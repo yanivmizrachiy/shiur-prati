@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#102a43">
+  <title>שיעור פרטי</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="app">
+  <header>
+    <div>
+      <div class="tag">מערכת פרטית · ללא דמו</div>
+      <h1>שיעור פרטי</h1>
+    </div>
+    <button id="installBtn" class="round hidden">⬇</button>
+  </header>
+  <main>
+    <section id="home" class="screen active">
+      <div class="hero">
+        <h2>ניהול שיעורים פרטיים</h2>
+        <p>תלמידים, שיעורים, תשלומים, חובות וקבלות — רק נתונים אמיתיים שאתה מזין.</p>
+        <div class="badges"><span>חינמי</span><span>עברית RTL</span><span>אין דמו</span></div>
+      </div>
+      <div id="stats" class="stats"></div>
+      <div class="actions2">
+        <button data-go="studentForm" class="primary">הוסף תלמיד</button>
+        <button data-go="lessonForm" class="primary">הוסף שיעור</button>
+        <button data-go="debts" class="soft">מי חייב לי כסף</button>
+        <button data-go="month" class="soft">סיכום חודשי</button>
+      </div>
+      <div class="card">
+        <div class="head"><h3>שיעורים</h3><button data-go="lessons" class="link">הצג הכל</button></div>
+        <div id="homeLessons"></div>
+      </div>
+    </section>
+    <section id="students" class="screen">
+      <div class="head"><h2>תלמידים</h2><button data-go="studentForm" class="small">הוסף תלמיד</button></div>
+      <input id="search" placeholder="חיפוש תלמיד" type="search">
+      <div id="studentsList"></div>
+    </section>
+    <section id="studentView" class="screen">
+      <button data-go="students" class="link">← חזרה</button>
+      <div id="studentViewContent"></div>
+    </section>
+    <section id="studentForm" class="screen">
+      <h2 id="studentFormTitle">הוסף תלמיד</h2>
+      <form id="studentFormEl" class="card form">
+        <input id="studentId" type="hidden">
+        <label>שם מלא<input id="studentName" required placeholder="שם תלמיד אמיתי"></label>
+        <label>טלפון<input id="studentPhone" type="tel" placeholder="לא חובה"></label>
+        <label>כיתה<input id="studentGrade" placeholder="לא חובה"></label>
+        <label>מחיר לשיעור<input id="studentPrice" type="number" min="0" step="1" placeholder="לא חובה"></label>
+        <label>סטטוס<select id="studentStatus"><option>פעיל</option><option>לא פעיל</option></select></label>
+        <label>הערות<textarea id="studentNotes" rows="3"></textarea></label>
+        <button class="primary full">שמור תלמיד</button>
+      </form>
+    </section>
+    <section id="lessons" class="screen">
+      <div class="head"><h2>שיעורים</h2><button data-go="lessonForm" class="small">הוסף שיעור</button></div>
+      <div class="chips">
+        <button data-filter="all" class="chip active">כולם</button>
+        <button data-filter="orange" class="chip">כתום</button>
+        <button data-filter="green" class="chip">ירוק</button>
+        <button data-filter="red" class="chip">אדום</button>
+      </div>
+      <div id="lessonsList"></div>
+    </section>
+    <section id="lessonForm" class="screen">
+      <h2 id="lessonFormTitle">הוסף שיעור</h2>
+      <form id="lessonFormEl" class="card form">
+        <input id="lessonId" type="hidden">
+        <label>תלמיד<select id="lessonStudent" required></select></label>
+        <div class="grid">
+          <label>תאריך<input id="lessonDate" type="date" required></label>
+          <label>שעה<input id="lessonTime" type="time"></label>
+        </div>
+        <label>נושא<input id="topic" placeholder="לא חובה"></label>
+        <div class="grid">
+          <label>משך בדקות<input id="duration" type="number" min="0" step="5"></label>
+          <label>סכום לתשלום<input id="amountDue" type="number" min="0" step="1" required></label>
+        </div>
+        <label>כמה שולם<input id="amountPaid" type="number" min="0" step="1" value="0"></label>
+        <label>סטטוס שיעור<select id="lessonStatus"><option>נקבע ועדיין לא התקיים</option><option>התקיים</option><option>בוטל</option></select></label>
+        <label>קבלה<select id="receiptStatus"><option>לא הוצאה קבלה</option><option>הוצאה קבלה</option></select></label>
+        <label>מספר קבלה<input id="receiptNumber" placeholder="לא חובה"></label>
+        <label>הערות<textarea id="lessonNotes" rows="3"></textarea></label>
+        <button class="primary full">שמור שיעור</button>
+      </form>
+    </section>
+    <section id="debts" class="screen"><h2>חובות</h2><div id="debtsList"></div></section>
+    <section id="receipts" class="screen"><h2>קבלות חסרות</h2><div id="receiptsList"></div></section>
+    <section id="month" class="screen"><h2>סיכום חודשי</h2><input id="monthPick" type="month"><div id="monthOut"></div></section>
+    <section id="backup" class="screen">
+      <h2>גיבוי</h2>
+      <div class="card">
+        <button id="exportJson" class="primary full">ייצוא JSON</button>
+        <button id="exportStudents" class="soft full">ייצוא תלמידים CSV</button>
+        <button id="exportLessons" class="soft full">ייצוא שיעורים CSV</button>
+        <label class="soft full file">ייבוא JSON<input id="importJson" type="file" accept="application/json" hidden></label>
+      </div>
+      <div class="card">
+        <h3>עוזר GPT</h3>
+        <button id="gpt" class="disabled full">עוזר GPT</button>
+        <p>עוזר GPT עדיין לא מחובר לעדכון נתונים אמיתי.</p>
+      </div>
+    </section>
+  </main>
+  <nav>
+    <button data-go="home" class="nav active">בית</button>
+    <button data-go="students" class="nav">תלמידים</button>
+    <button data-go="lessons" class="nav">שיעורים</button>
+    <button data-go="debts" class="nav">חובות</button>
+    <button data-go="backup" class="nav">גיבוי</button>
+  </nav>
+</div>
+<div id="toast"></div>
+<script src="app.js"></script>
+</body>
+</html>
