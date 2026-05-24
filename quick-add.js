@@ -1,4 +1,27 @@
 (() => {
+  function addAutoUpdateButton(){
+    if (document.getElementById('autoUpdateFloatingButton')) return;
+    const btn = document.createElement('button');
+    btn.id = 'autoUpdateFloatingButton';
+    btn.textContent = 'עדכון מהיר';
+    btn.type = 'button';
+    btn.setAttribute('aria-label', 'עדכון מהיר');
+    btn.style.position = 'fixed';
+    btn.style.left = '14px';
+    btn.style.bottom = '92px';
+    btn.style.zIndex = '9999';
+    btn.style.border = '0';
+    btn.style.borderRadius = '18px';
+    btn.style.padding = '13px 16px';
+    btn.style.fontWeight = '900';
+    btn.style.background = 'linear-gradient(135deg,#102a43,#173f64)';
+    btn.style.color = '#fff';
+    btn.style.boxShadow = '0 14px 34px rgba(16,42,67,.22)';
+    btn.onclick = () => { location.href = 'auto-update.html'; };
+    document.body.appendChild(btn);
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', addAutoUpdateButton); else addAutoUpdateButton();
+
   const KEY = 'shiur_prati_v1';
   const h = location.hash || '';
   if (!h.startsWith('#quick-add?') && !h.startsWith('#quick-import?')) return;
