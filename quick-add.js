@@ -22,6 +22,7 @@
       token = payload.token || '';
       items = Array.isArray(payload.items) ? payload.items : [];
     } catch {
+      alert('קישור הייבוא לא תקין. לא נשמר דבר.');
       return;
     }
   } else {
@@ -45,7 +46,10 @@
     duration: Number(item.duration || 60)
   })).filter(item => item.student && item.date && item.amount > 0);
 
-  if (!token || items.length === 0) return;
+  if (!token || items.length === 0) {
+    alert('לא נמצאו נתונים תקינים לייבוא. לא נשמר דבר.');
+    return;
+  }
 
   let db;
   try { db = JSON.parse(localStorage.getItem(KEY) || '{}'); } catch { db = {}; }
@@ -54,10 +58,12 @@
   db.logs = Array.isArray(db.logs) ? db.logs : [];
 
   if (db.logs.some(x => x.action === 'quick_import_lessons' && x.token === token)) {
+    alert('הייבוא הזה כבר בוצע בעבר. לא נוצרה כפילות.');
     history.replaceState(null, '', location.pathname);
     return;
   }
 
+  let total = 0;
   for (const item of items) {
     let st = db.students.find(x => (x.fullName || '').trim() === item.student);
     if (!st) {
@@ -65,10 +71,12 @@
       db.students.push(st);
     }
     db.lessons.push({ lessonId: uid('lesson'), studentId: st.studentId, lessonDate: item.date, lessonTime: item.time, topic: 'שיעור פרטי', durationMinutes: item.duration, amountDue: item.amount, amountPaid: 0, amountUnpaid: item.amount, lessonStatus: 'התקיים', receiptStatus: 'לא הוצאה קבלה', receiptNumber: '', notes: 'הוזן אוטומטית מקישור מהיר', createdAt: now(), updatedAt: now() });
+    total += item.amount;
   }
 
-  db.logs.push({ id: uid('log'), time: now(), action: 'quick_import_lessons', token, count: items.length });
+  db.logs.push({ id: uid('log'), time: now(), action: 'quick_import_lessons', token, count: items.length, total });
   localStorage.setItem(KEY, JSON.stringify(db));
+  alert(`נשמרו ${items.length} שיעורים. חוב כולל שנוסף: ${total} ₪.`);
   history.replaceState(null, '', location.pathname);
   location.reload();
 })();
