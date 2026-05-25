@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#ff7a00">
+  <title>שמירה אוטומטית — שיעור פרטי</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="app">
+  <header><div><div class="tag">שמירה פרטית בדפדפן</div><h1>שיעור פרטי</h1></div></header>
+  <main>
+    <section class="screen active">
+      <div class="hero"><h2>שמירה אוטומטית</h2><p id="status">מנסה לשמור את הנתונים בדפדפן הזה בלבד...</p></div>
+      <div id="result" class="card"></div>
+      <button id="openApp" class="primary full">פתח את האפליקציה</button>
+    </section>
+  </main>
+</div>
+<script>
+(() => {
+  const KEY = 'shiur_prati_v1';
+  const $ = s => document.querySelector(s);
+  const uid = p => `${p}_${Date.now()}_${Math.random().toString(16).slice(2)}`;
+  const now = () => new Date().toISOString();
+  const money = n => `${Number(n || 0).toLocaleString('he-IL')} ₪`;
+  const load = () => {
+    try { const d = JSON.parse(localStorage.getItem(KEY) || '{}'); return { students: Array.isArray(d.students) ? d.students : [], lessons: Array.isArray(d.lessons) ? d.lessons : [], logs: Array.isArray(d.logs) ? d.logs : [] }; }
+    catch { return { students: [], lessons: [], logs: [] }; }
+  };
+  const save = db => localStorage.setItem(KEY, JSON.stringify(db));
+  const decodeBase64Url = value => {
+    const padded = value + '='.repeat((4 - value.length % 4) % 4);
+    const binary = atob(padded.replace(/-/g, '+').replace(/_/g, '/'));
+    const bytes = Uint8Array.from(binary, c => c.charCodeAt(0));
+    return new TextDecoder('utf-8').decode(bytes);
+  };
+  function parseLine(line) {
+    const parts = line.split('|').map(x => x.trim());
+    if (parts.length < 5) return null;
+    const [student, date, time, durationRaw, amountRaw, statusRaw = 'לא שולם'] = parts;
+    const amount = Number(String(amountRaw).replace(/[^0-9.]/g, ''));
+    const duration = Number(String(durationRaw).replace(/[^0-9.]/g, '')) || 60;
+    if (!student || !date || !amount) return null;
+    const isPaid = statusRaw.includes('שולם') && !statusRaw.includes('לא שולם');
+    return { student, date, time, duration, amount, paid: isPaid ? amount : 0 };
+  }
+  function run() {
+    const hash = location.hash || '';
+    const params = new URLSearchParams(hash.startsWith('#') ? hash.slice(1) : hash);
+    const token = params.get('t') || 'auto-' + Date.now();
+    const encoded = params.get('txt') || '';
+    if (!encoded) { $('#status').textContent = 'לא התקבלו נתונים לשמירה.'; $('#result').innerHTML = '<p>פתח קישור שמכיל txt.</p>'; return; }
+    let text = '';
+    try { text = decodeBase64Url(encoded); } catch { $('#status').textContent = 'הקישור לא תקין.'; $('#result').innerHTML = '<p>לא נשמר דבר.</p>'; return; }
+    const items = text.split(/\r?\n/).map(x => x.trim()).filter(Boolean).map(parseLine).filter(Boolean);
+    if (!items.length) { $('#status').textContent = 'לא נמצאו שורות תקינות.'; $('#result').innerHTML = '<p>לא נשמר דבר.</p>'; return; }
+    const db = load();
+    if (db.logs.some(x => x.action === 'auto_save_import' && x.token === token)) {
+      $('#status').textContent = 'העדכון הזה כבר נשמר בעבר. לא נוצרה כפילות.';
+      $('#result').innerHTML = '<p>אפשר לפתוח את האפליקציה ולבדוק.</p>';
+      return;
+    }
+    let totalDebt = 0;
+    for (const item of items) {
+      let st = db.students.find(x => (x.fullName || '').trim() === item.student);
+      if (!st) {
+        st = { studentId: uid('student'), fullName: item.student, phone: '', grade: '', defaultLessonPrice: item.amount, status: 'פעיל', notes: '', createdAt: now(), updatedAt: now() };
+        db.students.push(st);
+      }
+      const unpaid = Math.max(item.amount - item.paid, 0);
+      db.lessons.push({ lessonId: uid('lesson'), studentId: st.studentId, lessonDate: item.date, lessonTime: item.time, topic: 'שיעור פרטי', durationMinutes: item.duration, amountDue: item.amount, amountPaid: item.paid, amountUnpaid: unpaid, lessonStatus: 'התקיים', receiptStatus: 'לא הוצאה קבלה', receiptNumber: '', notes: 'הוזן משמירה אוטומטית', createdAt: now(), updatedAt: now() });
+      totalDebt += unpaid;
+    }
+    db.logs.push({ id: uid('log'), time: now(), action: 'auto_save_import', token, count: items.length, totalDebt });
+    save(db);
+    $('#status').textContent = 'נשמר בהצלחה בדפדפן הזה בלבד.';
+    $('#result').innerHTML = `<h3>נשמרו ${items.length} שיעורים</h3><p>חוב כולל שנוסף: ${money(totalDebt)}</p>`;
+    alert(`נשמרו ${items.length} שיעורים. חוב כולל שנוסף: ${totalDebt} ₪.`);
+  }
+  $('#openApp').addEventListener('click', () => location.href = './');
+  run();
+})();
+</script>
+</body>
+</html>
