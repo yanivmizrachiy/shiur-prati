@@ -24,7 +24,7 @@
 
   const KEY = 'shiur_prati_v1';
   const h = location.hash || '';
-  if (!h.startsWith('#quick-add?') && !h.startsWith('#quick-import?')) return;
+  if (!h.startsWith('#quick-add?') && !h.startsWith('#quick-import?') && !h.startsWith('#bulk?')) return;
 
   const uid = prefix => `${prefix}_${Date.now()}_${Math.random().toString(16).slice(2)}`;
   const now = () => new Date().toISOString();
@@ -34,11 +34,25 @@
     const bytes = Uint8Array.from(binary, c => c.charCodeAt(0));
     return new TextDecoder('utf-8').decode(bytes);
   };
+  const parseAmount = value => Number(String(value || '').replace(/[^0-9.]/g, '')) || 0;
 
   let token = '';
   let items = [];
 
-  if (h.startsWith('#quick-import?')) {
+  if (h.startsWith('#bulk?')) {
+    const p = new URLSearchParams(h.slice('#bulk?'.length));
+    token = p.get('t') || '';
+    try {
+      const text = decodeBase64Url(p.get('d') || '');
+      items = text.split(/\r?\n/).map(line => line.trim()).filter(Boolean).map(line => {
+        const parts = line.split('|').map(x => x.trim());
+        return { student: parts[0] || '', date: parts[1] || '', time: parts[2] || '', duration: parseAmount(parts[3]) || 60, amount: parseAmount(parts[4]) };
+      });
+    } catch {
+      alert('קישור הייבוא הקצר לא תקין. לא נשמר דבר.');
+      return;
+    }
+  } else if (h.startsWith('#quick-import?')) {
     const p = new URLSearchParams(h.slice('#quick-import?'.length));
     try {
       const payload = JSON.parse(decodeBase64Url(p.get('data') || ''));
@@ -52,27 +66,11 @@
     const p = new URLSearchParams(h.slice('#quick-add?'.length));
     token = p.get('token') || '';
     const students = p.getAll('student').map(x => (x || '').trim()).filter(Boolean);
-    items = students.map(student => ({
-      student,
-      date: p.get('date') || '',
-      time: p.get('time') || '',
-      amount: Number(p.get('amount') || 0),
-      duration: Number(p.get('duration') || 60)
-    }));
+    items = students.map(student => ({ student, date: p.get('date') || '', time: p.get('time') || '', amount: Number(p.get('amount') || 0), duration: Number(p.get('duration') || 60) }));
   }
 
-  items = items.map(item => ({
-    student: (item.student || '').trim(),
-    date: item.date || '',
-    time: item.time || '',
-    amount: Number(item.amount || 0),
-    duration: Number(item.duration || 60)
-  })).filter(item => item.student && item.date && item.amount > 0);
-
-  if (!token || items.length === 0) {
-    alert('לא נמצאו נתונים תקינים לייבוא. לא נשמר דבר.');
-    return;
-  }
+  items = items.map(item => ({ student: (item.student || '').trim(), date: item.date || '', time: item.time || '', amount: Number(item.amount || 0), duration: Number(item.duration || 60) })).filter(item => item.student && item.date && item.amount > 0);
+  if (!token || items.length === 0) { alert('לא נמצאו נתונים תקינים לייבוא. לא נשמר דבר.'); return; }
 
   let db;
   try { db = JSON.parse(localStorage.getItem(KEY) || '{}'); } catch { db = {}; }
