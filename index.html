@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-  <meta name="theme-color" content="#102a43">
+  <meta name="theme-color" content="#ff7a00">
   <title>שיעור פרטי</title>
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="stylesheet" href="styles.css">
@@ -12,7 +12,7 @@
 <div class="app">
   <header>
     <div>
-      <div class="tag">מערכת פרטית · ללא דמו</div>
+      <div class="tag">ניהול פרטי</div>
       <h1>שיעור פרטי</h1>
     </div>
     <button id="installBtn" class="round hidden">⬇</button>
@@ -20,15 +20,15 @@
   <main>
     <section id="home" class="screen active">
       <div class="hero">
-        <h2>ניהול שיעורים פרטיים</h2>
-        <p>תלמידים, שיעורים, תשלומים, חובות וקבלות — רק נתונים אמיתיים שאתה מזין.</p>
-        <div class="badges"><span>חינמי</span><span>עברית RTL</span><span>אין דמו</span></div>
+        <h2>שיעורים ותשלומים</h2>
+        <p>תלמידים, שיעורים, תשלומים, חובות וקבלות.</p>
+        <div class="badges"><span>נייד</span><span>עברית</span><span>פרטי</span></div>
       </div>
       <div id="stats" class="stats"></div>
       <div class="actions2">
         <button data-go="studentForm" class="primary">הוסף תלמיד</button>
         <button data-go="lessonForm" class="primary">הוסף שיעור</button>
-        <button data-go="debts" class="soft">מי חייב לי כסף</button>
+        <button data-go="debts" class="soft">חובות</button>
         <button data-go="month" class="soft">סיכום חודשי</button>
       </div>
       <div class="card">
@@ -49,10 +49,10 @@
       <h2 id="studentFormTitle">הוסף תלמיד</h2>
       <form id="studentFormEl" class="card form">
         <input id="studentId" type="hidden">
-        <label>שם מלא<input id="studentName" required placeholder="שם תלמיד אמיתי"></label>
-        <label>טלפון<input id="studentPhone" type="tel" placeholder="לא חובה"></label>
-        <label>כיתה<input id="studentGrade" placeholder="לא חובה"></label>
-        <label>מחיר לשיעור<input id="studentPrice" type="number" min="0" step="1" placeholder="לא חובה"></label>
+        <label>שם מלא<input id="studentName" required></label>
+        <label>טלפון<input id="studentPhone" type="tel"></label>
+        <label>כיתה<input id="studentGrade"></label>
+        <label>מחיר קבוע<input id="studentPrice" type="number" min="0" step="1"></label>
         <label>סטטוס<select id="studentStatus"><option>פעיל</option><option>לא פעיל</option></select></label>
         <label>הערות<textarea id="studentNotes" rows="3"></textarea></label>
         <button class="primary full">שמור תלמיד</button>
@@ -62,9 +62,9 @@
       <div class="head"><h2>שיעורים</h2><button data-go="lessonForm" class="small">הוסף שיעור</button></div>
       <div class="chips">
         <button data-filter="all" class="chip active">כולם</button>
-        <button data-filter="orange" class="chip">כתום</button>
-        <button data-filter="green" class="chip">ירוק</button>
-        <button data-filter="red" class="chip">אדום</button>
+        <button data-filter="orange" class="chip">נקבע</button>
+        <button data-filter="green" class="chip">שולם</button>
+        <button data-filter="red" class="chip">חוב</button>
       </div>
       <div id="lessonsList"></div>
     </section>
@@ -77,15 +77,14 @@
           <label>תאריך<input id="lessonDate" type="date" required></label>
           <label>שעה<input id="lessonTime" type="time"></label>
         </div>
-        <label>נושא<input id="topic" placeholder="לא חובה"></label>
         <div class="grid">
           <label>משך בדקות<input id="duration" type="number" min="0" step="5"></label>
-          <label>סכום לתשלום<input id="amountDue" type="number" min="0" step="1" required></label>
+          <label>סכום<input id="amountDue" type="number" min="0" step="1" required></label>
         </div>
-        <label>כמה שולם<input id="amountPaid" type="number" min="0" step="1" value="0"></label>
-        <label>סטטוס שיעור<select id="lessonStatus"><option>נקבע ועדיין לא התקיים</option><option>התקיים</option><option>בוטל</option></select></label>
+        <label>שולם<input id="amountPaid" type="number" min="0" step="1" value="0"></label>
+        <label>סטטוס<select id="lessonStatus"><option>נקבע ועדיין לא התקיים</option><option>התקיים</option><option>בוטל</option></select></label>
         <label>קבלה<select id="receiptStatus"><option>לא הוצאה קבלה</option><option>הוצאה קבלה</option></select></label>
-        <label>מספר קבלה<input id="receiptNumber" placeholder="לא חובה"></label>
+        <label>מספר קבלה<input id="receiptNumber"></label>
         <label>הערות<textarea id="lessonNotes" rows="3"></textarea></label>
         <button class="primary full">שמור שיעור</button>
       </form>
@@ -100,11 +99,6 @@
         <button id="exportStudents" class="soft full">ייצוא תלמידים CSV</button>
         <button id="exportLessons" class="soft full">ייצוא שיעורים CSV</button>
         <label class="soft full file">ייבוא JSON<input id="importJson" type="file" accept="application/json" hidden></label>
-      </div>
-      <div class="card">
-        <h3>עוזר GPT</h3>
-        <button id="gpt" class="disabled full">עוזר GPT</button>
-        <p>עוזר GPT עדיין לא מחובר לעדכון נתונים אמיתי.</p>
       </div>
     </section>
   </main>
