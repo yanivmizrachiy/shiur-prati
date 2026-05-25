@@ -91,7 +91,7 @@
       st = { studentId: uid('student'), fullName: item.student, phone: '', grade: '', defaultLessonPrice: item.amount, status: 'פעיל', notes: '', createdAt: now(), updatedAt: now() };
       db.students.push(st);
     }
-    db.lessons.push({ lessonId: uid('lesson'), studentId: st.studentId, lessonDate: item.date, lessonTime: item.time, topic: 'שיעור פרטי', durationMinutes: item.duration, amountDue: item.amount, amountPaid: 0, amountUnpaid: item.amount, lessonStatus: 'התקיים', receiptStatus: 'לא הוצאה קבלה', receiptNumber: '', notes: 'הוזן אוטומטית מקישור מהיר', createdAt: now(), updatedAt: now() });
+    db.lessons.push({ lessonId: uid('lesson'), studentId: st.studentId, lessonDate: item.date, lessonTime: item.time, durationMinutes: item.duration, amountDue: item.amount, amountPaid: 0, amountUnpaid: item.amount, lessonStatus: 'התקיים', receiptStatus: 'לא הוצאה קבלה', receiptNumber: '', notes: '', createdAt: now(), updatedAt: now() });
     total += item.amount;
   }
 
