@@ -1,0 +1,24 @@
+{
+  "schema": "yaniv-private-lessons-appointments-v1",
+  "updated_at": "2026-05-26T13:00:00+03:00",
+  "updated_by": "chatgpt-github-connector",
+  "timezone": "Asia/Jerusalem",
+  "appointments": [
+    {
+      "id": "lesson-2026-05-28-ilan-1600",
+      "type": "private_lesson_appointment",
+      "title_he": "שיעור פרטי עם אילן",
+      "student_name_he": "אילן",
+      "date": "2026-05-28",
+      "day_he": "יום חמישי",
+      "time_24h": "16:00",
+      "status_he": "נקבע",
+      "duration_minutes": null,
+      "amount_due_ils": null,
+      "payment_status_he": "לא נמסר",
+      "receipt_status_he": "לא נמסר",
+      "source_he": "נרשם לפי בקשת יניב בצ׳אט",
+      "notes_he": "נקבע שיעור פרטי עם אילן ביום חמישי הקרוב, 28/05/2026, בשעה 16:00."
+    }
+  ]
+}
