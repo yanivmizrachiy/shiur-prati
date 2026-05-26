@@ -3,32 +3,22 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-  <meta name="theme-color" content="#102a43">
+  <meta name="theme-color" content="#ff7a00">
   <title>עדכון מהיר — שיעור פרטי</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 <div class="app">
-  <header>
-    <div>
-      <div class="tag">עדכון אוטומטי פרטי</div>
-      <h1>עדכון מהיר</h1>
-    </div>
-  </header>
+  <header><div><div class="tag">ניהול פרטי</div><h1>עדכון מהיר</h1></div></header>
   <main>
     <section class="screen active">
-      <div class="hero">
-        <h2>הדבקת שיעורים מרוכזת</h2>
-        <p>הנתונים נשמרים רק בדפדפן הזה. שום שם תלמיד ושום חוב לא נשמרים בקוד או בגיטאב.</p>
-        <div class="badges"><span>פרטי</span><span>ללא דמו</span><span>שמירה מקומית</span></div>
-      </div>
+      <div class="hero"><h2>הדבקת שיעורים</h2><p>הנתונים נשמרים בדפדפן הזה בלבד.</p></div>
       <div class="card form">
-        <label>הדבק שורות בפורמט הבא:</label>
+        <label>שורות שיעורים</label>
         <p class="meta">שם | תאריך | שעה | משך בדקות | סכום | סטטוס</p>
-        <p class="meta">דוגמת מבנה בלבד: שם תלמיד | 2026-05-24 | 18:30 | 60 | 200 | לא שולם</p>
-        <textarea id="bulkText" rows="10" placeholder="הדבק כאן שורות אמיתיות שלך"></textarea>
-        <button id="saveBulk" class="primary full">שמור עדכון אוטומטי</button>
-        <button id="goApp" class="soft full">חזרה לאפליקציה</button>
+        <textarea id="bulkText" rows="10"></textarea>
+        <button id="saveBulk" class="primary full">שמור</button>
+        <button id="goApp" class="soft full">חזרה</button>
       </div>
       <div id="result" class="card hidden"></div>
     </section>
@@ -40,13 +30,9 @@
   const $ = s => document.querySelector(s);
   const uid = p => `${p}_${Date.now()}_${Math.random().toString(16).slice(2)}`;
   const now = () => new Date().toISOString();
-  const load = () => {
-    try { const d = JSON.parse(localStorage.getItem(KEY) || '{}'); return { students: Array.isArray(d.students) ? d.students : [], lessons: Array.isArray(d.lessons) ? d.lessons : [], logs: Array.isArray(d.logs) ? d.logs : [] }; }
-    catch { return { students: [], lessons: [], logs: [] }; }
-  };
+  const load = () => { try { const d = JSON.parse(localStorage.getItem(KEY) || '{}'); return { students: Array.isArray(d.students) ? d.students : [], lessons: Array.isArray(d.lessons) ? d.lessons : [], logs: Array.isArray(d.logs) ? d.logs : [], payments: Array.isArray(d.payments) ? d.payments : [] }; } catch { return { students: [], lessons: [], logs: [], payments: [] }; } };
   const save = db => localStorage.setItem(KEY, JSON.stringify(db));
   const money = n => `${Number(n || 0).toLocaleString('he-IL')} ₪`;
-
   function parseLine(line) {
     const parts = line.split('|').map(x => x.trim());
     if (parts.length < 5) return null;
@@ -57,27 +43,22 @@
     const isPaid = statusRaw.includes('שולם') && !statusRaw.includes('לא שולם');
     return { student, date, time, duration, amount, paid: isPaid ? amount : 0 };
   }
-
   $('#saveBulk').addEventListener('click', () => {
-    const lines = $('#bulkText').value.split(/\r?\n/).map(x => x.trim()).filter(Boolean);
-    const items = lines.map(parseLine).filter(Boolean);
-    if (!items.length) { alert('לא נמצאו שורות תקינות לשמירה.'); return; }
+    const items = $('#bulkText').value.split(/\r?\n/).map(x => x.trim()).filter(Boolean).map(parseLine).filter(Boolean);
+    if (!items.length) { alert('לא נמצאו שורות תקינות.'); return; }
     const db = load();
     let totalDebt = 0;
     for (const item of items) {
       let st = db.students.find(x => (x.fullName || '').trim() === item.student);
-      if (!st) {
-        st = { studentId: uid('student'), fullName: item.student, phone: '', grade: '', defaultLessonPrice: item.amount, status: 'פעיל', notes: '', createdAt: now(), updatedAt: now() };
-        db.students.push(st);
-      }
+      if (!st) { st = { studentId: uid('student'), fullName: item.student, phone: '', grade: '', defaultLessonPrice: item.amount, status: 'פעיל', notes: '', createdAt: now(), updatedAt: now() }; db.students.push(st); }
       const unpaid = Math.max(item.amount - item.paid, 0);
-      db.lessons.push({ lessonId: uid('lesson'), studentId: st.studentId, lessonDate: item.date, lessonTime: item.time, topic: 'שיעור פרטי', durationMinutes: item.duration, amountDue: item.amount, amountPaid: item.paid, amountUnpaid: unpaid, lessonStatus: 'התקיים', receiptStatus: 'לא הוצאה קבלה', receiptNumber: '', notes: 'הוזן מעדכון מהיר פרטי', createdAt: now(), updatedAt: now() });
+      db.lessons.push({ lessonId: uid('lesson'), studentId: st.studentId, lessonDate: item.date, lessonTime: item.time, durationMinutes: item.duration, amountDue: item.amount, amountPaid: item.paid, amountUnpaid: unpaid, lessonStatus: 'התקיים', receiptStatus: 'לא הוצאה קבלה', receiptNumber: '', notes: '', createdAt: now(), updatedAt: now() });
       totalDebt += unpaid;
     }
     db.logs.push({ id: uid('log'), time: now(), action: 'bulk_private_update', count: items.length, totalDebt });
     save(db);
     $('#result').classList.remove('hidden');
-    $('#result').innerHTML = `<h3>נשמר בהצלחה</h3><p>נשמרו ${items.length} שיעורים בדפדפן הזה בלבד.</p><p>חוב נוסף: ${money(totalDebt)}</p>`;
+    $('#result').innerHTML = `<h3>נשמר</h3><p>${items.length} שיעורים</p><p>חוב נוסף: ${money(totalDebt)}</p>`;
     alert(`נשמרו ${items.length} שיעורים. חוב נוסף: ${money(totalDebt)}.`);
   });
   $('#goApp').addEventListener('click', () => location.href = './');
