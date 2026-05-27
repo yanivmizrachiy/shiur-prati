@@ -28,6 +28,7 @@
       <div class="actions2">
         <button data-go="studentForm" class="primary">הוסף תלמיד</button>
         <button data-go="lessonForm" class="primary">הוסף שיעור</button>
+        <button data-go="payments" class="soft">תשלומים</button>
         <button data-go="debts" class="soft">חובות</button>
         <button data-go="month" class="soft">סיכום חודשי</button>
       </div>
@@ -90,6 +91,7 @@
       </form>
     </section>
     <section id="debts" class="screen"><h2>חובות</h2><div id="debtsList"></div></section>
+    <section id="payments" class="screen"><h2>תשלומים</h2><div id="paymentsList"></div></section>
     <section id="receipts" class="screen"><h2>קבלות חסרות</h2><div id="receiptsList"></div></section>
     <section id="month" class="screen"><h2>סיכום חודשי</h2><input id="monthPick" type="month"><div id="monthOut"></div></section>
     <section id="backup" class="screen">
@@ -98,6 +100,7 @@
         <button id="exportJson" class="primary full">ייצוא JSON</button>
         <button id="exportStudents" class="soft full">ייצוא תלמידים CSV</button>
         <button id="exportLessons" class="soft full">ייצוא שיעורים CSV</button>
+        <button id="exportPayments" class="soft full">ייצוא תשלומים CSV</button>
         <label class="soft full file">ייבוא JSON<input id="importJson" type="file" accept="application/json" hidden></label>
       </div>
     </section>
@@ -106,6 +109,7 @@
     <button data-go="home" class="nav active">בית</button>
     <button data-go="students" class="nav">תלמידים</button>
     <button data-go="lessons" class="nav">שיעורים</button>
+    <button data-go="payments" class="nav">תשלומים</button>
     <button data-go="debts" class="nav">חובות</button>
     <button data-go="backup" class="nav">גיבוי</button>
   </nav>
