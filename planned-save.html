@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#ff7a00">
+<title>שמירת שיעורים שנקבעו</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="app">
+<header><div><div class="tag">ניהול פרטי</div><h1>שמירת שיעורים</h1></div></header>
+<main><section class="screen active"><div class="hero"><h2>שמירה</h2><p id="status">שומר בדפדפן הזה בלבד...</p></div><div id="result" class="card"></div><button id="openApp" class="primary full">פתח את האפליקציה</button></section></main>
+</div>
+<script>
+(()=>{
+const KEY='shiur_prati_v1';
+const $=s=>document.querySelector(s);
+const uid=p=>`${p}_${Date.now()}_${Math.random().toString(16).slice(2)}`;
+const now=()=>new Date().toISOString();
+const money=n=>`${Number(n||0).toLocaleString('he-IL')} ₪`;
+const load=()=>{try{const d=JSON.parse(localStorage.getItem(KEY)||'{}');return{students:Array.isArray(d.students)?d.students:[],lessons:Array.isArray(d.lessons)?d.lessons:[],logs:Array.isArray(d.logs)?d.logs:[],payments:Array.isArray(d.payments)?d.payments:[]}}catch{return{students:[],lessons:[],logs:[],payments:[]}}};
+const save=db=>localStorage.setItem(KEY,JSON.stringify(db));
+const decode=v=>{const p=v+'='.repeat((4-v.length%4)%4);const b=atob(p.replace(/-/g,'+').replace(/_/g,'/'));const bytes=Uint8Array.from(b,c=>c.charCodeAt(0));return new TextDecoder('utf-8').decode(bytes)};
+const num=v=>Number(String(v||'').replace(/[^0-9.]/g,''))||0;
+function getStudent(db,name,price){let s=db.students.find(x=>(x.fullName||'').trim()===name);if(!s){s={studentId:uid('student'),fullName:name,phone:'',grade:'',defaultLessonPrice:price,status:'פעיל',notes:'',createdAt:now(),updatedAt:now()};db.students.push(s)}return s}
+function run(){
+ const p=new URLSearchParams((location.hash||'').replace(/^#/,''));
+ const token=p.get('t')||`planned-${Date.now()}`;
+ const data=p.get('d')||'';
+ if(!data){$('#status').textContent='לא התקבלו נתונים.';return}
+ let text='';try{text=decode(data)}catch{$('#status').textContent='קישור לא תקין.';return}
+ const rows=text.split(/\r?\n/).map(x=>x.trim()).filter(Boolean);
+ const db=load();
+ if(db.logs.some(x=>x.action==='planned_save'&&x.token===token)){$('#status').textContent='כבר נשמר בעבר.';$('#result').innerHTML='<p>לא נוצרה כפילות.</p>';return}
+ let count=0,total=0;
+ for(const row of rows){
+  const parts=row.split('|').map(x=>x.trim());
+  const name=parts[0]||'',date=parts[1]||'',time=parts[2]||'',duration=num(parts[3])||60,amount=num(parts[4]);
+  if(!name||!date||!amount)continue;
+  const st=getStudent(db,name,amount);
+  db.lessons.push({lessonId:uid('lesson'),studentId:st.studentId,lessonDate:date,lessonTime:time,durationMinutes:duration,amountDue:amount,amountPaid:0,amountUnpaid:amount,lessonStatus:'נקבע ועדיין לא התקיים',receiptStatus:'לא הוצאה קבלה',receiptNumber:'',notes:'',createdAt:now(),updatedAt:now()});
+  count++;total+=amount;
+ }
+ db.logs.push({id:uid('log'),time:now(),action:'planned_save',token,count,total});
+ save(db);
+ $('#status').textContent='נשמר.';
+ $('#result').innerHTML=`<h3>נשמרו ${count} שיעורים</h3><p>סכום לתשלום: ${money(total)}</p>`;
+ alert(`נשמרו ${count} שיעורים. סכום לתשלום: ${total} ₪.`);
+}
+$('#openApp').addEventListener('click',()=>location.href='./?v=planned');
+run();
+})();
+</script>
+</body>
+</html>
