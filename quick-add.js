@@ -35,6 +35,10 @@
     return new TextDecoder('utf-8').decode(bytes);
   };
   const parseAmount = value => Number(String(value || '').replace(/[^0-9.]/g, '')) || 0;
+  const parseDuration = value => {
+    if (value === undefined || value === null || String(value).trim() === '') return 0;
+    return Number(String(value).replace(/[^0-9.]/g, '')) || 0;
+  };
 
   let token = '';
   let items = [];
@@ -46,7 +50,7 @@
       const text = decodeBase64Url(p.get('d') || '');
       items = text.split(/\r?\n/).map(line => line.trim()).filter(Boolean).map(line => {
         const parts = line.split('|').map(x => x.trim());
-        return { student: parts[0] || '', date: parts[1] || '', time: parts[2] || '', duration: parseAmount(parts[3]) || 60, amount: parseAmount(parts[4]) };
+        return { student: parts[0] || '', date: parts[1] || '', time: parts[2] || '', duration: parseDuration(parts[3]), amount: parseAmount(parts[4]) };
       });
     } catch {
       alert('קישור הייבוא הקצר לא תקין. לא נשמר דבר.');
@@ -66,10 +70,10 @@
     const p = new URLSearchParams(h.slice('#quick-add?'.length));
     token = p.get('token') || '';
     const students = p.getAll('student').map(x => (x || '').trim()).filter(Boolean);
-    items = students.map(student => ({ student, date: p.get('date') || '', time: p.get('time') || '', amount: Number(p.get('amount') || 0), duration: Number(p.get('duration') || 60) }));
+    items = students.map(student => ({ student, date: p.get('date') || '', time: p.get('time') || '', amount: Number(p.get('amount') || 0), duration: parseDuration(p.get('duration')) }));
   }
 
-  items = items.map(item => ({ student: (item.student || '').trim(), date: item.date || '', time: item.time || '', amount: Number(item.amount || 0), duration: Number(item.duration || 60) })).filter(item => item.student && item.date && item.amount > 0);
+  items = items.map(item => ({ student: (item.student || '').trim(), date: item.date || '', time: item.time || '', amount: Number(item.amount || 0), duration: parseDuration(item.duration) })).filter(item => item.student && item.date && item.amount > 0);
   if (!token || items.length === 0) { alert('לא נמצאו נתונים תקינים לייבוא. לא נשמר דבר.'); return; }
 
   let db;
@@ -77,6 +81,7 @@
   db.students = Array.isArray(db.students) ? db.students : [];
   db.lessons = Array.isArray(db.lessons) ? db.lessons : [];
   db.logs = Array.isArray(db.logs) ? db.logs : [];
+  db.payments = Array.isArray(db.payments) ? db.payments : [];
 
   if (db.logs.some(x => x.action === 'quick_import_lessons' && x.token === token)) {
     alert('הייבוא הזה כבר בוצע בעבר. לא נוצרה כפילות.');
@@ -85,19 +90,24 @@
   }
 
   let total = 0;
+  let added = 0;
+  let skipped = 0;
   for (const item of items) {
     let st = db.students.find(x => (x.fullName || '').trim() === item.student);
     if (!st) {
       st = { studentId: uid('student'), fullName: item.student, phone: '', grade: '', defaultLessonPrice: item.amount, status: 'פעיל', notes: '', createdAt: now(), updatedAt: now() };
       db.students.push(st);
     }
+    const exists = db.lessons.some(l => l.studentId === st.studentId && l.lessonDate === item.date && String(l.lessonTime || '') === String(item.time || '') && Number(l.amountDue || 0) === Number(item.amount || 0) && l.lessonStatus === 'התקיים');
+    if (exists) { skipped += 1; continue; }
     db.lessons.push({ lessonId: uid('lesson'), studentId: st.studentId, lessonDate: item.date, lessonTime: item.time, durationMinutes: item.duration, amountDue: item.amount, amountPaid: 0, amountUnpaid: item.amount, lessonStatus: 'התקיים', receiptStatus: 'לא הוצאה קבלה', receiptNumber: '', notes: '', createdAt: now(), updatedAt: now() });
     total += item.amount;
+    added += 1;
   }
 
-  db.logs.push({ id: uid('log'), time: now(), action: 'quick_import_lessons', token, count: items.length, total });
+  db.logs.push({ id: uid('log'), time: now(), action: 'quick_import_lessons', token, count: added, skipped, total });
   localStorage.setItem(KEY, JSON.stringify(db));
-  alert(`נשמרו ${items.length} שיעורים. חוב כולל שנוסף: ${total} ₪.`);
+  alert(`נשמרו ${added} שיעורים. דולגו כפילויות: ${skipped}. חוב נוסף: ${total} ₪.`);
   history.replaceState(null, '', location.pathname);
   location.reload();
 })();
