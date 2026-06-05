@@ -26,6 +26,7 @@
       </div>
       <div id="stats" class="stats"></div>
       <div class="actions2">
+        <button onclick="location.href='assistant-sync.html?v=main'" class="primary">סנכרון חכם</button>
         <button onclick="location.href='today.html?v=main'" class="primary">היום</button>
         <button data-go="studentForm" class="primary">הוסף תלמיד</button>
         <button data-go="lessonForm" class="primary">הוסף שיעור</button>
@@ -64,8 +65,8 @@
       <div class="head"><h2>שיעורים</h2><button data-go="lessonForm" class="small">הוסף שיעור</button></div>
       <div class="chips">
         <button data-filter="all" class="chip active">כולם</button>
-        <button data-filter="orange" class="chip">נקבע</button>
-        <button data-filter="green" class="chip">שולם</button>
+        <button data-filter="orange" class="chip">נקבע / חסרה קבלה</button>
+        <button data-filter="green" class="chip">שולם + קבלה</button>
         <button data-filter="red" class="chip">חוב</button>
       </div>
       <div id="lessonsList"></div>
@@ -108,6 +109,7 @@
   </main>
   <nav>
     <button data-go="home" class="nav active">בית</button>
+    <button onclick="location.href='assistant-sync.html?v=nav'" class="nav">סנכרון</button>
     <button onclick="location.href='today.html?v=nav'" class="nav">היום</button>
     <button data-go="students" class="nav">תלמידים</button>
     <button data-go="lessons" class="nav">שיעורים</button>
