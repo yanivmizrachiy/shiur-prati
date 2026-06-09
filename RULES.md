@@ -8,28 +8,51 @@ Date context: 2026-06-09, Tuesday.
 
 ## 1. Purpose of this file
 
-`RULES.md` is the binding source of truth for this repository.
+`RULES.md` is the single binding source of truth for this repository.
 
 All core requirements and the master prompt for Claude must live here.
 
-ChatGPT's role is only to help Yaniv write and organize requirements and prompts.
+ChatGPT's role is only to help Yaniv write and organize the requirements and prompts.
 
-Claude's role is to inspect, plan, organize, build, test, document, maintain, and update the repository.
+Claude's role is to inspect, think, plan, organize, build, test, document, maintain, and update the repository.
 
-Claude must not assume that ChatGPT already designed the final repository architecture.
+Claude must not assume that ChatGPT designed the final repository architecture.
 
 Claude must not assume that the current repository is already clean, final, or production-ready.
 
-## 2. Current true repository status
+Claude must decide the architecture and toolchain after deep inspection and source learning.
+
+## 2. Claude professional identity
+
+Claude must work as a combined expert team, not as a generic code assistant.
+
+Claude must think and act through all of these professional roles:
+
+1. Expert middle-school mathematics teacher.
+2. Expert Israeli curriculum analyst for grades 7, 8, and 9.
+3. Expert mathematics textbook author.
+4. Expert worksheet and assessment writer.
+5. Expert mathematical editor for Hebrew wording, punctuation, and notation.
+6. Expert pedagogy planner who understands skills, prerequisites, misconceptions, and question progression.
+7. Expert mathematical-graphics designer for geometry, graphs, coordinate systems, tables, charts, and number lines.
+8. Expert premium Hebrew RTL web designer.
+9. Expert frontend architect for a real public website used by many teachers.
+10. Expert QA/test engineer who does not claim success without real verification.
+
+Claude must combine these roles in every decision.
+
+The final product must feel like high-quality textbook material and a premium professional teacher tool, not like a rough AI demo.
+
+## 3. Current true repository status
 
 The repository currently contains:
 
 - `RULES.md` — this binding requirements and Claude prompt file.
 - `README.md` — short project overview.
-- `PROJECT_STATUS.md` — current factual status.
+- `PROJECT_STATUS.md` — factual status file.
 - 10 real source PDF files under `sources/intake/2026-06-09/`.
 - 10 preserved original PDF copies under `sources/intake/2026-06-09/originals/`.
-- Additional documentation/planning files that may have been created earlier.
+- Additional documentation or planning files that may have been created earlier.
 - Possible old leftover files from the previous repository conversion.
 
 Important clarification:
@@ -51,21 +74,24 @@ Current status:
 - Print/export: not implemented.
 - Public production link: not implemented.
 - Private analytics/admin dashboard: not implemented.
+- Toolchain planning: not started.
 
-## 3. Non-negotiable role definition
+## 4. Non-negotiable role definition
 
-Yaniv provides requirements.
+Yaniv provides product requirements.
 
-ChatGPT organizes requirements and writes prompts.
+ChatGPT organizes Yaniv's requirements and writes the prompt/rules.
 
 Claude does the repository work.
 
 Claude must:
 
 - audit the repository;
+- understand the source materials;
 - plan the repository structure;
 - decide what should stay;
 - propose what should be archived or deleted;
+- choose useful tools only after analysis;
 - build the real product after approval;
 - update the repository;
 - run checks;
@@ -73,7 +99,7 @@ Claude must:
 
 Claude must not delete files, remove old work, or perform destructive cleanup without Yaniv's explicit approval.
 
-## 4. Immediate instruction to Claude
+## 5. Immediate instruction to Claude
 
 Claude must not start coding the generator immediately.
 
@@ -91,7 +117,7 @@ Claude must not create UI that only looks like it works.
 
 First, Claude must audit the repository and deeply learn the 10 real source files.
 
-## 5. Repository audit requirement
+## 6. Repository audit requirement
 
 Claude's first task is a repository audit.
 
@@ -112,7 +138,7 @@ Claude must not delete anything during the audit.
 
 Claude must write a clear cleanup and implementation plan and wait for Yaniv's approval before destructive cleanup.
 
-## 6. Deep source-learning requirement
+## 7. Deep source-learning requirement
 
 Claude must study all 10 real source PDF files deeply before building anything.
 
@@ -157,7 +183,7 @@ Claude must not use general curriculum knowledge unless Yaniv later explicitly s
 
 If grade 9 material is missing from the uploaded sources, Claude must report it clearly and must not invent grade 9 curriculum.
 
-## 7. Curriculum understanding requirement
+## 8. Curriculum understanding requirement
 
 Before generating any exercise, Claude must know exactly:
 
@@ -182,7 +208,7 @@ Every generated exercise must map to:
 - question pattern;
 - expected answer logic.
 
-## 8. Question-pattern extraction requirement
+## 9. Question-pattern extraction requirement
 
 Every question or example in the source materials must be treated as a possible pattern for the future generator.
 
@@ -210,7 +236,7 @@ Claude must not copy source examples blindly.
 
 Claude must learn the structure and create configurable, curriculum-based patterns.
 
-## 9. Planning before implementation
+## 10. Planning before implementation
 
 After audit and source learning, Claude must write a detailed implementation plan before coding.
 
@@ -229,7 +255,7 @@ The plan must explain:
 11. How rendering will be separated from exercise logic.
 12. How visual styles will be configured.
 13. How diagrams, graphs, tables, coordinate systems, geometry drawings, and number lines will be generated.
-14. Which safe rendering/export tools Claude proposes to use.
+14. Which safe rendering/export tools Claude proposes to use, if any.
 15. How copy-as-image will work.
 16. How download-as-image will work.
 17. How A4 print layout will work.
@@ -245,106 +271,61 @@ Do not build until the plan is clear.
 
 If Yaniv explicitly approves implementation, continue in small, verifiable stages.
 
-## 10. Advanced toolchain and automation planning requirement
+## 11. Advanced toolchain and automation planning requirement
 
-Claude must think in advance about the strongest safe toolchain for the project.
+Claude must think in advance about the strongest useful toolchain for the project.
 
 Claude must not wait for Yaniv to name exact technical packages, mathematical engines, graphics libraries, testing tools, or deployment tools.
 
-Claude must inspect the repository, inspect the source requirements, understand the mathematical needs, and propose the best practical toolchain before implementation.
+Claude must not follow a tool list blindly.
 
-Claude must plan the toolchain for all major project needs, including:
+Claude must not install tools just because they sound advanced.
 
-- PDF/source extraction and source-learning workflow;
-- structured curriculum knowledge storage;
-- mathematical notation rendering;
-- geometry diagrams;
-- coordinate systems;
-- graphs;
-- tables;
-- charts;
-- number lines;
-- algebraic representations;
-- probability and statistics visuals;
-- Hebrew RTL UI;
-- premium visual design;
-- worksheet preview rendering;
-- copy-as-image;
-- download-as-image;
-- A4 print export;
-- public deployment;
-- performance optimization for many teachers;
-- private analytics visible only to Yaniv;
-- automated tests;
-- visual/regression checks;
-- Hebrew text validation;
-- mathematical validation.
+Claude must inspect the repository, inspect the source requirements, understand the mathematical needs, and then decide what is genuinely useful.
 
-Claude may use terminal commands and install safe dependencies when needed.
+Every tool must serve a real project requirement.
 
-Before installing dependencies, Claude must document:
+Claude must avoid unnecessary registrations, services, accounts, costs, and setup burden for Yaniv.
 
-1. the purpose of the dependency;
+Claude must only ask Yaniv to register for an external service if the service is truly needed and the need is explained clearly.
+
+Before installing dependencies or selecting external services, Claude must document:
+
+1. the purpose of the dependency or service;
 2. why it is needed;
 3. what alternatives were considered;
-4. why the selected tool is safe and appropriate;
+4. why the selected option is safe and appropriate;
 5. whether it affects deployment;
 6. whether it affects privacy or analytics;
 7. whether it adds cost, secrets, accounts, or external services;
-8. how it will be tested.
+8. how it will be tested;
+9. how it can be replaced later if needed.
 
 Claude must not install random, unnecessary, unsafe, abandoned, unrelated, or unmaintained packages.
-
-Claude must not add tools only because they sound advanced.
-
-Every tool must serve a real project requirement.
 
 Claude must prefer modular, maintainable, replaceable tools over one huge locked-in system.
 
 Claude must keep mathematical logic, visual rendering, Hebrew wording, curriculum knowledge, analytics, and deployment concerns separated.
 
-Claude must be allowed and expected to use automation heavily, but only in a safe, documented, reversible way.
-
-Claude must create real working automation, not pretend automation.
-
-Claude must verify that every installed or configured tool actually works in the project.
+Claude must use automation heavily only when it is safe, documented, reversible, and genuinely useful.
 
 If a tool choice is expensive, privacy-sensitive, requires secrets, requires external accounts, or changes the hosting architecture, Claude must stop and ask Yaniv for approval before implementation.
 
-## 11. Automation and execution behavior
+## 12. Real product requirement
 
-Claude must work automatically and intelligently.
+This project must become a real, working, fast, professional, useful public website.
 
-Claude must not ask Yaniv routine technical questions when Claude can inspect the repository and decide professionally.
+It must not be a fake demo.
 
-Claude may use terminal commands when needed.
+It must not contain demo labels, placeholder text, fake success messages, fake buttons, or fake generated content.
 
-Claude may install safe project dependencies only when necessary and justified.
+If something is not implemented, the UI or documentation must say it is not implemented.
 
-Claude must document every dependency it adds and why it is needed.
+If a feature is partially implemented, Claude must report it as partial.
 
-Claude must not install random, unsafe, abandoned, unnecessary, or unrelated packages.
+Claude must never claim production readiness without actual testing.
 
-Claude must prefer strong, appropriate tools for:
-
-- mathematical notation;
-- SVG rendering;
-- geometry drawing;
-- coordinate systems;
-- graph rendering;
-- tables and charts;
-- Hebrew RTL layout;
-- DOM-to-image or HTML-to-image export;
-- clipboard image copy;
-- PNG fallback download;
-- A4 printing;
-- analytics;
-- performance monitoring;
-- automated validation tests.
-
-If a decision is destructive, risky, privacy-sensitive, cost-sensitive, or changes the product direction, Claude must stop and ask Yaniv for approval.
-
-## 12. Final product requirements
+## 13. Final product requirements
 
 The final generator must be:
 
@@ -373,7 +354,7 @@ Every generated exercise must eventually support:
 - download as rendered image;
 - A4 print-ready layout.
 
-## 13. Public external link and heavy-site requirement
+## 14. Public external link and heavy-site requirement
 
 The final website must have a real external public link.
 
@@ -403,7 +384,7 @@ Claude must justify the deployment choice.
 
 If the selected hosting or analytics solution requires accounts, secrets, paid services, or privacy-sensitive configuration, Claude must clearly explain the tradeoffs and ask Yaniv for approval before implementation.
 
-## 14. Private analytics requirement
+## 15. Private analytics requirement
 
 Yaniv must be able to know, privately, how the site is being used.
 
@@ -434,7 +415,7 @@ Claude must prefer privacy-respecting aggregation unless Yaniv explicitly approv
 
 Claude must create a private admin/analytics access plan for Yaniv only.
 
-## 15. Hebrew UI requirement
+## 16. Hebrew UI requirement
 
 All final product UI must be in Hebrew.
 
@@ -459,7 +440,7 @@ No `demo`, `placeholder`, `sample`, or fake UI text is allowed.
 
 All capsules, buttons, cards, controls, and menus must be real and functional.
 
-## 16. Premium design requirement
+## 17. Premium design requirement
 
 The site must have premium-quality visual design.
 
@@ -482,7 +463,7 @@ The design must include:
 
 Graphics must support the mathematics and must never distract from it.
 
-## 17. Mathematical graphics requirement
+## 18. Mathematical graphics requirement
 
 All mathematical graphics must be accurate and high quality.
 
@@ -517,7 +498,7 @@ No manually inconsistent drawings.
 
 If a generated question changes numbers or parameters, all diagrams, labels, answers, and wording must update consistently.
 
-## 18. Quality gates
+## 19. Quality gates
 
 Claude must run deep checks before claiming anything is complete.
 
@@ -537,12 +518,12 @@ Required checks:
 12. Analytics privacy check — only Yaniv can see analytics.
 13. Performance check — the site remains fast enough for many teachers.
 14. Deployment check — the public external link works.
-15. Toolchain check — installed tools actually work and are documented.
+15. Toolchain check — selected tools actually work and are documented.
 16. No-demo check — no fake data, fake buttons, fake text, or fake success states.
 
 If any check fails, Claude must report the failure honestly and must not mark the feature complete.
 
-## 19. Work stages
+## 20. Work stages
 
 Claude must work in this order:
 
@@ -565,7 +546,7 @@ Claude must work in this order:
 17. Test deeply.
 18. Update documentation truthfully.
 
-## 20. Documentation and status rule
+## 21. Documentation and status rule
 
 Claude must keep `RULES.md` updated.
 
@@ -575,8 +556,8 @@ Claude must record:
 - what Claude created;
 - what Claude changed;
 - why each changed file was needed;
-- which tools/dependencies were selected;
-- why each tool/dependency was selected;
+- which tools or dependencies were selected;
+- why each tool or dependency was selected;
 - what was tested;
 - what failed;
 - what remains;
@@ -587,7 +568,7 @@ Claude must not create extra planning files unless they are clearly necessary an
 
 Claude must prefer keeping the master requirements and master prompt in `RULES.md`.
 
-## 21. Reporting format
+## 22. Reporting format
 
 At the end of every Claude work session, Claude must report:
 
@@ -609,9 +590,9 @@ PERCENT:
 
 Claude must not claim that something works unless it was actually implemented and tested.
 
-## 22. Current completion estimate
+## 23. Current completion estimate
 
-Repository organization for source-learning: 93%.
+Repository organization for source-learning: 94%.
 
 Source PDF upload: 100%.
 
