@@ -1,0 +1,51 @@
+{
+  "url": "https://yanivmizrachiy.github.io/targilim/",
+  "status": "PASS",
+  "checks": [
+    {
+      "name": "page loaded",
+      "ok": true
+    },
+    {
+      "name": "Hebrew title visible",
+      "ok": true
+    },
+    {
+      "name": "selectors visible",
+      "ok": true
+    },
+    {
+      "name": "selected grade 7 geometry G7-03",
+      "ok": true
+    },
+    {
+      "name": "question card and SVG created",
+      "ok": true
+    },
+    {
+      "name": "question text verified",
+      "ok": true
+    },
+    {
+      "name": "export buttons visible",
+      "ok": true
+    },
+    {
+      "name": "solution text verified",
+      "ok": true
+    },
+    {
+      "name": "screenshot saved",
+      "ok": true
+    },
+    {
+      "name": "no browser console errors",
+      "ok": true
+    }
+  ],
+  "error": null,
+  "questionText": "במשולש ישר-זווית, יתר \n15\n15 ס\"מ, רגל \n12\n12 ס\"מ. חשבו את אורך הרגל השנייה.",
+  "answerText": "𝑎\n2\n+\n1\n2\n2\n=\n1\n5\n2\na\n2\n+12\n2\n=15\n2\n𝑎\n2\n=\n225\n−\n144\n=\n81\na\n2\n=225−144=81\n𝑎\n=\n81\n=\n9\na=\n81\n\t​\n\n=9\nאורך הרגל: \n9\n9 ס\"מ.",
+  "exportButtonCount": 3,
+  "timestamp": "2026-06-09T21:23:10.882Z"
+}
