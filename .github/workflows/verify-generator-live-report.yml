@@ -1,0 +1,159 @@
+name: Verify live generator and write report
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "generator/index.html"
+      - ".github/workflows/verify-generator-live-report.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: verify-generator-live-report
+  cancel-in-progress: true
+
+jobs:
+  verify-live-generator-report:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install Playwright
+        run: |
+          npm init -y
+          npm i -D playwright
+          npx playwright install chromium --with-deps
+
+      - name: Run live browser verification and prepare report
+        id: verify
+        env:
+          GENERATOR_URL: "https://yanivmizrachiy.github.io/targilim/"
+        shell: bash
+        run: |
+          set +e
+          mkdir -p docs/verification
+          cat > verify-generator-live.mjs <<'EOF'
+          import { chromium } from 'playwright';
+          import fs from 'node:fs';
+
+          const url = process.env.GENERATOR_URL;
+          const browser = await chromium.launch();
+          const page = await browser.newPage({ viewport: { width: 390, height: 844 } });
+          const errors = [];
+          page.on('pageerror', err => errors.push(err.message));
+          page.on('console', msg => { if (msg.type() === 'error') errors.push(msg.text()); });
+
+          const result = {
+            url,
+            status: 'UNKNOWN',
+            checks: [],
+            error: null,
+            questionText: null,
+            answerText: null,
+            exportButtonCount: 0,
+            timestamp: new Date().toISOString()
+          };
+
+          function ok(name){ result.checks.push({ name, ok: true }); }
+
+          try {
+            await page.goto(url, { waitUntil: 'networkidle', timeout: 60000 });
+            ok('page loaded');
+            await page.waitForSelector('text=תרגילים', { timeout: 30000 });
+            ok('Hebrew title visible');
+            await page.waitForSelector('#sg', { timeout: 10000 });
+            await page.waitForSelector('#sd', { timeout: 10000 });
+            await page.waitForSelector('#st', { timeout: 10000 });
+            ok('selectors visible');
+            await page.selectOption('#sg', '7');
+            await page.selectOption('#sd', 'geometry');
+            await page.selectOption('#st', 'G7-03');
+            await page.selectOption('#sl', 'standard');
+            ok('selected grade 7 geometry G7-03');
+            await page.click('.btn-gen');
+            await page.waitForSelector('.qcard', { timeout: 10000 });
+            await page.waitForSelector('.qcard svg', { timeout: 10000 });
+            await page.waitForSelector('.qtext', { timeout: 10000 });
+            ok('question card and SVG created');
+            result.questionText = await page.locator('.qtext').innerText();
+            if (!/משולש|יתר|רגל/.test(result.questionText)) throw new Error('Generated question text missing expected Hebrew math wording: ' + result.questionText);
+            ok('question text verified');
+            result.exportButtonCount = await page.locator('.btn-exp').count();
+            if (result.exportButtonCount < 3) throw new Error('Expected at least 3 export buttons, found ' + result.exportButtonCount);
+            ok('export buttons visible');
+            await page.click('.btn-ans');
+            await page.waitForSelector('.answer.open', { timeout: 10000 });
+            result.answerText = await page.locator('.answer.open').innerText();
+            if (!/ס"מ|פיתגורס|אורך/.test(result.answerText)) throw new Error('Answer text missing expected Hebrew wording: ' + result.answerText);
+            ok('solution text verified');
+            await page.screenshot({ path: 'docs/verification/generator-live-smoke.png', fullPage: true });
+            ok('screenshot saved');
+            if (errors.length > 0) throw new Error('Browser console/page errors: ' + errors.join(' | '));
+            ok('no browser console errors');
+            result.status = 'PASS';
+          } catch (err) {
+            result.status = 'FAIL';
+            result.error = String(err?.stack || err?.message || err);
+            try { await page.screenshot({ path: 'docs/verification/generator-live-smoke.png', fullPage: true }); } catch {}
+          } finally {
+            await browser.close();
+          }
+
+          const lines = [];
+          lines.push('# Generator Live Verification Report');
+          lines.push('');
+          lines.push('Date: ' + result.timestamp);
+          lines.push('URL: ' + result.url);
+          lines.push('Status: ' + result.status);
+          lines.push('');
+          lines.push('## Checks');
+          for (const check of result.checks) lines.push('- ' + (check.ok ? 'PASS' : 'FAIL') + ' — ' + check.name);
+          lines.push('');
+          lines.push('## Observed');
+          lines.push('- exportButtonCount: ' + result.exportButtonCount);
+          if (result.questionText) lines.push('- questionText: ' + result.questionText.replace(/\n/g, ' / '));
+          if (result.answerText) lines.push('- answerText: ' + result.answerText.replace(/\n/g, ' / '));
+          if (result.error) { lines.push(''); lines.push('## Error'); lines.push('```'); lines.push(result.error); lines.push('```'); }
+          fs.writeFileSync('docs/verification/generator-live-latest.md', lines.join('\n'), 'utf8');
+          fs.writeFileSync('docs/verification/generator-live-latest.json', JSON.stringify(result, null, 2), 'utf8');
+          process.exit(result.status === 'PASS' ? 0 : 1);
+          EOF
+
+          node verify-generator-live.mjs
+          status=$?
+          echo "verify_status=$status" >> "$GITHUB_OUTPUT"
+          exit 0
+
+      - name: Commit verification report back to repository
+        if: always()
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/verification/generator-live-latest.md docs/verification/generator-live-latest.json docs/verification/generator-live-smoke.png || true
+          if git diff --cached --quiet; then
+            echo "No verification report changes to commit."
+          else
+            git commit -m "ci: update live generator verification report"
+            git push
+          fi
+
+      - name: Fail workflow if verification failed
+        if: always()
+        run: |
+          if [ "${{ steps.verify.outputs.verify_status }}" != "0" ]; then
+            echo "Live generator verification failed. See docs/verification/generator-live-latest.md"
+            exit 1
+          fi
+          echo "Live generator verification passed."
