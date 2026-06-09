@@ -15,7 +15,7 @@ All work performed today must be recorded under this date:
 - Gregorian date: 2026-06-09
 - Day: Tuesday
 
-Whenever work is done today by Yaniv, ChatGPT, or Claude later, the documentation must keep the date context clear and must not mix today's work with earlier or future work without an explicit date.
+Whenever work is done today by Yaniv, ChatGPT, or Claude, the documentation must keep the date context clear and must not mix today's work with earlier or future work without an explicit date.
 
 ## 3. Current phase
 
@@ -72,9 +72,16 @@ If Claude finds that `RULES.md` is disorganized, incomplete, duplicated, unclear
 
 Claude must not start implementation while the rules are unclear.
 
-## 5. Source of truth and progress tracking
+## 5. Source of truth, live status, and progress tracking
 
 `RULES.md` is the main source of truth for this project.
+
+`RULES.md` is not only a static requirements document. It is also a live project status and work-log document.
+
+Claude must treat this file as the place where both of the following are kept current:
+
+1. Yaniv's requirements.
+2. The real project state after every meaningful work session.
 
 Every new requirement from Yaniv must be added here in a professional order.
 
@@ -84,9 +91,23 @@ Contradictions must be detected and resolved explicitly.
 
 The repository must never contain documentation that contradicts the current project rules.
 
-`RULES.md` and `PROJECT_STATUS.md` must always show the real project state.
+At the end of every meaningful Claude work session, Claude must update `RULES.md` and `PROJECT_STATUS.md` with a clear status summary.
 
-They must clearly distinguish:
+That status summary must include:
+
+- What Claude attempted.
+- What Claude successfully completed.
+- What Claude changed in the repository.
+- What Claude could not complete.
+- Any blockers, missing files, missing permissions, failed tests, unsupported browser behavior, or unclear requirements.
+- What remains to do next.
+- The next planned work step.
+- Whether the relevant feature is only planned, partially implemented, implemented but not tested, or implemented and tested.
+- The real updated completion estimate.
+
+Claude must never leave the documentation saying that something is completed if it is only planned, untested, blocked, or partially done.
+
+`RULES.md` and `PROJECT_STATUS.md` must always distinguish:
 
 - What Yaniv has already done.
 - What ChatGPT has already done.
@@ -393,6 +414,8 @@ You are Claude, managing repository `yanivmizrachiy/targilim` for Yaniv Mizrachi
 
 The Hebrew product name is `תרגילים`.
 
+`RULES.md` is both the requirements document and the live project status document. You must read it before working and update it after every meaningful work session.
+
 Build a real Hebrew mathematics exercise generator for grades 7, 8, and 9 only after planning and source learning are complete.
 
 Use only Yaniv-supplied curriculum materials, examples, drawings, diagrams, and requirements.
@@ -432,6 +455,20 @@ The future generator must provide strong graphics, correct Hebrew punctuation, a
 Claude must choose the strongest appropriate tools, libraries, architecture, data structures, rendering methods, export methods, and quality checks to satisfy Yaniv's requirements. Yaniv defines what the product must do; Claude chooses how to implement it professionally.
 
 Keep `RULES.md` and `PROJECT_STATUS.md` synchronized after every meaningful change.
+
+At the end of every meaningful work session, update `RULES.md` and `PROJECT_STATUS.md` with:
+
+- What you attempted.
+- What you completed.
+- What repository files you changed.
+- What did not work or could not be completed.
+- Any blockers or missing inputs.
+- What remains to do.
+- The next planned work step.
+- Which work is planned, partial, implemented, tested, or blocked.
+- The real updated completion estimate.
+
+Never claim that a feature is complete unless it is implemented and tested.
 
 Always document what Yaniv did, what ChatGPT did, what Claude did, what remains, what is only planned, and what is implemented and tested.
 
@@ -486,6 +523,8 @@ ChatGPT has done:
 - Added the mandatory pre-work rules-file organization audit.
 - Added detailed requirements for Hebrew punctuation quality, graphics, colors, visual styles, app buttons, navigation, copy-as-image, download-as-image, and teacher-controlled generation parameters.
 - Added detailed requirements for a comfortable Hebrew-only teacher menu and automatic question updates when teacher parameters change.
+- Clarified that `RULES.md` is both the requirements document and the live status/work-log document.
+- Added a mandatory end-of-session documentation update rule for Claude.
 
 Yaniv has done:
 
@@ -503,6 +542,7 @@ Yaniv has done:
 - Required intelligent teacher-controlled generation parameters and adaptive Hebrew wording when teacher parameters change.
 - Required a comfortable teacher menu for selecting topics and editing generated questions.
 - Required professional thinking about which fields teachers should be allowed to change for each question type.
+- Required Claude to update `RULES.md` after each work session with completed work, failed work, blockers, remaining tasks, and next work plan.
 
 Claude has done:
 
@@ -535,4 +575,4 @@ Full requirements collection: in progress.
 
 Generator implementation: not started.
 
-Estimated project planning completion: 54%.
+Estimated project planning completion: 56%.
