@@ -57,6 +57,7 @@ The required topic groups include at least:
 - Source-file intake, learning, naming, and organization.
 - Exercise generator requirements.
 - Teacher-controlled generation parameters.
+- Teacher menu and question-editing workflow.
 - Hebrew wording, punctuation, and RTL quality.
 - Mathematical notation and mathematical writing quality.
 - Graphics, diagrams, tables, graphs, and visual representation quality.
@@ -108,6 +109,8 @@ This includes:
 - Navigation buttons.
 - Action buttons.
 - Teacher controls.
+- Teacher menus.
+- Question editing menus.
 - Student-facing questions.
 - Worksheet content.
 - Mathematical explanations.
@@ -240,9 +243,13 @@ The machine must learn:
 - Which visual representations appear in the source files.
 - Which question structures can be safely turned into configurable generator templates.
 
-## 12. Teacher-controlled generation parameters
+## 12. Teacher menu and configurable generation parameters
 
-The future generator must allow teachers to control meaningful parameters.
+The future generator must provide a comfortable, clear, Hebrew-only teacher menu.
+
+The teacher must be able to choose a topic and then adjust meaningful changes and edits to the generated questions through a convenient interface.
+
+Claude must think professionally about what each question type should allow the teacher to generate, edit, and update automatically. The generator must expose useful controls, not random controls.
 
 Teacher controls may include:
 
@@ -255,8 +262,12 @@ Teacher controls may include:
 - Number of questions.
 - Total quantity in a problem, when relevant.
 - Given numbers and numerical ranges.
+- Ratio, percentage, part-whole structure, or other mathematical structure when relevant.
+- Number of objects, categories, data points, bars, sectors, points, angles, segments, or shapes when relevant.
 - Context or story theme.
+- Names, objects, and scenario details when pedagogically useful.
 - Representation type: text, table, diagram, graph, coordinate system, number line, geometric drawing, bar chart, pie chart, or another source-supported representation.
+- Whether the question requires drawing.
 - Whether answers are included.
 - Whether hints are included.
 - Whether solution notes are included.
@@ -267,7 +278,25 @@ Teacher controls may include:
 - Grayscale mode.
 - Full-color mode.
 
-When a teacher changes the topic, context, quantity, numbers, or any important data, the generator must adapt the exercise wording and visual representation so the result remains mathematically correct, natural in Hebrew, and suitable for printing.
+The menu must help the teacher choose sensible options according to the selected grade, topic, and skill.
+
+The menu must not show irrelevant controls that do not fit the selected exercise type.
+
+When a teacher changes the topic, context, quantity, numbers, or any important data, the generator must automatically update:
+
+- The mathematical validity of the question.
+- The Hebrew wording.
+- The punctuation.
+- The RTL layout.
+- The visual representation.
+- The answer, if answers are enabled.
+- The hint or solution notes, if enabled.
+- The copy-as-image output.
+- The download-as-image output.
+
+Changing a teacher-controlled parameter must never leave stale text, wrong numbers, incorrect answers, mismatched graphics, broken Hebrew, or outdated visual elements.
+
+Each generated question should have a simple editing path: choose topic, adjust parameters, preview the question, copy as image, download as image, or add to worksheet.
 
 ## 13. Exercise output rule
 
@@ -394,6 +423,10 @@ Every question must be suitable for A4 printing and for placement in Word, Canva
 
 Every question must include real working options to copy the final rendered question as an image and download it as an image, with a useful PNG fallback when needed.
 
+The future generator must provide a comfortable Hebrew-only teacher menu for choosing topics and editing meaningful question parameters.
+
+When a teacher changes a parameter, the generator must automatically update the exercise content, Hebrew wording, mathematical answer, visual representation, copy-as-image output, and download-as-image output.
+
 The future generator must provide strong graphics, correct Hebrew punctuation, accurate mathematical notation, high-quality visual design, teacher-controlled parameters, Hebrew-only buttons, and print-ready output.
 
 Claude must choose the strongest appropriate tools, libraries, architecture, data structures, rendering methods, export methods, and quality checks to satisfy Yaniv's requirements. Yaniv defines what the product must do; Claude chooses how to implement it professionally.
@@ -452,6 +485,7 @@ ChatGPT has done:
 - Reorganized `RULES.md` by professional requirement topics.
 - Added the mandatory pre-work rules-file organization audit.
 - Added detailed requirements for Hebrew punctuation quality, graphics, colors, visual styles, app buttons, navigation, copy-as-image, download-as-image, and teacher-controlled generation parameters.
+- Added detailed requirements for a comfortable Hebrew-only teacher menu and automatic question updates when teacher parameters change.
 
 Yaniv has done:
 
@@ -467,6 +501,8 @@ Yaniv has done:
 - Required Hebrew-only app buttons and navigation buttons.
 - Required one-click copy-as-image and download-as-image actions for generated questions.
 - Required intelligent teacher-controlled generation parameters and adaptive Hebrew wording when teacher parameters change.
+- Required a comfortable teacher menu for selecting topics and editing generated questions.
+- Required professional thinking about which fields teachers should be allowed to change for each question type.
 
 Claude has done:
 
@@ -480,6 +516,8 @@ Not done yet:
 - Organization of source files inside GitHub.
 - Claude implementation.
 - Exercise generator UI.
+- Teacher menu implementation.
+- Automatic parameter-update engine.
 - Copy-as-image implementation.
 - Download-as-image implementation.
 - Print/export implementation.
@@ -497,4 +535,4 @@ Full requirements collection: in progress.
 
 Generator implementation: not started.
 
-Estimated project planning completion: 52%.
+Estimated project planning completion: 54%.
