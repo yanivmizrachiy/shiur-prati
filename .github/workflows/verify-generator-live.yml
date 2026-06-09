@@ -1,0 +1,102 @@
+name: Verify live generator
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "generator/index.html"
+      - ".github/workflows/verify-generator-live.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify-live-generator:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install Playwright
+        run: |
+          npm init -y
+          npm i -D playwright
+          npx playwright install chromium --with-deps
+
+      - name: Verify live GitHub Pages generator
+        env:
+          GENERATOR_URL: "https://yanivmizrachiy.github.io/targilim/"
+        run: |
+          cat > verify-generator-live.mjs <<'EOF'
+          import { chromium } from 'playwright';
+
+          const url = process.env.GENERATOR_URL;
+          const browser = await chromium.launch();
+          const page = await browser.newPage({ viewport: { width: 390, height: 844 } });
+
+          const errors = [];
+          page.on('pageerror', err => errors.push(err.message));
+          page.on('console', msg => {
+            if (msg.type() === 'error') errors.push(msg.text());
+          });
+
+          await page.goto(url, { waitUntil: 'networkidle', timeout: 60000 });
+
+          await page.waitForSelector('text=תרגילים', { timeout: 30000 });
+          await page.waitForSelector('#sg', { timeout: 10000 });
+          await page.waitForSelector('#sd', { timeout: 10000 });
+          await page.waitForSelector('#st', { timeout: 10000 });
+
+          await page.selectOption('#sg', '7');
+          await page.selectOption('#sd', 'geometry');
+          await page.selectOption('#st', 'G7-03');
+          await page.selectOption('#sl', 'standard');
+          await page.click('.btn-gen');
+
+          await page.waitForSelector('.qcard', { timeout: 10000 });
+          await page.waitForSelector('.qcard svg', { timeout: 10000 });
+          await page.waitForSelector('.qtext', { timeout: 10000 });
+
+          const questionText = await page.locator('.qtext').innerText();
+          if (!/משולש|יתר|רגל/.test(questionText)) {
+            throw new Error('Generated question text did not contain expected Hebrew math wording. Text: ' + questionText);
+          }
+
+          const exportButtonCount = await page.locator('.btn-exp').count();
+          if (exportButtonCount < 3) {
+            throw new Error('Expected at least 3 export buttons; found ' + exportButtonCount);
+          }
+
+          await page.click('.btn-ans');
+          await page.waitForSelector('.answer.open', { timeout: 10000 });
+
+          const answerText = await page.locator('.answer.open').innerText();
+          if (!/ס"מ|פיתגורס|אורך/.test(answerText)) {
+            throw new Error('Answer text did not contain expected Hebrew solution wording. Text: ' + answerText);
+          }
+
+          await page.screenshot({ path: 'generator-live-smoke.png', fullPage: true });
+
+          if (errors.length > 0) {
+            throw new Error('Browser console/page errors: ' + errors.join(' | '));
+          }
+
+          await browser.close();
+          console.log('GENERATOR_LIVE_SMOKE_OK');
+          EOF
+
+          node verify-generator-live.mjs
+
+      - name: Upload smoke screenshot
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: generator-live-smoke
+          path: generator-live-smoke.png
+          if-no-files-found: ignore
