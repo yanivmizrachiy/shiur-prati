@@ -1,4 +1,4 @@
-name: Deploy static site to GitHub Pages
+name: Deploy targilim to GitHub Pages
 on:
   push:
     branches: [main]
@@ -18,15 +18,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Verify runtime files exist
-        shell: bash
-        run: |
-          test -f index.html
-          test -f styles.css
-          test -f app.js
+      - name: Verify generator exists
+        run: test -f generator/index.html || (echo "generator/index.html missing" && exit 1)
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: "."
+          path: "generator"
       - id: deployment
         uses: actions/deploy-pages@v4
