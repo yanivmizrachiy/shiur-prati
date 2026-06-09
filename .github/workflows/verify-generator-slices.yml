@@ -1,0 +1,54 @@
+name: Verify generator slices
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "generator/index.html"
+      - ".github/workflows/verify-generator-slices.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - run: |
+          npm init -y
+          npm i -D playwright
+          npx playwright install chromium --with-deps
+      - run: |
+          cat > verify.mjs <<'EOF'
+          import { chromium } from 'playwright';
+          const browser = await chromium.launch();
+          const page = await browser.newPage({ viewport: { width: 390, height: 844 } });
+          const errors = [];
+          page.on('pageerror', e => errors.push(e.message));
+          page.on('console', m => { if (m.type() === 'error') errors.push(m.text()); });
+          await page.goto('https://yanivmizrachiy.github.io/targilim/', { waitUntil: 'networkidle', timeout: 60000 });
+          await page.waitForSelector('text=תרגילים');
+          for (const id of ['G7-03','G7-04']) {
+            await page.selectOption('#sg','7');
+            await page.selectOption('#sd','geometry');
+            await page.selectOption('#st',id);
+            await page.click('.btn-gen');
+            await page.waitForSelector('.qcard svg');
+            const q = await page.locator('.qtext').innerText();
+            await page.click('.btn-ans');
+            await page.waitForSelector('.answer.open');
+            const a = await page.locator('.answer.open').innerText();
+            const buttons = await page.locator('.btn-exp').count();
+            if (buttons < 3) throw new Error(id + ' export buttons missing');
+            if (id === 'G7-03' && !/משולש|יתר|רגל/.test(q+a)) throw new Error('G7-03 wording failed');
+            if (id === 'G7-04' && !/זוויות|∠|180/.test(q+a)) throw new Error('G7-04 wording failed');
+          }
+          if (errors.length) throw new Error(errors.join(' | '));
+          await browser.close();
+          console.log('GENERATOR_SLICES_G7_03_G7_04_OK');
+          EOF
+          node verify.mjs
