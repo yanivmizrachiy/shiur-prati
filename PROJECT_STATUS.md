@@ -1,105 +1,51 @@
-# Project Status — Targilim
+# Project Status — Targilim תרגילים
+
+Last updated: 2026-06-09
 
 ## Current repository
 
 `yanivmizrachiy/targilim`
 
-## Hebrew project name
-
-`תרגילים`
-
-## Current date context
-
-- Date: 2026-06-09
-- Day: Tuesday
-
 ## Current phase
 
-Planning, source-material intake, and preparation for Claude source learning.
+Claude handoff execution is in progress through ChatGPT/GitHub.
 
-The generator is not implemented yet.
+## Completed and verified earlier
 
-## Completed today
+- Repository renamed to `targilim`.
+- 10 real source PDFs uploaded.
+- Preserved originals exist under `sources/intake/2026-06-09/originals`.
+- `RULES.md` is the source of truth.
+- README was corrected for the Targilim project.
 
-### Yaniv
+## Applied from Claude handoff
 
-- Chose the project direction.
-- Approved converting an existing repository.
-- Renamed the repository to `targilim`.
-- Provided 10 source curriculum PDFs named `targilim1.pdf` through `targilim10.pdf`.
-- Required Claude to learn every source file deeply before renaming or using it.
-- Required every generated exercise to be print-oriented.
-- Required strong graphics, Hebrew punctuation, accurate mathematical notation, and copy-as-image output.
+- Deployment workflow was updated to deploy the `generator/` folder.
+- A temporary workflow was added to try to apply the larger Claude handoff from inside GitHub Actions.
+- Some Claude-provided content is ready to be added when execution succeeds.
 
-### ChatGPT
+## Not fully available from Claude handoff
 
-- Created and organized project rules.
-- Added Claude deep source learning and quality protocol.
-- Added Claude Phase 1 source learning task.
-- Added repository organization audit.
-- Helped upload and verify the 10 source PDF files.
-- Replaced the old README with a correct Targilim README.
-- Synchronized project status after PDF upload.
+The handoff did not include complete file content for these Phase 1 files:
 
-### Claude
+- `source-learning/2026-06-09/`
+- `curriculum-map/CURRICULUM_MAP.md`
+- `question-patterns/PATTERN_INDEX.md`
+- `docs/AUDIT_AND_ARCHITECTURE_PLAN_2026-06-09.md`
+- `sources/official/math_7_9.pdf`
 
-- Not started.
-- Claude has not implemented or learned the source files yet.
+## Current honest status
 
-## Source PDF status
+| Item | Status |
+|---|---|
+| Source PDFs 01-10 | Verified uploaded |
+| Claude Phase 1 files | Missing full content in executable handoff |
+| Generator | Not verified in browser |
+| Copy as image | Not verified |
+| Print / A4 | Not verified |
+| Public Pages link | Not verified after generator workflow change |
+| Analytics | Deferred, not implemented |
 
-There are 10 real source PDF files.
+## Next step
 
-The repository contains 20 PDF entries because each source exists twice:
-
-1. one organized copy in a per-source folder;
-2. one preserved original copy under `sources/intake/2026-06-09/originals`.
-
-Remote verification result:
-
-```text
-REMOTE_EXPECTED_FOUND_COUNT=20
-REMOTE_EXPECTED_TOTAL=20
-TARGILIM_FULL_REPAIR_AND_UPLOAD_OK
-```
-
-## Organized source location
-
-```text
-sources/intake/2026-06-09/
-```
-
-## Important documents
-
-```text
-RULES.md
-docs/CLAUDE_DEEP_SOURCE_LEARNING_AND_QUALITY_PROTOCOL.md
-docs/CLAUDE_PHASE_1_SOURCE_LEARNING_TASK.md
-docs/audits/REPO_ORGANIZATION_AUDIT_2026-06-09.md
-sources/intake/2026-06-09/MANIFEST.md
-```
-
-## Not started
-
-- Deep source-file learning by Claude.
-- Curriculum map.
-- Question-pattern index.
-- Final pedagogical renaming after learning.
-- Cleanup of old project files.
-- Exercise generator UI.
-- Teacher menu.
-- Automatic parameter-update engine.
-- Copy-as-image implementation.
-- Download-as-image implementation.
-- Print/export implementation.
-- Testing.
-
-## Completion estimate
-
-Repository organization for planning/source-learning: 90%.
-
-Source PDF upload: 100%.
-
-Claude source learning: 0%.
-
-Generator implementation: 0%.
+Claude must provide complete content or patch for the missing Phase 1 files. ChatGPT can continue executing GitHub changes after the missing content is provided.
