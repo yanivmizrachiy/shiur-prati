@@ -2,9 +2,7 @@
 
 ## Repository identity
 
-Current technical repository: `yanivmizrachiy/shiur-prati`.
-
-Target technical repository name: `targilim` when the repository rename is completed.
+Technical repository: `yanivmizrachiy/targilim`.
 
 Hebrew project name: `תרגילים`.
 
@@ -15,7 +13,7 @@ Project purpose: create a real, curriculum-based Hebrew mathematics exercise gen
 The project is currently in the requirements collection and planning phase.
 
 Allowed now:
-- Keep this repository as the working repository for the new project.
+- Use this repository as the working repository for the new project.
 - Create and maintain this `RULES.md` file.
 - Collect Yaniv's requirements.
 - Organize requirements in a professional, contradiction-free order.
@@ -95,7 +93,7 @@ If direct browser image clipboard copying is not supported, the app must provide
 
 ## Repository conversion rule
 
-This repository originally served a different project. It is now being prepared for conversion into the `תרגילים` project.
+This repository originally served a different project. It is now being converted into the `תרגילים` project.
 
 No destructive cleanup is allowed until Yaniv explicitly approves it.
 Before cleanup, preserve only what is intentionally needed; remove or archive irrelevant old material only after approval.
@@ -108,7 +106,8 @@ Only after the planning phase is complete should Claude receive one large profes
 
 ## Current completion estimate
 
+Repository renamed to `yanivmizrachiy/targilim`: completed.
 Initial repository rules: created.
 Full requirements collection: in progress.
 Generator implementation: not started.
-Estimated project planning completion: 25%.
+Estimated project planning completion: 38%.
