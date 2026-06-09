@@ -285,3 +285,49 @@ Source-material manifest: created.
 Full requirements collection: in progress.
 Generator implementation: not started.
 Estimated project planning completion: 48%.
+
+## Source intake added on 2026-06-09
+
+The following source files were organized for Claude learning:
+
+1. Grade 7 algebra curriculum.
+2. Grade 8 algebra curriculum.
+3. Grade 7 pre-deductive geometry curriculum.
+4. Grade 7 numeric domain curriculum.
+5. Grade 8 geometry curriculum.
+6. Uncertainty domain curriculum and examples.
+7. Numeric domain principles for grades 7-8.
+8. Algebra domain principles for grades 7-8.
+9. Geometry domain principles for grades 7-8.
+10. Grade 8 teaching sequence for 2026-2027.
+
+Each source file must be studied separately.
+
+Every exercise appearing in the source files must be analyzed as a possible pattern for the future exercise generator.
+
+Claude must code all documented rules into the future exercise machine.
+
+The generator must let teachers change:
+
+- grade
+- mathematical domain
+- topic
+- subtopic
+- skill
+- numbers and quantities
+- context/theme
+- representation type
+- visual style
+- color mode
+- black-and-white / grayscale / full-color output
+- whether answers or hints are included
+- worksheet length and difficulty
+
+The final product must provide:
+
+- very strong graphics
+- correct Hebrew punctuation
+- accurate mathematical notation
+- print-ready layout
+- copy-as-image output for every generated exercise
+- immediate paste support into Word, Canva, Google Docs, PowerPoint, or another print-oriented editor
