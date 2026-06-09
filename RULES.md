@@ -8,14 +8,14 @@ Hebrew project name: `תרגילים`.
 
 Project purpose: create a real, curriculum-based Hebrew mathematics exercise generator for grades 7, 8, and 9.
 
-## 2. Current date and work-log rule
+## 2. Date and work-log rule
 
 All work performed today must be recorded under this date:
 
 - Gregorian date: 2026-06-09
 - Day: Tuesday
 
-Whenever work is done today by Yaniv, ChatGPT, or Claude, the documentation must keep the date context clear and must not mix today's work with earlier or future work without an explicit date.
+Every work session by Yaniv, ChatGPT, or Claude must keep its date context clear.
 
 ## 3. Current phase
 
@@ -25,12 +25,10 @@ The generator is not implemented yet.
 
 Allowed now:
 
-- Use this repository as the working repository for the new project.
-- Create and maintain this `RULES.md` file.
-- Keep the Claude working prompt inside this `RULES.md` file.
-- Collect Yaniv's requirements.
-- Organize requirements in a professional, contradiction-free order.
-- Prepare source-material intake folders and documentation for curriculum files, drawings, examples, and uploaded learning materials.
+- Maintain `RULES.md` as the main source of truth.
+- Keep Claude's working instructions inside `RULES.md`.
+- Collect and organize Yaniv's requirements.
+- Prepare source-material intake, documentation, and planning.
 
 Forbidden now:
 
@@ -39,86 +37,64 @@ Forbidden now:
 - Do not invent curriculum content.
 - Do not generate fake exercises.
 - Do not create fake working buttons.
-- Do not delete repository files until Yaniv explicitly approves the final conversion/cleanup step.
+- Do not delete old project files until Yaniv explicitly approves cleanup.
 - Do not claim that any feature works before it is implemented and tested.
 
-## 4. Mandatory rules-file organization audit
+## 4. RULES.md is both requirements and live status
 
-Before every meaningful continuation of the project, Claude must first inspect `RULES.md` and verify that it is truly organized, current, complete, and contradiction-free.
+`RULES.md` is not only a static requirements document.
+
+It is also the live project status and work-log document.
+
+Claude must treat `RULES.md` as the place where both of the following are always current:
+
+1. Yaniv's product requirements.
+2. The real project state after every meaningful work session.
+
+At the end of every meaningful Claude work session, Claude must update `RULES.md` and `PROJECT_STATUS.md` with:
+
+- What Claude attempted.
+- What Claude completed successfully.
+- What repository files Claude changed.
+- What Claude could not complete.
+- Any blockers, missing files, missing permissions, failed tests, unsupported browser behavior, or unclear requirements.
+- What remains to do.
+- The next planned work step.
+- Whether the relevant feature is planned, partial, implemented but untested, implemented and tested, or blocked.
+- The real updated completion estimate.
+
+Claude must never leave the documentation claiming that something is completed if it is only planned, untested, blocked, or partial.
+
+## 5. Mandatory rules-file organization audit
+
+Before every meaningful continuation of the project, Claude must inspect `RULES.md` and verify that it is organized, current, complete, and contradiction-free.
 
 Claude must check that Yaniv's requirements are organized by professional topics, not scattered randomly.
 
-The required topic groups include at least:
+Required topic groups include:
 
 - Repository identity and current phase.
-- Source of truth and progress tracking.
+- Source of truth, live status, and progress tracking.
 - Curriculum and source-material learning.
 - Grade 7, grade 8, and grade 9 curriculum mapping.
 - Source-file intake, learning, naming, and organization.
+- Deep source learning from the 10 curriculum files.
 - Exercise generator requirements.
-- Teacher-controlled generation parameters.
-- Teacher menu and question-editing workflow.
+- Teacher menu and configurable question editing.
 - Hebrew wording, punctuation, and RTL quality.
 - Mathematical notation and mathematical writing quality.
-- Graphics, diagrams, tables, graphs, and visual representation quality.
+- Geometry, coordinate-system, diagram, graph, and visual representation quality.
 - Color modes and design palettes.
 - Print-only worksheet output.
 - Navigation buttons and app buttons.
 - Copy-as-image and download-as-image features.
+- Automated quality gates and tests.
 - Claude implementation responsibility.
 - What Yaniv has done, what ChatGPT has done, what Claude has done, and what remains.
 
-If Claude finds that `RULES.md` is disorganized, incomplete, duplicated, unclear, or contradictory, Claude must fix the rules file first before implementing or changing product code.
+If `RULES.md` is disorganized, duplicated, unclear, incomplete, or contradictory, Claude must fix the rules file before implementing product code.
 
 Claude must not start implementation while the rules are unclear.
-
-## 5. Source of truth, live status, and progress tracking
-
-`RULES.md` is the main source of truth for this project.
-
-`RULES.md` is not only a static requirements document. It is also a live project status and work-log document.
-
-Claude must treat this file as the place where both of the following are kept current:
-
-1. Yaniv's requirements.
-2. The real project state after every meaningful work session.
-
-Every new requirement from Yaniv must be added here in a professional order.
-
-Every update must preserve previous requirements unless Yaniv explicitly cancels or replaces them.
-
-Contradictions must be detected and resolved explicitly.
-
-The repository must never contain documentation that contradicts the current project rules.
-
-At the end of every meaningful Claude work session, Claude must update `RULES.md` and `PROJECT_STATUS.md` with a clear status summary.
-
-That status summary must include:
-
-- What Claude attempted.
-- What Claude successfully completed.
-- What Claude changed in the repository.
-- What Claude could not complete.
-- Any blockers, missing files, missing permissions, failed tests, unsupported browser behavior, or unclear requirements.
-- What remains to do next.
-- The next planned work step.
-- Whether the relevant feature is only planned, partially implemented, implemented but not tested, or implemented and tested.
-- The real updated completion estimate.
-
-Claude must never leave the documentation saying that something is completed if it is only planned, untested, blocked, or partially done.
-
-`RULES.md` and `PROJECT_STATUS.md` must always distinguish:
-
-- What Yaniv has already done.
-- What ChatGPT has already done.
-- What Claude has already done.
-- What has not been done yet.
-- What remains to do next.
-- Which requirements are documented.
-- Which features are only planned.
-- Which features are implemented and tested.
-
-Claude has not started implementation yet.
 
 ## 6. Product language rules
 
@@ -150,15 +126,16 @@ Every generated question must be checked for:
 - Correct Hebrew punctuation.
 - Clear mathematical Hebrew.
 - Natural sentence flow.
+- Correct use of commas, periods, colons, question marks, parentheses, and mathematical punctuation.
 - No awkward automatic translation.
 - Correct RTL order.
 - Correct placement of numbers, variables, units, and mathematical symbols inside Hebrew text.
 - Appropriate wording for Israeli middle-school mathematics.
 - Clear instruction verbs such as חשבו, מצאו, השלימו, הסבירו, סמנו, סרטטו, קבעו, נמקו, when pedagogically appropriate.
 
-If a teacher changes the topic, numbers, context, quantity, representation type, or any other generator parameter, the Hebrew wording must adapt intelligently and remain grammatically correct.
+If a teacher changes a topic, number, quantity, context, representation type, or any other generator parameter, the Hebrew wording must adapt intelligently and remain grammatically correct.
 
-Changing a value must not create broken Hebrew, mismatched singular/plural forms, mismatched gender forms, unclear references, or incorrect punctuation.
+Changing a value must not create broken Hebrew, mismatched singular/plural forms, mismatched gender forms, unclear references, stale text, or incorrect punctuation.
 
 ## 8. Curriculum and source-material rule
 
@@ -170,11 +147,10 @@ The generator is for:
 - Grade 8.
 - Grade 9.
 
-Claude must first store, organize, study, and understand the supplied curriculum information and uploaded source materials inside the repository before implementing exercise generation.
+Claude must first store, organize, study, and understand the supplied curriculum information and source materials inside the repository before implementing exercise generation.
 
 Source materials may include:
 
-- Text explanations.
 - Curriculum documents.
 - Tables.
 - Images.
@@ -183,14 +159,6 @@ Source materials may include:
 - Sample questions.
 - Teacher examples.
 - Mathematical visual representations.
-
-Every source file uploaded for Claude to study must initially be stored safely in the repository without losing information.
-
-Claude must inspect and understand each source file before renaming it.
-
-After understanding a file, Claude must give it a meaningful professional filename and place it in the correct folder according to grade, topic, skill, or source-material type.
-
-Claude must not rename files blindly.
 
 Every generated question must map to:
 
@@ -207,7 +175,50 @@ Every generated question must map to:
 - Common misconception addressed, if relevant.
 - Source file or example used, if relevant.
 
-## 9. Source-file intake and renaming workflow
+## 9. Ten source-file learning requirement
+
+Claude must learn the 10 curriculum/source files identified for this project before building the exercise generator.
+
+The 10 source files identified today are:
+
+1. `targilim1.pdf` — Algebra, grade 7.
+2. `targilim2.pdf` — Algebra, grade 8.
+3. `targilim3.pdf` — Geometry, grade 7.
+4. `targilim4.pdf` — Geometry, grade 8.
+5. `targilim5.pdf` — Numeric domain, grade 7.
+6. `targilim6.pdf` — Uncertainty, statistics, probability, cross-grade.
+7. `targilim7.pdf` — Numeric domain principles, grades 7 and 8.
+8. `targilim8.pdf` — Algebra domain principles, grades 7 and 8.
+9. `targilim9.pdf` — Geometry domain principles, grades 7 and 8.
+10. `targilim10.pdf` — Grade 8 teaching sequence for 2026-2027.
+
+Before learning them, Claude must verify whether the raw PDF files are actually present in the repository. If any file is missing, Claude must mark source learning as blocked for that file and document the blocker honestly.
+
+For each source file Claude must extract and document:
+
+- Grade level or grade range.
+- Curriculum domain.
+- Topics and subtopics.
+- Skills and prerequisite skills.
+- Question types.
+- Exercise structures.
+- Examples that can become generator templates.
+- Required drawings or diagrams.
+- Coordinate-system uses.
+- Geometry objects, markings, and constructions.
+- Tables, charts, graphs, bar charts, pie charts, number lines, and visual representations.
+- Mathematical notation conventions.
+- Hebrew wording patterns.
+- Expected answer types.
+- Common mistakes or misconceptions when visible.
+
+Claude must not rename any source file blindly.
+
+Claude may only rename or reorganize a source file after understanding its content.
+
+Every source file must remain traceable back to its original uploaded file.
+
+## 10. Source-file intake and renaming workflow
 
 When Yaniv uploads learning files to the repository, Claude must follow this workflow:
 
@@ -222,36 +233,11 @@ When Yaniv uploads learning files to the repository, Claude must follow this wor
 9. Connect the file to future question-generation rules.
 10. Update `RULES.md` and `PROJECT_STATUS.md` when the project state changes.
 
-## 10. Uploaded source-material manifest — 2026-06-09
-
-A detailed one-by-one manifest for the uploaded PDFs is located here:
-
-```text
-source-materials/raw/2026-06-09/MANIFEST.md
-```
-
-The 10 source PDFs identified today are:
-
-1. `targilim1.pdf` — Algebra, grade 7.
-2. `targilim2.pdf` — Algebra, grade 8.
-3. `targilim3.pdf` — Geometry, grade 7.
-4. `targilim4.pdf` — Geometry, grade 8.
-5. `targilim5.pdf` — Numeric domain, grade 7.
-6. `targilim6.pdf` — Uncertainty/statistics/probability, cross-grade.
-7. `targilim7.pdf` — Numeric domain principles, grades 7 and 8.
-8. `targilim8.pdf` — Algebra domain principles, grades 7 and 8.
-9. `targilim9.pdf` — Geometry domain principles, grades 7 and 8.
-10. `targilim10.pdf` — Grade 8 teaching sequence for 2026-2027.
-
-Each source file must be studied separately.
-
-Every exercise appearing in the source files must be analyzed as a possible pattern for the future exercise generator.
-
 ## 11. Exercise generator requirements
 
 Claude must eventually code all documented rules into the future exercise machine.
 
-The exercise generator must not merely replace numbers. It must understand the mathematical structure of the exercise, the topic, the required skill, and the Hebrew wording pattern.
+The generator must not merely replace numbers. It must understand the mathematical structure of the exercise, the topic, the required skill, the visual representation, and the Hebrew wording pattern.
 
 The machine must learn:
 
@@ -264,13 +250,17 @@ The machine must learn:
 - Which visual representations appear in the source files.
 - Which question structures can be safely turned into configurable generator templates.
 
+Every exercise appearing in the source files must be studied as a possible pattern for the future exercise generator.
+
 ## 12. Teacher menu and configurable generation parameters
 
 The future generator must provide a comfortable, clear, Hebrew-only teacher menu.
 
-The teacher must be able to choose a topic and then adjust meaningful changes and edits to the generated questions through a convenient interface.
+The teacher must be able to choose a topic and adjust meaningful changes and edits to the generated questions through a convenient interface.
 
-Claude must think professionally about what each question type should allow the teacher to generate, edit, and update automatically. The generator must expose useful controls, not random controls.
+Claude must think professionally about what each question type should allow the teacher to generate, edit, and update automatically.
+
+The generator must expose useful controls, not random controls.
 
 Teacher controls may include:
 
@@ -315,34 +305,40 @@ When a teacher changes the topic, context, quantity, numbers, or any important d
 - The copy-as-image output.
 - The download-as-image output.
 
-Changing a teacher-controlled parameter must never leave stale text, wrong numbers, incorrect answers, mismatched graphics, broken Hebrew, or outdated visual elements.
+Changing a teacher-controlled parameter must never leave stale text, wrong numbers, incorrect answers, mismatched graphics, broken Hebrew, outdated drawings, or outdated visual elements.
 
 Each generated question should have a simple editing path: choose topic, adjust parameters, preview the question, copy as image, download as image, or add to worksheet.
 
-## 13. Exercise output rule
+## 13. Print-only output rule
 
 All generated exercises are for print-oriented worksheets only.
 
-The generator is not being built as a system for assigning computerized tasks to students.
+The generator is not being built as a computerized task-assignment system for students.
 
 The target output is printable mathematics content that a teacher can place into a worksheet, Word document, Canva document, Google Docs document, PowerPoint slide, or A4 print layout.
 
-## 14. Graphics and mathematical writing rule
+## 14. Mathematical graphics and textbook-quality rendering
 
 Every generated question must use the strongest and highest-quality visual and mathematical presentation the system can produce.
+
+The required quality target is textbook-quality mathematical rendering.
 
 This includes:
 
 - Clear Hebrew RTL layout.
 - Accurate mathematical notation.
-- Clean diagrams when diagrams are required.
-- High-quality tables, graphs, coordinate systems, number lines, geometric drawings, and visual representations when relevant.
+- High-quality geometry drawings.
+- Correct geometric labels and markings.
+- Accurate coordinate systems.
+- Clear axes, scale marks, plotted points, rays, segments, angles, polygons, circles, and other mathematical objects when relevant.
+- Correct use of line styles, arrows, labels, congruence markings, angle markings, tick marks, and measurement notation when relevant.
+- High-quality tables, graphs, number lines, bar charts, pie charts, and visual representations when relevant.
 - Print-ready visual clarity.
 - No cropped text.
 - No low-quality placeholder graphics.
 - No fake visuals.
 
-Claude must use its strongest available tools and implementation judgment to satisfy these requirements. Yaniv defines what the product must do; Claude must choose the best technical tools and implementation methods.
+The rendered result must be suitable for direct copying as a high-quality image and pasting into Word, Canva, Google Docs, PowerPoint, or another print-oriented editor.
 
 ## 15. Color, grayscale, and visual style rule
 
@@ -378,7 +374,7 @@ Required button categories include:
 - Export worksheet for printing.
 - Back, next, and previous actions when relevant.
 
-Buttons must be understandable to teachers and should not use awkward wording.
+Buttons must be understandable to teachers and must not use awkward wording.
 
 The app must not include buttons that appear to work but do nothing.
 
@@ -386,13 +382,7 @@ The app must not include buttons that appear to work but do nothing.
 
 Every generated question must be exportable and copyable as a rendered image, not only as text.
 
-Each generated question must have a real working button that copies the final rendered question as an image, so the teacher can paste it into:
-
-- Microsoft Word.
-- Canva.
-- Google Docs.
-- PowerPoint.
-- Any print-oriented editor.
+Each generated question must have a real working button that copies the final rendered question as an image.
 
 Each generated question must also have a real working option to download the rendered question as an image.
 
@@ -400,7 +390,48 @@ The copied or downloaded image must include the full rendered Hebrew question, i
 
 If direct browser image clipboard copying is not supported, the app must provide an honest fallback such as PNG download.
 
-## 18. Claude working prompt inside RULES.md
+## 18. Toolchain, automation, and terminal-work requirement for Claude
+
+Claude must use the strongest appropriate tools, libraries, architecture, data structures, rendering methods, export methods, and quality checks needed to satisfy Yaniv's requirements.
+
+Yaniv defines what the product must do; Claude chooses how to implement it professionally.
+
+Claude may and should use terminal commands, package installation, rendering libraries, geometry/graphing libraries, mathematical typesetting tools, build tools, test tools, audit scripts, or other professional automation when appropriate.
+
+Claude should prefer smart automation over manual repetitive work.
+
+Claude must not use fake technical success messages.
+
+If a tool, browser API, package, clipboard feature, rendering method, or automation path is unsupported, unsafe, unavailable, or blocked, Claude must document that honestly and provide the best safe fallback.
+
+## 19. Continuous quality gates and testing
+
+Claude must continuously check whether the work is correct.
+
+Quality checks must include, when relevant:
+
+- Hebrew wording review.
+- Hebrew punctuation review.
+- RTL layout review.
+- Mathematical correctness review.
+- Answer correctness review.
+- Geometry and coordinate-system accuracy review.
+- Diagram and graph visual accuracy review.
+- Copy-as-image behavior verification.
+- Download-as-image behavior verification.
+- Print-readiness review.
+- No stale text after parameter changes.
+- No stale answers after parameter changes.
+- No stale drawings after parameter changes.
+- No fake data.
+- No demo-only behavior.
+- No fake working buttons.
+
+Claude must create or use appropriate automated tests and manual validation steps where needed.
+
+Claude must document which checks passed, failed, were skipped, or are blocked.
+
+## 20. Claude working prompt inside RULES.md
 
 Yaniv can tell Claude:
 
@@ -420,21 +451,13 @@ Build a real Hebrew mathematics exercise generator for grades 7, 8, and 9 only a
 
 Use only Yaniv-supplied curriculum materials, examples, drawings, diagrams, and requirements.
 
-Do not invent curriculum content.
+Do not invent curriculum content, create demo data, generate fake questions, or create fake working buttons.
 
-Do not create demo data.
+Before implementation, inspect `RULES.md` and verify that it is organized by topic, current, complete, and contradiction-free. If it is not, fix the rules before coding.
 
-Do not generate fake questions.
+Before implementation, verify whether the 10 source PDF files are actually present in the repository. If any source file is missing, document the blocker honestly.
 
-Do not create fake working buttons.
-
-All product-facing content must be Hebrew-only and RTL.
-
-Before any implementation, first inspect `RULES.md` and verify that it is organized by topic, current, complete, and contradiction-free. If it is not, fix the rules before coding.
-
-Before implementation, study each uploaded source file one by one.
-
-Preserve the raw file, understand it, classify it by grade/domain/topic/skill, then rename and organize it professionally.
+Study each source file deeply, one by one. Extract grade, topic, skill, question types, examples, drawings, diagrams, coordinate systems, geometry objects, mathematical notation, Hebrew wording patterns, and template opportunities.
 
 Build the curriculum knowledge base from the source files before creating exercise-generation logic.
 
@@ -448,49 +471,23 @@ Every question must include real working options to copy the final rendered ques
 
 The future generator must provide a comfortable Hebrew-only teacher menu for choosing topics and editing meaningful question parameters.
 
-When a teacher changes a parameter, the generator must automatically update the exercise content, Hebrew wording, mathematical answer, visual representation, copy-as-image output, and download-as-image output.
+When a teacher changes a parameter, the generator must automatically update the exercise content, Hebrew wording, punctuation, mathematical answer, visual representation, copy-as-image output, and download-as-image output.
 
-The future generator must provide strong graphics, correct Hebrew punctuation, accurate mathematical notation, high-quality visual design, teacher-controlled parameters, Hebrew-only buttons, and print-ready output.
+The future generator must provide textbook-quality graphics, correct Hebrew punctuation, accurate mathematical notation, strong geometry and coordinate-system rendering, high-quality visual design, teacher-controlled parameters, Hebrew-only buttons, continuous quality gates, and print-ready output.
 
-Claude must choose the strongest appropriate tools, libraries, architecture, data structures, rendering methods, export methods, and quality checks to satisfy Yaniv's requirements. Yaniv defines what the product must do; Claude chooses how to implement it professionally.
+Use the strongest appropriate tools and automation you can safely use. Use terminal commands, packages, rendering libraries, geometry/graphing tools, mathematical typesetting tools, build tools, and tests when they help satisfy the requirements.
 
 Keep `RULES.md` and `PROJECT_STATUS.md` synchronized after every meaningful change.
 
-At the end of every meaningful work session, update `RULES.md` and `PROJECT_STATUS.md` with:
-
-- What you attempted.
-- What you completed.
-- What repository files you changed.
-- What did not work or could not be completed.
-- Any blockers or missing inputs.
-- What remains to do.
-- The next planned work step.
-- Which work is planned, partial, implemented, tested, or blocked.
-- The real updated completion estimate.
+At the end of every meaningful work session, update `RULES.md` and `PROJECT_STATUS.md` with what you attempted, completed, changed, failed, blocked, what remains, the next plan, status of features, and the real updated completion estimate.
 
 Never claim that a feature is complete unless it is implemented and tested.
-
-Always document what Yaniv did, what ChatGPT did, what Claude did, what remains, what is only planned, and what is implemented and tested.
 
 Today's work belongs under Tuesday, 2026-06-09.
 
 Claude implementation has not started yet.
 
-Start by validating the repository documentation and source-material manifest, then wait for the raw PDF files to be present in the repository before learning and implementation.
-
-## 19. Claude responsibility rule
-
-Claude must work at a very high professional level.
-
-Yaniv's instructions define the required product behavior, quality, and constraints.
-
-Claude must not wait for Yaniv to specify low-level technical methods when the requirement is clear.
-
-Claude must choose the strongest appropriate tools, libraries, architecture, data structures, rendering methods, export methods, and quality checks to satisfy the requirements.
-
-Claude must still remain honest: if a requirement is impossible, unsafe, unsupported by the browser, or blocked by missing data, Claude must say so clearly and provide the best safe fallback.
-
-## 20. Repository conversion rule
+## 21. Repository conversion rule
 
 This repository originally served a different project. It is now being converted into the `תרגילים` project.
 
@@ -498,26 +495,22 @@ No destructive cleanup is allowed until Yaniv explicitly approves it.
 
 Before cleanup, preserve only what is intentionally needed; remove or archive irrelevant old material only after approval.
 
-## 21. Planning rule
+## 22. Planning rule
 
 The project remains in planning mode until Yaniv says he has finished giving all requirements.
 
 Only after the planning phase is complete should Claude begin building the repository and generator according to the complete plan.
 
-## 22. Today's completed work — 2026-06-09, Tuesday
+## 23. Today's completed work — 2026-06-09, Tuesday
 
 ChatGPT has done:
 
 - Selected and converted the existing repository into the planning repository for `תרגילים`.
 - Verified that the repository was renamed to `yanivmizrachiy/targilim`.
 - Updated `RULES.md` as the main source of truth.
-- Created or updated planning documentation, including project status and AI handoff files.
 - Added initial product requirements for a Hebrew curriculum-based math exercise generator.
 - Added initial generator specification files for question metadata and Hebrew RTL rules.
-- Added the requirement that source files must be learned before they are renamed and organized.
-- Added the requirement that generated exercises are for print-oriented worksheets only.
-- Added source-material intake documentation.
-- Added a source-material manifest for the 10 uploaded PDFs.
+- Added source-material intake documentation and a source-material manifest for the 10 uploaded PDFs.
 - Added the Claude working prompt inside `RULES.md`.
 - Reorganized `RULES.md` by professional requirement topics.
 - Added the mandatory pre-work rules-file organization audit.
@@ -525,6 +518,8 @@ ChatGPT has done:
 - Added detailed requirements for a comfortable Hebrew-only teacher menu and automatic question updates when teacher parameters change.
 - Clarified that `RULES.md` is both the requirements document and the live status/work-log document.
 - Added a mandatory end-of-session documentation update rule for Claude.
+- Added deep learning requirements for the 10 source files.
+- Added toolchain, terminal automation, geometry, coordinate-system, textbook-quality rendering, and continuous quality-gate requirements for Claude.
 
 Yaniv has done:
 
@@ -543,6 +538,7 @@ Yaniv has done:
 - Required a comfortable teacher menu for selecting topics and editing generated questions.
 - Required professional thinking about which fields teachers should be allowed to change for each question type.
 - Required Claude to update `RULES.md` after each work session with completed work, failed work, blockers, remaining tasks, and next work plan.
+- Required Claude to use the strongest appropriate tools, automation, terminal workflows, rendering tools, tests, and quality checks to produce textbook-quality printable exercises.
 
 Claude has done:
 
@@ -550,10 +546,11 @@ Claude has done:
 
 Not done yet:
 
-- Raw upload of the 10 PDF files into the GitHub repository.
+- Verification that the 10 raw PDF files are actually present in GitHub.
 - Final cleanup of old project files.
 - Full curriculum intake.
-- Organization of source files inside GitHub.
+- Deep source-file learning by Claude.
+- Organization of source files inside GitHub after learning.
 - Claude implementation.
 - Exercise generator UI.
 - Teacher menu implementation.
@@ -561,9 +558,9 @@ Not done yet:
 - Copy-as-image implementation.
 - Download-as-image implementation.
 - Print/export implementation.
-- Testing.
+- Continuous quality gates and testing.
 
-## 23. Current completion estimate
+## 24. Current completion estimate
 
 Repository renamed to `yanivmizrachiy/targilim`: completed.
 
@@ -575,4 +572,4 @@ Full requirements collection: in progress.
 
 Generator implementation: not started.
 
-Estimated project planning completion: 56%.
+Estimated project planning completion: 58%.
