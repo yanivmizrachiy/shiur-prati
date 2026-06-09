@@ -238,12 +238,80 @@ The plan must explain:
 20. How the public external link will be deployed and maintained.
 21. How the site will handle heavy teacher traffic.
 22. How private analytics will be implemented so only Yaniv can see site usage.
+23. Which mathematical, graphical, automated, and AI-assisted tools Claude needs before implementation.
+24. Which tools should be installed, which tools should be avoided, and why.
 
 Do not build until the plan is clear.
 
 If Yaniv explicitly approves implementation, continue in small, verifiable stages.
 
-## 10. Automation and execution behavior
+## 10. Advanced toolchain and automation planning requirement
+
+Claude must think in advance about the strongest safe toolchain for the project.
+
+Claude must not wait for Yaniv to name exact technical packages, mathematical engines, graphics libraries, testing tools, or deployment tools.
+
+Claude must inspect the repository, inspect the source requirements, understand the mathematical needs, and propose the best practical toolchain before implementation.
+
+Claude must plan the toolchain for all major project needs, including:
+
+- PDF/source extraction and source-learning workflow;
+- structured curriculum knowledge storage;
+- mathematical notation rendering;
+- geometry diagrams;
+- coordinate systems;
+- graphs;
+- tables;
+- charts;
+- number lines;
+- algebraic representations;
+- probability and statistics visuals;
+- Hebrew RTL UI;
+- premium visual design;
+- worksheet preview rendering;
+- copy-as-image;
+- download-as-image;
+- A4 print export;
+- public deployment;
+- performance optimization for many teachers;
+- private analytics visible only to Yaniv;
+- automated tests;
+- visual/regression checks;
+- Hebrew text validation;
+- mathematical validation.
+
+Claude may use terminal commands and install safe dependencies when needed.
+
+Before installing dependencies, Claude must document:
+
+1. the purpose of the dependency;
+2. why it is needed;
+3. what alternatives were considered;
+4. why the selected tool is safe and appropriate;
+5. whether it affects deployment;
+6. whether it affects privacy or analytics;
+7. whether it adds cost, secrets, accounts, or external services;
+8. how it will be tested.
+
+Claude must not install random, unnecessary, unsafe, abandoned, unrelated, or unmaintained packages.
+
+Claude must not add tools only because they sound advanced.
+
+Every tool must serve a real project requirement.
+
+Claude must prefer modular, maintainable, replaceable tools over one huge locked-in system.
+
+Claude must keep mathematical logic, visual rendering, Hebrew wording, curriculum knowledge, analytics, and deployment concerns separated.
+
+Claude must be allowed and expected to use automation heavily, but only in a safe, documented, reversible way.
+
+Claude must create real working automation, not pretend automation.
+
+Claude must verify that every installed or configured tool actually works in the project.
+
+If a tool choice is expensive, privacy-sensitive, requires secrets, requires external accounts, or changes the hosting architecture, Claude must stop and ask Yaniv for approval before implementation.
+
+## 11. Automation and execution behavior
 
 Claude must work automatically and intelligently.
 
@@ -276,7 +344,7 @@ Claude must prefer strong, appropriate tools for:
 
 If a decision is destructive, risky, privacy-sensitive, cost-sensitive, or changes the product direction, Claude must stop and ask Yaniv for approval.
 
-## 11. Final product requirements
+## 12. Final product requirements
 
 The final generator must be:
 
@@ -305,7 +373,7 @@ Every generated exercise must eventually support:
 - download as rendered image;
 - A4 print-ready layout.
 
-## 12. Public external link and heavy-site requirement
+## 13. Public external link and heavy-site requirement
 
 The final website must have a real external public link.
 
@@ -335,7 +403,7 @@ Claude must justify the deployment choice.
 
 If the selected hosting or analytics solution requires accounts, secrets, paid services, or privacy-sensitive configuration, Claude must clearly explain the tradeoffs and ask Yaniv for approval before implementation.
 
-## 13. Private analytics requirement
+## 14. Private analytics requirement
 
 Yaniv must be able to know, privately, how the site is being used.
 
@@ -366,7 +434,7 @@ Claude must prefer privacy-respecting aggregation unless Yaniv explicitly approv
 
 Claude must create a private admin/analytics access plan for Yaniv only.
 
-## 14. Hebrew UI requirement
+## 15. Hebrew UI requirement
 
 All final product UI must be in Hebrew.
 
@@ -391,7 +459,7 @@ No `demo`, `placeholder`, `sample`, or fake UI text is allowed.
 
 All capsules, buttons, cards, controls, and menus must be real and functional.
 
-## 15. Premium design requirement
+## 16. Premium design requirement
 
 The site must have premium-quality visual design.
 
@@ -414,7 +482,7 @@ The design must include:
 
 Graphics must support the mathematics and must never distract from it.
 
-## 16. Mathematical graphics requirement
+## 17. Mathematical graphics requirement
 
 All mathematical graphics must be accurate and high quality.
 
@@ -449,7 +517,7 @@ No manually inconsistent drawings.
 
 If a generated question changes numbers or parameters, all diagrams, labels, answers, and wording must update consistently.
 
-## 17. Quality gates
+## 18. Quality gates
 
 Claude must run deep checks before claiming anything is complete.
 
@@ -469,11 +537,12 @@ Required checks:
 12. Analytics privacy check — only Yaniv can see analytics.
 13. Performance check — the site remains fast enough for many teachers.
 14. Deployment check — the public external link works.
-15. No-demo check — no fake data, fake buttons, fake text, or fake success states.
+15. Toolchain check — installed tools actually work and are documented.
+16. No-demo check — no fake data, fake buttons, fake text, or fake success states.
 
 If any check fails, Claude must report the failure honestly and must not mark the feature complete.
 
-## 18. Work stages
+## 19. Work stages
 
 Claude must work in this order:
 
@@ -486,16 +555,17 @@ Claude must work in this order:
 7. Build a curriculum map.
 8. Extract question patterns.
 9. Design the data model.
-10. Design the rendering/export architecture.
-11. Design the teacher-editing system.
-12. Design the public deployment strategy.
-13. Design private analytics for Yaniv only.
-14. Ask for approval before major implementation.
-15. Implement only after approval.
-16. Test deeply.
-17. Update documentation truthfully.
+10. Design the toolchain and automation plan.
+11. Design the rendering/export architecture.
+12. Design the teacher-editing system.
+13. Design the public deployment strategy.
+14. Design private analytics for Yaniv only.
+15. Ask for approval before major implementation.
+16. Implement only after approval.
+17. Test deeply.
+18. Update documentation truthfully.
 
-## 19. Documentation and status rule
+## 20. Documentation and status rule
 
 Claude must keep `RULES.md` updated.
 
@@ -505,6 +575,8 @@ Claude must record:
 - what Claude created;
 - what Claude changed;
 - why each changed file was needed;
+- which tools/dependencies were selected;
+- why each tool/dependency was selected;
 - what was tested;
 - what failed;
 - what remains;
@@ -515,7 +587,7 @@ Claude must not create extra planning files unless they are clearly necessary an
 
 Claude must prefer keeping the master requirements and master prompt in `RULES.md`.
 
-## 20. Reporting format
+## 21. Reporting format
 
 At the end of every Claude work session, Claude must report:
 
@@ -525,6 +597,9 @@ DONE:
 FILES INSPECTED:
 FILES CHANGED:
 WHY EACH FILE WAS CHANGED:
+TOOLS CONSIDERED:
+TOOLS INSTALLED OR CONFIGURED:
+WHY EACH TOOL WAS CHOSEN:
 WHAT SHOULD BE CLEANED:
 WHAT REMAINS:
 BLOCKERS:
@@ -534,13 +609,15 @@ PERCENT:
 
 Claude must not claim that something works unless it was actually implemented and tested.
 
-## 21. Current completion estimate
+## 22. Current completion estimate
 
-Repository organization for source-learning: 92%.
+Repository organization for source-learning: 93%.
 
 Source PDF upload: 100%.
 
 Claude source learning: 0%.
+
+Toolchain planning: 0%.
 
 Generator implementation: 0%.
 
