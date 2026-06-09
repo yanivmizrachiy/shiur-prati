@@ -1,0 +1,273 @@
+name: Apply Claude handoff 2026-06-09
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: apply-claude-handoff-2026-06-09
+  cancel-in-progress: false
+
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Configure git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      - name: Stop if already applied
+        run: |
+          if [ -f docs/CHATGPT_EXECUTION_REPORT_2026-06-09.md ]; then
+            echo "Claude handoff already applied. Exiting."
+            exit 0
+          fi
+
+      - name: Archive legacy shiur-prati files
+        shell: bash
+        run: |
+          set -e
+          ARCHIVE="archive/legacy-shiur-prati/2026-06-09"
+          mkdir -p "$ARCHIVE/assets" "$ARCHIVE/data"
+          move_if_exists() {
+            src="$1"
+            dst="$2"
+            if [ -e "$src" ]; then
+              mkdir -p "$(dirname "$dst")"
+              git mv "$src" "$dst"
+              echo "ARCHIVED: $src -> $dst"
+            else
+              echo "SKIPPED_NOT_FOUND: $src"
+            fi
+          }
+          move_if_exists "index.html" "$ARCHIVE/index.html"
+          move_if_exists "app.js" "$ARCHIVE/app.js"
+          move_if_exists "styles.css" "$ARCHIVE/styles.css"
+          move_if_exists "sw.js" "$ARCHIVE/sw.js"
+          move_if_exists "manifest.webmanifest" "$ARCHIVE/manifest.webmanifest"
+          move_if_exists "assistant-sync.html" "$ARCHIVE/assistant-sync.html"
+          move_if_exists "auto-save.html" "$ARCHIVE/auto-save.html"
+          move_if_exists "auto-update.html" "$ARCHIVE/auto-update.html"
+          move_if_exists "payment-save.html" "$ARCHIVE/payment-save.html"
+          move_if_exists "planned-save.html" "$ARCHIVE/planned-save.html"
+          move_if_exists "today.html" "$ARCHIVE/today.html"
+          move_if_exists "quick-add.js" "$ARCHIVE/quick-add.js"
+          move_if_exists "assets/icon.svg" "$ARCHIVE/assets/icon.svg"
+          move_if_exists "data/lesson-appointments.json" "$ARCHIVE/data/lesson-appointments.json"
+
+      - name: Create/update executable handoff files
+        shell: bash
+        run: |
+          set -e
+          mkdir -p .github/workflows sources/official knowledge-base/grade-7 knowledge-base/grade-8 knowledge-base/grade-9 generator docs
+
+          cat > .github/workflows/deploy-pages.yml <<'EOF'
+          name: Deploy targilim to GitHub Pages
+          on:
+            push:
+              branches: [main]
+            workflow_dispatch:
+          permissions:
+            contents: read
+            pages: write
+            id-token: write
+          concurrency:
+            group: pages
+            cancel-in-progress: true
+          jobs:
+            deploy:
+              environment:
+                name: github-pages
+                url: ${{ steps.deployment.outputs.page_url }}
+              runs-on: ubuntu-latest
+              steps:
+                - uses: actions/checkout@v4
+                - name: Verify generator exists
+                  run: test -f generator/index.html || (echo "generator/index.html missing" && exit 1)
+                - uses: actions/configure-pages@v5
+                - uses: actions/upload-pages-artifact@v3
+                  with:
+                    path: "generator"
+                - id: deployment
+                  uses: actions/deploy-pages@v4
+          EOF
+
+          cat > PROJECT_STATUS.md <<'EOF'
+          # Project Status — Targilim תרגילים
+          **Last updated:** 2026-06-09
+
+          ## Phase status
+          | Phase | Status |
+          |---|---|
+          | 10 source PDFs uploaded | ✅ verified |
+          | Official curriculum (math_7_9.pdf) learned | ⚠️ claimed by Claude; source file itself not uploaded by this handoff |
+          | Phase 1: Audit + source learning | ⚠️ partial in GitHub; full source-learning file contents were not provided in the handoff |
+          | Phase 2: Archive + KB + generator slice | ⚠️ partially applied from Claude handoff; needs browser/testing verification |
+          | Grade 9 content | ⚠️ unblocked only if official source is later added/verified |
+          | Grade 9 generator | 🔲 Needs example questions from source |
+          | Copy-as-image | ⚠️ Architecture ready in generator file, needs browser testing |
+          | Analytics | 🔲 Deferred — interface defined, no real tracking |
+
+          ## Working generator slices
+          | Topic | ID | Status |
+          |---|---|---|
+          | Pythagoras — find missing side | G7-03 | ⚠️ Code created from handoff; browser verification still required |
+          | All others | various | ◦ Not yet implemented |
+
+          ## Sources learned
+          - Files 01–10: uploaded and verified earlier.
+          - Official MoE curriculum URL documented in `sources/official/SOURCE_REFERENCE.md`.
+          - The actual `math_7_9.pdf` file was not provided in this executable handoff.
+
+          ## Key findings from Claude handoff
+          - Functions start in grade 7 according to Claude handoff.
+          - Probability also appears in grade 7 according to Claude handoff.
+          - Formal algebraic exponent laws: grade 9 only according to Claude handoff.
+          - Formal deductive proofs: grade 9 only according to Claude handoff.
+          - Triangle similarity moved to grade 8 according to Claude handoff.
+
+          ## Toolchain decisions from Claude handoff
+          | Tool | Decision | Reason |
+          |---|---|---|
+          | Math rendering | KaTeX | Synchronous, html2canvas compatible |
+          | Diagrams | SVG manual | Full control, no dependencies |
+          | Copy-as-image | html2canvas + PNG fallback | Clipboard API fallback |
+          | Hosting | GitHub Pages (generator/ folder) | Free, CDN |
+          | Analytics | Deferred | No paid services before MVP |
+          EOF
+
+          cat > sources/official/SOURCE_REFERENCE.md <<'EOF'
+          # Official Curriculum Source Reference
+
+          ## Document
+          תוכנית הלימודים במתמטיקה לכיתות ז-ט
+          משרד החינוך, המזכירות הפדגוגית, אגף א' מדעים
+
+          ## URL
+          https://meyda.education.gov.il/files/Curriculum/math_7_9.pdf
+
+          ## Status
+          - URL documented on 2026-06-09.
+          - Claude reported that the full text was read and analyzed.
+          - The actual PDF file was not included in the executable handoff.
+          - Deep learning note content was not included in the executable handoff.
+
+          ## Importance
+          This is intended to be the authoritative source for the entire project.
+          All other source files (01-10) must be cross-referenced against this document after the actual file and learning notes are available and verified.
+          EOF
+
+          cat > knowledge-base/grade-7/numeric.json <<'EOF'
+          {"domain":"numeric","grade":7,"source_files":["05_grade-7_numeric_domain_curriculum.pdf","07_numeric_domain_principles_grades-7-8.pdf","00_official_curriculum_7_9"],"topics":[{"id":"N7-01","name":"מערכת צירים — רביע I","hours":5,"pattern_ids":["N7-01","N7-02"],"visual":"coordinate_system_q1"},{"id":"N7-02","name":"מספרים שליליים ונגדיים","hours":5,"pattern_ids":["N7-03"],"visual":"number_line"},{"id":"N7-03","name":"חיבור וחיסור מכוונים","hours":7,"pattern_ids":["N7-04"],"visual":"number_line"},{"id":"N7-04","name":"כפל וחילוק מכוונים","hours":8,"pattern_ids":["N7-05"],"visual":"none"},{"id":"N7-05","name":"חזקות — (−a)ⁿ לעומת −aⁿ","hours":5,"pattern_ids":["N7-06"],"visual":"none","critical":"(-3)²=9 vs -3²=-9"},{"id":"N7-06","name":"שורש ריבועי","hours":4,"pattern_ids":["N7-07"],"visual":"none","perfect_squares":[1,4,9,16,25,36,49,64,81,100,121,144]},{"id":"N7-07","name":"מערכת צירים — 4 רביעים","hours":5,"pattern_ids":["N7-01"],"visual":"coordinate_system_full"},{"id":"N7-08","name":"חוקי חשבון וחוק הפילוג","hours":10,"visual":"none","note":"official_curriculum_round_1"}]}
+          EOF
+          cat > knowledge-base/grade-7/algebra.json <<'EOF'
+          {"domain":"algebra","grade":7,"source_files":["01_grade-7_algebra_curriculum.pdf","08_algebra_domain_principles_grades-7-8.pdf","00_official_curriculum_7_9"],"rounds":[{"round":1,"topics":[{"id":"A7-01","name":"משתנים וביטויים אלגבריים","hours":15,"pattern_ids":["A7-01","A7-02"]},{"id":"A7-02","name":"סדרות → ביטוי אלגברי","hours":5,"note":"official_curriculum_only"}]},{"round":2,"topics":[{"id":"A7-03","name":"משוואות מד ראשונה","hours":15,"pattern_ids":["A7-03"]},{"id":"A7-04","name":"שאלות מילוליות","hours":10}]},{"round":3,"topics":[{"id":"A7-05","name":"פונקציות — מבוא","hours":15,"note":"MOVED_TO_GRADE_7_by_official_curriculum"},{"id":"A7-06","name":"פונקציה ישרונית f(x)=ax+b","hours":23,"pattern_ids":["A7-04"],"visual":"coordinate_system_full"}]}]}
+          EOF
+          cat > knowledge-base/grade-7/geometry.json <<'EOF'
+          {"domain":"geometry","grade":7,"source_files":["03_grade-7_pre_deductive_geometry_curriculum.pdf","09_geometry_domain_principles_grades-7-8.pdf","00_official_curriculum_7_9"],"rounds":[{"round":1,"topics":[{"id":"G7-01","name":"מלבן, תיבה, ניצבות, הקבלה","hours":15}]},{"round":2,"topics":[{"id":"G7-02","name":"שטחי מצולעים","hours":12},{"id":"G7-03","name":"זוויות","hours":15},{"id":"G7-04","name":"זוויות בין קווים מקבילים ונחתך","hours":5,"note":"also_in_grade_7_per_official"}]},{"round":3,"topics":[{"id":"G7-05","name":"מרובעים: מקביל, טרפז","hours":15},{"id":"G7-06","name":"עיגול — מבוא","hours":10},{"id":"G7-07","name":"משפט פיתגורס","hours":8,"pattern_ids":["G7-03"],"safe_triples":[[3,4,5],[5,12,13],[6,8,10],[8,15,17]]}]}]}
+          EOF
+          cat > knowledge-base/grade-7/uncertainty.json <<'EOF'
+          {"domain":"uncertainty","grade":7,"source_files":["06_uncertainty_domain_curriculum_examples.pdf","00_official_curriculum_7_9"],"topics":[{"id":"U7-01","name":"סטטיסטיקה — תדירות וייצוגים","hours":10,"pattern_ids":["U7-01","U7-02","U7-03"]},{"id":"U7-02","name":"הסתברות תיאורטית","hours":8,"note":"ALSO_IN_GRADE_7_per_official_curriculum","pattern_ids":["U8-02"]}]}
+          EOF
+          cat > knowledge-base/grade-8/numeric.json <<'EOF'
+          {"domain":"numeric","grade":8,"source_files":["07_numeric_domain_principles_grades-7-8.pdf","00_official_curriculum_7_9"],"hours_total":54,"topics":[{"id":"N8-01","name":"יחס","hours":8,"pattern_ids":["N8-01"]},{"id":"N8-02","name":"פרופורציה","hours":8,"pattern_ids":["N8-02"]},{"id":"N8-03","name":"קנה מידה","hours":6,"pattern_ids":["N8-03"],"note":"EMPHASIZED_by_official"},{"id":"N8-04","name":"אחוזים סטטיים","hours":8,"pattern_ids":["N8-04"]},{"id":"N8-05","name":"אחוזים דינמיים","hours":8,"pattern_ids":["N8-05"]},{"id":"N8-06","name":"סטטיסטיקה — מדדי מרכז ופיזור","hours":16,"pattern_ids":["U8-01"]}]}
+          EOF
+          cat > knowledge-base/grade-8/algebra.json <<'EOF'
+          {"domain":"algebra","grade":8,"source_files":["02_grade-8_algebra_curriculum.pdf","08_algebra_domain_principles_grades-7-8.pdf","00_official_curriculum_7_9"],"hours_total":58,"topics":[{"id":"A8-01","name":"המשך פונקציות ישרוניות","hours":12,"pattern_ids":["A8-01"]},{"id":"A8-02","name":"שיפוע — f(x)=ax+b מלא","hours":16,"pattern_ids":["A8-02"]},{"id":"A8-03","name":"אי-שוויונות מד ראשונה","hours":8,"pattern_ids":[]},{"id":"A8-04","name":"מערכות משוואות","hours":14,"pattern_ids":["A8-03"]},{"id":"A8-05","name":"משוואות כולל אחוזים","hours":8}]}
+          EOF
+          cat > knowledge-base/grade-8/geometry.json <<'EOF'
+          {"domain":"geometry","grade":8,"source_files":["04_grade-8_geometry_curriculum.pdf","09_geometry_domain_principles_grades-7-8.pdf","00_official_curriculum_7_9"],"hours_total":38,"topics":[{"id":"G8-01","name":"עיגול — היקף ושטח","hours":8,"pattern_ids":["G8-01"]},{"id":"G8-02","name":"גליל","hours":6},{"id":"G8-03","name":"חפיפת משולשים — פורמלית","hours":14},{"id":"G8-04","name":"ניידות משולשים","hours":10,"note":"MOVED_to_grade_8_by_official","pattern_ids":["G8-02"]}]}
+          EOF
+          cat > knowledge-base/grade-8/uncertainty.json <<'EOF'
+          {"domain":"uncertainty","grade":8,"source_files":["06_uncertainty_domain_curriculum_examples.pdf"],"topics":[{"id":"U8-01","name":"מדדי מרכז ופיזור","hours":12,"pattern_ids":["U8-01"]},{"id":"U8-02","name":"הסתברות בסיסית","hours":8,"pattern_ids":["U8-02"]},{"id":"U8-03","name":"קריאה ביקורתית של גרפים","hours":4}]}
+          EOF
+          cat > knowledge-base/grade-9/algebra.json <<'EOF'
+          {"domain":"algebra","grade":9,"source_files":["00_official_curriculum_7_9"],"status":"SOURCE_AVAILABLE","hours_total":90,"topics":[{"id":"A9-01","name":"חוקי חזקות עם מעריך שלם","hours":10},{"id":"A9-02","name":"פונקציות ריבועיות","hours":25},{"id":"A9-03","name":"משוואות ריבועיות","hours":20},{"id":"A9-04","name":"הסתברות מורכבת","hours":20},{"id":"A9-05","name":"סדרות חשבוניות והנדסיות","hours":15}],"generator_status":"not_yet_built","requires":"additional_source_materials_for_examples"}
+          EOF
+          cat > knowledge-base/grade-9/geometry.json <<'EOF'
+          {"domain":"geometry","grade":9,"source_files":["00_official_curriculum_7_9"],"status":"SOURCE_AVAILABLE","hours_total":60,"topics":[{"id":"G9-01","name":"גאומטריה דדוקטיבית — הוכחות פורמליות","hours":20},{"id":"G9-02","name":"מעגל מתקדם","hours":20},{"id":"G9-03","name":"בניות עם סרגל ומחוגה","hours":10},{"id":"G9-04","name":"משפט פיתגורס — הוכחה פורמלית","hours":10}],"generator_status":"not_yet_built","requires":"additional_source_materials_for_examples"}
+          EOF
+
+          cat > generator/index.html <<'EOF'
+          <!DOCTYPE html>
+          <html lang="he" dir="rtl">
+          <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>תרגילים — מחולל תרגילי מתמטיקה</title>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+            <style>
+              *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}body{font-family:"Segoe UI",Arial,sans-serif;background:#f5f6fa;color:#1a1a2e;direction:rtl;min-height:100vh}.app-header{background:linear-gradient(135deg,#1a1a2e 0%,#16213e 100%);color:#e2e2e2;padding:18px 28px;display:flex;align-items:center;gap:14px}.app-header h1{font-size:1.4rem;font-weight:700;color:#fff}.app-header .subtitle{font-size:.82rem;color:#8892b0}.grade-badge{background:#e63946;color:#fff;border-radius:20px;padding:3px 12px;font-size:.78rem;font-weight:700;margin-right:auto}main{max-width:860px;margin:0 auto;padding:28px 20px 60px}.controls-card,.question-card{background:#fff;border-radius:14px;box-shadow:0 2px 16px rgba(0,0,0,.09)}.controls-card{padding:22px 24px;margin-bottom:24px}.controls-card h2{font-size:1rem;margin-bottom:16px;color:#16213e}.controls-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px;margin-bottom:18px}.ctrl-group label{display:block;font-size:.8rem;font-weight:600;color:#555;margin-bottom:6px}.ctrl-group select{width:100%;border:1.5px solid #dde2ef;border-radius:8px;padding:8px 10px;font-size:.9rem;font-family:inherit;direction:rtl;background:#fafbff;color:#1a1a2e}.btn-generate{background:linear-gradient(135deg,#4361ee,#3a0ca3);color:#fff;border:none;border-radius:10px;padding:11px 28px;font-size:1rem;font-weight:700;cursor:pointer}.question-card{padding:28px 28px 22px;margin-bottom:18px}.q-meta{font-size:.75rem;color:#8892b0;margin-bottom:12px;display:flex;gap:10px;flex-wrap:wrap}.tag{background:#edf2ff;color:#4361ee;border-radius:20px;padding:2px 10px;font-weight:600}.question-text{font-size:1.05rem;line-height:1.75;margin-bottom:18px}.diagram-wrap{display:flex;justify-content:center;margin:14px 0 20px}.diagram-wrap svg{max-width:260px;height:auto}.answer-toggle{background:none;border:1.5px solid #dde2ef;border-radius:8px;padding:8px 16px;font-size:.88rem;cursor:pointer;color:#4361ee;font-weight:600;margin-bottom:12px;direction:rtl}.answer-section{background:#f0fdf4;border-radius:8px;padding:14px 16px;font-size:.95rem;color:#166534;line-height:1.7;display:none}.answer-section.visible{display:block}.export-bar{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px;padding-top:16px;border-top:1px solid #eee}.btn-export{background:#f0f4ff;color:#4361ee;border:1.5px solid #c7d2fe;border-radius:8px;padding:7px 16px;font-size:.82rem;font-weight:600;cursor:pointer}.export-status{font-size:.78rem;color:#555;align-self:center}.grade9-notice{background:#fff7ed;border:1.5px solid #fed7aa;border-radius:10px;padding:14px 18px;font-size:.88rem;color:#9a3412;line-height:1.6;display:none}.empty-state{text-align:center;color:#8892b0;padding:40px 0;font-size:.95rem}@media print{body{background:#fff}.controls-card,.app-header,.export-bar,.answer-toggle,.btn-generate{display:none!important}.question-card{box-shadow:none;border:1px solid #ccc}.answer-section{display:block!important}main{padding:0;max-width:100%}}
+            </style>
+          </head>
+          <body>
+          <header class="app-header"><div><h1>תרגילים</h1><div class="subtitle">מחולל תרגילי מתמטיקה לכיתות ז׳–ח׳</div></div><span class="grade-badge" id="gradeBadge">כיתה ז׳</span></header>
+          <main>
+            <div class="controls-card"><h2>הגדרות תרגיל</h2><div class="controls-grid"><div class="ctrl-group"><label for="selGrade">כיתה</label><select id="selGrade" onchange="onGradeChange()"><option value="7">כיתה ז׳</option><option value="8">כיתה ח׳</option><option value="9">כיתה ט׳</option></select></div><div class="ctrl-group"><label for="selDomain">תחום</label><select id="selDomain" onchange="onDomainChange()"><option value="geometry">גאומטריה</option><option value="algebra">אלגברה</option><option value="numeric">מספרים</option><option value="uncertainty">אי-ודאות</option></select></div><div class="ctrl-group"><label for="selTopic">נושא</label><select id="selTopic"></select></div><div class="ctrl-group"><label for="selDifficulty">רמה</label><select id="selDifficulty"><option value="standard">סטנדרטית</option><option value="challenge">מאתגרת</option></select></div></div><button class="btn-generate" onclick="generateQuestion()">צור תרגיל</button></div>
+            <div class="grade9-notice" id="grade9Notice"><strong>כיתה ט׳ — טרם נבנו תרגילים.</strong><br>קיים מקור תוכנית לימודים לפי ההנדאוף, אך יש צורך בדוגמאות ובתבניות לפני יצירת תרגילים.</div>
+            <div id="outputArea"><div class="empty-state">בחרו כיתה, תחום ונושא — ולחצו על ״צור תרגיל״</div></div>
+          </main>
+          <script>
+          const TOPICS={7:{geometry:[{id:"G7-03",label:"משפט פיתגורס — מציאת צלע",hasGenerator:true}],algebra:[{id:"A7-01",label:"ביטויים אלגבריים — בפיתוח",hasGenerator:false}],numeric:[{id:"N7-06",label:"חזקות — בפיתוח",hasGenerator:false}],uncertainty:[{id:"U7-01",label:"טבלת תדירות — בפיתוח",hasGenerator:false}]},8:{geometry:[{id:"G8-01",label:"עיגול — בפיתוח",hasGenerator:false}],algebra:[{id:"A8-02",label:"שיפוע קו ישר — בפיתוח",hasGenerator:false}],numeric:[{id:"N8-04",label:"אחוזים — בפיתוח",hasGenerator:false}],uncertainty:[{id:"U8-01",label:"מדדי מרכז ופיזור — בפיתוח",hasGenerator:false}]},9:{geometry:[{id:"G9-01",label:"גאומטריה דדוקטיבית — דורש תבניות ודוגמאות",hasGenerator:false}],algebra:[{id:"A9-02",label:"פונקציות ריבועיות — דורש תבניות ודוגמאות",hasGenerator:false}],numeric:[],uncertainty:[]}};
+          const PYTH_TRIPLES=[[3,4,5],[5,12,13],[6,8,10],[8,15,17],[9,12,15],[10,24,26],[7,24,25],[20,21,29]];
+          function onGradeChange(){const g=+document.getElementById('selGrade').value;document.getElementById('gradeBadge').textContent=`כיתה ${g===7?'ז׳':g===8?'ח׳':'ט׳'}`;document.getElementById('grade9Notice').style.display=g===9?'block':'none';onDomainChange()}function onDomainChange(){const g=+document.getElementById('selGrade').value,d=document.getElementById('selDomain').value,sel=document.getElementById('selTopic');sel.innerHTML='';((TOPICS[g]||{})[d]||[]).forEach(t=>{const o=document.createElement('option');o.value=t.id;o.textContent=t.label+(t.hasGenerator?'':' — לא פעיל עדיין');sel.appendChild(o)})}function getCurrentTopic(){const g=+document.getElementById('selGrade').value,d=document.getElementById('selDomain').value,id=document.getElementById('selTopic').value;return((TOPICS[g]||{})[d]||[]).find(t=>t.id===id)}
+          function generateQuestion(){const topic=getCurrentTopic();if(!topic)return;if(!topic.hasGenerator){showNotImplemented(topic);return}if(topic.id==='G7-03')generatePythagoras()}function showNotImplemented(topic){document.getElementById('outputArea').innerHTML=`<div class="question-card"><div class="q-meta"><span class="tag">בפיתוח</span><span>${topic.id}</span></div><div class="question-text">הנושא <strong>${topic.label}</strong> עדיין לא ממומש. אין כאן דמו ואין יצירת תרגיל מזויפת.</div></div>`}
+          function generatePythagoras(){const diff=document.getElementById('selDifficulty').value,[a,b,c]=PYTH_TRIPLES[Math.floor(Math.random()*PYTH_TRIPLES.length)],unknown=diff==='challenge'?(Math.random()<.5?'a':'b'):['a','b','c'][Math.floor(Math.random()*3)];let questionText,answerText,svgDiagram;if(unknown==='c'){questionText=`במשולש ישר-זוויות, שתי הרגליים הן $${a}$ ס״מ ו-$${b}$ ס״מ. חשבו את אורך היתר.`;answerText=`לפי משפט פיתגורס: $${a}^2+${b}^2=c^2$<br>$${a*a}+${b*b}=c^2$<br>$c=\\sqrt{${c*c}}=${c}$<br>אורך היתר הוא $${c}$ ס״מ.`;svgDiagram=buildRightTriangleSVG(a,b,null)}else if(unknown==='a'){questionText=`במשולש ישר-זוויות, היתר הוא $${c}$ ס״מ ורגל אחת היא $${b}$ ס״מ. חשבו את אורך הרגל השנייה.`;answerText=`לפי משפט פיתגורס: $a^2+${b}^2=${c}^2$<br>$a^2=${c*c}-${b*b}=${a*a}$<br>$a=\\sqrt{${a*a}}=${a}$<br>אורך הרגל השנייה הוא $${a}$ ס״מ.`;svgDiagram=buildRightTriangleSVG(null,b,c)}else{questionText=`במשולש ישר-זוויות, היתר הוא $${c}$ ס״מ ורגל אחת היא $${a}$ ס״מ. חשבו את אורך הרגל השנייה.`;answerText=`לפי משפט פיתגורס: $${a}^2+b^2=${c}^2$<br>$b^2=${c*c}-${a*a}=${b*b}$<br>$b=\\sqrt{${b*b}}=${b}$<br>אורך הרגל השנייה הוא $${b}$ ס״מ.`;svgDiagram=buildRightTriangleSVG(a,null,c)}const cardId='qcard-'+Date.now(),ansId='ans-'+Date.now();document.getElementById('outputArea').innerHTML=`<div class="question-card" id="${cardId}"><div class="q-meta"><span class="tag">כיתה ז׳</span><span class="tag">גאומטריה</span><span class="tag">G7-03</span><span>משפט פיתגורס</span></div><div class="diagram-wrap">${svgDiagram}</div><div class="question-text">${questionText}</div><button class="answer-toggle" onclick="toggleAnswer('${ansId}')">הצג פתרון</button><div class="answer-section" id="${ansId}">${answerText}</div><div class="export-bar"><button class="btn-export" onclick="copyAsImage('${cardId}',this)">העתק כתמונה</button><button class="btn-export" onclick="downloadPNG('${cardId}',this)">הורד PNG</button><button class="btn-export" onclick="window.print()">הדפס</button><span class="export-status" id="status-${cardId}"></span></div></div>`;renderMathInElement(document.getElementById(cardId),{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false})}
+          function buildRightTriangleSVG(legA,legB,hyp){const W=220,H=160,pad=30,bx=pad,by=H-pad,cx=W-pad,cy=H-pad,ax=pad,ay=pad+10,labelA=legA!==null?`${legA} ס״מ`:'?',labelB=legB!==null?`${legB} ס״מ`:'?',labelC=hyp!==null?`${hyp} ס״מ`:'?';return `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="משולש ישר-זוויות"><polygon points="${ax},${ay} ${bx},${by} ${cx},${cy}" fill="#edf2ff" stroke="#4361ee" stroke-width="2" stroke-linejoin="round"/><polyline points="${bx+10},${by} ${bx+10},${by-10} ${bx},${by-10}" fill="none" stroke="#4361ee" stroke-width="1.5"/><text x="${bx-18}" y="${(ay+by)/2+5}" font-size="13" fill="#1a1a2e" text-anchor="middle">${labelA}</text><text x="${(bx+cx)/2}" y="${by+18}" font-size="13" fill="#1a1a2e" text-anchor="middle">${labelB}</text><text x="${(ax+cx)/2+18}" y="${(ay+cy)/2-8}" font-size="13" fill="#e63946" text-anchor="middle" transform="rotate(-38 ${(ax+cx)/2+18} ${(ay+cy)/2-8})">${labelC}</text><text x="${ax-8}" y="${ay-4}" font-size="11" fill="#8892b0">A</text><text x="${bx-14}" y="${by+4}" font-size="11" fill="#8892b0">B</text><text x="${cx+4}" y="${cy+4}" font-size="11" fill="#8892b0">C</text></svg>`}
+          async function copyAsImage(cardId,btn){const el=document.getElementById(cardId),statusEl=document.getElementById('status-'+cardId);btn.disabled=true;statusEl.textContent='מכין תמונה...';try{const canvas=await html2canvas(el,{scale:2,useCORS:false,backgroundColor:'#ffffff',logging:false});try{const blob=await new Promise(r=>canvas.toBlob(r,'image/png'));await navigator.clipboard.write([new ClipboardItem({'image/png':blob})]);statusEl.textContent='הועתק ללוח'}catch{downloadCanvasAsPNG(canvas,'targilim-question.png');statusEl.textContent='הורד PNG — הדפדפן חסם העתקה'}}catch(e){statusEl.textContent='שגיאה בייצוא'}btn.disabled=false}async function downloadPNG(cardId,btn){const canvas=await html2canvas(document.getElementById(cardId),{scale:2,backgroundColor:'#ffffff',logging:false});downloadCanvasAsPNG(canvas,'targilim-question.png')}function downloadCanvasAsPNG(canvas,filename){const a=document.createElement('a');a.href=canvas.toDataURL('image/png');a.download=filename;a.click()}function toggleAnswer(ansId){const el=document.getElementById(ansId),v=el.classList.contains('visible');el.classList.toggle('visible');el.previousElementSibling.textContent=v?'הצג פתרון':'הסתר פתרון'}const Analytics={questionGenerated:()=>{},copyAsImageUsed:()=>{},downloadUsed:()=>{},printUsed:()=>{}};onDomainChange();
+          </script>
+          </body>
+          </html>
+          EOF
+
+          cat > docs/CHATGPT_EXECUTION_REPORT_2026-06-09.md <<'EOF'
+          # ChatGPT Execution Report — Claude Handoff 2026-06-09
+
+          ## Status
+          PARTIAL_EXECUTION
+
+          ## Executed
+          - Archived legacy shiur-prati files when present.
+          - Updated `.github/workflows/deploy-pages.yml` to deploy `generator/`.
+          - Updated `PROJECT_STATUS.md` with cautious status language.
+          - Created `sources/official/SOURCE_REFERENCE.md`.
+          - Created knowledge-base JSON files for grades 7, 8, and 9 from Claude handoff.
+          - Created `generator/index.html` as a Hebrew RTL first-slice generator based on the executable handoff and prior provided generator content.
+
+          ## Not executed because content was missing from Claude handoff
+          - `source-learning/2026-06-09/` full learning notes.
+          - `curriculum-map/CURRICULUM_MAP.md`.
+          - `question-patterns/PATTERN_INDEX.md`.
+          - `docs/AUDIT_AND_ARCHITECTURE_PLAN_2026-06-09.md`.
+          - Actual binary file `sources/official/math_7_9.pdf`.
+
+          ## Important caution
+          Some status claims from the handoff were softened because browser testing, GitHub Pages deployment verification, and copy-as-image verification were not completed by ChatGPT in this execution step.
+
+          ## Required from Claude next
+          Claude must provide exact full content or patch for the missing Phase 1 files, or confirm that they are no longer available.
+          EOF
+
+      - name: Commit and push applied handoff
+        shell: bash
+        run: |
+          set -e
+          git add -A
+          if git diff --cached --quiet; then
+            echo "No changes to commit."
+            exit 0
+          fi
+          git commit -m "Apply executable Claude handoff: archive legacy, add KB, generator, deploy workflow"
+          git push
