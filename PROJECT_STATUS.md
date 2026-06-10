@@ -7,14 +7,16 @@
 | 10 source PDFs + official curriculum | ✅ learned |
 | Phase 1: Audit + source learning | ✅ Done |
 | Phase 2: Archive + KB + generator MVP | ✅ Done |
-| Phase 2 continued: slice expansion | 🔄 Active |
+| Phase 2 continued: slice expansion | ✅ Done |
 | Delta repair: weak slices + verification | ✅ Done |
-| Premium mobile-first UI redesign | ⚠️ Applied — pending full visual/browser batch verification |
-| Live basic deployment | ✅ Passed — external Termux check |
+| Premium mobile-first UI redesign | ✅ Applied |
+| Live basic deployment | ✅ Passed |
+| Phase 2 full browser batch | ✅ Passed after readiness-check fix |
 | Obsolete workflow cleanup | ✅ Done |
-| Verification hardening | ✅ Done — pending workflow results |
+| Verification hardening | ✅ Done |
 | Rules sync / anti-duplication guard | ✅ Done |
 | True generator vision captured in repo rules | ✅ Done |
+| Phase 3A true engine pilot | Code ✅ — Live ⚠️ pending direct visual/browser verification |
 | Pages hardening | ✅ Done |
 | Legacy archive | ✅ Done |
 | Grade 9 generator | 🔒 Locked — needs real example question sources |
@@ -29,14 +31,15 @@ https://yanivmizrachiy.github.io/targilim/site-health.json
 ## Binding vision and rules
 The current live system is a useful MVP, not the final intelligent generator Yaniv ultimately requested.
 
-Yaniv's full no-demo product vision is now preserved in:
+Yaniv's full no-demo product vision is preserved in:
 
 - `RULES.md`
 - `docs/TRUE_GENERATOR_VISION_REQUIREMENTS.md`
+- `docs/prompts/CLAUDE_PHASE3A_TRUE_ENGINE_REQUEST.md`
 
 Future Claude/ChatGPT work must not ask Yaniv to repeat the full vision from scratch.
 
-The next product direction is **not** more shallow slices and **not** starting over. The next direction is to preserve the existing live MVP and add a real generator engine beside it.
+The next product direction is **not** more shallow slices and **not** starting over. The current direction is to preserve the existing live MVP and add a real generator engine beside it.
 
 Phase 3 must build toward:
 
@@ -57,27 +60,22 @@ Phase 3 must build toward:
 Claude remains the project manager/brain. ChatGPT is the GitHub executor. Claude does not need to work directly in GitHub; ChatGPT executes repository changes after Claude provides the approved blueprint/patch pack.
 
 ## Latest external verification
-Verified externally from Termux on 2026-06-10:
+Verified from Yaniv PowerShell on 2026-06-10:
 
-| Check | HTTP |
+| Check | Result |
 |---|---|
-| `site-health.json` | 200 |
-| app shell `/targilim/` | 200 |
-| `style.css` | 200 |
-| `core.js` | 200 |
+| app shell `/targilim/` | HTTP 200 ✅ |
+| `site-health.json` | HTTP 200 ✅ |
+| `style.css` | HTTP 200 ✅ |
+| `core.js` | HTTP 200 ✅ |
+| local static verifier | PASS ✅ |
+| Phase 2 browser batch | PASS ✅ after workflow readiness fix |
+| scheduled PowerShell health task | Ready ✅ |
 
-Observed GitHub Actions:
-
-| Workflow | Status | Conclusion | Commit |
-|---|---|---|---|
-| Deploy targilim to GitHub Pages | completed | success | `1afaff9` |
-| Verify Phase 2 static structure | completed | success | `1afaff9` |
-| Pages healthcheck | completed | success | `9238a60` |
-
-Conclusion: public basic deployment is working. Full browser batch verification for all 25 slices is still pending.
+Conclusion: Phase 2 is live and verified. Phase 3A engine pilot code exists and is connected, but still needs direct live visual/browser verification before marking Live ✅.
 
 ## Architecture
-- generator/index.html — modular loader, mobile viewport, theme color
+- generator/index.html — modular loader, mobile viewport, theme color, Phase 3A engine panel and engine script loading
 - generator/site-health.json — static Pages health endpoint independent of JavaScript
 - generator/core.js — base registry/router/renderCard with `qmeta` class for premium card header styling and Grade 9 locked-notice UI
 - generator/export.js — copy-as-image / PNG / print
@@ -88,12 +86,20 @@ Conclusion: public basic deployment is working. Full browser batch verification 
 - generator/phase2-loader.js — loads Phase 2 slice modules
 - generator/.nojekyll — GitHub Pages artifact hardening marker
 - generator/style.css — premium mobile-first RTL styles
+- generator/engine/schema.js — Phase 3A engine marker/schema notes
+- generator/engine/random.js — Phase 3A random utilities
+- generator/engine/validators.js — Phase 3A validation helpers
+- generator/engine/themes.js — Phase 3A visual theme tokens
+- generator/engine/diagrams.js — Phase 3A dynamic SVG builders
+- generator/engine/question-types.js — Phase 3A question type renderers
+- generator/engine/pilot-g7-03.js — Phase 3A Pythagoras engine pilot
+- generator/engine/pattern-engine.js — Phase 3A engine registration/render adapter
 
 ## Verification assets
 - tools/verify-phase2-static.mjs — strict repository static verifier: 25 slice IDs, loader coverage, export functions, site-health, anti-stub guard, mobile meta, Grade 9 lock, and truthful status checks
 - .github/workflows/verify-phase2-static.yml — static CI verification
 - .github/workflows/pages-healthcheck.yml — public Pages healthcheck that first checks `site-health.json`, then the app shell
-- .github/workflows/verify-phase2-batch.yml — full 25-slice browser/live verification against the public Pages URL; checks selectors, generation, question text, answer reveal, export buttons, required SVGs, and no horizontal scroll on mobile viewport; uploads mobile screenshot artifact
+- .github/workflows/verify-phase2-batch.yml — full 25-slice browser/live verification against the public Pages URL; checks selectors, generation, question text, answer reveal, export buttons, required SVGs, and no horizontal scroll on mobile viewport
 
 ## Workflow cleanup
 Disabled obsolete one-time apply workflows by removing their active `.yml` files from `.github/workflows/`:
@@ -141,6 +147,24 @@ Reason: those workflows attempted to re-apply already completed work and pollute
 | U8-01 | Mean, median, range | 8 | Uncertainty | ✅ | ✅ |
 | U8-02 | Basic probability | 8 | Uncertainty | ✅ | ⚠️ |
 
+## Phase 3A engine topics
+| ID | Topic | Grade | Domain | Code | Live |
+|---|---|---|---|---|---|
+| G7-03-ENGINE | Pythagoras — true engine pilot | 7 | Geometry | ✅ | ⚠️ |
+
+Capabilities implemented in `G7-03-ENGINE`:
+
+- dynamic Pythagorean triples;
+- unknown switching: leg or hypotenuse;
+- basic/standard/challenge difficulty behavior;
+- question types: open, multiple choice, true/false, identify mistake;
+- dynamic right-triangle SVG;
+- dynamic rectangle-diagonal SVG;
+- KaTeX-compatible mathematical solution steps;
+- existing export/PNG/print buttons preserved through the existing export pipeline.
+
+Known Phase 3A caveat: CSS enhancements were kept minimal/in-script due connector write-safety blocks; live visual verification is still required before `Live ✅`.
+
 ## Delta repairs completed after Claude audit
 - N8-01 Ratio: expanded from one hardcoded question to 4 randomized variants.
 - N8-03 Scale: expanded from one hardcoded question to 4 randomized variants.
@@ -158,13 +182,12 @@ Reason: those workflows attempted to re-apply already completed work and pollute
 - `generator/core.js` received only a minimal `class="qmeta"` markup alignment so Claude's premium CSS applies to the card metadata row.
 - `generator/core.js` also received a minimal Grade 9 locked-notice UI fix: selecting Grade 9 opens the existing `g9notice` block and shows a clear locked/pending option instead of an empty selector.
 - No slice files, `export.js`, `phase2-loader.js`, sources, archive, or Grade 9 generator logic were changed.
-- Status: applied in code; public files are reachable; full visual/browser batch verification remains pending.
 
 ## Current honest status
-The public external link is reachable and basic deployment is verified externally: `site-health.json`, app shell, `style.css`, and `core.js` all returned HTTP 200 from Termux. Deploy Pages and static structure workflows completed successfully on commit `1afaff9`. Obsolete one-time apply workflows were disabled. The strict static verifier and full browser batch workflow were strengthened. The generator has 25 code-active slices. The current system is an MVP, not the final intelligent generator. Yaniv's full requirements are now preserved in `RULES.md` and `docs/TRUE_GENERATOR_VISION_REQUIREMENTS.md`. The next major work is Phase 3A: a real source-bound generator engine beside the current MVP, with no fake controls and no demo-only UI.
+The public external link is reachable. Phase 2 static verifier and full browser batch now pass after the readiness-check fix. The generator has 25 code-active legacy slices. The current system is a live MVP plus the first Phase 3A engine pilot code. Yaniv's full requirements are preserved in `RULES.md`, `docs/TRUE_GENERATOR_VISION_REQUIREMENTS.md`, and `docs/prompts/CLAUDE_PHASE3A_TRUE_ENGINE_REQUEST.md`. The next major work is live verification and refinement of `G7-03-ENGINE`, then extension of the same engine architecture to worksheet mode and additional source-backed topics.
 
 ## Known caveat
 `G8-04` is currently implemented as Hebrew text-only with 4 variants. It is code-active and student-facing in Hebrew, but SVG can be added later if needed.
 
 ## Next required action
-Before Phase 3 coding, Claude must produce a true Phase 3A generator-engine blueprint and exact patch pack based on `RULES.md` and `docs/TRUE_GENERATOR_VISION_REQUIREMENTS.md`. ChatGPT should execute the approved pack in GitHub. Do not start from scratch, do not add shallow slices, do not implement Grade 9, and do not create fake UI controls.
+Run live visual/browser verification for `G7-03-ENGINE` after deployment. Do not mark Phase 3A Live ✅ until the engine topic is opened on the live site, generates all question types, shows SVG diagrams, opens answers, and preserves export/print.
