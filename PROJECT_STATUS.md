@@ -43,6 +43,7 @@ Public URL:
 | U8-01 | Mean, median, and range | Active; dedicated verification workflow added |
 | N8-04 | Static percentages | Active; dedicated verification workflow added |
 | N8-05 | Dynamic percentages | Active; dedicated verification workflow added |
+| N8-02 | Proportion | Active; dedicated verification workflow added |
 
 ## Verification
 
@@ -84,7 +85,7 @@ Archived files:
 
 ## Current honest status
 
-The project has a working MVP generator with seven active slices. The repository is organized, the generator is now modular, the curriculum source material is documented, and the old private-tutoring root app has been archived.
+The project has a working MVP generator with eight active slices. The repository is organized, the generator is now modular, the curriculum source material is documented, and the old private-tutoring root app has been archived.
 
 ## Remaining work
 
@@ -95,6 +96,6 @@ The project has a working MVP generator with seven active slices. The repository
 
 ## Recommended next slice
 
-`N8-02` — proportion.
+`N7-07` — square root.
 
-Reason: no SVG required, direct continuation of numeric grade 8 work, and useful classroom practice.
+Reason: no SVG required, useful grade 7 numeric topic, and simple clean logic for exact and estimated roots.
