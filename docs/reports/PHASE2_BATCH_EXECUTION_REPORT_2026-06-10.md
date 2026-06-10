@@ -80,9 +80,14 @@ The generator remains at **25 code-active slices**. Grade 9 remains locked.
   - Added as a Pages artifact hardening marker and redeploy trigger.
   - Commit: `0ecf1bac668821399b970e382edbf8967c264212`
 
+- `.github/workflows/pages-healthcheck.yml`
+  - Added as a lightweight public Pages healthcheck with retries.
+  - It checks the public URL for HTTP 200 and the Hebrew title before the heavier Playwright batch workflow.
+  - Commit: `3d4b209bb180a132b5c8962d7aa8e39c2838c713`
+
 - `PROJECT_STATUS.md`
-  - Updated to record Claude delta repairs, verification improvements, and Pages hardening.
-  - Commits: `4c0fe86688dc800bcfe9a8fc0ffc4ff8060c139b`, `9ffcf5f74d128fea620dd79dd7dc3aeedb6d143c`
+  - Updated to record Claude delta repairs, verification improvements, Pages hardening, and the Pages healthcheck workflow.
+  - Commits: `4c0fe86688dc800bcfe9a8fc0ffc4ff8060c139b`, `9ffcf5f74d128fea620dd79dd7dc3aeedb6d143c`, `5b1844fd7c82860ab6025b28cf16c636367098d9`
 
 ## What ChatGPT did not touch
 
@@ -147,6 +152,18 @@ It checks:
 - new slices are not falsely marked Live ✅ before verification
 - Phase 2 slice files are not stub-like under 200 bytes
 
+## Pages healthcheck status
+
+A lightweight healthcheck workflow exists:
+
+- `.github/workflows/pages-healthcheck.yml`
+
+It checks:
+
+- public URL returns HTTP 200
+- page content includes the Hebrew title `תרגילים`
+- retries several times to allow Pages/CDN deployment delay
+
 ## Browser/live verification status
 
 Browser/live workflow exists and was strengthened:
@@ -169,7 +186,7 @@ Current truthful status: **Live ⚠️ pending** until the workflow or a browser
 
 ## Deployment status
 
-`deploy-pages.yml` is structurally correct for GitHub Actions Pages artifact deployment from `generator/`. A `.nojekyll` file was added to the artifact and committed to trigger a clean redeploy.
+`deploy-pages.yml` is structurally correct for GitHub Actions Pages artifact deployment from `generator/`. A `.nojekyll` file was added to the artifact and committed to trigger a clean redeploy. A lightweight Pages healthcheck workflow was added to diagnose the previous 403 quickly.
 
 ## Grade 9 status
 
@@ -184,7 +201,8 @@ Grade 9 remains **LOCKED**. No Grade 9 generator implementation was added.
 ## Next recommendation
 
 1. Wait for GitHub Pages deployment to settle.
-2. Run/inspect `.github/workflows/verify-phase2-static.yml`.
-3. Run/inspect `.github/workflows/verify-phase2-batch.yml`.
-4. If browser verification passes, update `PROJECT_STATUS.md` Live column for the new slices.
-5. If it fails, fix only the exact failing module/selector/pages issue.
+2. Run/inspect `.github/workflows/pages-healthcheck.yml`.
+3. Run/inspect `.github/workflows/verify-phase2-static.yml`.
+4. Run/inspect `.github/workflows/verify-phase2-batch.yml`.
+5. If browser verification passes, update `PROJECT_STATUS.md` Live column for the new slices.
+6. If it fails, fix only the exact failing module/selector/pages issue.
