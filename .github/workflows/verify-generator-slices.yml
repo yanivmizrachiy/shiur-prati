@@ -32,23 +32,28 @@ jobs:
           page.on('console', m => { if (m.type() === 'error') errors.push(m.text()); });
           await page.goto('https://yanivmizrachiy.github.io/targilim/', { waitUntil: 'networkidle', timeout: 60000 });
           await page.waitForSelector('text=תרגילים');
-          for (const id of ['G7-03','G7-04']) {
+          const checks = [
+            {id:'G7-03', domain:'geometry', re:/משולש|יתר|רגל/},
+            {id:'G7-04', domain:'geometry', re:/זוויות|∠|180/},
+            {id:'N7-06', domain:'numeric', re:/חזקות|סוגריים|בסיס|חזקה/}
+          ];
+          for (const item of checks) {
             await page.selectOption('#sg','7');
-            await page.selectOption('#sd','geometry');
-            await page.selectOption('#st',id);
+            await page.selectOption('#sd',item.domain);
+            await page.selectOption('#st',item.id);
             await page.click('.btn-gen');
-            await page.waitForSelector('.qcard svg');
+            await page.waitForSelector('.qcard');
             const q = await page.locator('.qtext').innerText();
             await page.click('.btn-ans');
             await page.waitForSelector('.answer.open');
             const a = await page.locator('.answer.open').innerText();
             const buttons = await page.locator('.btn-exp').count();
-            if (buttons < 3) throw new Error(id + ' export buttons missing');
-            if (id === 'G7-03' && !/משולש|יתר|רגל/.test(q+a)) throw new Error('G7-03 wording failed');
-            if (id === 'G7-04' && !/זוויות|∠|180/.test(q+a)) throw new Error('G7-04 wording failed');
+            if (buttons < 3) throw new Error(item.id + ' export buttons missing');
+            if (!item.re.test(q+a)) throw new Error(item.id + ' wording failed: ' + q + ' / ' + a);
+            if (item.id !== 'N7-06') await page.waitForSelector('.qcard svg');
           }
           if (errors.length) throw new Error(errors.join(' | '));
           await browser.close();
-          console.log('GENERATOR_SLICES_G7_03_G7_04_OK');
+          console.log('GENERATOR_SLICES_G7_03_G7_04_N7_06_OK');
           EOF
           node verify.mjs
