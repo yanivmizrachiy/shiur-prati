@@ -1,5 +1,7 @@
 name: Apply U8-01 generator slice
 
+# Retrigger: 2026-06-10T04:18Z
+
 on:
   push:
     branches: [main]
