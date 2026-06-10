@@ -44,15 +44,15 @@ const allJs = fs.readdirSync('generator')
   .map(f => read('generator/' + f))
   .join('\n');
 
+const status = read('PROJECT_STATUS.md');
 for (const id of requiredIds) {
-  if (!allJs.includes(id) && !read('PROJECT_STATUS.md').includes(id)) {
-    throw new Error('Missing slice id in code/status: ' + id);
-  }
+  if (!allJs.includes(id)) throw new Error('Missing slice id in generator code: ' + id);
+  if (!status.includes(id)) throw new Error('Missing slice id in PROJECT_STATUS.md: ' + id);
 }
 
-const status = read('PROJECT_STATUS.md');
 if (!status.includes('Active generator slices (25)')) throw new Error('PROJECT_STATUS.md does not report 25 slices');
 if (!status.includes('Grade 9 generator |')) throw new Error('Grade 9 status missing');
 if (!status.includes('Locked')) throw new Error('Grade 9 is not clearly locked');
+if (!status.includes('Live ⚠️')) throw new Error('PROJECT_STATUS.md should distinguish not-yet-live-verified slices');
 
-console.log('PHASE2_STATIC_VERIFY_OK: 25 slices, loader, status, and Grade 9 lock verified.');
+console.log('PHASE2_STATIC_VERIFY_STRICT_OK: 25 slice IDs exist in code and status; loader and Grade 9 lock verified.');
