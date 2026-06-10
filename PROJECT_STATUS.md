@@ -9,6 +9,7 @@
 | Phase 2: Archive + KB + generator MVP | ✅ Done |
 | Phase 2 continued: slice expansion | 🔄 Active |
 | Delta repair: weak slices + verification | ✅ Done |
+| Pages hardening | ✅ Done |
 | Legacy archive | ✅ Done |
 | Grade 9 generator | 🔒 Locked — needs real example question sources |
 | Analytics | 🔲 Deferred |
@@ -25,7 +26,13 @@ https://yanivmizrachiy.github.io/targilim/
 - generator/numeric.js — base numeric slices
 - generator/stats.js — base uncertainty/statistics slices
 - generator/phase2-loader.js — loads Phase 2 slice modules
+- generator/.nojekyll — GitHub Pages artifact hardening marker
 - generator/style.css — styles
+
+## Deployment
+- .github/workflows/deploy-pages.yml deploys the `generator/` folder through GitHub Actions Pages.
+- The workflow uses `actions/configure-pages`, `actions/upload-pages-artifact` with `path: "generator"`, and `actions/deploy-pages`.
+- A `.nojekyll` marker was added to the generator artifact to harden Pages serving and trigger a clean redeploy.
 
 ## Verification assets
 - tools/verify-phase2-static.mjs — strict repository static verifier, including non-stub Phase 2 file-size guard
@@ -87,6 +94,7 @@ https://yanivmizrachiy.github.io/targilim/
 - generator/u7-02.js
 - generator/g8-04.js
 - generator/phase2-loader.js
+- generator/.nojekyll
 
 ## Delta repairs completed after Claude audit
 - N8-01 Ratio: expanded from one hardcoded question to 4 randomized variants.
@@ -95,9 +103,10 @@ https://yanivmizrachiy.github.io/targilim/
 - A8-03 Systems: expanded from one hardcoded question to 4 randomized variants, with integer-safe examples only.
 - Static verifier strengthened with a Phase 2 file-size guard to catch stub-like files.
 - Browser workflow strengthened to fail clearly on Pages 403/404 and to check SVG for relevant geometry slices.
+- Pages deployment hardened with `generator/.nojekyll` and a clean redeploy trigger.
 
 ## Current honest status
-The generator has 25 code-active slices. The original MVP slices were previously browser/workflow verified. The Phase 2 batch is connected through `phase2-loader.js` and is code-active. Claude-identified weak slices were repaired. A strict static verifier now checks repository structure, all 25 slice IDs, non-stub Phase 2 files, and Grade 9 lock. The browser workflow now handles async loader registration and Pages 403/404 clearly. The batch still needs one end-of-batch browser/live verification before marking the new slices Live ✅.
+The generator has 25 code-active slices. The original MVP slices were previously browser/workflow verified. The Phase 2 batch is connected through `phase2-loader.js` and is code-active. Claude-identified weak slices were repaired. A strict static verifier now checks repository structure, all 25 slice IDs, non-stub Phase 2 files, and Grade 9 lock. The browser workflow now handles async loader registration and Pages 403/404 clearly. Pages deployment is through GitHub Actions artifact upload from `generator/`, and `.nojekyll` was added to harden artifact serving. The batch still needs one end-of-batch browser/live verification before marking the new slices Live ✅.
 
 ## Known caveat
 `G8-04` is currently implemented as Hebrew text-only with 4 variants. It is code-active and student-facing in Hebrew, but SVG can be added later if needed.
