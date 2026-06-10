@@ -14,6 +14,7 @@
 | Obsolete workflow cleanup | ✅ Done |
 | Verification hardening | ✅ Done — pending workflow results |
 | Rules sync / anti-duplication guard | ✅ Done |
+| True generator vision captured in repo rules | ✅ Done |
 | Pages hardening | ✅ Done |
 | Legacy archive | ✅ Done |
 | Grade 9 generator | 🔒 Locked — needs real example question sources |
@@ -24,6 +25,36 @@ https://yanivmizrachiy.github.io/targilim/
 
 ## Static health endpoint
 https://yanivmizrachiy.github.io/targilim/site-health.json
+
+## Binding vision and rules
+The current live system is a useful MVP, not the final intelligent generator Yaniv ultimately requested.
+
+Yaniv's full no-demo product vision is now preserved in:
+
+- `RULES.md`
+- `docs/TRUE_GENERATOR_VISION_REQUIREMENTS.md`
+
+Future Claude/ChatGPT work must not ask Yaniv to repeat the full vision from scratch.
+
+The next product direction is **not** more shallow slices and **not** starting over. The next direction is to preserve the existing live MVP and add a real generator engine beside it.
+
+Phase 3 must build toward:
+
+- source-bound template/pattern engine;
+- many questions per topic;
+- dynamic data generation;
+- unknown switching;
+- Hebrew wording variation;
+- multiple question types: open, multiple choice, completion, true/false, matching, reasoning, mistake identification;
+- real difficulty levels: basic, standard, challenge;
+- dynamic premium SVG graphics with controlled colors/themes;
+- full worksheet mode: 5/10/15 questions, with/without answers, answer key, A4 print;
+- export/copy/PNG/print preserved;
+- no fake controls;
+- no demo-only UI;
+- no Grade 9 until real worked source examples exist.
+
+Claude remains the project manager/brain. ChatGPT is the GitHub executor. Claude does not need to work directly in GitHub; ChatGPT executes repository changes after Claude provides the approved blueprint/patch pack.
 
 ## Latest external verification
 Verified externally from Termux on 2026-06-10:
@@ -57,12 +88,6 @@ Conclusion: public basic deployment is working. Full browser batch verification 
 - generator/phase2-loader.js — loads Phase 2 slice modules
 - generator/.nojekyll — GitHub Pages artifact hardening marker
 - generator/style.css — premium mobile-first RTL styles
-
-## Deployment
-- .github/workflows/deploy-pages.yml deploys the `generator/` folder through GitHub Actions Pages.
-- The workflow uses `actions/configure-pages`, `actions/upload-pages-artifact` with `path: "generator"`, and `actions/deploy-pages`.
-- A `.nojekyll` marker was added to the generator artifact to harden Pages serving and trigger a clean redeploy.
-- `generator/site-health.json` gives a JS-independent Pages health endpoint.
 
 ## Verification assets
 - tools/verify-phase2-static.mjs — strict repository static verifier: 25 slice IDs, loader coverage, export functions, site-health, anti-stub guard, mobile meta, Grade 9 lock, and truthful status checks
@@ -116,27 +141,6 @@ Reason: those workflows attempted to re-apply already completed work and pollute
 | U8-01 | Mean, median, range | 8 | Uncertainty | ✅ | ✅ |
 | U8-02 | Basic probability | 8 | Uncertainty | ✅ | ⚠️ |
 
-## Phase 2 batch files added
-- generator/n7-03.js
-- generator/n7-04.js
-- generator/n7-05.js
-- generator/n8-ratio.js
-- generator/n8-03.js
-- generator/u8-02.js
-- generator/u7-01.js
-- generator/a7-01.js
-- generator/a7-02.js
-- generator/a8-02.js
-- generator/g8-01.js
-- generator/g7-02.js
-- generator/g7-01.js
-- generator/a8-03.js
-- generator/u7-02.js
-- generator/g8-04.js
-- generator/phase2-loader.js
-- generator/.nojekyll
-- generator/site-health.json
-
 ## Delta repairs completed after Claude audit
 - N8-01 Ratio: expanded from one hardcoded question to 4 randomized variants.
 - N8-03 Scale: expanded from one hardcoded question to 4 randomized variants.
@@ -156,16 +160,11 @@ Reason: those workflows attempted to re-apply already completed work and pollute
 - No slice files, `export.js`, `phase2-loader.js`, sources, archive, or Grade 9 generator logic were changed.
 - Status: applied in code; public files are reachable; full visual/browser batch verification remains pending.
 
-## Rules synchronization
-- `RULES.md` was updated from an obsolete pre-build state to a current execution rulebook.
-- It now records the 25 active slices, protected files, Grade 9 lock, no-repeat rules, deployment rules, verification rules, and the current next action.
-- Purpose: prevent future agents from restarting completed work or duplicating slices.
-
 ## Current honest status
-The public external link is reachable and basic deployment is verified externally: `site-health.json`, app shell, `style.css`, and `core.js` all returned HTTP 200 from Termux. Deploy Pages and static structure workflows completed successfully on commit `1afaff9`. Obsolete one-time apply workflows were disabled. The strict static verifier and full browser batch workflow were strengthened. The generator has 25 code-active slices. The original MVP slices were previously browser/workflow verified. The Phase 2 batch is connected through `phase2-loader.js` and is code-active. Claude-identified weak slices were repaired. Claude's premium mobile-first CSS redesign is deployed. Grade 9 lock UX is fixed. `RULES.md` now reflects the real current state. The remaining unclosed item is waiting for the strengthened static/browser workflows to run and pass before marking the remaining new slices Live ✅.
+The public external link is reachable and basic deployment is verified externally: `site-health.json`, app shell, `style.css`, and `core.js` all returned HTTP 200 from Termux. Deploy Pages and static structure workflows completed successfully on commit `1afaff9`. Obsolete one-time apply workflows were disabled. The strict static verifier and full browser batch workflow were strengthened. The generator has 25 code-active slices. The current system is an MVP, not the final intelligent generator. Yaniv's full requirements are now preserved in `RULES.md` and `docs/TRUE_GENERATOR_VISION_REQUIREMENTS.md`. The next major work is Phase 3A: a real source-bound generator engine beside the current MVP, with no fake controls and no demo-only UI.
 
 ## Known caveat
 `G8-04` is currently implemented as Hebrew text-only with 4 variants. It is code-active and student-facing in Hebrew, but SVG can be added later if needed.
 
 ## Next required action
-Wait for `verify-phase2-static.yml` and `verify-phase2-batch.yml` to complete on the latest commits. If they pass, update all remaining active slices to Live ✅ and mark Phase 2 complete. If they fail, fix only the exact failing item.
+Before Phase 3 coding, Claude must produce a true Phase 3A generator-engine blueprint and exact patch pack based on `RULES.md` and `docs/TRUE_GENERATOR_VISION_REQUIREMENTS.md`. ChatGPT should execute the approved pack in GitHub. Do not start from scratch, do not add shallow slices, do not implement Grade 9, and do not create fake UI controls.
