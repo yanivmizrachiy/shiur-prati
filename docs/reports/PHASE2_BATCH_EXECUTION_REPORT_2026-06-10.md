@@ -1,82 +1,89 @@
-# PHASE 2 BATCH EXECUTION REPORT
+# PHASE 2 DELTA AUDIT REPORT
 
 Date: 2026-06-10
 Executed by: ChatGPT
-Project manager / source pack: Claude
+Project manager / audit pack: Claude
 Repository: `yanivmizrachiy/targilim`
 Public URL: https://yanivmizrachiy.github.io/targilim/
 
 ## Summary
 
-Implemented a large Phase 2 source-bound batch without adding Grade 9 and without rewriting `generator/index.html` as a full app. The generator now has **25 code-active slices**.
+Claude reviewed the Phase 2 state and identified the correct next action: stop adding new slices, repair weak/stub slices, strengthen verification, and do not mark new slices Live ✅ until browser/live verification passes.
 
-The new slices are loaded through `generator/phase2-loader.js`, which keeps the existing modular architecture intact.
+ChatGPT executed the delta repair as an audit-and-repair operation, not new feature development.
 
-A strict static verifier was added after the implementation. It verifies that all 25 slice IDs exist in generator code and in `PROJECT_STATUS.md`, that `phase2-loader.js` is loaded by `index.html`, and that Grade 9 remains locked.
+The generator remains at **25 code-active slices**. Grade 9 remains locked.
 
-The browser/live workflow was strengthened to wait for the async Phase 2 loader to finish registering new slices before it checks selectors. This reduces false failures caused by module load timing.
+## What Claude recommended
 
-## Scope rule followed
+- Fix the GitHub Pages 403 before marking Live ✅.
+- Repair four weak/stub slices:
+  - N8-01 Ratio
+  - N8-03 Scale
+  - G8-04 Similarity / triangle scale factor
+  - A8-03 Systems of equations
+- Add a static verifier guard against stub-like slice files.
+- Improve browser workflow handling for Pages 403/404.
+- Do not add more slices before live verification.
 
-- Grade 9 was not implemented.
-- Work stayed bound to the source-backed Grade 7 and Grade 8 topics.
-- `RULES.md`, `sources/`, and `archive/` were not touched.
-- `generator/export.js` was not changed.
+## What ChatGPT inspected
 
-## Baseline
-
-Base commit before this implementation wave:
-
-`388e0aa0c1da5c022de68bbda9189d5e1aaa1184`
-
-## Files added or changed
-
-### Added workflows
-
-- `.github/workflows/verify-phase2-batch.yml` — browser/live-style verification against the public Pages URL; waits for async loader registration
-- `.github/workflows/verify-phase2-static.yml` — static repository verification
-
-### Added static verifier
-
+- `generator/n8-ratio.js`
+- `generator/n8-03.js`
+- `generator/g8-04.js`
+- `generator/a8-03.js`
 - `tools/verify-phase2-static.mjs`
-
-### Updated status
-
+- `.github/workflows/verify-phase2-batch.yml`
 - `PROJECT_STATUS.md`
 
-### Added Phase 2 loader
+## What ChatGPT fixed
 
-- `generator/phase2-loader.js`
+### Weak/stub slice repairs
 
-### Added numeric slices
+- `generator/n8-ratio.js`
+  - Expanded from one hardcoded question to 4 randomized source-bound variants.
+  - Commit: `0396d8b9018d2f9ec909eb3045fba83ebc6dd2f9`
 
-- `generator/n7-03.js` — Negative numbers on number line
-- `generator/n7-04.js` — Signed addition/subtraction
-- `generator/n7-05.js` — Signed multiplication/division
-- `generator/n8-ratio.js` — Ratio
-- `generator/n8-03.js` — Scale
+- `generator/n8-03.js`
+  - Expanded from one hardcoded question to 4 randomized source-bound scale variants.
+  - Commit: `70acbdda83af486bbec9ca530b1c7dd2b4488d0b`
 
-### Added uncertainty/statistics slices
+- `generator/g8-04.js`
+  - Expanded from one hardcoded question to 4 randomized Hebrew variants.
+  - Commit: `ae35159175e38aeab801ecd2d1cedde17964d729`
 
-- `generator/u7-01.js` — Frequency table
-- `generator/u7-02.js` — Basic probability for Grade 7
-- `generator/u8-02.js` — Basic probability for Grade 8
+- `generator/a8-03.js`
+  - Expanded from one hardcoded word problem to 4 randomized variants.
+  - Claude's suggested 14-books / 2x example was corrected because it produced a non-integer answer. The implemented variant uses 18 books, giving integer answers 6 and 12.
+  - Commit: `5a756ce63adf826be313272f97430e3c3740c808`
 
-### Added algebra slices
+### Verification repairs
 
-- `generator/a7-01.js` — Algebraic expressions
-- `generator/a7-02.js` — Substitution in expression
-- `generator/a8-02.js` — Slope and line equation
-- `generator/a8-03.js` — Systems of equations
+- `tools/verify-phase2-static.mjs`
+  - Added a Phase 2 file-size guard to catch stub-like slice files under 200 bytes.
+  - Commit: `4e65d39c246fdc0fde87b30f0b7b7a3dd7ef0c4c`
 
-### Added geometry slices
+- `.github/workflows/verify-phase2-batch.yml`
+  - Added explicit failure on GitHub Pages HTTP 403/404.
+  - Preserved async-loader wait before selector checks.
+  - Checks export buttons and generated card content.
+  - Checks SVG presence only for geometry slices that require SVG.
+  - Commit: `d6705ae86bd9c6cd4f0bf6b8346a6ef0b7b86631`
 
-- `generator/g7-01.js` — Rectangle and box
-- `generator/g7-02.js` — Flat shape areas
-- `generator/g8-01.js` — Circle circumference and area
-- `generator/g8-04.js` — Similarity / triangle scale factor
+- `PROJECT_STATUS.md`
+  - Updated to record Claude delta repairs and verification improvements.
+  - Commit: `4c0fe86688dc800bcfe9a8fc0ffc4ff8060c139b`
 
-## Slices active now
+## What ChatGPT did not touch
+
+- `RULES.md`
+- `sources/`
+- `archive/`
+- `generator/export.js`
+- Grade 9 generator logic
+- Existing verified MVP slices, except through shared verification references
+
+## Active slices
 
 Total: **25 code-active slices**
 
@@ -111,61 +118,59 @@ Total: **25 code-active slices**
 - U8-01 — Mean, median, range
 - U8-02 — Basic probability
 
-## Verified by code inspection
+## Static verification status
 
-- `phase2-loader.js` loads all newly added Phase 2 slice modules.
-- `index.html` loads `phase2-loader.js` after the base modules.
-- Every new slice registers a topic through `TOPICS[grade].domain.push(...)`.
-- Every new slice uses `renderCard(...)`.
-- `PROJECT_STATUS.md` reflects 25 code-active slices.
-- Grade 9 remains locked.
-
-## Static verification
-
-Strict static verifier added:
+Static verifier exists and was strengthened:
 
 - `tools/verify-phase2-static.mjs`
 - `.github/workflows/verify-phase2-static.yml`
 
-The verifier checks:
+It checks:
 
-- required generator files exist
+- required files exist
 - `index.html` loads `phase2-loader.js`
 - `phase2-loader.js` loads all Phase 2 slice modules
 - all 25 slice IDs exist in generator code
 - all 25 slice IDs exist in `PROJECT_STATUS.md`
 - `PROJECT_STATUS.md` reports `Active generator slices (25)`
-- Grade 9 is clearly locked
-- not-yet-live-verified slices remain marked `Live ⚠️`
+- Grade 9 remains locked
+- new slices are not falsely marked Live ✅ before verification
+- Phase 2 slice files are not stub-like under 200 bytes
 
-## Live / browser verification
+## Browser/live verification status
 
-A consolidated workflow exists:
+Browser/live workflow exists and was strengthened:
 
-`.github/workflows/verify-phase2-batch.yml`
+- `.github/workflows/verify-phase2-batch.yml`
 
-It checks all 25 expected active slices on the public GitHub Pages URL:
+It now:
 
-https://yanivmizrachiy.github.io/targilim/
+- opens the public Pages URL
+- fails clearly on HTTP 403/404
+- waits for async loader registration
+- loops through all 25 slices
+- selects grade/domain/topic
+- generates a card
+- opens the answer
+- checks export buttons
+- checks SVG for geometry slices that require SVG
 
-The workflow now waits for the async loader by checking that representative Phase 2 slices are registered in `TOPICS` before it loops through selectors.
+Current truthful status: **Live ⚠️ pending** until the workflow or a browser test confirms the public URL.
 
-Current truthful status: browser/live verification should still be considered **Live ⚠️** until the workflow or a browser test confirms it.
+## Grade 9 status
+
+Grade 9 remains **LOCKED**. No Grade 9 generator implementation was added.
 
 ## Known caveats
 
-- `G8-04` is implemented as Hebrew text-only. SVG can be added later if tool constraints allow.
-- Some new slices are intentionally compact to avoid tool write blocks. They are code-active and pedagogically valid, but can be enriched later.
-- No Grade 9 implementation was done.
+- `G8-04` now has 4 Hebrew variants but remains text-only. SVG can be added later.
+- Live verification is still pending because GitHub Pages previously returned 403.
+- Do not add more content slices before final live verification.
 
 ## Next recommendation
 
-Do not add more slices until the Phase 2 batch is live/browser verified.
-
-Next action:
-
-1. Wait for GitHub Pages deployment.
+1. Wait for GitHub Pages deployment to settle.
 2. Run/inspect `.github/workflows/verify-phase2-static.yml`.
 3. Run/inspect `.github/workflows/verify-phase2-batch.yml`.
-4. If browser verification passes, update `PROJECT_STATUS.md` Live column for all new slices.
-5. If it fails, fix the exact failing selector/module only.
+4. If browser verification passes, update `PROJECT_STATUS.md` Live column for the new slices.
+5. If it fails, fix only the exact failing module/selector/pages issue.
