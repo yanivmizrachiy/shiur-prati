@@ -1,0 +1,51 @@
+name: Verify N8-02 proportion slice
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "generator/**"
+      - ".github/workflows/verify-n8-02.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify-n8-02:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - run: |
+          npm init -y
+          npm i -D playwright
+          npx playwright install chromium --with-deps
+      - run: |
+          cat > verify-n8-02.mjs <<'EOF'
+          import { chromium } from 'playwright';
+          const browser = await chromium.launch();
+          const page = await browser.newPage({ viewport: { width: 390, height: 844 } });
+          const errors = [];
+          page.on('pageerror', e => errors.push(e.message));
+          page.on('console', m => { if (m.type() === 'error') errors.push(m.text()); });
+          await page.goto('https://yanivmizrachiy.github.io/targilim/', { waitUntil: 'networkidle', timeout: 60000 });
+          await page.waitForSelector('text=תרגילים');
+          await page.selectOption('#sg','8');
+          await page.selectOption('#sd','numeric');
+          await page.selectOption('#st','N8-02');
+          await page.click('.btn-gen');
+          await page.waitForSelector('.qcard');
+          const question = await page.locator('.qtext').innerText();
+          await page.click('.btn-ans');
+          await page.waitForSelector('.answer.open');
+          const answer = await page.locator('.answer.open').innerText();
+          const buttons = await page.locator('.btn-exp').count();
+          if (buttons < 3) throw new Error('N8-02 export buttons missing');
+          if (!/פרופורציה|כפל צולבי|כמה|תשובה/.test(question + answer)) throw new Error('N8-02 wording failed');
+          if (errors.length) throw new Error(errors.join(' | '));
+          await browser.close();
+          console.log('N8_02_PROPORTION_SLICE_OK');
+          EOF
+          node verify-n8-02.mjs
