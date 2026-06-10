@@ -86,7 +86,7 @@ https://yanivmizrachiy.github.io/targilim/
 The generator has 25 code-active slices. The original MVP slices were previously browser/workflow verified. The Phase 2 batch is connected through `phase2-loader.js` and is code-active, but it still needs one end-of-batch browser/live verification before marking the new slices Live ✅.
 
 ## Known caveat
-`G8-04` is currently implemented as a minimal text-only similarity/scale-factor slice. It is code-active but should be improved later with Hebrew wording and SVG if tool constraints allow.
+`G8-04` is currently implemented as a Hebrew text-only similarity/scale-factor slice. It is code-active and student-facing in Hebrew, but should be improved later with SVG if tool constraints allow.
 
 ## Next required action
 Run final end-of-batch verification on the public URL. Do not add more content slices before confirming the Phase 2 batch loads and the selectors contain the new topics.
