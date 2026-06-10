@@ -28,9 +28,9 @@ jobs:
           const checks = [
             ['7','geometry','G7-03'],['7','geometry','G7-04'],['7','geometry','G7-01'],['7','geometry','G7-02'],
             ['7','numeric','N7-03'],['7','numeric','N7-04'],['7','numeric','N7-05'],['7','numeric','N7-06'],['7','numeric','N7-07'],
-            ['7','algebra','A7-01'],['7','algebra','A7-02'],['7','algebra','A7-03'],['7','uncertainty','U7-01'],
-            ['8','geometry','G8-01'],['8','numeric','N8-01'],['8','numeric','N8-02'],['8','numeric','N8-03'],['8','numeric','N8-04'],['8','numeric','N8-05'],
-            ['8','algebra','A8-02'],['8','uncertainty','U8-01'],['8','uncertainty','U8-02']
+            ['7','algebra','A7-01'],['7','algebra','A7-02'],['7','algebra','A7-03'],['7','uncertainty','U7-01'],['7','uncertainty','U7-02'],
+            ['8','geometry','G8-01'],['8','geometry','G8-04'],['8','numeric','N8-01'],['8','numeric','N8-02'],['8','numeric','N8-03'],['8','numeric','N8-04'],['8','numeric','N8-05'],
+            ['8','algebra','A8-02'],['8','algebra','A8-03'],['8','uncertainty','U8-01'],['8','uncertainty','U8-02']
           ];
           const browser = await chromium.launch();
           const page = await browser.newPage({ viewport: { width: 390, height: 844 } });
@@ -55,6 +55,6 @@ jobs:
           }
           if (errors.length) throw new Error(errors.join(' | '));
           await browser.close();
-          console.log('PHASE_2_BATCH_OK');
+          console.log('PHASE_2_BATCH_25_SLICES_OK');
           EOF
           node verify-phase2.mjs
