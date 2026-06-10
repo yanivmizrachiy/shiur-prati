@@ -4,25 +4,14 @@
 
 ## Product target
 
-The product target is a **smart Hebrew math exercise generator**.
+Smart Hebrew math exercise generator for Grades 7–8 only.
 
-It is **not** a booklet product, not a worksheet builder, and not a PDF workbook system.
+Removed from active scope:
 
-All future work should focus on generator intelligence:
+- Grade 9.
+- Worksheet / booklet / PDF workbook mode.
 
-- source-bound template/pattern engine;
-- many question variations per topic;
-- dynamic data generation;
-- unknown switching;
-- Hebrew wording variation;
-- multiple real question types;
-- real difficulty levels;
-- dynamic premium SVG graphics where relevant;
-- strong KaTeX-compatible mathematical writing;
-- export/copy/PNG/print preserved;
-- no fake controls;
-- no demo-only UI;
-- no Grade 9 until real worked source examples exist.
+Future work focuses only on generator intelligence: source-bound patterns, dynamic data, unknown switching, Hebrew wording variation, real question types, real difficulty, premium SVG when useful, KaTeX math writing, and preserved export/copy/PNG/print.
 
 ---
 
@@ -30,26 +19,12 @@ All future work should focus on generator intelligence:
 
 | Phase | Status |
 |---|---|
-| 10 source PDFs + official curriculum | ✅ learned |
-| Phase 1: Audit + source learning | ✅ Done |
-| Phase 2: Archive + KB + generator MVP | ✅ Done |
-| Phase 2 continued: slice expansion | ✅ Done |
-| Delta repair: weak slices + verification | ✅ Done |
-| Premium mobile-first UI redesign | ✅ Applied |
+| Source learning | ✅ Done |
+| Phase 1 audit | ✅ Done |
+| Phase 2 generator MVP | ✅ Done |
 | Live basic deployment | ✅ Passed |
-| Phase 2 full browser batch | ✅ Passed after readiness-check fix |
-| Obsolete workflow cleanup | ✅ Done |
-| Verification hardening | ✅ Done |
-| Rules sync / anti-duplication guard | ✅ Done |
-| True generator vision captured in repo rules | ✅ Done |
-| Phase 3A true engine topics | Local Live ✅ — G7-03-ENGINE, N8-03-ENGINE, and N8-04-ENGINE passed local Phase 3A browser verification; public Actions pending for the new N8-03 engine change |
-| Phase 3A engine.css | ✅ Added |
-| Phase 3A dedicated live workflow | ✅ Added |
-| Phase 3A static audit automation | ✅ Added — local run PASS |
-| Pages hardening | ✅ Done |
-| Legacy archive | ✅ Done |
-| Grade 9 generator | 🔒 Locked — needs real example question sources |
-| Worksheet/booklet mode | 🚫 Out of scope — do not build unless Yaniv explicitly reopens it |
+| Phase 2 full browser batch | ✅ Passed |
+| Phase 3A true engine topics | Local Live ✅ — G7-03-ENGINE, N8-03-ENGINE, N8-04-ENGINE |
 | Analytics | 🔲 Deferred |
 
 ---
@@ -64,173 +39,56 @@ https://yanivmizrachiy.github.io/targilim/site-health.json
 
 ---
 
-## Latest local Phase 3A verification
-
-Verified from local Codex browser run on 2026-06-10 against `http://127.0.0.1`:
-
-| Check | Result |
-|---|---|
-| `node tools/verify-phase3a-static.mjs` | PASS ✅ |
-| `G7-03-ENGINE` browser generation | PASS ✅ — 12 difficulty/type combinations |
-| `N8-03-ENGINE` browser generation | PASS ✅ — 12 difficulty/type combinations |
-| `N8-04-ENGINE` browser generation | PASS ✅ — 12 difficulty/type combinations |
-| Engine controls affect output | PASS ✅ — MCQ / true-false / mistake markup verified |
-| Legacy `G7-03` | PASS ✅ |
-| Legacy `N8-03` | PASS ✅ |
-| Legacy `N8-04` | PASS ✅ |
-| Grade 9 locked notice | PASS ✅ |
-| export buttons | PASS ✅ |
-| mobile horizontal scroll | PASS ✅ — none detected at 390px viewport |
-| browser console errors | PASS ✅ — none detected |
-
-Conclusion: Phase 2 is live and verified. Phase 3A contains three locally browser-verified engine topics. `G7-03-ENGINE`, `N8-03-ENGINE`, and `N8-04-ENGINE` passed local Phase 3A verification. `N8-03-ENGINE` adds source-bound scale template families, unknown switching, Hebrew wording variation, real question types, real difficulty behavior, and dynamic map/scale SVG while preserving legacy `N8-03`.
-
----
-
-## Architecture
-
-- `generator/index.html` — modular loader, mobile viewport, theme color, Phase 3A engine panel and engine script loading.
-- `generator/site-health.json` — static Pages health endpoint independent of JavaScript.
-- `generator/core.js` — base registry/router/renderCard with Grade 9 locked-notice UI.
-- `generator/export.js` — copy-as-image / PNG / print.
-- `generator/geo.js` — base geometry slices.
-- `generator/algebra.js` — base algebra slices.
-- `generator/numeric.js` — base numeric slices.
-- `generator/stats.js` — base uncertainty/statistics slices.
-- `generator/phase2-loader.js` — loads Phase 2 slice modules.
-- `generator/.nojekyll` — GitHub Pages artifact hardening marker.
-- `generator/style.css` — premium mobile-first RTL styles.
-- `generator/engine/engine.css` — Phase 3A engine-specific UI styles.
-- `generator/engine/schema.js` — Phase 3A engine marker/schema notes.
-- `generator/engine/random.js` — Phase 3A random utilities.
-- `generator/engine/validators.js` — Phase 3A validation helpers.
-- `generator/engine/themes.js` — Phase 3A visual theme tokens.
-- `generator/engine/diagrams.js` — Phase 3A dynamic SVG builders.
-- `generator/engine/question-types.js` — Phase 3A question type renderers.
-- `generator/engine/pilot-g7-03.js` — Phase 3A Pythagoras engine pilot.
-- `generator/engine/pilot-n8-03.js` — Phase 3A scale engine topic.
-- `generator/engine/pilot-n8-04.js` — Phase 3A percentages engine pilot.
-- `generator/engine/pattern-engine.js` — Phase 3A engine registration/render adapter.
-
----
-
-## Verification assets
-
-- `tools/verify-phase2-static.mjs` — strict repository static verifier.
-- `tools/verify-phase3a-static.mjs` — fast Phase 3A structural audit.
-- `.github/workflows/verify-phase2-static.yml` — static CI verification.
-- `.github/workflows/pages-healthcheck.yml` — public Pages healthcheck.
-- `.github/workflows/verify-phase2-batch.yml` — full 25-slice browser/live verification.
-- `.github/workflows/verify-generator-live-report.yml` — live report workflow for generator topics.
-- `.github/workflows/verify-phase3a.yml` — dedicated Phase 3A live workflow.
-- `.github/workflows/verify-phase3a-static.yml` — dedicated Phase 3A static audit workflow.
-
----
-
-## Status codes
-
-- `Code ✅` — generator code exists and is registered.
-- `Live ⚠️` — not yet live/browser verified in the latest relevant batch.
-- `Live ✅` — verified by browser/workflow/manual live test.
-- `🔒 Locked` — intentionally blocked because source examples are missing.
-
----
-
 ## Active generator slices (25)
 
-| ID | Topic | Grade | Domain | Code | Live |
-|---|---|---|---|---|---|
-| G7-03 | Pythagoras — missing side | 7 | Geometry | ✅ | ✅ |
-| G7-04 | Missing angle in triangle | 7 | Geometry | ✅ | ✅ |
-| G7-01 | Rectangle and box | 7 | Geometry | ✅ | ⚠️ |
-| G7-02 | Flat shape areas | 7 | Geometry | ✅ | ⚠️ |
-| N7-03 | Negative numbers on number line | 7 | Numeric | ✅ | ⚠️ |
-| N7-04 | Signed addition/subtraction | 7 | Numeric | ✅ | ⚠️ |
-| N7-05 | Signed multiplication/division | 7 | Numeric | ✅ | ⚠️ |
-| N7-06 | Powers: (−a)ⁿ vs −aⁿ | 7 | Numeric | ✅ | ✅ |
-| N7-07 | Square root — exact and estimation | 7 | Numeric | ✅ | ⚠️ |
-| A7-01 | Algebraic expressions | 7 | Algebra | ✅ | ⚠️ |
-| A7-02 | Substitution in expression | 7 | Algebra | ✅ | ⚠️ |
-| A7-03 | First-degree equations | 7 | Algebra | ✅ | ✅ |
-| U7-01 | Frequency table | 7 | Uncertainty | ✅ | ⚠️ |
-| U7-02 | Basic probability | 7 | Uncertainty | ✅ | ⚠️ |
-| G8-01 | Circle circumference and area | 8 | Geometry | ✅ | ⚠️ |
-| G8-04 | Similarity / triangle scale factor | 8 | Geometry | ✅ | ⚠️ |
-| N8-01 | Ratio | 8 | Numeric | ✅ | ⚠️ |
-| N8-02 | Proportion | 8 | Numeric | ✅ | ⚠️ |
-| N8-03 | Scale | 8 | Numeric | ✅ | ⚠️ |
-| N8-04 | Static percentages | 8 | Numeric | ✅ | ✅ |
-| N8-05 | Dynamic percentages | 8 | Numeric | ✅ | ✅ |
-| A8-02 | Slope and line equation | 8 | Algebra | ✅ | ⚠️ |
-| A8-03 | Systems of equations | 8 | Algebra | ✅ | ⚠️ |
-| U8-01 | Mean, median, range | 8 | Uncertainty | ✅ | ✅ |
-| U8-02 | Basic probability | 8 | Uncertainty | ✅ | ⚠️ |
+G7-01 Live ⚠️
+G7-02 Live ⚠️
+G7-03 ✅
+G7-04 ✅
+N7-03 Live ⚠️
+N7-04 Live ⚠️
+N7-05 Live ⚠️
+N7-06 ✅
+N7-07 Live ⚠️
+A7-01 Live ⚠️
+A7-02 Live ⚠️
+A7-03 ✅
+U7-01 Live ⚠️
+U7-02 Live ⚠️
+G8-01 Live ⚠️
+G8-04 Live ⚠️
+N8-01 Live ⚠️
+N8-02 Live ⚠️
+N8-03 Live ⚠️
+N8-04 ✅
+N8-05 ✅
+A8-02 Live ⚠️
+A8-03 Live ⚠️
+U8-01 ✅
+U8-02 Live ⚠️
 
 ---
 
 ## Phase 3A engine topics
 
-| ID | Topic | Grade | Domain | Code | Live |
-|---|---|---|---|---|---|
-| G7-03-ENGINE | Pythagoras — true engine pilot | 7 | Geometry | ✅ | Local Live ✅ |
-| N8-03-ENGINE | Scale — true engine topic | 8 | Numeric | ✅ | Local Live ✅ |
-| N8-04-ENGINE | Static percentages — engine pilot | 8 | Numeric | ✅ | Local Live ✅ |
-
-Capabilities implemented in `G7-03-ENGINE`:
-
-- dynamic Pythagorean triples;
-- unknown switching: leg or hypotenuse;
-- basic/standard/challenge difficulty behavior;
-- question types: open, multiple choice, true/false, identify mistake;
-- dynamic right-triangle SVG;
-- dynamic rectangle-diagonal SVG;
-- KaTeX-compatible mathematical solution steps;
-- existing export/PNG/print buttons preserved through the existing export pipeline.
-
-Capabilities implemented in `N8-04-ENGINE`:
-
-- percent of a number;
-- find the whole from a percentage;
-- find the percentage from part/whole;
-- basic/standard/challenge difficulty behavior;
-- question types: open, multiple choice, true/false, identify mistake;
-- KaTeX-compatible mathematical solution steps;
-- existing export/PNG/print buttons preserved through the existing export pipeline.
-
-Capabilities implemented in `N8-03-ENGINE`:
-
-- source-bound scale template families;
-- find real distance from map/drawing distance;
-- find map/drawing distance from real distance;
-- find the scale factor from map and real distances;
-- basic/standard/challenge difficulty behavior;
-- question types: open, multiple choice, true/false, identify mistake;
-- dynamic map/scale SVG;
-- KaTeX-compatible mathematical solution steps;
-- existing export/PNG/print buttons preserved through the existing export pipeline.
+- G7-03-ENGINE — Pythagoras true engine pilot — Local Live ✅
+- N8-03-ENGINE — Scale true engine topic — Local Live ✅
+- N8-04-ENGINE — Percentages engine pilot — Local Live ✅
 
 ---
 
 ## Current honest status
 
-The public external link is reachable. Phase 2 static verifier and full browser batch pass after the readiness-check fix. The generator has 25 code-active legacy slices. Phase 3A includes three engine topics: `G7-03-ENGINE`, `N8-03-ENGINE`, and `N8-04-ENGINE`. All three passed local static and browser verification on 2026-06-10.
-
-The project direction is **smart generator only**.
-
-Do not start worksheet/booklet/PDF workbook features.
+The generator has 25 code-active legacy slices and 3 Phase 3A engine topics. Public link is reachable. Latest public Actions confirmation is still pending after the scope cleanup.
 
 ---
 
 ## Next required action
 
-Continue generator intelligence work only:
+Continue generator intelligence only:
 
 1. Convert additional legacy topics into true engine topics.
 2. Add source-bound template families.
 3. Add dynamic data and unknown switching.
-4. Add Hebrew wording variation.
-5. Add real question types.
-6. Add real difficulty behavior.
-7. Add premium SVG graphics where relevant.
-8. Keep Grade 9 locked until real source examples exist.
-9. Keep export/copy/PNG/print working.
+4. Add real question types and real difficulty behavior.
+5. Preserve export/copy/PNG/print.
