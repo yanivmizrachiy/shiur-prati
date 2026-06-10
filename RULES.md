@@ -8,34 +8,40 @@ Last updated: 2026-06-10
 
 ---
 
-## 1. Purpose of this file
+## 1. Binding documents
 
 `RULES.md` is the binding execution rulebook for this repository.
 
-This file must prevent repeated work, duplicated patches, false claims, fake success, and unsafe edits.
+The full product vision is preserved in:
+
+`docs/TRUE_GENERATOR_VISION_REQUIREMENTS.md`
+
+That file is now mandatory reading before any Phase 3 planning or coding.
+
+Future agents must not ask Yaniv to restate the full vision from scratch.
 
 The repository has already passed major Phase 1 and Phase 2 work. Future agents must not restart the project from old assumptions.
 
 ---
 
-## 2. Role model
+## 2. Roles
 
 Yaniv is the product owner and teacher.
 
-Claude is the project manager / brain / pedagogy and design decision-maker.
+Claude is the project manager / brain / pedagogy / design decision-maker.
 
 ChatGPT is the GitHub executor / implementation assistant.
 
 Execution rule:
 
-- Claude decides strategy, pedagogy, design direction, and quality gates.
-- ChatGPT may execute repository changes, but must preserve Claude's decisions and repository reality.
+- Claude decides strategy, pedagogy, design direction, source interpretation, and quality gates.
+- ChatGPT executes approved repository changes while preserving repository reality.
 - Yaniv must not be forced to manage routine technical decisions.
-- No agent may ask Yaniv to repeat work that already exists in the repository.
+- No agent may ask Yaniv to repeat work or restate the full vision already documented in `docs/TRUE_GENERATOR_VISION_REQUIREMENTS.md`.
 
 ---
 
-## 3. Current true status — do not reset
+## 3. Current true status
 
 As of 2026-06-10, the project is not at the beginning.
 
@@ -56,49 +62,22 @@ Completed:
 - Premium mobile-first RTL CSS redesign has been applied.
 - `core.js` contains minimal `qmeta` markup alignment for premium card styling.
 - Grade 9 remains locked because real worked example sources are missing.
+- 25 code-active slices exist for Grades 7–8.
+- Yaniv's true generator vision is now documented in `docs/TRUE_GENERATOR_VISION_REQUIREMENTS.md`.
 
-Active code state:
+Current limitation:
 
-- 25 code-active slices exist.
-- Grade 7 and Grade 8 are active.
-- The original verified MVP slices remain active.
-- The Phase 2 slices are code-active and loaded through `phase2-loader.js`.
-- The four weak/stub slices previously identified by Claude were repaired:
-  - `N8-01` Ratio — 4 variants.
-  - `N8-03` Scale — 4 variants.
-  - `G8-04` Similarity — 4 variants.
-  - `A8-03` Systems of equations — 4 integer-safe variants.
-
-Pending:
-
-- Final live visual verification.
-- Final Pages healthcheck / browser workflow confirmation.
-- Only after live verification may new Phase 2 slices be marked `Live ✅`.
+- The live system is a useful MVP, not the final intelligent generator.
+- Phase 3 true generator engine has not yet been built.
+- Worksheet mode has not yet been built.
+- Real question-type engine has not yet been built.
+- Dynamic unknown-switching engine has not yet been built.
+- Full dynamic diagram/graphics engine has not yet been built.
+- Real difficulty logic across all topics has not yet been built.
 
 ---
 
-## 4. Do not repeat completed work
-
-Future work must not repeat these completed actions:
-
-- Do not recreate the source-learning phase.
-- Do not recreate the curriculum map from scratch.
-- Do not recreate the pattern index from scratch.
-- Do not re-archive legacy files that are already archived.
-- Do not rebuild the modular architecture from scratch.
-- Do not rewrite `index.html` wholesale.
-- Do not rewrite `core.js` wholesale.
-- Do not rewrite `phase2-loader.js` unless there is a real loader failure.
-- Do not rewrite `export.js` unless export is proven broken.
-- Do not re-add the same 25 slices.
-- Do not create duplicate topic IDs.
-- Do not mark `Live ✅` without actual verification.
-
-Every future change must first inspect repository reality.
-
----
-
-## 5. Active generator slices
+## 4. Active generator slices
 
 The project currently has 25 code-active slices.
 
@@ -141,6 +120,28 @@ Do not implement Grade 9 generator slices until Yaniv supplies real worked examp
 
 ---
 
+## 5. Do not repeat completed work
+
+Future work must not repeat these completed actions:
+
+- Do not recreate the source-learning phase.
+- Do not recreate the curriculum map from scratch.
+- Do not recreate the pattern index from scratch.
+- Do not re-archive legacy files that are already archived.
+- Do not rebuild the modular architecture from scratch.
+- Do not rewrite `index.html` wholesale.
+- Do not rewrite `core.js` wholesale.
+- Do not rewrite `phase2-loader.js` unless there is a real loader failure.
+- Do not rewrite `export.js` unless export is proven broken.
+- Do not re-add the same 25 slices.
+- Do not create duplicate topic IDs.
+- Do not mark `Live ✅` without actual verification.
+- Do not ask Yaniv to repeat the full Phase 3 generator vision.
+
+Every future change must first inspect repository reality.
+
+---
+
 ## 6. Protected files and folders
 
 Do not touch these unless there is explicit need and a clear reason:
@@ -148,48 +149,23 @@ Do not touch these unless there is explicit need and a clear reason:
 - `sources/`
 - `archive/`
 - `knowledge-base/`
-- `RULES.md` itself, except for truth/status/rule updates.
 - `generator/export.js`, unless export is proven broken.
 - `generator/phase2-loader.js`, unless a loader failure is proven.
 - all slice files, unless fixing a real mathematical/UI/runtime issue.
+- `RULES.md`, except for truth/status/rule updates.
+- `docs/TRUE_GENERATOR_VISION_REQUIREMENTS.md`, except for approved vision refinements.
 
 Do not delete files without explicit approval.
 
 ---
 
-## 7. Allowed future changes
-
-Allowed safe changes:
-
-- Fix proven runtime errors.
-- Fix proven mathematical errors.
-- Fix proven Hebrew wording errors.
-- Improve mobile UI only if it preserves generator logic and export.
-- Update documentation to match actual repository state.
-- Update status files after real code changes.
-- Improve verification workflows if they produce false failures or miss real failures.
-- Add reports under `docs/reports/` when they document real execution.
-
-Not allowed without Claude/Yaniv approval:
-
-- Adding new content slices.
-- Implementing Grade 9.
-- Adding analytics services.
-- Adding paid services.
-- Adding secrets.
-- Changing hosting architecture.
-- Replacing the generator architecture.
-- Performing destructive cleanup.
-
----
-
-## 8. Source-bound content rule
+## 7. Source-bound rule
 
 Every exercise must remain source-bound.
 
 No generic curriculum invention.
 
-Every generated topic must map to:
+Every generated topic/template must map to:
 
 - grade;
 - domain;
@@ -197,13 +173,40 @@ Every generated topic must map to:
 - skill;
 - source or approved source-learning note;
 - safe parameter set;
-- correct answer logic.
+- correct answer logic;
+- diagram need, if relevant;
+- question type behavior, if relevant;
+- difficulty behavior, if relevant.
 
 If a topic lacks source-backed examples, mark it locked or pending.
 
 ---
 
-## 9. UI and design rules
+## 8. True generator vision rule
+
+Phase 3 must not be another set of shallow slices.
+
+Phase 3 must build toward the real generator described in `docs/TRUE_GENERATOR_VISION_REQUIREMENTS.md`.
+
+Required future capabilities include:
+
+- many questions per topic;
+- multiple mathematical pattern families per topic;
+- dynamic data generation;
+- unknown switching;
+- Hebrew wording variation;
+- controlled visual themes;
+- dynamic SVG diagrams;
+- multiple question types: open, multiple choice, completion, true/false, matching, reasoning, mistake identification;
+- real difficulty levels: basic, standard, challenge;
+- full worksheet mode: 5/10/15 questions, with/without answers, answer key, A4 print;
+- mobile, print, and export compatibility;
+- no fake controls;
+- no demo-only UI.
+
+---
+
+## 9. UI, graphics, export and print rules
 
 The public site must remain:
 
@@ -216,17 +219,17 @@ The public site must remain:
 - suitable for print/export;
 - free of demo labels and fake controls.
 
-Current design decision:
+Graphics are first-class product behavior, not decoration.
 
-- Claude selected the premium mobile-first RTL design system.
-- `generator/style.css` contains the current design system.
-- `generator/core.js` includes `qmeta` only as a minimal markup alignment for this design.
+Dynamic visual work must follow the vision document and preserve:
 
-Do not invent a different design direction without Claude approval.
-
----
-
-## 10. Export and print rules
+- premium educational visual quality;
+- clear diagrams;
+- controlled colors;
+- no overlap;
+- export-safe SVG/HTML;
+- mobile-safe layout;
+- print-safe layout.
 
 The following must remain working:
 
@@ -236,16 +239,9 @@ The following must remain working:
 
 Do not change `export.js` unless the export pipeline is proven broken.
 
-If UI CSS changes, verify that:
-
-- `.qcard` remains the exported element;
-- `.expbar` remains visible on screen;
-- print hides controls but preserves the question card;
-- answer visibility in print follows current project policy.
-
 ---
 
-## 11. Deployment rules
+## 10. Deployment and verification rules
 
 Public URL:
 
@@ -256,17 +252,6 @@ Deployment model:
 - GitHub Pages through GitHub Actions artifact deployment.
 - `.github/workflows/deploy-pages.yml` deploys `generator/`.
 - `generator/.nojekyll` must remain in the artifact.
-
-If the public URL returns 403 after deployment:
-
-1. Confirm the latest deployment workflow finished.
-2. Confirm GitHub Pages source is set to GitHub Actions.
-3. Do not falsely mark the app live.
-4. Fix only the exact deployment issue.
-
----
-
-## 12. Verification rules
 
 Required verification assets:
 
@@ -293,7 +278,7 @@ No `Live ✅` without real live verification.
 
 ---
 
-## 13. Documentation truth rule
+## 11. Documentation truth rule
 
 `PROJECT_STATUS.md` must describe the current truth.
 
@@ -316,31 +301,42 @@ Use honest statuses:
 
 ---
 
-## 14. No-pressure execution rule
+## 12. Phase 3 execution rule
 
-Yaniv should not be forced into technical management.
+Before Phase 3 code:
 
-When possible, agents must:
+1. Claude must read `docs/TRUE_GENERATOR_VISION_REQUIREMENTS.md`.
+2. Claude must produce a source-to-generator blueprint.
+3. Claude must provide an implementation-ready Phase 3A patch pack.
+4. ChatGPT must execute Phase 3A only.
+5. Existing 25 slices must continue working.
+6. The current MVP must remain live.
+7. No Grade 9.
+8. No fake controls.
+9. No shallow demo.
+10. Report truth only.
 
-- inspect the repository directly;
-- avoid asking Yaniv to repeat checks;
-- avoid unnecessary ping-pong;
-- avoid asking for manual tests unless the blocker truly requires user-side visibility;
-- explain only the next real action.
+Phase 3A acceptance requires:
+
+- a real engine foundation beside the old system;
+- one pilot topic using the engine;
+- changing data;
+- changing unknown target;
+- changing Hebrew wording;
+- at least two question types;
+- real difficulty behavior;
+- correct solution generation;
+- dynamic premium graphics if relevant;
+- old 25 slices still working;
+- mobile/export/print still working;
+- documentation updated truthfully.
 
 ---
 
-## 15. Current next action
+## 13. Current next action
 
-The next meaningful action is not more content development.
+The next meaningful action is not more content slices.
 
-The next meaningful action is final verification:
+The next meaningful action is for Claude to produce a true Phase 3A generator-engine blueprint and exact patch pack, based on `docs/TRUE_GENERATOR_VISION_REQUIREMENTS.md`.
 
-1. Wait for GitHub Pages deployment to finish.
-2. Confirm Pages healthcheck.
-3. Confirm static verification.
-4. Confirm browser batch verification.
-5. If all pass, update `PROJECT_STATUS.md` to mark verified items as `Live ✅`.
-6. If any fail, fix only the exact failing issue.
-
-Do not add new content slices before this is clean.
+ChatGPT should not build Phase 3 blindly without that approved pack.
