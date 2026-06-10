@@ -1,102 +1,74 @@
-# PHASE 2 DELTA AUDIT REPORT
+# FINAL PHASE 2 COMPLETION REPORT
 
 Date: 2026-06-10
 Executed by: ChatGPT
-Project manager / audit pack: Claude
+Design decisions by: Claude
 Repository: `yanivmizrachiy/targilim`
 Public URL: https://yanivmizrachiy.github.io/targilim/
 
 ## Summary
 
-Claude reviewed the Phase 2 state and identified the correct next action: stop adding new slices, repair weak/stub slices, strengthen verification, and do not mark new slices Live ✅ until browser/live verification passes.
+Claude's final completion pack defined the remaining work as final polish and verification: preserve the working generator, apply the premium mobile-first UI redesign, keep Grade 9 locked, and do not add new math content.
 
-ChatGPT executed the delta repair as an audit-and-repair operation, not new feature development.
+ChatGPT executed the UI portion exactly as implementation work, not product-direction work.
 
-The generator remains at **25 code-active slices**. Grade 9 remains locked.
+The generator remains at **25 code-active slices**. Grade 9 remains locked. Live verification remains pending until the public Pages URL and the final workflows pass.
 
-## What Claude recommended
+## What Claude decided
 
-- Fix the GitHub Pages 403 before marking Live ✅.
-- Repair four weak/stub slices:
-  - N8-01 Ratio
-  - N8-03 Scale
-  - G8-04 Similarity / triangle scale factor
-  - A8-03 Systems of equations
-- Add a static verifier guard against stub-like slice files.
-- Improve browser workflow handling for Pages 403/404.
-- Do not add more slices before live verification.
+- Full CSS replacement with premium mobile-first Hebrew RTL design.
+- No new slices.
+- No file consolidation.
+- No Grade 9 implementation.
+- `renderCard()` unchanged.
+- `export.js`, slice files, `phase2-loader.js`, `RULES.md`, `sources/`, and `archive/` must not be touched.
+- Add `theme-color` to `index.html` only if missing.
 
-## What ChatGPT inspected
+## What ChatGPT changed
 
-- `generator/n8-ratio.js`
-- `generator/n8-03.js`
-- `generator/g8-04.js`
-- `generator/a8-03.js`
-- `tools/verify-phase2-static.mjs`
-- `.github/workflows/verify-phase2-batch.yml`
-- `.github/workflows/deploy-pages.yml`
-- `PROJECT_STATUS.md`
+### Premium UI redesign
 
-## What ChatGPT fixed
+- `generator/style.css`
+  - Replaced the old one-line basic CSS with Claude's premium mobile-first RTL CSS.
+  - Adds modern mobile layout, stronger typography, polished cards, better selector controls, improved answer box, export button styling, SVG containment, print rules, and responsive desktop improvements.
+  - Commit: `772f993c290949df42e6971004cd3835416694bc`
 
-### Weak/stub slice repairs
+### Mobile theme color
 
-- `generator/n8-ratio.js`
-  - Expanded from one hardcoded question to 4 randomized source-bound variants.
-  - Commit: `0396d8b9018d2f9ec909eb3045fba83ebc6dd2f9`
+- `generator/index.html`
+  - Added only:
 
-- `generator/n8-03.js`
-  - Expanded from one hardcoded question to 4 randomized source-bound scale variants.
-  - Commit: `70acbdda83af486bbec9ca530b1c7dd2b4488d0b`
+```html
+<meta name="theme-color" content="#0f172a">
+```
 
-- `generator/g8-04.js`
-  - Expanded from one hardcoded question to 4 randomized Hebrew variants.
-  - Commit: `ae35159175e38aeab801ecd2d1cedde17964d729`
+  - No structure or generator logic changed.
+  - Commit: `766f8ef9068091c55e2461873ded32a5a6eebd16`
 
-- `generator/a8-03.js`
-  - Expanded from one hardcoded word problem to 4 randomized variants.
-  - Claude's suggested 14-books / 2x example was corrected because it produced a non-integer answer. The implemented variant uses 18 books, giving integer answers 6 and 12.
-  - Commit: `5a756ce63adf826be313272f97430e3c3740c808`
-
-### Verification repairs
-
-- `tools/verify-phase2-static.mjs`
-  - Added a Phase 2 file-size guard to catch stub-like slice files under 200 bytes.
-  - Commit: `4e65d39c246fdc0fde87b30f0b7b7a3dd7ef0c4c`
-
-- `.github/workflows/verify-phase2-batch.yml`
-  - Added explicit failure on GitHub Pages HTTP 403/404.
-  - Preserved async-loader wait before selector checks.
-  - Checks export buttons and generated card content.
-  - Checks SVG presence only for geometry slices that require SVG.
-  - Commit: `d6705ae86bd9c6cd4f0bf6b8346a6ef0b7b86631`
-
-### Pages deployment hardening
-
-- `.github/workflows/deploy-pages.yml`
-  - Inspected and confirmed it deploys the `generator/` folder through GitHub Actions Pages using `actions/upload-pages-artifact` with `path: "generator"` and `actions/deploy-pages`.
-
-- `generator/.nojekyll`
-  - Added as a Pages artifact hardening marker and redeploy trigger.
-  - Commit: `0ecf1bac668821399b970e382edbf8967c264212`
-
-- `.github/workflows/pages-healthcheck.yml`
-  - Added as a lightweight public Pages healthcheck with retries.
-  - It checks the public URL for HTTP 200 and the Hebrew title before the heavier Playwright batch workflow.
-  - Commit: `3d4b209bb180a132b5c8962d7aa8e39c2838c713`
+### Status update
 
 - `PROJECT_STATUS.md`
-  - Updated to record Claude delta repairs, verification improvements, Pages hardening, and the Pages healthcheck workflow.
-  - Commits: `4c0fe86688dc800bcfe9a8fc0ffc4ff8060c139b`, `9ffcf5f74d128fea620dd79dd7dc3aeedb6d143c`, `5b1844fd7c82860ab6025b28cf16c636367098d9`
+  - Recorded: `Premium mobile-first UI redesign | ⚠️ Applied — pending live visual verification`.
+  - Recorded that only `style.css` and theme-color were changed for UI.
+  - Commit: `94b27cd38a3ccc39fb53c455e035c4e9510ae148`
 
-## What ChatGPT did not touch
+## Files changed in final polish
 
+- `generator/style.css`
+- `generator/index.html`
+- `PROJECT_STATUS.md`
+- `docs/reports/PHASE2_BATCH_EXECUTION_REPORT_2026-06-10.md`
+
+## Files not touched
+
+- `generator/export.js`
+- `generator/phase2-loader.js`
+- all math slice files
 - `RULES.md`
 - `sources/`
 - `archive/`
-- `generator/export.js`
+- `knowledge-base/`
 - Grade 9 generator logic
-- Existing verified MVP slices, except through shared verification references
 
 ## Active slices
 
@@ -133,9 +105,34 @@ Total: **25 code-active slices**
 - U8-01 — Mean, median, range
 - U8-02 — Basic probability
 
+## Previous delta repair summary
+
+Before the final UI pass, Claude identified four weak/stub slices. ChatGPT repaired them:
+
+- N8-01 Ratio: expanded from one hardcoded question to 4 randomized variants.
+- N8-03 Scale: expanded from one hardcoded question to 4 randomized variants.
+- G8-04 Similarity: expanded from one hardcoded question to 4 randomized variants.
+- A8-03 Systems: expanded from one hardcoded question to 4 randomized variants, with integer-safe examples only.
+
+Verification was also strengthened:
+
+- `tools/verify-phase2-static.mjs` detects stub-like Phase 2 files under 200 bytes.
+- `.github/workflows/verify-phase2-batch.yml` fails clearly on Pages 403/404, waits for async loader registration, checks selectors/cards/answers/export buttons, and checks SVG for relevant geometry slices.
+- `.github/workflows/pages-healthcheck.yml` provides a lightweight 200/403/404 Pages diagnosis.
+
+## UI status
+
+Premium mobile-first CSS redesign: **Applied in code ⚠️**
+
+Pending:
+
+- live visual verification on phone/mobile viewport
+- final Pages healthcheck
+- final browser batch verification
+
 ## Static verification status
 
-Static verifier exists and was strengthened:
+Static verifier exists:
 
 - `tools/verify-phase2-static.mjs`
 - `.github/workflows/verify-phase2-static.yml`
@@ -152,41 +149,25 @@ It checks:
 - new slices are not falsely marked Live ✅ before verification
 - Phase 2 slice files are not stub-like under 200 bytes
 
-## Pages healthcheck status
+## Live / browser verification status
 
-A lightweight healthcheck workflow exists:
+Live status: **pending ⚠️**
+
+The public URL remains:
+
+https://yanivmizrachiy.github.io/targilim/
+
+The project has these verification workflows:
 
 - `.github/workflows/pages-healthcheck.yml`
-
-It checks:
-
-- public URL returns HTTP 200
-- page content includes the Hebrew title `תרגילים`
-- retries several times to allow Pages/CDN deployment delay
-
-## Browser/live verification status
-
-Browser/live workflow exists and was strengthened:
-
+- `.github/workflows/verify-phase2-static.yml`
 - `.github/workflows/verify-phase2-batch.yml`
 
-It now:
-
-- opens the public Pages URL
-- fails clearly on HTTP 403/404
-- waits for async loader registration
-- loops through all 25 slices
-- selects grade/domain/topic
-- generates a card
-- opens the answer
-- checks export buttons
-- checks SVG for geometry slices that require SVG
-
-Current truthful status: **Live ⚠️ pending** until the workflow or a browser test confirms the public URL.
+Do not mark new slices or UI redesign as Live ✅ until those checks or an equivalent browser/live test pass.
 
 ## Deployment status
 
-`deploy-pages.yml` is structurally correct for GitHub Actions Pages artifact deployment from `generator/`. A `.nojekyll` file was added to the artifact and committed to trigger a clean redeploy. A lightweight Pages healthcheck workflow was added to diagnose the previous 403 quickly.
+`deploy-pages.yml` is structurally correct for GitHub Actions Pages artifact deployment from `generator/`. A `.nojekyll` marker exists in the artifact. The CSS update and index theme-color update should trigger a fresh Pages deployment.
 
 ## Grade 9 status
 
@@ -195,14 +176,18 @@ Grade 9 remains **LOCKED**. No Grade 9 generator implementation was added.
 ## Known caveats
 
 - `G8-04` now has 4 Hebrew variants but remains text-only. SVG can be added later.
-- Live verification is still pending because GitHub Pages previously returned 403 and must be rechecked after redeploy.
-- Do not add more content slices before final live verification.
+- Live verification is still pending.
+- If GitHub Pages still returns 403 after the new deployment, the likely next manual check is GitHub repository Settings → Pages → Source should be set to GitHub Actions.
 
-## Next recommendation
+## Final recommendation
 
-1. Wait for GitHub Pages deployment to settle.
-2. Run/inspect `.github/workflows/pages-healthcheck.yml`.
-3. Run/inspect `.github/workflows/verify-phase2-static.yml`.
-4. Run/inspect `.github/workflows/verify-phase2-batch.yml`.
-5. If browser verification passes, update `PROJECT_STATUS.md` Live column for the new slices.
-6. If it fails, fix only the exact failing module/selector/pages issue.
+Do not add more math content.
+
+Next action:
+
+1. Wait for Pages deployment to finish.
+2. Inspect/run `pages-healthcheck.yml`.
+3. Inspect/run `verify-phase2-static.yml`.
+4. Inspect/run `verify-phase2-batch.yml`.
+5. If passing, update `PROJECT_STATUS.md` from pending visual/live verification to verified Live ✅.
+6. If failing, fix only the exact failing Pages/workflow/UI issue.
