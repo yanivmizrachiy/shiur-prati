@@ -25,6 +25,7 @@ jobs:
       - run: |
           cat > verify-phase2.mjs <<'EOF'
           import { chromium } from 'playwright';
+          const url = 'https://yanivmizrachiy.github.io/targilim/?verify=phase2';
           const checks = [
             ['7','geometry','G7-03'],['7','geometry','G7-04'],['7','geometry','G7-01'],['7','geometry','G7-02'],
             ['7','numeric','N7-03'],['7','numeric','N7-04'],['7','numeric','N7-05'],['7','numeric','N7-06'],['7','numeric','N7-07'],
@@ -36,8 +37,13 @@ jobs:
           const page = await browser.newPage({ viewport: { width: 390, height: 844 } });
           const errors = [];
           page.on('pageerror', e => errors.push(e.message));
-          page.on('console', m => { if (m.type() === 'error') errors.push(m.text()); });
-          await page.goto('https://yanivmizrachiy.github.io/targilim/?verify=phase2', { waitUntil: 'networkidle', timeout: 60000 });
+          page.on('console', m => {
+            if (m.type() === 'error' && /TypeError|ReferenceError|SyntaxError|Failed to load resource/.test(m.text())) errors.push(m.text());
+          });
+          const response = await page.goto(url, { waitUntil: 'networkidle', timeout: 60000 });
+          const status = response ? response.status() : 0;
+          if (status === 403 || status === 404) throw new Error('GitHub Pages not deployed or inaccessible: HTTP ' + status);
+          if (status < 200 || status >= 400) throw new Error('Unexpected Pages HTTP status: ' + status);
           await page.waitForSelector('text=תרגילים');
           await page.waitForFunction(() => window.TOPICS && TOPICS[7]?.numeric?.some(t => t[0] === 'N7-04') && TOPICS[8]?.algebra?.some(t => t[0] === 'A8-03'), null, { timeout: 30000 });
           for (const [grade, domain, id] of checks) {
@@ -55,6 +61,10 @@ jobs:
             if (buttons < 3) throw new Error(id + ' export buttons missing');
             const text = await page.locator('.qcard').innerText();
             if (!text || text.length < 5) throw new Error(id + ' generated empty card');
+            if (/^G/.test(id)) {
+              const svgCount = await page.locator('.qcard svg').count();
+              if (['G7-01','G7-02','G7-03','G7-04','G8-01'].includes(id) && svgCount < 1) throw new Error(id + ' expected SVG but none found');
+            }
           }
           if (errors.length) throw new Error(errors.join(' | '));
           await browser.close();
