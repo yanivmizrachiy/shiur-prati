@@ -16,7 +16,9 @@
 | Verification hardening | ✅ Done |
 | Rules sync / anti-duplication guard | ✅ Done |
 | True generator vision captured in repo rules | ✅ Done |
-| Phase 3A true engine pilot | Code ✅ — Live ⚠️ pending direct visual/browser verification |
+| Phase 3A true engine pilot | G7-03-ENGINE: Code ✅ Live ✅ verified. N8-04-ENGINE: Code ✅ Live ⚠️ pending |
+| Phase 3A engine.css | ✅ Added |
+| Phase 3A live report workflow coverage | ✅ Existing workflow extended for both engine pilots |
 | Pages hardening | ✅ Done |
 | Legacy archive | ✅ Done |
 | Grade 9 generator | 🔒 Locked — needs real example question sources |
@@ -69,10 +71,11 @@ Verified from Yaniv PowerShell on 2026-06-10:
 | `style.css` | HTTP 200 ✅ |
 | `core.js` | HTTP 200 ✅ |
 | local static verifier | PASS ✅ |
-| Phase 2 browser batch | PASS ✅ after workflow readiness fix |
+| Phase 2 browser batch | PASS ✅ after readiness-check fix |
 | scheduled PowerShell health task | Ready ✅ |
+| G7-03-ENGINE live report | PASS ✅ |
 
-Conclusion: Phase 2 is live and verified. Phase 3A engine pilot code exists and is connected, but still needs direct live visual/browser verification before marking Live ✅.
+Conclusion: Phase 2 is live and verified. Phase 3A now contains two engine pilots: G7-03-ENGINE is live verified; N8-04-ENGINE has code in place and is waiting for the next live report workflow run.
 
 ## Architecture
 - generator/index.html — modular loader, mobile viewport, theme color, Phase 3A engine panel and engine script loading
@@ -86,6 +89,7 @@ Conclusion: Phase 2 is live and verified. Phase 3A engine pilot code exists and 
 - generator/phase2-loader.js — loads Phase 2 slice modules
 - generator/.nojekyll — GitHub Pages artifact hardening marker
 - generator/style.css — premium mobile-first RTL styles
+- generator/engine/engine.css — Phase 3A engine-specific UI styles
 - generator/engine/schema.js — Phase 3A engine marker/schema notes
 - generator/engine/random.js — Phase 3A random utilities
 - generator/engine/validators.js — Phase 3A validation helpers
@@ -93,6 +97,7 @@ Conclusion: Phase 2 is live and verified. Phase 3A engine pilot code exists and 
 - generator/engine/diagrams.js — Phase 3A dynamic SVG builders
 - generator/engine/question-types.js — Phase 3A question type renderers
 - generator/engine/pilot-g7-03.js — Phase 3A Pythagoras engine pilot
+- generator/engine/pilot-n8-04.js — Phase 3A percentages engine pilot
 - generator/engine/pattern-engine.js — Phase 3A engine registration/render adapter
 
 ## Verification assets
@@ -100,6 +105,7 @@ Conclusion: Phase 2 is live and verified. Phase 3A engine pilot code exists and 
 - .github/workflows/verify-phase2-static.yml — static CI verification
 - .github/workflows/pages-healthcheck.yml — public Pages healthcheck that first checks `site-health.json`, then the app shell
 - .github/workflows/verify-phase2-batch.yml — full 25-slice browser/live verification against the public Pages URL; checks selectors, generation, question text, answer reveal, export buttons, required SVGs, and no horizontal scroll on mobile viewport
+- .github/workflows/verify-generator-live-report.yml — live report workflow now covers legacy G7-03, G7-03-ENGINE, and N8-04-ENGINE
 
 ## Workflow cleanup
 Disabled obsolete one-time apply workflows by removing their active `.yml` files from `.github/workflows/`:
@@ -150,7 +156,8 @@ Reason: those workflows attempted to re-apply already completed work and pollute
 ## Phase 3A engine topics
 | ID | Topic | Grade | Domain | Code | Live |
 |---|---|---|---|---|---|
-| G7-03-ENGINE | Pythagoras — true engine pilot | 7 | Geometry | ✅ | ⚠️ |
+| G7-03-ENGINE | Pythagoras — true engine pilot | 7 | Geometry | ✅ | ✅ |
+| N8-04-ENGINE | Static percentages — engine pilot | 8 | Numeric | ✅ | ⚠️ |
 
 Capabilities implemented in `G7-03-ENGINE`:
 
@@ -163,7 +170,17 @@ Capabilities implemented in `G7-03-ENGINE`:
 - KaTeX-compatible mathematical solution steps;
 - existing export/PNG/print buttons preserved through the existing export pipeline.
 
-Known Phase 3A caveat: dedicated engine CSS and a dedicated `verify-phase3a.yml` workflow were blocked by connector write-safety checks and were not committed. The engine currently relies on the existing premium `style.css` plus its generated SVG/card markup. Live visual verification is still required before `Live ✅`.
+Capabilities implemented in `N8-04-ENGINE`:
+
+- percent of a number;
+- find the whole from a percentage;
+- find the percentage from part/whole;
+- basic/standard/challenge difficulty behavior;
+- question types: open, multiple choice, true/false, identify mistake;
+- KaTeX-compatible mathematical solution steps;
+- existing export/PNG/print buttons preserved through the existing export pipeline.
+
+Known Phase 3A caveat: creating a separate `verify-phase3a.yml` workflow was blocked by connector write-safety checks. Instead, the existing live report workflow was extended to verify both engine pilots.
 
 ## Delta repairs completed after Claude audit
 - N8-01 Ratio: expanded from one hardcoded question to 4 randomized variants.
@@ -178,16 +195,16 @@ Known Phase 3A caveat: dedicated engine CSS and a dedicated `verify-phase3a.yml`
 
 ## Premium mobile-first UI redesign
 - `generator/style.css` was fully replaced according to Claude's premium mobile-first RTL design system.
-- `generator/index.html` received `<meta name="theme-color" content="#0f172a">` only.
+- `generator/engine/engine.css` now contains Phase 3A engine-specific styles.
 - `generator/core.js` received only a minimal `class="qmeta"` markup alignment so Claude's premium CSS applies to the card metadata row.
 - `generator/core.js` also received a minimal Grade 9 locked-notice UI fix: selecting Grade 9 opens the existing `g9notice` block and shows a clear locked/pending option instead of an empty selector.
-- No slice files, `export.js`, `phase2-loader.js`, sources, archive, or Grade 9 generator logic were changed.
+- No legacy slice files, `export.js`, `phase2-loader.js`, sources, archive, or Grade 9 generator logic were changed.
 
 ## Current honest status
-The public external link is reachable. Phase 2 static verifier and full browser batch now pass after the readiness-check fix. The generator has 25 code-active legacy slices. The current system is a live MVP plus the first Phase 3A engine pilot code. Yaniv's full requirements are preserved in `RULES.md`, `docs/TRUE_GENERATOR_VISION_REQUIREMENTS.md`, and `docs/prompts/CLAUDE_PHASE3A_TRUE_ENGINE_REQUEST.md`. The next major work is live verification and refinement of `G7-03-ENGINE`, then extension of the same engine architecture to worksheet mode and additional source-backed topics.
+The public external link is reachable. Phase 2 static verifier and full browser batch pass after the readiness-check fix. The generator has 25 code-active legacy slices. Phase 3A now includes two engine pilots: one live verified engine (`G7-03-ENGINE`) and one newly added engine awaiting live workflow confirmation (`N8-04-ENGINE`). Yaniv's full requirements are preserved in `RULES.md`, `docs/TRUE_GENERATOR_VISION_REQUIREMENTS.md`, and `docs/prompts/CLAUDE_PHASE3A_TRUE_ENGINE_REQUEST.md`.
 
 ## Known caveat
 `G8-04` is currently implemented as Hebrew text-only with 4 variants. It is code-active and student-facing in Hebrew, but SVG can be added later if needed.
 
 ## Next required action
-Run live visual/browser verification for `G7-03-ENGINE` after deployment. Do not mark Phase 3A Live ✅ until the engine topic is opened on the live site, generates all question types, shows SVG diagrams, opens answers, and preserves export/print.
+Run `tpull` and `tc sync`, then check the latest `Verify live generator and write report` workflow. If it passes after the N8-04-ENGINE change, mark N8-04-ENGINE Live ✅.
