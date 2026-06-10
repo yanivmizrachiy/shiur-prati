@@ -34,6 +34,7 @@ The generator remains at **25 code-active slices**. Grade 9 remains locked.
 - `generator/a8-03.js`
 - `tools/verify-phase2-static.mjs`
 - `.github/workflows/verify-phase2-batch.yml`
+- `.github/workflows/deploy-pages.yml`
 - `PROJECT_STATUS.md`
 
 ## What ChatGPT fixed
@@ -70,9 +71,18 @@ The generator remains at **25 code-active slices**. Grade 9 remains locked.
   - Checks SVG presence only for geometry slices that require SVG.
   - Commit: `d6705ae86bd9c6cd4f0bf6b8346a6ef0b7b86631`
 
+### Pages deployment hardening
+
+- `.github/workflows/deploy-pages.yml`
+  - Inspected and confirmed it deploys the `generator/` folder through GitHub Actions Pages using `actions/upload-pages-artifact` with `path: "generator"` and `actions/deploy-pages`.
+
+- `generator/.nojekyll`
+  - Added as a Pages artifact hardening marker and redeploy trigger.
+  - Commit: `0ecf1bac668821399b970e382edbf8967c264212`
+
 - `PROJECT_STATUS.md`
-  - Updated to record Claude delta repairs and verification improvements.
-  - Commit: `4c0fe86688dc800bcfe9a8fc0ffc4ff8060c139b`
+  - Updated to record Claude delta repairs, verification improvements, and Pages hardening.
+  - Commits: `4c0fe86688dc800bcfe9a8fc0ffc4ff8060c139b`, `9ffcf5f74d128fea620dd79dd7dc3aeedb6d143c`
 
 ## What ChatGPT did not touch
 
@@ -157,6 +167,10 @@ It now:
 
 Current truthful status: **Live ⚠️ pending** until the workflow or a browser test confirms the public URL.
 
+## Deployment status
+
+`deploy-pages.yml` is structurally correct for GitHub Actions Pages artifact deployment from `generator/`. A `.nojekyll` file was added to the artifact and committed to trigger a clean redeploy.
+
 ## Grade 9 status
 
 Grade 9 remains **LOCKED**. No Grade 9 generator implementation was added.
@@ -164,7 +178,7 @@ Grade 9 remains **LOCKED**. No Grade 9 generator implementation was added.
 ## Known caveats
 
 - `G8-04` now has 4 Hebrew variants but remains text-only. SVG can be added later.
-- Live verification is still pending because GitHub Pages previously returned 403.
+- Live verification is still pending because GitHub Pages previously returned 403 and must be rechecked after redeploy.
 - Do not add more content slices before final live verification.
 
 ## Next recommendation
