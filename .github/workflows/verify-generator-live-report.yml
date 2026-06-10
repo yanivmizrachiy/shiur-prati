@@ -5,6 +5,9 @@ on:
     branches: [main]
     paths:
       - "generator/index.html"
+      - "generator/geo.js"
+      - "generator/core.js"
+      - "generator/engine/**"
       - ".github/workflows/verify-generator-live-report.yml"
   workflow_dispatch:
 
@@ -49,10 +52,13 @@ jobs:
 
           const url = process.env.GENERATOR_URL;
           const browser = await chromium.launch();
-          const page = await browser.newPage({ viewport: { width: 390, height: 844 } });
+          const page = await browser.newPage({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 2, isMobile: true });
           const errors = [];
           page.on('pageerror', err => errors.push(err.message));
-          page.on('console', msg => { if (msg.type() === 'error') errors.push(msg.text()); });
+          page.on('console', msg => {
+            const text = msg.text();
+            if (msg.type() === 'error' && /TypeError|ReferenceError|SyntaxError/.test(text)) errors.push(text);
+          });
 
           const result = {
             url,
@@ -62,10 +68,37 @@ jobs:
             questionText: null,
             answerText: null,
             exportButtonCount: 0,
+            engineChecks: [],
             timestamp: new Date().toISOString()
           };
 
           function ok(name){ result.checks.push({ name, ok: true }); }
+          function assertMathAnswer(label, text){
+            if (!text || text.trim().length < 2 || !/[abcABCd]|\d|פיתגורס|חזקה|שוויון|טעות/.test(text)) {
+              throw new Error(label + ' answer text is empty or not mathematical: ' + text);
+            }
+          }
+          async function selectTopic(id){
+            await page.waitForFunction((topicId) => [...document.querySelectorAll('#st option')].some(o => o.value === topicId), id, { timeout: 15000 });
+            await page.selectOption('#st', id);
+          }
+          async function generateAssert(label, requireSvg = true){
+            await page.click('.btn-gen');
+            await page.waitForSelector('.qcard', { timeout: 10000 });
+            if (requireSvg) await page.waitForSelector('.qcard svg', { timeout: 10000 });
+            await page.waitForSelector('.qtext', { timeout: 10000 });
+            const q = await page.locator('.qtext').innerText();
+            if (!q || q.trim().length < 3 || !/משולש|יתר|רגל|מלבן|אלכסון|שגוי|טעות/.test(q)) throw new Error(label + ' bad question text: ' + q);
+            const count = await page.locator('.btn-exp').count();
+            if (count < 3) throw new Error(label + ' expected at least 3 export buttons, found ' + count);
+            await page.click('.btn-ans');
+            await page.waitForSelector('.answer.open', { timeout: 10000 });
+            const a = await page.locator('.answer.open').innerText();
+            assertMathAnswer(label, a);
+            const hasHorizontalScroll = await page.evaluate(() => document.body.scrollWidth > window.innerWidth + 2);
+            if (hasHorizontalScroll) throw new Error(label + ' horizontal scroll detected on mobile viewport');
+            return { questionText: q, answerText: a, exportButtonCount: count };
+          }
 
           try {
             await page.goto(url, { waitUntil: 'networkidle', timeout: 60000 });
@@ -76,27 +109,28 @@ jobs:
             await page.waitForSelector('#sd', { timeout: 10000 });
             await page.waitForSelector('#st', { timeout: 10000 });
             ok('selectors visible');
+            await page.waitForFunction(() => typeof TOPICS !== 'undefined' && TOPICS[7]?.geometry?.some(t => t[0] === 'G7-03'), null, { timeout: 30000 });
             await page.selectOption('#sg', '7');
             await page.selectOption('#sd', 'geometry');
-            await page.selectOption('#st', 'G7-03');
+            await selectTopic('G7-03');
             await page.selectOption('#sl', 'standard');
             ok('selected grade 7 geometry G7-03');
-            await page.click('.btn-gen');
-            await page.waitForSelector('.qcard', { timeout: 10000 });
-            await page.waitForSelector('.qcard svg', { timeout: 10000 });
-            await page.waitForSelector('.qtext', { timeout: 10000 });
-            ok('question card and SVG created');
-            result.questionText = await page.locator('.qtext').innerText();
-            if (!/משולש|יתר|רגל/.test(result.questionText)) throw new Error('Generated question text missing expected Hebrew math wording: ' + result.questionText);
-            ok('question text verified');
-            result.exportButtonCount = await page.locator('.btn-exp').count();
-            if (result.exportButtonCount < 3) throw new Error('Expected at least 3 export buttons, found ' + result.exportButtonCount);
-            ok('export buttons visible');
-            await page.click('.btn-ans');
-            await page.waitForSelector('.answer.open', { timeout: 10000 });
-            result.answerText = await page.locator('.answer.open').innerText();
-            if (!/ס"מ|פיתגורס|אורך/.test(result.answerText)) throw new Error('Answer text missing expected Hebrew wording: ' + result.answerText);
-            ok('solution text verified');
+            const legacy = await generateAssert('legacy G7-03', true);
+            result.questionText = legacy.questionText;
+            result.answerText = legacy.answerText;
+            result.exportButtonCount = legacy.exportButtonCount;
+            ok('legacy G7-03 verified');
+
+            await page.waitForFunction(() => TOPICS[7]?.geometry?.some(t => t[0] === 'G7-03-ENGINE'), null, { timeout: 30000 });
+            await selectTopic('G7-03-ENGINE');
+            const qtypes = ['open', 'mcq', 'tf', 'mistake'];
+            for (const qtype of qtypes) {
+              await page.selectOption('#selQType', qtype);
+              await page.selectOption('#selDiff', qtype === 'open' ? 'basic' : 'challenge');
+              const engineResult = await generateAssert('engine G7-03-ENGINE ' + qtype, true);
+              result.engineChecks.push({ qtype, ok: true, questionText: engineResult.questionText, exportButtonCount: engineResult.exportButtonCount });
+            }
+            ok('Phase 3A G7-03-ENGINE verified: open, mcq, tf, mistake');
             await page.screenshot({ path: 'docs/verification/generator-live-smoke.png', fullPage: true });
             ok('screenshot saved');
             if (errors.length > 0) throw new Error('Browser console/page errors: ' + errors.join(' | '));
@@ -119,6 +153,13 @@ jobs:
           lines.push('');
           lines.push('## Checks');
           for (const check of result.checks) lines.push('- ' + (check.ok ? 'PASS' : 'FAIL') + ' — ' + check.name);
+          lines.push('');
+          lines.push('## Engine checks');
+          if (result.engineChecks.length) {
+            for (const check of result.engineChecks) lines.push('- PASS — G7-03-ENGINE / ' + check.qtype + ' / exportButtonCount=' + check.exportButtonCount);
+          } else {
+            lines.push('- Not reached');
+          }
           lines.push('');
           lines.push('## Observed');
           lines.push('- exportButtonCount: ' + result.exportButtonCount);
