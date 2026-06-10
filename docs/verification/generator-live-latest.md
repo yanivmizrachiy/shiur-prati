@@ -1,6 +1,6 @@
 # Generator Live Verification Report
 
-Date: 2026-06-10T18:41:36.250Z
+Date: 2026-06-10T19:38:55.732Z
 URL: https://yanivmizrachiy.github.io/targilim/
 Status: PASS
 
@@ -27,5 +27,5 @@ Status: PASS
 
 ## Observed
 - exportButtonCount: 3
-- questionText: במשולש ישר-זווית, שתי הרגליים הן  / 5 / 5 ס"מ ו- / 12 / 12 ס"מ. / חשבו את היתר.
-- answerText: 5 / 2 / + / 1 / 2 / 2 / = / 𝑐 / 2 / 5 / 2 / +12 / 2 / =c / 2 /  /  / 25 / + / 144 / = / 169 / 25+144=169 /  /  / 𝑐 / = / 13 / c=13
+- questionText: במשולש ישר-זווית, היתר  / 25 / 25 ס"מ והרגל  / 24 / 24 ס"מ. / חשבו את הרגל השנייה.
+- answerText: 𝑎 / 2 / + / 2 / 4 / 2 / = / 2 / 5 / 2 / a / 2 / +24 / 2 / =25 / 2 /  /  / 𝑎 / 2 / = / 625 / − / 576 / = / 49 / a / 2 / =625−576=49 /  /  / 𝑎 / = / 7 / a=7
