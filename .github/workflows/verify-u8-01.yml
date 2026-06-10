@@ -1,0 +1,51 @@
+name: Verify U8-01 statistics slice
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "generator/index.html"
+      - ".github/workflows/verify-u8-01.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify-u8-01:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - run: |
+          npm init -y
+          npm i -D playwright
+          npx playwright install chromium --with-deps
+      - run: |
+          cat > verify-u8-01.mjs <<'EOF'
+          import { chromium } from 'playwright';
+          const browser = await chromium.launch();
+          const page = await browser.newPage({ viewport: { width: 390, height: 844 } });
+          const errors = [];
+          page.on('pageerror', e => errors.push(e.message));
+          page.on('console', m => { if (m.type() === 'error') errors.push(m.text()); });
+          await page.goto('https://yanivmizrachiy.github.io/targilim/', { waitUntil: 'networkidle', timeout: 60000 });
+          await page.waitForSelector('text=תרגילים');
+          await page.selectOption('#sg','8');
+          await page.selectOption('#sd','uncertainty');
+          await page.selectOption('#st','U8-01');
+          await page.click('.btn-gen');
+          await page.waitForSelector('.qcard');
+          const question = await page.locator('.qtext').innerText();
+          await page.click('.btn-ans');
+          await page.waitForSelector('.answer.open');
+          const answer = await page.locator('.answer.open').innerText();
+          const buttons = await page.locator('.btn-exp').count();
+          if (buttons < 3) throw new Error('U8-01 export buttons missing');
+          if (!/ממוצע|חציון|טווח/.test(question + answer)) throw new Error('U8-01 wording failed');
+          if (errors.length) throw new Error(errors.join(' | '));
+          await browser.close();
+          console.log('U8_01_STATS_SLICE_OK');
+          EOF
+          node verify-u8-01.mjs
