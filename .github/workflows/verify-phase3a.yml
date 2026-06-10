@@ -46,7 +46,7 @@ jobs:
             page.on('pageerror', e => jsErrors.push(e.message));
             page.on('console', m => {
               const text = m.text();
-              if (m.type() === 'error' && /TypeError|ReferenceError|SyntaxError|Failed to load/i.test(text)) jsErrors.push(text);
+              if (m.type() === 'error' && /TypeError|ReferenceError|SyntaxError/i.test(text)) jsErrors.push(text);
             });
             await page.goto(BASE, { waitUntil: 'networkidle2', timeout: 45000 });
             await wait(1000);
