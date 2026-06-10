@@ -36,33 +36,26 @@ jobs:
           node - << 'NODEEOF'
           const puppeteer = require('puppeteer');
           const BASE = 'https://yanivmizrachiy.github.io/targilim/';
-
           async function wait(ms){ return new Promise(r => setTimeout(r, ms)); }
 
           (async () => {
             const browser = await puppeteer.launch({ args: ['--no-sandbox','--disable-setuid-sandbox'] });
             const page = await browser.newPage();
             await page.setViewport({ width: 390, height: 844, isMobile: true, deviceScaleFactor: 2 });
-
             const jsErrors = [];
             page.on('pageerror', e => jsErrors.push(e.message));
             page.on('console', m => {
               const text = m.text();
-              if (m.type() === 'error' && /TypeError|ReferenceError|SyntaxError|Failed to load/i.test(text)) {
-                jsErrors.push(text);
-              }
+              if (m.type() === 'error' && /TypeError|ReferenceError|SyntaxError|Failed to load/i.test(text)) jsErrors.push(text);
             });
-
             await page.goto(BASE, { waitUntil: 'networkidle2', timeout: 45000 });
             await wait(1000);
 
-            const engineReady = await page.evaluate(() => {
-              return !!(window.TargilimEngine &&
-                typeof window.TargilimEngine.generateG703Engine === 'function' &&
-                typeof window.TargilimEngine.generateN803Engine === 'function' &&
-                typeof window.TargilimEngine.generateN804Engine === 'function');
-            });
+            const engineReady = await page.evaluate(() => !!(window.TargilimEngine && typeof window.TargilimEngine.generateG703Engine === 'function' && typeof window.TargilimEngine.generateN803Engine === 'function' && typeof window.TargilimEngine.generateN804Engine === 'function'));
             if (!engineReady) throw new Error('Phase 3A engine functions are not loaded');
+
+            const grade9OptionExists = await page.$eval('#sg', sel => Array.from(sel.options).some(o => o.value === '9'));
+            if (grade9OptionExists) throw new Error('Grade 9 option should not exist in active UI');
 
             const engineTopics = [
               { grade: '7', domain: 'geometry', id: 'G7-03-ENGINE', needsSvg: true },
@@ -77,10 +70,8 @@ jobs:
               await wait(200);
               await page.select('#sd', topic.domain);
               await wait(300);
-
               const exists = await page.$eval('#st', (sel, id) => Array.from(sel.options).some(o => o.value === id), topic.id);
               if (!exists) throw new Error(`${topic.id} not found in topic selector`);
-
               for (const diff of diffs) {
                 for (const qtype of qtypes) {
                   await page.select('#st', topic.id);
@@ -89,31 +80,24 @@ jobs:
                   await page.select('#selQType', qtype);
                   await page.click('.btn-gen');
                   await wait(700);
-
                   const cardExists = await page.$('.qcard');
                   if (!cardExists) throw new Error(`No qcard for ${topic.id} ${diff}/${qtype}`);
-
                   const text = await page.$eval('.qtext', e => e.textContent.trim());
                   if (!text || text.length < 3) throw new Error(`Empty qtext for ${topic.id} ${diff}/${qtype}`);
-
                   const answerButton = await page.$('.btn-ans');
                   if (!answerButton) throw new Error(`No answer button for ${topic.id} ${diff}/${qtype}`);
                   await answerButton.click();
                   await wait(200);
                   const ans = await page.$eval('.answer', e => e.textContent.trim());
                   if (!ans || ans.length < 2) throw new Error(`Empty answer for ${topic.id} ${diff}/${qtype}`);
-
                   const exports = await page.$$('.btn-exp');
                   if (exports.length < 3) throw new Error(`Missing export buttons for ${topic.id} ${diff}/${qtype}`);
-
                   if (topic.needsSvg) {
                     const svg = await page.$('.qcard svg');
                     if (!svg) throw new Error(`Missing SVG for ${topic.id} ${diff}/${qtype}`);
                   }
-
                   const scroll = await page.evaluate(() => document.body.scrollWidth > window.innerWidth + 2);
                   if (scroll) throw new Error(`Horizontal scroll for ${topic.id} ${diff}/${qtype}`);
-
                   console.log(`PASS ${topic.id} ${diff}/${qtype}`);
                 }
               }
@@ -137,18 +121,9 @@ jobs:
               console.log(`PASS legacy ${legacy.id}`);
             }
 
-            await page.select('#sg', '9');
-            await wait(300);
-            const g9Open = await page.$eval('#g9notice', e => e.classList.contains('open'));
-            if (!g9Open) throw new Error('Grade 9 locked notice did not open');
-
             const filteredErrors = jsErrors.filter(e => !/favicon|fonts\.gstatic/i.test(e));
             if (filteredErrors.length) throw new Error('JS errors: ' + filteredErrors.join(' | '));
-
             await browser.close();
             console.log('Phase 3A engine verification PASS ✅');
-          })().catch(err => {
-            console.error(err);
-            process.exit(1);
-          });
+          })().catch(err => { console.error(err); process.exit(1); });
           NODEEOF
