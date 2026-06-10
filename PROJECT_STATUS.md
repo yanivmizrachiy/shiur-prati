@@ -19,8 +19,12 @@
 ## External URL
 https://yanivmizrachiy.github.io/targilim/
 
+## Static health endpoint
+https://yanivmizrachiy.github.io/targilim/site-health.json
+
 ## Architecture
 - generator/index.html — modular loader, mobile viewport, theme color
+- generator/site-health.json — static Pages health endpoint independent of JavaScript
 - generator/core.js — base registry/router/renderCard with `qmeta` class for premium card header styling and Grade 9 locked-notice UI
 - generator/export.js — copy-as-image / PNG / print
 - generator/geo.js — base geometry slices
@@ -35,11 +39,12 @@ https://yanivmizrachiy.github.io/targilim/
 - .github/workflows/deploy-pages.yml deploys the `generator/` folder through GitHub Actions Pages.
 - The workflow uses `actions/configure-pages`, `actions/upload-pages-artifact` with `path: "generator"`, and `actions/deploy-pages`.
 - A `.nojekyll` marker was added to the generator artifact to harden Pages serving and trigger a clean redeploy.
+- `generator/site-health.json` gives a JS-independent Pages health endpoint.
 
 ## Verification assets
 - tools/verify-phase2-static.mjs — strict repository static verifier, including non-stub Phase 2 file-size guard
 - .github/workflows/verify-phase2-static.yml — static CI verification
-- .github/workflows/pages-healthcheck.yml — lightweight public Pages HTTP healthcheck with retries
+- .github/workflows/pages-healthcheck.yml — public Pages healthcheck that first checks `site-health.json`, then the app shell
 - .github/workflows/verify-phase2-batch.yml — browser/live-style verification against the public Pages URL; fails clearly on 403/404, waits for async loader registration, checks selectors/cards/answers/export buttons, and checks SVG for geometry slices that require SVG
 
 ## Status codes
@@ -98,6 +103,7 @@ https://yanivmizrachiy.github.io/targilim/
 - generator/g8-04.js
 - generator/phase2-loader.js
 - generator/.nojekyll
+- generator/site-health.json
 
 ## Delta repairs completed after Claude audit
 - N8-01 Ratio: expanded from one hardcoded question to 4 randomized variants.
@@ -108,6 +114,7 @@ https://yanivmizrachiy.github.io/targilim/
 - Browser workflow strengthened to fail clearly on Pages 403/404 and to check SVG for relevant geometry slices.
 - Pages deployment hardened with `generator/.nojekyll` and a clean redeploy trigger.
 - Lightweight Pages healthcheck workflow added for fast 200/403/404 diagnosis.
+- Static `generator/site-health.json` endpoint added so Pages serving can be diagnosed without JavaScript.
 
 ## Premium mobile-first UI redesign
 - `generator/style.css` was fully replaced according to Claude's premium mobile-first RTL design system.
@@ -123,7 +130,7 @@ https://yanivmizrachiy.github.io/targilim/
 - Purpose: prevent future agents from restarting completed work or duplicating slices.
 
 ## Current honest status
-The generator has 25 code-active slices. The original MVP slices were previously browser/workflow verified. The Phase 2 batch is connected through `phase2-loader.js` and is code-active. Claude-identified weak slices were repaired. A strict static verifier now checks repository structure, all 25 slice IDs, non-stub Phase 2 files, and Grade 9 lock. The browser workflow now handles async loader registration and Pages 403/404 clearly. Pages deployment is through GitHub Actions artifact upload from `generator/`, `.nojekyll` was added to harden artifact serving, and a lightweight Pages healthcheck workflow was added. Claude's premium mobile-first CSS redesign was applied, the card metadata markup was aligned, Grade 9 lock UX was fixed, and `RULES.md` now reflects the real current state. The batch still needs one end-of-batch browser/live and visual verification before marking the new slices Live ✅.
+The generator has 25 code-active slices. The original MVP slices were previously browser/workflow verified. The Phase 2 batch is connected through `phase2-loader.js` and is code-active. Claude-identified weak slices were repaired. A strict static verifier now checks repository structure, all 25 slice IDs, non-stub Phase 2 files, and Grade 9 lock. The browser workflow now handles async loader registration and Pages 403/404 clearly. Pages deployment is through GitHub Actions artifact upload from `generator/`, `.nojekyll` was added to harden artifact serving, a static `site-health.json` endpoint was added, and a lightweight Pages healthcheck workflow now checks the static endpoint before the app shell. Claude's premium mobile-first CSS redesign was applied, the card metadata markup was aligned, Grade 9 lock UX was fixed, and `RULES.md` now reflects the real current state. The batch still needs one end-of-batch browser/live and visual verification before marking the new slices Live ✅.
 
 ## Known caveat
 `G8-04` is currently implemented as Hebrew text-only with 4 variants. It is code-active and student-facing in Hebrew, but SVG can be added later if needed.
