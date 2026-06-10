@@ -20,7 +20,7 @@ The generator remains at **25 code-active slices**. Grade 9 remains locked. Live
 - No new slices.
 - No file consolidation.
 - No Grade 9 implementation.
-- `renderCard()` unchanged.
+- `renderCard()` should keep its signature and structure.
 - `export.js`, slice files, `phase2-loader.js`, `RULES.md`, `sources/`, and `archive/` must not be touched.
 - Add `theme-color` to `index.html` only if missing.
 
@@ -45,17 +45,25 @@ The generator remains at **25 code-active slices**. Grade 9 remains locked. Live
   - No structure or generator logic changed.
   - Commit: `766f8ef9068091c55e2461873ded32a5a6eebd16`
 
+### Minimal card metadata alignment
+
+- `generator/core.js`
+  - Added only `class="qmeta"` to the existing metadata row inside `renderCard()` so Claude's premium CSS can style the tag/header row.
+  - The `renderCard()` signature, output card structure, generator routing, and export integration were preserved.
+  - Commit: `91ebdec29a6b6c0db5eace83c1c286f1eb58b23a`
+
 ### Status update
 
 - `PROJECT_STATUS.md`
   - Recorded: `Premium mobile-first UI redesign | ⚠️ Applied — pending live visual verification`.
-  - Recorded that only `style.css` and theme-color were changed for UI.
-  - Commit: `94b27cd38a3ccc39fb53c455e035c4e9510ae148`
+  - Recorded that `style.css`, theme-color, and the minimal `qmeta` markup alignment were changed for UI.
+  - Commits: `94b27cd38a3ccc39fb53c455e035c4e9510ae148`, `aee3f7a997470c7275c9bb29d2afd1554d3ca0ae`
 
 ## Files changed in final polish
 
 - `generator/style.css`
 - `generator/index.html`
+- `generator/core.js`
 - `PROJECT_STATUS.md`
 - `docs/reports/PHASE2_BATCH_EXECUTION_REPORT_2026-06-10.md`
 
@@ -167,7 +175,7 @@ Do not mark new slices or UI redesign as Live ✅ until those checks or an equiv
 
 ## Deployment status
 
-`deploy-pages.yml` is structurally correct for GitHub Actions Pages artifact deployment from `generator/`. A `.nojekyll` marker exists in the artifact. The CSS update and index theme-color update should trigger a fresh Pages deployment.
+`deploy-pages.yml` is structurally correct for GitHub Actions Pages artifact deployment from `generator/`. A `.nojekyll` marker exists in the artifact. The CSS update, index theme-color update, and minimal `qmeta` alignment should trigger fresh Pages deployments.
 
 ## Grade 9 status
 
