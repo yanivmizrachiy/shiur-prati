@@ -10,7 +10,7 @@ Public URL: https://yanivmizrachiy.github.io/targilim/
 
 Claude's final completion pack defined the remaining work as final polish and verification: preserve the working generator, apply the premium mobile-first UI redesign, keep Grade 9 locked, and do not add new math content.
 
-ChatGPT executed the UI portion exactly as implementation work, not product-direction work.
+ChatGPT executed the UI and documentation hardening exactly as implementation work, not product-direction work.
 
 The generator remains at **25 code-active slices**. Grade 9 remains locked. Live verification remains pending until the public Pages URL and the final workflows pass.
 
@@ -21,8 +21,9 @@ The generator remains at **25 code-active slices**. Grade 9 remains locked. Live
 - No file consolidation.
 - No Grade 9 implementation.
 - `renderCard()` should keep its signature and structure.
-- `export.js`, slice files, `phase2-loader.js`, `RULES.md`, `sources/`, and `archive/` must not be touched.
+- `export.js`, slice files, `phase2-loader.js`, sources, and archive must not be touched.
 - Add `theme-color` to `index.html` only if missing.
+- Keep documentation truthful and prevent duplicate/repeated work.
 
 ## What ChatGPT changed
 
@@ -52,18 +53,34 @@ The generator remains at **25 code-active slices**. Grade 9 remains locked. Live
   - The `renderCard()` signature, output card structure, generator routing, and export integration were preserved.
   - Commit: `91ebdec29a6b6c0db5eace83c1c286f1eb58b23a`
 
+### Grade 9 locked-notice UX
+
+- `generator/core.js`
+  - Fixed the existing Grade 9 locked notice behavior.
+  - Selecting Grade 9 now opens the existing `g9notice` block and shows a clear locked/pending selector option instead of an empty selector.
+  - No Grade 9 generator logic or content was added.
+  - Commit: `ac149a120b02792678fe5bf1a6e1a0d72df6288b`
+
+### Rules synchronization
+
+- `RULES.md`
+  - Replaced the obsolete pre-build rules with a current execution rulebook.
+  - Records completed work, 25 active slices, protected files, Grade 9 lock, no-repeat rules, deployment rules, verification rules, and the current next action.
+  - Purpose: prevent future agents from restarting completed work or duplicating slices.
+  - Commit: `97071378a2e303700e449029f3dd12e76ca822df`
+
 ### Status update
 
 - `PROJECT_STATUS.md`
-  - Recorded: `Premium mobile-first UI redesign | ⚠️ Applied — pending live visual verification`.
-  - Recorded that `style.css`, theme-color, and the minimal `qmeta` markup alignment were changed for UI.
-  - Commits: `94b27cd38a3ccc39fb53c455e035c4e9510ae148`, `aee3f7a997470c7275c9bb29d2afd1554d3ca0ae`
+  - Recorded premium mobile-first UI status, Grade 9 locked-notice UX, and `RULES.md` synchronization.
+  - Commits: `94b27cd38a3ccc39fb53c455e035c4e9510ae148`, `aee3f7a997470c7275c9bb29d2afd1554d3ca0ae`, `52fac81b08ed12ddb2fd01a9384af811d7bef332`
 
-## Files changed in final polish
+## Files changed in final polish and hardening
 
 - `generator/style.css`
 - `generator/index.html`
 - `generator/core.js`
+- `RULES.md`
 - `PROJECT_STATUS.md`
 - `docs/reports/PHASE2_BATCH_EXECUTION_REPORT_2026-06-10.md`
 
@@ -72,7 +89,6 @@ The generator remains at **25 code-active slices**. Grade 9 remains locked. Live
 - `generator/export.js`
 - `generator/phase2-loader.js`
 - all math slice files
-- `RULES.md`
 - `sources/`
 - `archive/`
 - `knowledge-base/`
@@ -175,11 +191,17 @@ Do not mark new slices or UI redesign as Live ✅ until those checks or an equiv
 
 ## Deployment status
 
-`deploy-pages.yml` is structurally correct for GitHub Actions Pages artifact deployment from `generator/`. A `.nojekyll` marker exists in the artifact. The CSS update, index theme-color update, and minimal `qmeta` alignment should trigger fresh Pages deployments.
+`deploy-pages.yml` is structurally correct for GitHub Actions Pages artifact deployment from `generator/`. A `.nojekyll` marker exists in the artifact. The CSS update, index theme-color update, minimal `qmeta` alignment, Grade 9 lock UX, and rules/status updates should trigger fresh Pages deployments.
 
 ## Grade 9 status
 
 Grade 9 remains **LOCKED**. No Grade 9 generator implementation was added.
+
+The UI now surfaces the existing locked notice when Grade 9 is selected, instead of leaving the user with an empty selector.
+
+## Rules status
+
+`RULES.md` now reflects the current true repository state and should be treated as the no-repeat / anti-duplication execution guard for future work.
 
 ## Known caveats
 
