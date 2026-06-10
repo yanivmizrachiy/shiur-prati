@@ -16,7 +16,7 @@ The full product vision is preserved in:
 
 `docs/TRUE_GENERATOR_VISION_REQUIREMENTS.md`
 
-That file is now mandatory reading before any Phase 3 planning or coding.
+That file is mandatory reading before any Phase 3 planning or coding.
 
 Future agents must not ask Yaniv to restate the full vision from scratch.
 
@@ -63,7 +63,8 @@ Completed:
 - `core.js` contains minimal `qmeta` markup alignment for premium card styling.
 - Grade 9 remains locked because real worked example sources are missing.
 - 25 code-active slices exist for Grades 7–8.
-- Yaniv's true generator vision is now documented in `docs/TRUE_GENERATOR_VISION_REQUIREMENTS.md`.
+- Yaniv's true generator vision is documented in `docs/TRUE_GENERATOR_VISION_REQUIREMENTS.md`.
+- A formal Phase 3A gate issue exists: `https://github.com/yanivmizrachiy/targilim/issues/1`.
 
 Current limitation:
 
@@ -206,7 +207,43 @@ Required future capabilities include:
 
 ---
 
-## 9. UI, graphics, export and print rules
+## 9. Source-based question variety and mathematical writing
+
+The generator must create varied question types based on the actual question patterns found in the source PDFs and source-learning notes.
+
+Claude must prove source learning by mapping source question patterns into generator families.
+
+For each source-backed topic, Claude must identify which of the following are appropriate and supported by the sources:
+
+- open calculation questions;
+- multiple-choice questions;
+- completion questions;
+- true/false questions;
+- matching questions;
+- explanation/reasoning questions;
+- identify-the-mistake questions;
+- build-an-equation questions;
+- read-from-diagram questions;
+- diagram-construction or label-the-diagram questions;
+- word problems;
+- table-based questions;
+- graph/chart-based questions when source-backed.
+
+The mathematical writing layer must be strong and professional:
+
+- use KaTeX-compatible notation where appropriate;
+- support fractions, roots, powers, percentages, equations, ratios, units, tables, and structured solution steps;
+- preserve Hebrew RTL clarity;
+- avoid plain-text-only math when proper mathematical notation is needed;
+- keep printed and exported math readable.
+
+Do not create unsupported generic question types.
+
+Do not create plain text-only questions when a source-based visual or mathematical representation is appropriate.
+
+---
+
+## 10. UI, graphics, export and print rules
 
 The public site must remain:
 
@@ -224,12 +261,25 @@ Graphics are first-class product behavior, not decoration.
 Dynamic visual work must follow the vision document and preserve:
 
 - premium educational visual quality;
-- clear diagrams;
+- clean drawings and diagrams;
 - controlled colors;
+- strong visual hierarchy;
 - no overlap;
 - export-safe SVG/HTML;
 - mobile-safe layout;
-- print-safe layout.
+- print-safe layout;
+- A4-safe worksheet rendering;
+- classroom-ready appearance.
+
+For every visual question family, define:
+
+- what diagram is needed;
+- what data controls the diagram;
+- what labels appear;
+- what changes between versions;
+- what colors are used;
+- how overlap is prevented;
+- how the diagram appears in worksheet mode.
 
 The following must remain working:
 
@@ -241,7 +291,7 @@ Do not change `export.js` unless the export pipeline is proven broken.
 
 ---
 
-## 10. Deployment and verification rules
+## 11. Deployment and verification rules
 
 Public URL:
 
@@ -278,7 +328,7 @@ No `Live ✅` without real live verification.
 
 ---
 
-## 11. Documentation truth rule
+## 12. Documentation truth rule
 
 `PROJECT_STATUS.md` must describe the current truth.
 
@@ -301,20 +351,22 @@ Use honest statuses:
 
 ---
 
-## 12. Phase 3 execution rule
+## 13. Phase 3 execution rule
 
 Before Phase 3 code:
 
 1. Claude must read `docs/TRUE_GENERATOR_VISION_REQUIREMENTS.md`.
-2. Claude must produce a source-to-generator blueprint.
-3. Claude must provide an implementation-ready Phase 3A patch pack.
-4. ChatGPT must execute Phase 3A only.
-5. Existing 25 slices must continue working.
-6. The current MVP must remain live.
-7. No Grade 9.
-8. No fake controls.
-9. No shallow demo.
-10. Report truth only.
+2. Claude must read `docs/prompts/CLAUDE_PHASE3A_TRUE_ENGINE_REQUEST.md`.
+3. Claude must read GitHub Issue #1.
+4. Claude must produce a source-to-generator blueprint.
+5. Claude must provide an implementation-ready Phase 3A patch pack.
+6. ChatGPT must execute Phase 3A only.
+7. Existing 25 slices must continue working.
+8. The current MVP must remain live.
+9. No Grade 9.
+10. No fake controls.
+11. No shallow demo.
+12. Report truth only.
 
 Phase 3A acceptance requires:
 
@@ -327,16 +379,23 @@ Phase 3A acceptance requires:
 - real difficulty behavior;
 - correct solution generation;
 - dynamic premium graphics if relevant;
+- strong mathematical writing;
 - old 25 slices still working;
 - mobile/export/print still working;
 - documentation updated truthfully.
 
 ---
 
-## 13. Current next action
+## 14. Current next action
 
 The next meaningful action is not more content slices.
 
-The next meaningful action is for Claude to produce a true Phase 3A generator-engine blueprint and exact patch pack, based on `docs/TRUE_GENERATOR_VISION_REQUIREMENTS.md`.
+The next meaningful action is for Claude to produce a true Phase 3A generator-engine blueprint and exact patch pack, based on:
+
+- `RULES.md`;
+- `PROJECT_STATUS.md`;
+- `docs/TRUE_GENERATOR_VISION_REQUIREMENTS.md`;
+- `docs/prompts/CLAUDE_PHASE3A_TRUE_ENGINE_REQUEST.md`;
+- GitHub Issue #1.
 
 ChatGPT should not build Phase 3 blindly without that approved pack.
