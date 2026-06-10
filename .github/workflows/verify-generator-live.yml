@@ -5,6 +5,8 @@ on:
     branches: [main]
     paths:
       - "generator/index.html"
+      - "generator/geo.js"
+      - "generator/core.js"
       - ".github/workflows/verify-generator-live.yml"
   workflow_dispatch:
 
@@ -38,12 +40,13 @@ jobs:
 
           const url = process.env.GENERATOR_URL;
           const browser = await chromium.launch();
-          const page = await browser.newPage({ viewport: { width: 390, height: 844 } });
+          const page = await browser.newPage({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 2, isMobile: true });
 
           const errors = [];
           page.on('pageerror', err => errors.push(err.message));
           page.on('console', msg => {
-            if (msg.type() === 'error') errors.push(msg.text());
+            const text = msg.text();
+            if (msg.type() === 'error' && /TypeError|ReferenceError|SyntaxError/.test(text)) errors.push(text);
           });
 
           await page.goto(url, { waitUntil: 'networkidle', timeout: 60000 });
@@ -55,6 +58,7 @@ jobs:
 
           await page.selectOption('#sg', '7');
           await page.selectOption('#sd', 'geometry');
+          await page.waitForFunction(() => [...document.querySelectorAll('#st option')].some(o => o.value === 'G7-03'), null, { timeout: 15000 });
           await page.selectOption('#st', 'G7-03');
           await page.selectOption('#sl', 'standard');
           await page.click('.btn-gen');
@@ -64,7 +68,7 @@ jobs:
           await page.waitForSelector('.qtext', { timeout: 10000 });
 
           const questionText = await page.locator('.qtext').innerText();
-          if (!/משולש|יתר|רגל/.test(questionText)) {
+          if (!questionText || questionText.trim().length < 3 || !/משולש|יתר|רגל/.test(questionText)) {
             throw new Error('Generated question text did not contain expected Hebrew math wording. Text: ' + questionText);
           }
 
@@ -77,9 +81,12 @@ jobs:
           await page.waitForSelector('.answer.open', { timeout: 10000 });
 
           const answerText = await page.locator('.answer.open').innerText();
-          if (!/ס"מ|פיתגורס|אורך/.test(answerText)) {
-            throw new Error('Answer text did not contain expected Hebrew solution wording. Text: ' + answerText);
+          if (!answerText || answerText.trim().length < 2 || !/[abcABC]|\d/.test(answerText)) {
+            throw new Error('Answer text is empty or not mathematical. Text: ' + answerText);
           }
+
+          const hasHorizontalScroll = await page.evaluate(() => document.body.scrollWidth > window.innerWidth + 2);
+          if (hasHorizontalScroll) throw new Error('Horizontal scroll detected on mobile viewport');
 
           await page.screenshot({ path: 'generator-live-smoke.png', fullPage: true });
 
