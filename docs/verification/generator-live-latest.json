@@ -36,8 +36,8 @@
     }
   ],
   "error": null,
-  "questionText": "במשולש ישר-זווית, היתר \n15\n15 ס\"מ והרגל \n9\n9 ס\"מ.\nחשבו את הרגל השנייה.",
-  "answerText": "9\n2\n+\n𝑏\n2\n=\n1\n5\n2\n9\n2\n+b\n2\n=15\n2\n\n\n𝑏\n2\n=\n225\n−\n81\n=\n144\nb\n2\n=225−81=144\n\n\n𝑏\n=\n12\nb=12",
+  "questionText": "במשולש ישר-זווית, שתי הרגליים הן \n7\n7 ס\"מ ו-\n24\n24 ס\"מ.\nחשבו את היתר.",
+  "answerText": "7\n2\n+\n2\n4\n2\n=\n𝑐\n2\n7\n2\n+24\n2\n=c\n2\n\n\n49\n+\n576\n=\n625\n49+576=625\n\n\n𝑐\n=\n25\nc=25",
   "exportButtonCount": 3,
   "engineChecks": [
     {
@@ -49,21 +49,21 @@
     {
       "qtype": "mcq",
       "ok": true,
-      "questionText": "במשולש ישר-זווית, היתר הוא \n13\n13 ס״מ ורגל אחת היא \n12\n12 ס״מ.\nחשבו את אורך הרגל החסרה.",
+      "questionText": "במשולש ישר-זווית, היתר הוא \n15\n15 ס״מ ורגל אחת היא \n9\n9 ס״מ.\nחשבו את אורך הרגל החסרה.",
       "exportButtonCount": 3
     },
     {
       "qtype": "tf",
       "ok": true,
-      "questionText": "נכון / שגוי: אם הרגליים הן \n5\n5 ס״מ ו-\n12\n12 ס״מ, אז היתר הוא \n17\n17 ס״מ.",
+      "questionText": "נכון / שגוי: משולש עם צלעות \n3\n3, \n4\n4, \n6\n6 הוא ישר-זווית.",
       "exportButtonCount": 3
     },
     {
       "qtype": "mistake",
       "ok": true,
-      "questionText": "האם משולש שצלעותיו \n3\n3, \n5\n5, \n7\n7 ס״מ הוא משולש ישר-זווית?",
+      "questionText": "האם משולש שצלעותיו \n8\n8, \n15\n15, \n17\n17 ס״מ הוא משולש ישר-זווית?",
       "exportButtonCount": 3
     }
   ],
-  "timestamp": "2026-06-10T15:02:50.867Z"
+  "timestamp": "2026-06-10T15:05:33.359Z"
 }
