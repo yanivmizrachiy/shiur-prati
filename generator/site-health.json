@@ -2,8 +2,10 @@
   "project": "targilim",
   "status": "ok",
   "artifact": "generator",
-  "phase": "phase-2-final-polish",
+  "phase": "phase-3a-generator-engine",
   "activeSlices": 25,
-  "grade9": "locked",
+  "activeGrades": [7, 8],
+  "scope": "smart-generator-only",
+  "excluded": ["grade-9", "worksheet", "booklet"],
   "updated": "2026-06-10"
 }
