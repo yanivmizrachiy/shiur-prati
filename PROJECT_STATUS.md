@@ -26,6 +26,11 @@ https://yanivmizrachiy.github.io/targilim/
 - generator/phase2-loader.js — loads Phase 2 slice modules
 - generator/style.css — styles
 
+## Verification assets
+- tools/verify-phase2-static.mjs — strict repository static verifier
+- .github/workflows/verify-phase2-static.yml — static CI verification
+- .github/workflows/verify-phase2-batch.yml — browser/live-style verification against the public Pages URL
+
 ## Status codes
 | Code | Meaning |
 |---|---|
@@ -83,7 +88,7 @@ https://yanivmizrachiy.github.io/targilim/
 - generator/phase2-loader.js
 
 ## Current honest status
-The generator has 25 code-active slices. The original MVP slices were previously browser/workflow verified. The Phase 2 batch is connected through `phase2-loader.js` and is code-active, but it still needs one end-of-batch browser/live verification before marking the new slices Live ✅.
+The generator has 25 code-active slices. The original MVP slices were previously browser/workflow verified. The Phase 2 batch is connected through `phase2-loader.js` and is code-active. A strict static verifier now exists to check repository structure and all 25 slice IDs. The batch still needs one end-of-batch browser/live verification before marking the new slices Live ✅.
 
 ## Known caveat
 `G8-04` is currently implemented as a Hebrew text-only similarity/scale-factor slice. It is code-active and student-facing in Hebrew, but should be improved later with SVG if tool constraints allow.
