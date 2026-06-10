@@ -8,7 +8,7 @@ Last updated: 2026-06-10
 
 ## Current phase
 
-MVP generator is live on GitHub Pages and verified by browser automation.
+MVP generator is live on GitHub Pages and verified by browser automation. Phase 2 slice expansion is in progress.
 
 Public URL:
 
@@ -40,6 +40,7 @@ Public URL:
 | N7-06 | Powers: `(-a)^n` vs `-a^n` | Active and verified |
 | A7-03 | First-degree equations | Active and verified |
 | U8-01 | Mean, median, and range | Active; dedicated verification workflow added |
+| N8-04 | Static percentages | Active; dedicated verification workflow added |
 
 ## Verification
 
@@ -48,7 +49,7 @@ Public URL:
 | GitHub Pages | Live |
 | Hebrew RTL UI | Verified |
 | Grade/domain/topic selectors | Verified |
-| Question generation | Verified for active slices; U8-01 workflow added |
+| Question generation | Verified for active slices; U8-01 and N8-04 workflows added |
 | SVG diagram rendering | Verified for geometry slices |
 | KaTeX math rendering | Verified |
 | Solution panel | Verified |
@@ -81,7 +82,7 @@ Archived files:
 
 ## Current honest status
 
-The project has a working MVP generator with five active slices. The repository is organized, the curriculum source material is documented, and the old private-tutoring root app has been archived.
+The project has a working MVP generator with six active slices. The repository is organized, the curriculum source material is documented, and the old private-tutoring root app has been archived.
 
 ## Remaining work
 
@@ -92,6 +93,6 @@ The project has a working MVP generator with five active slices. The repository 
 
 ## Recommended next slice
 
-`G7-02` — area of flat shapes.
+`N8-05` — dynamic percentages.
 
-Reason: strong source coverage, useful geometry practice, and a natural next step after Pythagoras and missing angles.
+Reason: natural continuation after N8-04, useful for percentage increase/decrease, and no SVG required.
