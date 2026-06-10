@@ -14,6 +14,8 @@ The new slices are loaded through `generator/phase2-loader.js`, which keeps the 
 
 A strict static verifier was added after the implementation. It verifies that all 25 slice IDs exist in generator code and in `PROJECT_STATUS.md`, that `phase2-loader.js` is loaded by `index.html`, and that Grade 9 remains locked.
 
+The browser/live workflow was strengthened to wait for the async Phase 2 loader to finish registering new slices before it checks selectors. This reduces false failures caused by module load timing.
+
 ## Scope rule followed
 
 - Grade 9 was not implemented.
@@ -31,7 +33,7 @@ Base commit before this implementation wave:
 
 ### Added workflows
 
-- `.github/workflows/verify-phase2-batch.yml` — browser/live-style verification against the public Pages URL
+- `.github/workflows/verify-phase2-batch.yml` — browser/live-style verification against the public Pages URL; waits for async loader registration
 - `.github/workflows/verify-phase2-static.yml` — static repository verification
 
 ### Added static verifier
@@ -145,6 +147,8 @@ A consolidated workflow exists:
 It checks all 25 expected active slices on the public GitHub Pages URL:
 
 https://yanivmizrachiy.github.io/targilim/
+
+The workflow now waits for the async loader by checking that representative Phase 2 slices are registered in `TOPICS` before it loops through selectors.
 
 Current truthful status: browser/live verification should still be considered **Live ⚠️** until the workflow or a browser test confirms it.
 
