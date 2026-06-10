@@ -1,2 +1,2 @@
-TOPICS[8].numeric.push(['N8-03','Scale',1]);
-generators['N8-03']=function(){renderCard('N8-03','Scale','','$1:50000, 3 cm$','$$3\\times50000=150000$$','num')};
+TOPICS[8].numeric.push(['N8-03','\u05e7\u05e0\u05d4 \u05de\u05d9\u05d3\u05d4',1]);
+generators['N8-03']=function(){let q='\u05e7\u05e0\u05d4 \u05de\u05d9\u05d3\u05d4 $1:50000$. \u05d1\u05de\u05e4\u05d4 \u05d4\u05de\u05e8\u05d7\u05e7 \u05d4\u05d5\u05d0 $3$ \u05e1\u05de. \u05de\u05d4 \u05d4\u05de\u05e8\u05d7\u05e7 \u05d4\u05d0\u05de\u05d9\u05ea\u05d9?',a='\u05de\u05db\u05e4\u05d9\u05dc\u05d9\u05dd \u05d1\u05e7\u05e0\u05d4 \u05d4\u05de\u05d9\u05d3\u05d4.\n$$3\\times50000=150000$$\n$150000$ \u05e1\u05de = $1.5$ \u05e7\u05de.';renderCard('N8-03','\u05e7\u05e0\u05d4 \u05de\u05d9\u05d3\u05d4','',q,a,'num')};
