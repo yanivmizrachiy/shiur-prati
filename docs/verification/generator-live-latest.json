@@ -31,9 +31,9 @@
       "ok": true
     }
   ],
-  "error": "Error: Answer text missing expected Hebrew wording: 3\n2\n+\n4\n2\n=\n𝑐\n2\n3\n2\n+4\n2\n=c\n2\n\n\n9\n+\n16\n=\n25\n9+16=25\n\n\n𝑐\n=\n5\nc=5\n    at file:///home/runner/work/targilim/targilim/verify-generator-live.mjs:52:58",
-  "questionText": "במשולש ישר-זווית, שתי הרגליים הן \n3\n3 ס\"מ ו-\n4\n4 ס\"מ.\nחשבו את היתר.",
-  "answerText": "3\n2\n+\n4\n2\n=\n𝑐\n2\n3\n2\n+4\n2\n=c\n2\n\n\n9\n+\n16\n=\n25\n9+16=25\n\n\n𝑐\n=\n5\nc=5",
+  "error": "Error: Answer text missing expected Hebrew wording: 3\n2\n+\n𝑏\n2\n=\n5\n2\n3\n2\n+b\n2\n=5\n2\n\n\n𝑏\n2\n=\n25\n−\n9\n=\n16\nb\n2\n=25−9=16\n\n\n𝑏\n=\n4\nb=4\n    at file:///home/runner/work/targilim/targilim/verify-generator-live.mjs:52:58",
+  "questionText": "במשולש ישר-זווית, היתר \n5\n5 ס\"מ והרגל \n3\n3 ס\"מ.\nחשבו את הרגל השנייה.",
+  "answerText": "3\n2\n+\n𝑏\n2\n=\n5\n2\n3\n2\n+b\n2\n=5\n2\n\n\n𝑏\n2\n=\n25\n−\n9\n=\n16\nb\n2\n=25−9=16\n\n\n𝑏\n=\n4\nb=4",
   "exportButtonCount": 3,
-  "timestamp": "2026-06-10T08:43:49.801Z"
+  "timestamp": "2026-06-10T12:13:54.370Z"
 }

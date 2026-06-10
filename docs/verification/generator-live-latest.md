@@ -1,6 +1,6 @@
 # Generator Live Verification Report
 
-Date: 2026-06-10T08:43:49.801Z
+Date: 2026-06-10T12:13:54.370Z
 URL: https://yanivmizrachiy.github.io/targilim/
 Status: FAIL
 
@@ -15,38 +15,43 @@ Status: FAIL
 
 ## Observed
 - exportButtonCount: 3
-- questionText: במשולש ישר-זווית, שתי הרגליים הן  / 3 / 3 ס"מ ו- / 4 / 4 ס"מ. / חשבו את היתר.
-- answerText: 3 / 2 / + / 4 / 2 / = / 𝑐 / 2 / 3 / 2 / +4 / 2 / =c / 2 /  /  / 9 / + / 16 / = / 25 / 9+16=25 /  /  / 𝑐 / = / 5 / c=5
+- questionText: במשולש ישר-זווית, היתר  / 5 / 5 ס"מ והרגל  / 3 / 3 ס"מ. / חשבו את הרגל השנייה.
+- answerText: 3 / 2 / + / 𝑏 / 2 / = / 5 / 2 / 3 / 2 / +b / 2 / =5 / 2 /  /  / 𝑏 / 2 / = / 25 / − / 9 / = / 16 / b / 2 / =25−9=16 /  /  / 𝑏 / = / 4 / b=4
 
 ## Error
 ```
 Error: Answer text missing expected Hebrew wording: 3
 2
 +
-4
+𝑏
 2
 =
-𝑐
+5
 2
 3
 2
-+4
++b
 2
-=c
+=5
 2
 
 
-9
-+
-16
+𝑏
+2
 =
 25
-9+16=25
-
-
-𝑐
+−
+9
 =
-5
-c=5
+16
+b
+2
+=25−9=16
+
+
+𝑏
+=
+4
+b=4
     at file:///home/runner/work/targilim/targilim/verify-generator-live.mjs:52:58
 ```
