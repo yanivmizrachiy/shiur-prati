@@ -18,7 +18,8 @@
 | True generator vision captured in repo rules | ✅ Done |
 | Phase 3A true engine pilots | Code ✅ — G7-03-ENGINE and N8-04-ENGINE present; final verify-phase3a run pending ⚠️ |
 | Phase 3A engine.css | ✅ Added |
-| Phase 3A dedicated verification workflow | ✅ Added — pending result |
+| Phase 3A dedicated live workflow | ✅ Added — pending result |
+| Phase 3A static audit automation | ✅ Added — pending result |
 | Pages hardening | ✅ Done |
 | Legacy archive | ✅ Done |
 | Grade 9 generator | 🔒 Locked — needs real example question sources |
@@ -75,7 +76,7 @@ Verified from Yaniv PowerShell on 2026-06-10:
 | scheduled PowerShell health task | Ready ✅ |
 | G7-03-ENGINE live report | PASS ✅ |
 
-Conclusion: Phase 2 is live and verified. Phase 3A now contains two engine pilots. `G7-03-ENGINE` was previously live verified. `N8-04-ENGINE` exists in code and is awaiting the new dedicated `verify-phase3a.yml` workflow result. Do not mark Phase 3A complete until that workflow passes.
+Conclusion: Phase 2 is live and verified. Phase 3A now contains two engine pilots. `G7-03-ENGINE` was previously live verified. `N8-04-ENGINE` exists in code and is awaiting the new dedicated `verify-phase3a.yml` workflow result. The new `verify-phase3a-static.yml` workflow was also added for fast structural/audit checks. Do not mark Phase 3A complete until the relevant workflows pass.
 
 ## Architecture
 - generator/index.html — modular loader, mobile viewport, theme color, Phase 3A engine panel and engine script loading
@@ -102,11 +103,13 @@ Conclusion: Phase 2 is live and verified. Phase 3A now contains two engine pilot
 
 ## Verification assets
 - tools/verify-phase2-static.mjs — strict repository static verifier: 25 slice IDs, loader coverage, export functions, site-health, anti-stub guard, mobile meta, Grade 9 lock, and truthful status checks
+- tools/verify-phase3a-static.mjs — fast Phase 3A structural audit: engine files, classic-script safety, engine controls, engine registrations, question types, diagram builders, docs guardrails
 - .github/workflows/verify-phase2-static.yml — static CI verification
 - .github/workflows/pages-healthcheck.yml — public Pages healthcheck that first checks `site-health.json`, then the app shell
 - .github/workflows/verify-phase2-batch.yml — full 25-slice browser/live verification against the public Pages URL; checks selectors, generation, question text, answer reveal, export buttons, required SVGs, and no horizontal scroll on mobile viewport
 - .github/workflows/verify-generator-live-report.yml — live report workflow covers legacy G7-03, G7-03-ENGINE, and N8-04-ENGINE
-- .github/workflows/verify-phase3a.yml — dedicated Phase 3A workflow for both engine pilots, engine controls, export buttons, legacy checks, mobile no-scroll, and Grade 9 lock
+- .github/workflows/verify-phase3a.yml — dedicated Phase 3A live workflow for both engine pilots, engine controls, export buttons, legacy checks, mobile no-scroll, and Grade 9 lock
+- .github/workflows/verify-phase3a-static.yml — dedicated Phase 3A static audit workflow
 
 ## Workflow cleanup
 Disabled obsolete one-time apply workflows by removing their active `.yml` files from `.github/workflows/`:
@@ -200,10 +203,10 @@ Capabilities implemented in `N8-04-ENGINE`:
 - No legacy slice files, `export.js`, `phase2-loader.js`, sources, archive, or Grade 9 generator logic were changed.
 
 ## Current honest status
-The public external link is reachable. Phase 2 static verifier and full browser batch pass after the readiness-check fix. The generator has 25 code-active legacy slices. Phase 3A includes two engine pilots in code: `G7-03-ENGINE` and `N8-04-ENGINE`. A dedicated `verify-phase3a.yml` workflow was added and must pass before Phase 3A is marked complete. Yaniv's full requirements are preserved in `RULES.md`, `docs/TRUE_GENERATOR_VISION_REQUIREMENTS.md`, and `docs/prompts/CLAUDE_PHASE3A_TRUE_ENGINE_REQUEST.md`.
+The public external link is reachable. Phase 2 static verifier and full browser batch pass after the readiness-check fix. The generator has 25 code-active legacy slices. Phase 3A includes two engine pilots in code: `G7-03-ENGINE` and `N8-04-ENGINE`. A dedicated live `verify-phase3a.yml` workflow and a fast `verify-phase3a-static.yml` workflow were added. Phase 3A must not be marked complete until the relevant workflow results are observed. Yaniv's full requirements are preserved in `RULES.md`, `docs/TRUE_GENERATOR_VISION_REQUIREMENTS.md`, and `docs/prompts/CLAUDE_PHASE3A_TRUE_ENGINE_REQUEST.md`.
 
 ## Known caveat
 `G8-04` is currently implemented as Hebrew text-only with 4 variants. It is code-active and student-facing in Hebrew, but SVG can be added later if needed.
 
 ## Next required action
-Wait for `.github/workflows/verify-phase3a.yml` to complete. If it passes, mark both engine pilots Live ✅ and close Phase 3A as verified. If it fails, fix only the exact failing line/slice/control reported by the workflow.
+Wait for `.github/workflows/verify-phase3a-static.yml` and `.github/workflows/verify-phase3a.yml` to complete. If they pass, mark both engine pilots Live ✅ and close Phase 3A as verified. If any workflow fails, fix only the exact failing line/slice/control reported by the workflow.
