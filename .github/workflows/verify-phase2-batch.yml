@@ -80,7 +80,11 @@ jobs:
           if (status < 200 || status >= 400) throw new Error('Unexpected Pages HTTP status: ' + status);
 
           await page.waitForSelector('text=תרגילים', { timeout: 30000 });
-          await page.waitForFunction(() => window.TOPICS && TOPICS[7]?.numeric?.some(t => t[0] === 'N7-04') && TOPICS[8]?.algebra?.some(t => t[0] === 'A8-03'), null, { timeout: 30000 });
+          await page.waitForFunction(() => {
+            return typeof TOPICS !== 'undefined' &&
+              TOPICS[7]?.numeric?.some(t => t[0] === 'N7-04') &&
+              TOPICS[8]?.algebra?.some(t => t[0] === 'A8-03');
+          }, null, { timeout: 30000 });
 
           for (const [grade, domain, id] of checks) {
             try {
