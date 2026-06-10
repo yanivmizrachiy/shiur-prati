@@ -55,8 +55,8 @@ The integration uses classic browser scripts and `window.TargilimEngine`, not ES
 
 | ID | Topic | Grade | Domain | Status |
 |---|---|---|---|---|
-| `G7-03-ENGINE` | Pythagoras — true engine pilot | 7 | Geometry | Code ✅; previously live verified; pending dedicated `verify-phase3a.yml` |
-| `N8-04-ENGINE` | Static percentages — engine pilot | 8 | Numeric | Code ✅; pending dedicated `verify-phase3a.yml` |
+| `G7-03-ENGINE` | Pythagoras — true engine pilot | 7 | Geometry | Local Live ✅; public `verify-phase3a.yml` pending push/result |
+| `N8-04-ENGINE` | Static percentages — engine pilot | 8 | Numeric | Local Live ✅; public `verify-phase3a.yml` pending push/result |
 
 ---
 
@@ -155,16 +155,29 @@ It checks:
 
 ### Current result
 
-`verify-phase3a.yml` was created and is pending run/result.
+Local Phase 3A closure verification was run on 2026-06-10.
 
-Do not mark Phase 3A complete until it passes.
+Observed results:
+
+- `node tools/verify-phase3a-static.mjs` PASS ✅
+- `G7-03-ENGINE` PASS ✅ across 12 local browser combinations: 3 difficulty levels × 4 question types.
+- `N8-04-ENGINE` PASS ✅ across 12 local browser combinations: 3 difficulty levels × 4 question types.
+- Engine control fidelity PASS ✅: MCQ / true-false / identify-mistake output markup verified for both pilots.
+- Legacy `G7-03` PASS ✅.
+- Legacy `N8-04` PASS ✅.
+- Grade 9 locked notice PASS ✅.
+- Export buttons PASS ✅.
+- Mobile horizontal scroll PASS ✅: no horizontal scroll at 390px viewport.
+- Browser console errors PASS ✅: none detected.
+
+Public GitHub Pages and the dedicated `verify-phase3a.yml` / `verify-phase3a-static.yml` workflow results still require commit and push.
 
 ---
 
 ## 8. Current caveats
 
-- `N8-04-ENGINE` is code-present but not yet marked Live ✅ by a dedicated verification run.
-- `G7-03-ENGINE` was previously live verified, but final Phase 3A closure waits for the new dedicated workflow.
+- Public GitHub Actions verification has not been observed for this local fix yet.
+- Public GitHub Pages will not include the local fix until commit and push.
 - Worksheet mode is not implemented yet; it remains Phase 3B.
 - Full conversion of all 25 legacy topics is not implemented yet; it remains future Phase 3 work.
 - Grade 9 remains locked.
@@ -173,26 +186,23 @@ Do not mark Phase 3A complete until it passes.
 
 ## 9. Acceptance criteria for closure
 
-Phase 3A can be marked verified only after:
+Local Phase 3A verification is complete. Public closure still requires:
 
+- commit and push of the local fix;
+- `.github/workflows/verify-phase3a-static.yml` passes;
 - `.github/workflows/verify-phase3a.yml` passes;
-- both engine topics are live verified;
-- legacy `G7-03` and `N8-04` remain working;
-- Grade 9 remains locked;
-- no export/print regression is observed;
-- `PROJECT_STATUS.md` is updated to reflect the result.
+- public Pages reflects the pushed generator.
 
 ---
 
 ## 10. Next action
 
-Wait for `verify-phase3a.yml` to run.
+Commit and push the local Phase 3A verification fix.
 
-If it passes:
+If the public workflows pass:
 
-- mark `G7-03-ENGINE` and `N8-04-ENGINE` Live ✅;
-- update `PROJECT_STATUS.md`;
-- append closure line to this report.
+- keep `G7-03-ENGINE` and `N8-04-ENGINE` marked Live ✅;
+- close the Phase 3A verification gate.
 
 If it fails:
 

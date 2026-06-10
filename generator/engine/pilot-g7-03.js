@@ -71,14 +71,15 @@
 
   E.generateG703Engine = function(diff, qtype){
     diff = diff || 'standard'; qtype = qtype || 'open';
-    if(diff==='basic') return rightCase('basic','open');
+    if(diff==='basic') return rightCase('basic',qtype);
+    if(qtype==='mcq' || qtype==='mistake') return rightCase(diff,qtype);
     if(diff==='standard'){
-      const family = E.pick(['side','side','check','rect']);
+      const family = E.pick(qtype==='tf' ? ['side','check'] : ['side','side','check','rect']);
       if(family==='check') return checkCase(qtype==='tf'?'tf':'open');
       if(family==='rect') return rectCase();
-      return rightCase(diff, qtype==='mistake'?'open':qtype);
+      return rightCase(diff,qtype);
     }
-    const family = E.pick(['side','side','check']);
+    const family = E.pick(qtype==='tf' ? ['side','check'] : ['side','side','check']);
     if(family==='check') return checkCase(qtype==='tf'?'tf':'open');
     return rightCase('challenge', qtype);
   };
