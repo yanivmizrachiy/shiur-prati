@@ -16,7 +16,7 @@ The full product vision is preserved in:
 
 `docs/TRUE_GENERATOR_VISION_REQUIREMENTS.md`
 
-That file is mandatory reading before any Phase 3 planning or coding.
+That file is mandatory reading before any future Phase 3 planning or coding.
 
 Future agents must not ask Yaniv to restate the full vision from scratch.
 
@@ -62,25 +62,26 @@ Completed:
 - Premium mobile-first RTL CSS redesign has been applied.
 - `core.js` contains minimal `qmeta` markup alignment for premium card styling.
 - Grade 9 remains locked because real worked example sources are missing.
-- 25 code-active slices exist for Grades 7–8.
+- 25 code-active legacy slices exist for Grades 7–8.
 - Yaniv's true generator vision is documented in `docs/TRUE_GENERATOR_VISION_REQUIREMENTS.md`.
 - A formal Phase 3A gate issue exists: `https://github.com/yanivmizrachiy/targilim/issues/1`.
+- Phase 3A engine code now exists for two pilots: `G7-03-ENGINE` and `N8-04-ENGINE`.
 
 Current limitation:
 
-- The live system is a useful MVP, not the final intelligent generator.
-- Phase 3 true generator engine has not yet been built.
+- The live system is beyond the initial MVP but is still not the final intelligent generator.
+- Phase 3A pilot engine code exists, but final Phase 3A closure is pending verification workflows.
 - Worksheet mode has not yet been built.
-- Real question-type engine has not yet been built.
-- Dynamic unknown-switching engine has not yet been built.
-- Full dynamic diagram/graphics engine has not yet been built.
+- Full conversion of all 25 legacy topics to the engine has not yet been built.
+- The full dynamic diagram/graphics engine for all visual topics has not yet been built.
 - Real difficulty logic across all topics has not yet been built.
+- Grade 9 remains locked.
 
 ---
 
 ## 4. Active generator slices
 
-The project currently has 25 code-active slices.
+The project currently has 25 code-active legacy slices.
 
 ### Grade 7
 
@@ -113,6 +114,13 @@ The project currently has 25 code-active slices.
 - `U8-01` — Mean, median, range.
 - `U8-02` — Basic probability.
 
+### Phase 3A engine pilots
+
+- `G7-03-ENGINE` — Pythagoras true engine pilot: dynamic data, unknown switching, question types, real difficulty, dynamic SVG.
+- `N8-04-ENGINE` — Static percentages engine pilot: percent families, unknown switching, question types, real difficulty.
+
+These are code-present. Do not mark Phase 3A complete until the relevant Phase 3A verification workflows pass.
+
 ### Grade 9
 
 Grade 9 is locked.
@@ -134,7 +142,8 @@ Future work must not repeat these completed actions:
 - Do not rewrite `core.js` wholesale.
 - Do not rewrite `phase2-loader.js` unless there is a real loader failure.
 - Do not rewrite `export.js` unless export is proven broken.
-- Do not re-add the same 25 slices.
+- Do not re-add the same 25 legacy slices.
+- Do not recreate the Phase 3A engine foundation already present under `generator/engine/`.
 - Do not create duplicate topic IDs.
 - Do not mark `Live ✅` without actual verification.
 - Do not ask Yaniv to repeat the full Phase 3 generator vision.
@@ -152,7 +161,7 @@ Do not touch these unless there is explicit need and a clear reason:
 - `knowledge-base/`
 - `generator/export.js`, unless export is proven broken.
 - `generator/phase2-loader.js`, unless a loader failure is proven.
-- all slice files, unless fixing a real mathematical/UI/runtime issue.
+- all legacy slice files, unless fixing a real mathematical/UI/runtime issue.
 - `RULES.md`, except for truth/status/rule updates.
 - `docs/TRUE_GENERATOR_VISION_REQUIREMENTS.md`, except for approved vision refinements.
 
@@ -309,6 +318,9 @@ Required verification assets:
 - `.github/workflows/verify-phase2-static.yml`
 - `.github/workflows/pages-healthcheck.yml`
 - `.github/workflows/verify-phase2-batch.yml`
+- `tools/verify-phase3a-static.mjs`
+- `.github/workflows/verify-phase3a-static.yml`
+- `.github/workflows/verify-phase3a.yml`
 
 Before claiming Phase 2 complete, verify:
 
@@ -323,6 +335,20 @@ Before claiming Phase 2 complete, verify:
 - mobile view has no horizontal scroll;
 - Grade 9 stays locked;
 - `PROJECT_STATUS.md` matches reality.
+
+Before claiming Phase 3A complete, verify:
+
+- `G7-03-ENGINE` appears in selector and generates correctly;
+- `N8-04-ENGINE` appears in selector and generates correctly;
+- engine panel controls are real and affect output;
+- open / MCQ / true-false / mistake question types work;
+- basic / standard / challenge difficulty works;
+- Pythagoras dynamic SVG renders;
+- legacy `G7-03` and `N8-04` still work;
+- export buttons remain present;
+- mobile view has no horizontal scroll;
+- Grade 9 stays locked;
+- `PROJECT_STATUS.md` and the Phase 3A report match observed results.
 
 No `Live ✅` without real live verification.
 
@@ -353,32 +379,33 @@ Use honest statuses:
 
 ## 13. Phase 3 execution rule
 
-Before Phase 3 code:
+Phase 3A code now exists. Future work must not restart Phase 3A.
 
-1. Claude must read `docs/TRUE_GENERATOR_VISION_REQUIREMENTS.md`.
-2. Claude must read `docs/prompts/CLAUDE_PHASE3A_TRUE_ENGINE_REQUEST.md`.
-3. Claude must read GitHub Issue #1.
-4. Claude must produce a source-to-generator blueprint.
-5. Claude must provide an implementation-ready Phase 3A patch pack.
-6. ChatGPT must execute Phase 3A only.
-7. Existing 25 slices must continue working.
-8. The current MVP must remain live.
-9. No Grade 9.
-10. No fake controls.
-11. No shallow demo.
-12. Report truth only.
+Before continuing beyond Phase 3A:
+
+1. Verify `.github/workflows/verify-phase3a-static.yml`.
+2. Verify `.github/workflows/verify-phase3a.yml`.
+3. If they pass, update `PROJECT_STATUS.md` and `docs/reports/PHASE3A_ENGINE_REPORT_2026-06-10.md` truthfully.
+4. If they fail, fix only the exact failing item.
+5. Do not start Phase 3B until Phase 3A is verified.
+6. Existing 25 slices must continue working.
+7. The current MVP must remain live.
+8. No Grade 9.
+9. No fake controls.
+10. No shallow demo.
+11. Report truth only.
 
 Phase 3A acceptance requires:
 
 - a real engine foundation beside the old system;
-- one pilot topic using the engine;
+- two pilot topics currently present in code: `G7-03-ENGINE` and `N8-04-ENGINE`;
 - changing data;
 - changing unknown target;
 - changing Hebrew wording;
 - at least two question types;
 - real difficulty behavior;
 - correct solution generation;
-- dynamic premium graphics if relevant;
+- dynamic premium graphics for `G7-03-ENGINE`;
 - strong mathematical writing;
 - old 25 slices still working;
 - mobile/export/print still working;
@@ -388,14 +415,11 @@ Phase 3A acceptance requires:
 
 ## 14. Current next action
 
-The next meaningful action is not more content slices.
+The next meaningful action is not more content slices and not Phase 3B.
 
-The next meaningful action is for Claude to produce a true Phase 3A generator-engine blueprint and exact patch pack, based on:
+The next required action is verification closure:
 
-- `RULES.md`;
-- `PROJECT_STATUS.md`;
-- `docs/TRUE_GENERATOR_VISION_REQUIREMENTS.md`;
-- `docs/prompts/CLAUDE_PHASE3A_TRUE_ENGINE_REQUEST.md`;
-- GitHub Issue #1.
-
-ChatGPT should not build Phase 3 blindly without that approved pack.
+- wait for `.github/workflows/verify-phase3a-static.yml` and `.github/workflows/verify-phase3a.yml` to complete;
+- if they pass, mark `G7-03-ENGINE` and `N8-04-ENGINE` Live ✅;
+- if they fail, fix only the exact failing line/control/topic;
+- do not add worksheet mode or more engine topics until Phase 3A is verified.
