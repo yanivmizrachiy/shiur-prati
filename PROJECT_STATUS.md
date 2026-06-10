@@ -28,6 +28,7 @@ Public URL:
 - Audit and architecture plan created: `docs/AUDIT_AND_ARCHITECTURE_PLAN_2026-06-09.md`.
 - Knowledge base JSON files created for grades 7, 8, and 9.
 - `generator/index.html` created and deployed from the `generator/` folder.
+- Generator was refactored into modular files: `core.js`, `geo.js`, `algebra.js`, `numeric.js`, `stats.js`, `export.js`, and `style.css`.
 - Browser verification workflows created and updated.
 - Legacy private tutoring app files archived under `archive/legacy-shiur-prati/2026-06-09/` and removed from the root.
 
@@ -41,6 +42,7 @@ Public URL:
 | A7-03 | First-degree equations | Active and verified |
 | U8-01 | Mean, median, and range | Active; dedicated verification workflow added |
 | N8-04 | Static percentages | Active; dedicated verification workflow added |
+| N8-05 | Dynamic percentages | Active; dedicated verification workflow added |
 
 ## Verification
 
@@ -49,13 +51,13 @@ Public URL:
 | GitHub Pages | Live |
 | Hebrew RTL UI | Verified |
 | Grade/domain/topic selectors | Verified |
-| Question generation | Verified for active slices; U8-01 and N8-04 workflows added |
+| Question generation | Verified for active slices; dedicated workflows added for later slices |
 | SVG diagram rendering | Verified for geometry slices |
 | KaTeX math rendering | Verified |
 | Solution panel | Verified |
-| Export buttons | Verified present |
-| Print / PNG / copy-as-image buttons | Present; browser workflows check presence |
-| Console errors | None reported in verification |
+| Export buttons | Present through modular `export.js` |
+| Print / PNG / copy-as-image buttons | Present |
+| Console errors | None reported in latest verified workflows |
 
 ## Archived legacy files
 
@@ -82,7 +84,7 @@ Archived files:
 
 ## Current honest status
 
-The project has a working MVP generator with six active slices. The repository is organized, the curriculum source material is documented, and the old private-tutoring root app has been archived.
+The project has a working MVP generator with seven active slices. The repository is organized, the generator is now modular, the curriculum source material is documented, and the old private-tutoring root app has been archived.
 
 ## Remaining work
 
@@ -93,6 +95,6 @@ The project has a working MVP generator with six active slices. The repository i
 
 ## Recommended next slice
 
-`N8-05` — dynamic percentages.
+`N8-02` — proportion.
 
-Reason: natural continuation after N8-04, useful for percentage increase/decrease, and no SVG required.
+Reason: no SVG required, direct continuation of numeric grade 8 work, and useful classroom practice.
