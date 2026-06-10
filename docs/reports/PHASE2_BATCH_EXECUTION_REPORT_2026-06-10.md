@@ -279,10 +279,13 @@ The UI now surfaces the existing locked notice when Grade 9 is selected, instead
 
 ## Deferred Phase 3 items
 
-These are not required to close Phase 2:
+These are not required to close Phase 2. Product scope was later corrected: future Phase 3 work should continue generator intelligence only, not worksheet/booklet/PDF workbook features.
 
-- Worksheet mode: generate 5/10 questions and print as A4.
-- Solution toggle: print with or without answers.
+- Source-bound engine template families.
+- Dynamic data and unknown switching.
+- Hebrew wording variation.
+- Real question-type behavior.
+- Real difficulty behavior.
 - Teacher mode: difficulty, count, presets.
 - Private analytics: only after MVP usage is confirmed.
 - Richer diagrams: number line SVG for N7-03, paired triangles for G8-04.

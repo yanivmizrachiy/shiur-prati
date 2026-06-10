@@ -15,6 +15,10 @@ It expands `docs/TRUE_GENERATOR_VISION_REQUIREMENTS.md`.
 
 Future Claude/ChatGPT work must not ask Yaniv to repeat these requirements.
 
+Scope correction on 2026-06-10:
+
+The final product is a smart Hebrew math exercise generator only. It is not a booklet system, not a worksheet builder, and not a PDF workbook product. Any worksheet/booklet/workbook references in older planning language are superseded by this correction.
+
 ---
 
 ## 2. Core expectation
@@ -30,7 +34,7 @@ Claude must learn deeply:
 - what mathematical thinking each source file teaches;
 - what question structures appear in the files;
 - what types of mistakes and misconceptions students may have;
-- what teachers need in order to generate varied, accurate, editable, printable questions.
+- what teachers need in order to generate varied, accurate, editable, printable exercise cards.
 
 ---
 
@@ -69,12 +73,10 @@ Required controls:
 2. Domain selection.
 3. Topic selection.
 4. Specific skill / subtopic selection.
-5. Number of questions:
-   - 1 question;
-   - 5 questions;
-   - 10 questions;
-   - 15 questions;
-   - custom count later if safe.
+5. Generation amount:
+   - one exercise card at a time in the current product;
+   - repeated regeneration for more variations;
+   - no worksheet/booklet batch builder.
 6. Difficulty level — four real levels:
    - remedial / foundation;
    - standard;
@@ -92,11 +94,9 @@ Required controls:
    - build an equation;
    - verify a solution.
 8. Answer display:
-   - no answers;
    - answer only;
    - full solution;
-   - answer key at end;
-   - separate answer page.
+   - hide/show solution for the generated exercise.
 9. Diagram setting:
    - include diagrams where relevant;
    - no diagram if not needed;
@@ -108,14 +108,14 @@ Required controls:
    - algebra;
    - numeric;
    - statistics/uncertainty;
-   - print worksheet.
-11. Worksheet mode:
-   - single topic worksheet;
-   - mixed topic worksheet;
-   - mixed domains only when pedagogically safe.
+   - print/export-safe exercise card.
+11. Explicit non-goal:
+   - no worksheet mode;
+   - no booklet mode;
+   - no PDF workbook mode;
+   - no 5/10/15 question worksheet builder.
 12. Regeneration:
-   - regenerate one question;
-   - regenerate whole worksheet;
+   - regenerate the current exercise;
    - preserve selected controls.
 
 No UI control may be fake. Every visible control must affect generation.
@@ -269,8 +269,7 @@ Required dynamic diagram families:
 - circle radius/diameter/circumference/area;
 - similar triangles;
 - frequency table;
-- bar chart when useful;
-- worksheet answer-key visual blocks.
+- bar chart when useful.
 
 Each graphic must support:
 
@@ -289,34 +288,19 @@ Graphics are part of correctness. A diagram must match the generated data.
 
 ---
 
-## 9. Worksheet requirements
+## 9. Explicit non-goal: worksheets/booklets
 
-The real product must support worksheets, not only one question at a time.
+The real product must remain a smart generator, not a worksheet/booklet/workbook product.
 
-Worksheet controls:
+Do not build:
 
-- question count: 5 / 10 / 15;
-- same topic or mixed topics;
-- difficulty level;
-- question types;
-- with answers / without answers;
-- full solution / answer key only;
-- title and metadata;
-- A4 print;
-- mobile preview;
-- regenerate one question;
-- regenerate all;
-- copy/export worksheet.
+- worksheet mode;
+- booklet mode;
+- PDF workbook output;
+- bulk A4 worksheet generation;
+- separate answer-key workbook pages.
 
-Worksheet output must:
-
-- be visually premium;
-- fit A4;
-- avoid clutter;
-- preserve RTL;
-- include diagrams when needed;
-- optionally place answer key at bottom or separate page;
-- be useful for a real math teacher in class.
+Print/export support remains required for the generated exercise card itself.
 
 ---
 
@@ -332,7 +316,7 @@ For each topic, Claude must decide:
 - add dynamic diagrams;
 - add four-level difficulty;
 - add question-type variants;
-- add worksheet support.
+- preserve export/copy/PNG/print support for generated exercise cards.
 
 No shallow conversion is acceptable.
 
@@ -384,5 +368,5 @@ Phase 3A is accepted only if the pilot topic can actually demonstrate:
 - four real difficulty levels or a documented pilot subset that is real;
 - dynamic graphics if visual;
 - correct answer/solution generation;
-- worksheet compatibility path;
+- export/copy/PNG/print compatibility;
 - no breakage of existing MVP.

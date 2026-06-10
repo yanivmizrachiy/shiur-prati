@@ -59,12 +59,14 @@ jobs:
             const engineReady = await page.evaluate(() => {
               return !!(window.TargilimEngine &&
                 typeof window.TargilimEngine.generateG703Engine === 'function' &&
+                typeof window.TargilimEngine.generateN803Engine === 'function' &&
                 typeof window.TargilimEngine.generateN804Engine === 'function');
             });
             if (!engineReady) throw new Error('Phase 3A engine functions are not loaded');
 
             const engineTopics = [
               { grade: '7', domain: 'geometry', id: 'G7-03-ENGINE', needsSvg: true },
+              { grade: '8', domain: 'numeric', id: 'N8-03-ENGINE', needsSvg: true },
               { grade: '8', domain: 'numeric', id: 'N8-04-ENGINE', needsSvg: false }
             ];
             const qtypes = ['open','mcq','tf','mistake'];
@@ -119,6 +121,7 @@ jobs:
 
             const legacyChecks = [
               { grade: '7', domain: 'geometry', id: 'G7-03' },
+              { grade: '8', domain: 'numeric', id: 'N8-03' },
               { grade: '8', domain: 'numeric', id: 'N8-04' }
             ];
             for (const legacy of legacyChecks) {

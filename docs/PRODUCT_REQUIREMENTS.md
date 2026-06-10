@@ -6,9 +6,11 @@ Hebrew product name: `תרגילים`.
 
 ## Product purpose
 
-Build a real Hebrew mathematics exercise generator for grades 7, 8, and 9.
+Build a real Hebrew mathematics exercise generator. The current source-backed scope is grades 7 and 8. Grade 9 remains locked until real worked source examples are supplied.
 
-The generator must help teachers create printable, curriculum-based Hebrew mathematics questions and worksheets.
+The generator must help teachers create printable, curriculum-based Hebrew mathematics exercise cards.
+
+The final product is not a booklet product, not a worksheet builder, and not a PDF workbook system.
 
 ## Current phase
 
@@ -59,12 +61,11 @@ The final generator should allow the teacher to control, at minimum:
 - Subtopic
 - Skill
 - Difficulty
-- Number of questions
 - Question type
 - Numerical range
 - Representation type
 - Context/theme
-- Whether answers are included
+- Whether the solution is shown
 - Whether hints are included
 - Whether the output is for classwork, homework, practice, assessment, or enrichment
 
@@ -84,6 +85,6 @@ If direct image clipboard copying is not supported by the browser, the product m
 
 ## Print requirement
 
-Generated questions and worksheets must be suitable for A4 printing.
+Generated exercise cards must be suitable for printing.
 
 The layout must be clean, readable, Hebrew RTL, and classroom-ready.

@@ -81,7 +81,7 @@ Completed or present:
 - 25 code-active legacy slices exist for Grades 7–8.
 - Yaniv's true generator vision is documented in `docs/TRUE_GENERATOR_VISION_REQUIREMENTS.md`.
 - A formal Phase 3A gate issue exists: `https://github.com/yanivmizrachiy/targilim/issues/1`.
-- Phase 3A engine code exists for two pilots: `G7-03-ENGINE` and `N8-04-ENGINE`.
+- Phase 3A engine code exists for three topics: `G7-03-ENGINE`, `N8-03-ENGINE`, and `N8-04-ENGINE`.
 
 Current limitation:
 
@@ -132,6 +132,7 @@ The project currently has 25 code-active legacy slices.
 ### Phase 3A engine pilots
 
 - `G7-03-ENGINE` — Pythagoras true engine pilot: dynamic data, unknown switching, question types, real difficulty, dynamic SVG.
+- `N8-03-ENGINE` — Scale true engine topic: dynamic scale data, unknown switching, question types, real difficulty, dynamic map/scale SVG.
 - `N8-04-ENGINE` — Static percentages engine pilot: percent families, unknown switching, question types, real difficulty.
 
 ### Grade 9
@@ -343,6 +344,7 @@ Required verification assets:
 Before claiming Phase 3A complete, verify:
 
 - `G7-03-ENGINE` appears in selector and generates correctly;
+- `N8-03-ENGINE` appears in selector and generates correctly;
 - `N8-04-ENGINE` appears in selector and generates correctly;
 - engine panel controls are real and affect output;
 - open / MCQ / true-false / mistake question types work;
@@ -402,7 +404,7 @@ Before continuing beyond Phase 3A:
 Phase 3A acceptance requires:
 
 - a real engine foundation beside the old system;
-- two pilot topics currently present in code: `G7-03-ENGINE` and `N8-04-ENGINE`;
+- three engine topics currently present in code: `G7-03-ENGINE`, `N8-03-ENGINE`, and `N8-04-ENGINE`;
 - changing data;
 - changing unknown target;
 - changing Hebrew wording;

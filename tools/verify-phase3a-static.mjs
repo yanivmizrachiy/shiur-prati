@@ -18,6 +18,7 @@ const requiredFiles = [
   'generator/engine/question-types.js',
   'generator/engine/engine.css',
   'generator/engine/pilot-g7-03.js',
+  'generator/engine/pilot-n8-03.js',
   'generator/engine/pilot-n8-04.js',
   'generator/engine/pattern-engine.js'
 ];
@@ -32,6 +33,7 @@ const index = read('generator/index.html');
 const core = read('generator/core.js');
 const pattern = read('generator/engine/pattern-engine.js');
 const g703 = read('generator/engine/pilot-g7-03.js');
+const n803 = read('generator/engine/pilot-n8-03.js');
 const n804 = read('generator/engine/pilot-n8-04.js');
 const qtypes = read('generator/engine/question-types.js');
 const diagrams = read('generator/engine/diagrams.js');
@@ -60,8 +62,10 @@ mustInclude(index, 'value="mistake"', 'mistake question type');
 console.log('Engine controls exist ✅');
 
 mustInclude(pattern, 'G7-03-ENGINE', 'Pythagoras engine registration');
+mustInclude(pattern, 'N8-03-ENGINE', 'scale engine registration');
 mustInclude(pattern, 'N8-04-ENGINE', 'percent engine registration');
 mustInclude(pattern, 'generateG703Engine', 'Pythagoras engine call');
+mustInclude(pattern, 'generateN803Engine', 'scale engine call');
 mustInclude(pattern, 'generateN804Engine', 'percent engine call');
 mustInclude(pattern, 'updatePanel', 'engine panel visibility hook');
 console.log('Engine topics registered ✅');
@@ -71,7 +75,7 @@ for (const needle of ['open', 'mcq', 'tf', 'mistake']) {
 }
 console.log('Question type renderers present ✅');
 
-for (const needle of ['rightTriangleSvg', 'rectangleDiagonalSvg', 'unknown', 'given']) {
+for (const needle of ['rightTriangleSvg', 'rectangleDiagonalSvg', 'scaleMapSvg', 'unknown', 'given']) {
   mustInclude(diagrams, needle, `diagram engine ${needle}`);
 }
 console.log('Diagram engine present ✅');
@@ -80,6 +84,11 @@ for (const needle of ['generateG703Engine', 'rightTriangleSvg', 'rectangleDiagon
   mustInclude(g703, needle, `G7-03 engine ${needle}`);
 }
 console.log('G7-03 engine behavior present ✅');
+
+for (const needle of ['generateN803Engine', 'scale_real_distance', 'scale_map_distance', 'scale_factor', 'scaleMapSvg', 'mcq', 'tf', 'mistake', 'basic', 'standard', 'challenge']) {
+  mustInclude(n803, needle, `N8-03 engine ${needle}`);
+}
+console.log('N8-03 engine behavior present ✅');
 
 for (const needle of ['generateN804Engine', 'pct_of_n', 'find_whole', 'find_pct', 'mcq', 'tf', 'mistake', 'basic', 'standard', 'challenge']) {
   mustInclude(n804, needle, `N8-04 engine ${needle}`);
@@ -91,7 +100,7 @@ for (const needle of ['engine-panel', 'engine-badge', 'mcq-choice', 'tf-statemen
 }
 console.log('Engine CSS present ✅');
 
-mustInclude(status, 'Phase 3A true engine pilots', 'PROJECT_STATUS Phase 3A status');
+mustInclude(status, 'Phase 3A true engine topics', 'PROJECT_STATUS Phase 3A status');
 mustInclude(status, 'verify-phase3a.yml', 'PROJECT_STATUS verification reference');
 mustInclude(rules, 'No fake controls', 'RULES no fake controls');
 mustInclude(rules, 'Source-based question variety', 'RULES source variety');

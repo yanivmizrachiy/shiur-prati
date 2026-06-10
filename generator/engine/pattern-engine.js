@@ -40,7 +40,7 @@
   E.updatePanel = function(){
     const st = document.getElementById('st');
     const panel = document.getElementById('enginePanel');
-    if(panel && st) panel.style.display = (st.value === 'G7-03-ENGINE' || st.value === 'N8-04-ENGINE') ? 'block' : 'none';
+    if(panel && st) panel.style.display = (st.value === 'G7-03-ENGINE' || st.value === 'N8-03-ENGINE' || st.value === 'N8-04-ENGINE') ? 'block' : 'none';
   };
 
   if(typeof TOPICS !== 'undefined' && TOPICS[7] && TOPICS[7].geometry && !TOPICS[7].geometry.some(t=>t[0]==='G7-03-ENGINE')){
@@ -48,6 +48,9 @@
   }
   if(typeof TOPICS !== 'undefined' && TOPICS[8] && TOPICS[8].numeric && !TOPICS[8].numeric.some(t=>t[0]==='N8-04-ENGINE')){
     TOPICS[8].numeric.push(['N8-04-ENGINE','אחוזים סטטיים — מנוע מלא ✦',1]);
+  }
+  if(typeof TOPICS !== 'undefined' && TOPICS[8] && TOPICS[8].numeric && !TOPICS[8].numeric.some(t=>t[0]==='N8-03-ENGINE')){
+    TOPICS[8].numeric.push(['N8-03-ENGINE','קנה מידה — מנוע מלא ✦',1]);
   }
 
   generators['G7-03-ENGINE'] = function(){
@@ -64,6 +67,13 @@
       const result = E.generateN804Engine(diff, qtype);
       E.renderEngineCard('N8-04-ENGINE','אחוזים סטטיים — מנוע מלא',result);
     });
+  };
+
+  generators['N8-03-ENGINE'] = function(){
+    const diff = document.getElementById('selDiff')?.value || document.getElementById('sl')?.value || 'standard';
+    const qtype = document.getElementById('selQType')?.value || 'open';
+    const result = E.generateN803Engine(diff, qtype);
+    E.renderEngineCard('N8-03-ENGINE','קנה מידה — מנוע מלא',result);
   };
 
   const oldOnDomain = window.onDomain;

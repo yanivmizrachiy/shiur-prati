@@ -74,7 +74,6 @@ It does not yet have:
 - Hebrew wording variation engine;
 - multiple question-type engine;
 - true difficulty behavior across topics;
-- full worksheet mode;
 - dynamic premium diagram/graphics engine;
 - controlled visual theme engine.
 
@@ -196,7 +195,7 @@ Expected concepts:
 - themes;
 - diagram generation;
 - render adapter to existing `renderCard()`;
-- worksheet compatibility later.
+- export/copy/PNG/print compatibility for generated exercise cards.
 
 ### SECTION 5 — PILOT TOPIC DESIGN
 
@@ -225,7 +224,7 @@ Define controlled themes:
 - numeric;
 - algebra;
 - uncertainty;
-- worksheet print.
+- print/export-safe exercise card.
 
 For each relevant theme define:
 

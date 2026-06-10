@@ -42,7 +42,7 @@ All future work should focus on generator intelligence:
 | Verification hardening | ✅ Done |
 | Rules sync / anti-duplication guard | ✅ Done |
 | True generator vision captured in repo rules | ✅ Done |
-| Phase 3A true engine pilots | Local Live ✅ — G7-03-ENGINE and N8-04-ENGINE passed local Phase 3A browser verification; public Actions visible green on latest commit screenshot |
+| Phase 3A true engine topics | Local Live ✅ — G7-03-ENGINE, N8-03-ENGINE, and N8-04-ENGINE passed local Phase 3A browser verification; public Actions pending for the new N8-03 engine change |
 | Phase 3A engine.css | ✅ Added |
 | Phase 3A dedicated live workflow | ✅ Added |
 | Phase 3A static audit automation | ✅ Added — local run PASS |
@@ -72,16 +72,18 @@ Verified from local Codex browser run on 2026-06-10 against `http://127.0.0.1`:
 |---|---|
 | `node tools/verify-phase3a-static.mjs` | PASS ✅ |
 | `G7-03-ENGINE` browser generation | PASS ✅ — 12 difficulty/type combinations |
+| `N8-03-ENGINE` browser generation | PASS ✅ — 12 difficulty/type combinations |
 | `N8-04-ENGINE` browser generation | PASS ✅ — 12 difficulty/type combinations |
 | Engine controls affect output | PASS ✅ — MCQ / true-false / mistake markup verified |
 | Legacy `G7-03` | PASS ✅ |
+| Legacy `N8-03` | PASS ✅ |
 | Legacy `N8-04` | PASS ✅ |
 | Grade 9 locked notice | PASS ✅ |
 | export buttons | PASS ✅ |
 | mobile horizontal scroll | PASS ✅ — none detected at 390px viewport |
 | browser console errors | PASS ✅ — none detected |
 
-Conclusion: Phase 2 is live and verified. Phase 3A contains two locally browser-verified engine pilots. `G7-03-ENGINE` and `N8-04-ENGINE` passed local Phase 3A verification after the missing N8 engine script load and question-type control fidelity were fixed.
+Conclusion: Phase 2 is live and verified. Phase 3A contains three locally browser-verified engine topics. `G7-03-ENGINE`, `N8-03-ENGINE`, and `N8-04-ENGINE` passed local Phase 3A verification. `N8-03-ENGINE` adds source-bound scale template families, unknown switching, Hebrew wording variation, real question types, real difficulty behavior, and dynamic map/scale SVG while preserving legacy `N8-03`.
 
 ---
 
@@ -106,6 +108,7 @@ Conclusion: Phase 2 is live and verified. Phase 3A contains two locally browser-
 - `generator/engine/diagrams.js` — Phase 3A dynamic SVG builders.
 - `generator/engine/question-types.js` — Phase 3A question type renderers.
 - `generator/engine/pilot-g7-03.js` — Phase 3A Pythagoras engine pilot.
+- `generator/engine/pilot-n8-03.js` — Phase 3A scale engine topic.
 - `generator/engine/pilot-n8-04.js` — Phase 3A percentages engine pilot.
 - `generator/engine/pattern-engine.js` — Phase 3A engine registration/render adapter.
 
@@ -121,6 +124,15 @@ Conclusion: Phase 2 is live and verified. Phase 3A contains two locally browser-
 - `.github/workflows/verify-generator-live-report.yml` — live report workflow for generator topics.
 - `.github/workflows/verify-phase3a.yml` — dedicated Phase 3A live workflow.
 - `.github/workflows/verify-phase3a-static.yml` — dedicated Phase 3A static audit workflow.
+
+---
+
+## Status codes
+
+- `Code ✅` — generator code exists and is registered.
+- `Live ⚠️` — not yet live/browser verified in the latest relevant batch.
+- `Live ✅` — verified by browser/workflow/manual live test.
+- `🔒 Locked` — intentionally blocked because source examples are missing.
 
 ---
 
@@ -161,6 +173,7 @@ Conclusion: Phase 2 is live and verified. Phase 3A contains two locally browser-
 | ID | Topic | Grade | Domain | Code | Live |
 |---|---|---|---|---|---|
 | G7-03-ENGINE | Pythagoras — true engine pilot | 7 | Geometry | ✅ | Local Live ✅ |
+| N8-03-ENGINE | Scale — true engine topic | 8 | Numeric | ✅ | Local Live ✅ |
 | N8-04-ENGINE | Static percentages — engine pilot | 8 | Numeric | ✅ | Local Live ✅ |
 
 Capabilities implemented in `G7-03-ENGINE`:
@@ -184,11 +197,23 @@ Capabilities implemented in `N8-04-ENGINE`:
 - KaTeX-compatible mathematical solution steps;
 - existing export/PNG/print buttons preserved through the existing export pipeline.
 
+Capabilities implemented in `N8-03-ENGINE`:
+
+- source-bound scale template families;
+- find real distance from map/drawing distance;
+- find map/drawing distance from real distance;
+- find the scale factor from map and real distances;
+- basic/standard/challenge difficulty behavior;
+- question types: open, multiple choice, true/false, identify mistake;
+- dynamic map/scale SVG;
+- KaTeX-compatible mathematical solution steps;
+- existing export/PNG/print buttons preserved through the existing export pipeline.
+
 ---
 
 ## Current honest status
 
-The public external link is reachable. Phase 2 static verifier and full browser batch pass after the readiness-check fix. The generator has 25 code-active legacy slices. Phase 3A includes two engine pilots: `G7-03-ENGINE` and `N8-04-ENGINE`. Both passed local static and browser verification on 2026-06-10.
+The public external link is reachable. Phase 2 static verifier and full browser batch pass after the readiness-check fix. The generator has 25 code-active legacy slices. Phase 3A includes three engine topics: `G7-03-ENGINE`, `N8-03-ENGINE`, and `N8-04-ENGINE`. All three passed local static and browser verification on 2026-06-10.
 
 The project direction is **smart generator only**.
 

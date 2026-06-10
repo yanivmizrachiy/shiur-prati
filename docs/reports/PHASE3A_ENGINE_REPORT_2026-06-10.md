@@ -44,6 +44,7 @@ Phase 3A engine files exist under `generator/engine/`:
 - `question-types.js`
 - `engine.css`
 - `pilot-g7-03.js`
+- `pilot-n8-03.js`
 - `pilot-n8-04.js`
 - `pattern-engine.js`
 
@@ -56,6 +57,7 @@ The integration uses classic browser scripts and `window.TargilimEngine`, not ES
 | ID | Topic | Grade | Domain | Status |
 |---|---|---|---|---|
 | `G7-03-ENGINE` | Pythagoras — true engine pilot | 7 | Geometry | Local Live ✅; public `verify-phase3a.yml` pending push/result |
+| `N8-03-ENGINE` | Scale — true engine topic | 8 | Numeric | Local Live ✅; public `verify-phase3a.yml` pending push/result |
 | `N8-04-ENGINE` | Static percentages — engine pilot | 8 | Numeric | Local Live ✅; public `verify-phase3a.yml` pending push/result |
 
 ---
@@ -88,6 +90,22 @@ Implemented:
 - KaTeX-compatible solution steps;
 - existing export/PNG/print buttons preserved.
 
+### N8-03-ENGINE — Scale
+
+Implemented:
+
+- scale template families from source-learning and pattern index;
+- find real distance from map/drawing distance;
+- find map/drawing distance from real distance;
+- find scale factor from map and real distances;
+- safe integer/decimal parameter sets with unit conversions;
+- unknown switching: map distance, real distance, or scale factor;
+- difficulty behavior: basic / standard / challenge;
+- question types: open, multiple choice, true/false, identify mistake;
+- dynamic map/scale SVG;
+- KaTeX-compatible solution steps;
+- existing export/PNG/print buttons preserved.
+
 ---
 
 ## 6. Files modified or added in Phase 3A context
@@ -102,6 +120,7 @@ Implemented:
 - `generator/engine/question-types.js`
 - `generator/engine/engine.css`
 - `generator/engine/pilot-g7-03.js`
+- `generator/engine/pilot-n8-03.js`
 - `generator/engine/pilot-n8-04.js`
 - `generator/engine/pattern-engine.js`
 - `.github/workflows/verify-phase3a.yml`
@@ -110,6 +129,10 @@ Implemented:
 ### Modified
 
 - `generator/index.html` — engine panel + engine script loading.
+- `generator/engine/diagrams.js` — dynamic map/scale SVG helper.
+- `generator/engine/pattern-engine.js` — `N8-03-ENGINE` registration/render adapter.
+- `tools/verify-phase3a-static.mjs` — static audit coverage for `N8-03-ENGINE`.
+- `.github/workflows/verify-phase3a.yml` — live workflow coverage for `N8-03-ENGINE` and legacy `N8-03`.
 - `PROJECT_STATUS.md` — Phase 3A status updated truthfully.
 
 ### Not touched in this closure step
@@ -142,14 +165,18 @@ It checks:
 - public Pages returns HTTP 200;
 - `window.TargilimEngine` loads;
 - `generateG703Engine` exists;
+- `generateN803Engine` exists;
 - `generateN804Engine` exists;
 - `G7-03-ENGINE` appears in selector;
+- `N8-03-ENGINE` appears in selector;
 - `N8-04-ENGINE` appears in selector;
 - open / MCQ / true-false / mistake generate non-empty questions and answers;
 - export buttons remain present;
 - SVG exists for the visual Pythagoras pilot;
+- SVG exists for the visual scale pilot;
 - no horizontal scroll on mobile viewport;
 - legacy `G7-03` still works;
+- legacy `N8-03` still works;
 - legacy `N8-04` still works;
 - Grade 9 locked notice still opens.
 
@@ -161,9 +188,11 @@ Observed results:
 
 - `node tools/verify-phase3a-static.mjs` PASS ✅
 - `G7-03-ENGINE` PASS ✅ across 12 local browser combinations: 3 difficulty levels × 4 question types.
+- `N8-03-ENGINE` PASS ✅ across 12 local browser combinations: 3 difficulty levels × 4 question types.
 - `N8-04-ENGINE` PASS ✅ across 12 local browser combinations: 3 difficulty levels × 4 question types.
-- Engine control fidelity PASS ✅: MCQ / true-false / identify-mistake output markup verified for both pilots.
+- Engine control fidelity PASS ✅: MCQ / true-false / identify-mistake output markup verified for the engine topics.
 - Legacy `G7-03` PASS ✅.
+- Legacy `N8-03` PASS ✅.
 - Legacy `N8-04` PASS ✅.
 - Grade 9 locked notice PASS ✅.
 - Export buttons PASS ✅.
@@ -178,7 +207,7 @@ Public GitHub Pages and the dedicated `verify-phase3a.yml` / `verify-phase3a-sta
 
 - Public GitHub Actions verification has not been observed for this local fix yet.
 - Public GitHub Pages will not include the local fix until commit and push.
-- Worksheet mode is not implemented yet; it remains Phase 3B.
+- Worksheet/booklet/PDF workbook mode is out of scope and must not become Phase 3B.
 - Full conversion of all 25 legacy topics is not implemented yet; it remains future Phase 3 work.
 - Grade 9 remains locked.
 
@@ -209,4 +238,4 @@ If it fails:
 - fix only the exact failing item reported by the workflow;
 - do not add new features;
 - do not rewrite the engine;
-- do not start Phase 3B.
+- do not start worksheet/booklet/PDF workbook work.
