@@ -8,6 +8,7 @@
 | Phase 1: Audit + source learning | ✅ Done |
 | Phase 2: Archive + KB + generator MVP | ✅ Done |
 | Phase 2 continued: slice expansion | 🔄 Active |
+| Delta repair: weak slices + verification | ✅ Done |
 | Legacy archive | ✅ Done |
 | Grade 9 generator | 🔒 Locked — needs real example question sources |
 | Analytics | 🔲 Deferred |
@@ -27,9 +28,9 @@ https://yanivmizrachiy.github.io/targilim/
 - generator/style.css — styles
 
 ## Verification assets
-- tools/verify-phase2-static.mjs — strict repository static verifier
+- tools/verify-phase2-static.mjs — strict repository static verifier, including non-stub Phase 2 file-size guard
 - .github/workflows/verify-phase2-static.yml — static CI verification
-- .github/workflows/verify-phase2-batch.yml — browser/live-style verification against the public Pages URL; waits for async loader registration before selector checks
+- .github/workflows/verify-phase2-batch.yml — browser/live-style verification against the public Pages URL; fails clearly on 403/404, waits for async loader registration, checks selectors/cards/answers/export buttons, and checks SVG for geometry slices that require SVG
 
 ## Status codes
 | Code | Meaning |
@@ -87,11 +88,19 @@ https://yanivmizrachiy.github.io/targilim/
 - generator/g8-04.js
 - generator/phase2-loader.js
 
+## Delta repairs completed after Claude audit
+- N8-01 Ratio: expanded from one hardcoded question to 4 randomized variants.
+- N8-03 Scale: expanded from one hardcoded question to 4 randomized variants.
+- G8-04 Similarity: expanded from one hardcoded question to 4 randomized variants.
+- A8-03 Systems: expanded from one hardcoded question to 4 randomized variants, with integer-safe examples only.
+- Static verifier strengthened with a Phase 2 file-size guard to catch stub-like files.
+- Browser workflow strengthened to fail clearly on Pages 403/404 and to check SVG for relevant geometry slices.
+
 ## Current honest status
-The generator has 25 code-active slices. The original MVP slices were previously browser/workflow verified. The Phase 2 batch is connected through `phase2-loader.js` and is code-active. A strict static verifier now exists to check repository structure and all 25 slice IDs. The browser workflow was strengthened to wait for async loader registration before testing selectors. The batch still needs one end-of-batch browser/live verification before marking the new slices Live ✅.
+The generator has 25 code-active slices. The original MVP slices were previously browser/workflow verified. The Phase 2 batch is connected through `phase2-loader.js` and is code-active. Claude-identified weak slices were repaired. A strict static verifier now checks repository structure, all 25 slice IDs, non-stub Phase 2 files, and Grade 9 lock. The browser workflow now handles async loader registration and Pages 403/404 clearly. The batch still needs one end-of-batch browser/live verification before marking the new slices Live ✅.
 
 ## Known caveat
-`G8-04` is currently implemented as a Hebrew text-only similarity/scale-factor slice. It is code-active and student-facing in Hebrew, but should be improved later with SVG if tool constraints allow.
+`G8-04` is currently implemented as Hebrew text-only with 4 variants. It is code-active and student-facing in Hebrew, but SVG can be added later if needed.
 
 ## Next required action
 Run final end-of-batch verification on the public URL. Do not add more content slices before confirming the Phase 2 batch loads and the selectors contain the new topics.
