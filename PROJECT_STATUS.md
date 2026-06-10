@@ -9,7 +9,8 @@
 | Phase 2: Archive + KB + generator MVP | ✅ Done |
 | Phase 2 continued: slice expansion | 🔄 Active |
 | Delta repair: weak slices + verification | ✅ Done |
-| Premium mobile-first UI redesign | ⚠️ Applied — pending live visual verification |
+| Premium mobile-first UI redesign | ⚠️ Applied — pending full visual/browser batch verification |
+| Live basic deployment | ✅ Passed — external Termux check |
 | Rules sync / anti-duplication guard | ✅ Done |
 | Pages hardening | ✅ Done |
 | Legacy archive | ✅ Done |
@@ -21,6 +22,26 @@ https://yanivmizrachiy.github.io/targilim/
 
 ## Static health endpoint
 https://yanivmizrachiy.github.io/targilim/site-health.json
+
+## Latest external verification
+Verified externally from Termux on 2026-06-10:
+
+| Check | HTTP |
+|---|---|
+| `site-health.json` | 200 |
+| app shell `/targilim/` | 200 |
+| `style.css` | 200 |
+| `core.js` | 200 |
+
+Observed GitHub Actions:
+
+| Workflow | Status | Conclusion | Commit |
+|---|---|---|---|
+| Deploy targilim to GitHub Pages | completed | success | `1afaff9` |
+| Verify Phase 2 static structure | completed | success | `1afaff9` |
+| Pages healthcheck | completed | success | `9238a60` |
+
+Conclusion: public basic deployment is working. Full browser batch verification for all 25 slices is still pending.
 
 ## Architecture
 - generator/index.html — modular loader, mobile viewport, theme color
@@ -122,7 +143,7 @@ https://yanivmizrachiy.github.io/targilim/site-health.json
 - `generator/core.js` received only a minimal `class="qmeta"` markup alignment so Claude's premium CSS applies to the card metadata row.
 - `generator/core.js` also received a minimal Grade 9 locked-notice UI fix: selecting Grade 9 opens the existing `g9notice` block and shows a clear locked/pending option instead of an empty selector.
 - No slice files, `export.js`, `phase2-loader.js`, sources, archive, or Grade 9 generator logic were changed.
-- Status: applied in code, pending live visual verification.
+- Status: applied in code; public files are reachable; full visual/browser batch verification remains pending.
 
 ## Rules synchronization
 - `RULES.md` was updated from an obsolete pre-build state to a current execution rulebook.
@@ -130,10 +151,10 @@ https://yanivmizrachiy.github.io/targilim/site-health.json
 - Purpose: prevent future agents from restarting completed work or duplicating slices.
 
 ## Current honest status
-The generator has 25 code-active slices. The original MVP slices were previously browser/workflow verified. The Phase 2 batch is connected through `phase2-loader.js` and is code-active. Claude-identified weak slices were repaired. A strict static verifier now checks repository structure, all 25 slice IDs, non-stub Phase 2 files, and Grade 9 lock. The browser workflow now handles async loader registration and Pages 403/404 clearly. Pages deployment is through GitHub Actions artifact upload from `generator/`, `.nojekyll` was added to harden artifact serving, a static `site-health.json` endpoint was added, and a lightweight Pages healthcheck workflow now checks the static endpoint before the app shell. Claude's premium mobile-first CSS redesign was applied, the card metadata markup was aligned, Grade 9 lock UX was fixed, and `RULES.md` now reflects the real current state. The batch still needs one end-of-batch browser/live and visual verification before marking the new slices Live ✅.
+The public external link is reachable and basic deployment is verified externally: `site-health.json`, app shell, `style.css`, and `core.js` all returned HTTP 200 from Termux. Deploy Pages and static structure workflows completed successfully on commit `1afaff9`. The generator has 25 code-active slices. The original MVP slices were previously browser/workflow verified. The Phase 2 batch is connected through `phase2-loader.js` and is code-active. Claude-identified weak slices were repaired. Claude's premium mobile-first CSS redesign is deployed. Grade 9 lock UX is fixed. `RULES.md` now reflects the real current state. The remaining unclosed item is full browser/live batch verification across all 25 slices before marking the remaining new slices Live ✅.
 
 ## Known caveat
 `G8-04` is currently implemented as Hebrew text-only with 4 variants. It is code-active and student-facing in Hebrew, but SVG can be added later if needed.
 
 ## Next required action
-Run final end-of-batch verification on the public URL. Do not add more content slices before confirming the Phase 2 batch loads and the selectors contain the new topics.
+Run final browser batch verification on the public URL. Do not add more content slices before confirming the Phase 2 batch loads and the selectors contain the new topics.
