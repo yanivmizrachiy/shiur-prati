@@ -7,6 +7,7 @@ on:
       - "generator/index.html"
       - "generator/geo.js"
       - "generator/core.js"
+      - "generator/engine/**"
       - ".github/workflows/verify-generator-live.yml"
   workflow_dispatch:
 
@@ -49,44 +50,62 @@ jobs:
             if (msg.type() === 'error' && /TypeError|ReferenceError|SyntaxError/.test(text)) errors.push(text);
           });
 
+          async function selectTopic(id) {
+            await page.waitForFunction((topicId) => [...document.querySelectorAll('#st option')].some(o => o.value === topicId), id, { timeout: 15000 });
+            await page.selectOption('#st', id);
+          }
+
+          async function generateAndAssert(label, requireSvg = true) {
+            await page.click('.btn-gen');
+            await page.waitForSelector('.qcard', { timeout: 10000 });
+            if (requireSvg) await page.waitForSelector('.qcard svg', { timeout: 10000 });
+            await page.waitForSelector('.qtext', { timeout: 10000 });
+
+            const questionText = await page.locator('.qtext').innerText();
+            if (!questionText || questionText.trim().length < 3 || !/משולש|יתר|רגל|מלבן|אלכסון|שגוי|טעות/.test(questionText)) {
+              throw new Error(label + ': bad question text: ' + questionText);
+            }
+
+            const exportButtonCount = await page.locator('.btn-exp').count();
+            if (exportButtonCount < 3) throw new Error(label + ': expected at least 3 export buttons; found ' + exportButtonCount);
+
+            await page.click('.btn-ans');
+            await page.waitForSelector('.answer.open', { timeout: 10000 });
+
+            const answerText = await page.locator('.answer.open').innerText();
+            if (!answerText || answerText.trim().length < 2 || !/[abcABCd]|\d|פיתגורס|חזקה|שוויון|טעות/.test(answerText)) {
+              throw new Error(label + ': answer text is empty or not mathematical: ' + answerText);
+            }
+
+            const hasHorizontalScroll = await page.evaluate(() => document.body.scrollWidth > window.innerWidth + 2);
+            if (hasHorizontalScroll) throw new Error(label + ': horizontal scroll detected on mobile viewport');
+
+            console.log('PASS ' + label);
+          }
+
           await page.goto(url, { waitUntil: 'networkidle', timeout: 60000 });
 
           await page.waitForSelector('text=תרגילים', { timeout: 30000 });
           await page.waitForSelector('#sg', { timeout: 10000 });
           await page.waitForSelector('#sd', { timeout: 10000 });
           await page.waitForSelector('#st', { timeout: 10000 });
+          await page.waitForFunction(() => typeof TOPICS !== 'undefined' && TOPICS[7]?.geometry?.some(t => t[0] === 'G7-03'), null, { timeout: 30000 });
 
           await page.selectOption('#sg', '7');
           await page.selectOption('#sd', 'geometry');
-          await page.waitForFunction(() => [...document.querySelectorAll('#st option')].some(o => o.value === 'G7-03'), null, { timeout: 15000 });
-          await page.selectOption('#st', 'G7-03');
+          await selectTopic('G7-03');
           await page.selectOption('#sl', 'standard');
-          await page.click('.btn-gen');
+          await generateAndAssert('legacy G7-03', true);
 
-          await page.waitForSelector('.qcard', { timeout: 10000 });
-          await page.waitForSelector('.qcard svg', { timeout: 10000 });
-          await page.waitForSelector('.qtext', { timeout: 10000 });
+          await page.waitForFunction(() => TOPICS[7]?.geometry?.some(t => t[0] === 'G7-03-ENGINE'), null, { timeout: 30000 });
+          await selectTopic('G7-03-ENGINE');
 
-          const questionText = await page.locator('.qtext').innerText();
-          if (!questionText || questionText.trim().length < 3 || !/משולש|יתר|רגל/.test(questionText)) {
-            throw new Error('Generated question text did not contain expected Hebrew math wording. Text: ' + questionText);
+          const qtypes = ['open', 'mcq', 'tf', 'mistake'];
+          for (const qtype of qtypes) {
+            await page.selectOption('#selQType', qtype);
+            await page.selectOption('#selDiff', qtype === 'open' ? 'basic' : 'challenge');
+            await generateAndAssert('engine G7-03-ENGINE ' + qtype, true);
           }
-
-          const exportButtonCount = await page.locator('.btn-exp').count();
-          if (exportButtonCount < 3) {
-            throw new Error('Expected at least 3 export buttons; found ' + exportButtonCount);
-          }
-
-          await page.click('.btn-ans');
-          await page.waitForSelector('.answer.open', { timeout: 10000 });
-
-          const answerText = await page.locator('.answer.open').innerText();
-          if (!answerText || answerText.trim().length < 2 || !/[abcABC]|\d/.test(answerText)) {
-            throw new Error('Answer text is empty or not mathematical. Text: ' + answerText);
-          }
-
-          const hasHorizontalScroll = await page.evaluate(() => document.body.scrollWidth > window.innerWidth + 2);
-          if (hasHorizontalScroll) throw new Error('Horizontal scroll detected on mobile viewport');
 
           await page.screenshot({ path: 'generator-live-smoke.png', fullPage: true });
 
@@ -95,7 +114,7 @@ jobs:
           }
 
           await browser.close();
-          console.log('GENERATOR_LIVE_SMOKE_OK');
+          console.log('GENERATOR_LIVE_SMOKE_AND_ENGINE_OK');
           EOF
 
           node verify-generator-live.mjs
