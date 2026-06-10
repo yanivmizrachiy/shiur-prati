@@ -1,0 +1,60 @@
+name: Verify Phase 2 batch
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - "generator/**"
+      - ".github/workflows/verify-phase2-batch.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - run: |
+          npm init -y
+          npm i -D playwright
+          npx playwright install chromium --with-deps
+      - run: |
+          cat > verify-phase2.mjs <<'EOF'
+          import { chromium } from 'playwright';
+          const checks = [
+            ['7','geometry','G7-03'],['7','geometry','G7-04'],['7','geometry','G7-01'],['7','geometry','G7-02'],
+            ['7','numeric','N7-03'],['7','numeric','N7-04'],['7','numeric','N7-05'],['7','numeric','N7-06'],['7','numeric','N7-07'],
+            ['7','algebra','A7-01'],['7','algebra','A7-02'],['7','algebra','A7-03'],['7','uncertainty','U7-01'],
+            ['8','geometry','G8-01'],['8','numeric','N8-01'],['8','numeric','N8-02'],['8','numeric','N8-03'],['8','numeric','N8-04'],['8','numeric','N8-05'],
+            ['8','algebra','A8-02'],['8','uncertainty','U8-01'],['8','uncertainty','U8-02']
+          ];
+          const browser = await chromium.launch();
+          const page = await browser.newPage({ viewport: { width: 390, height: 844 } });
+          const errors = [];
+          page.on('pageerror', e => errors.push(e.message));
+          page.on('console', m => { if (m.type() === 'error') errors.push(m.text()); });
+          await page.goto('https://yanivmizrachiy.github.io/targilim/', { waitUntil: 'networkidle', timeout: 60000 });
+          await page.waitForSelector('text=תרגילים');
+          for (const [grade, domain, id] of checks) {
+            await page.selectOption('#sg', grade);
+            await page.selectOption('#sd', domain);
+            await page.waitForTimeout(500);
+            const vals = await page.$$eval('#st option', opts => opts.map(o => o.value));
+            if (!vals.includes(id)) throw new Error(id + ' missing from selector: ' + vals.join(','));
+            await page.selectOption('#st', id);
+            await page.click('.btn-gen');
+            await page.waitForSelector('.qcard');
+            await page.click('.btn-ans');
+            await page.waitForSelector('.answer.open');
+            const buttons = await page.locator('.btn-exp').count();
+            if (buttons < 3) throw new Error(id + ' export buttons missing');
+          }
+          if (errors.length) throw new Error(errors.join(' | '));
+          await browser.close();
+          console.log('PHASE_2_BATCH_OK');
+          EOF
+          node verify-phase2.mjs
