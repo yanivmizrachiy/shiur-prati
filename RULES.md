@@ -30,22 +30,39 @@ Yaniv is the product owner and teacher.
 
 Claude is the project manager / brain / pedagogy / design decision-maker.
 
-ChatGPT is the GitHub executor / implementation assistant.
+ChatGPT/Codex are execution assistants.
 
 Execution rule:
 
 - Claude decides strategy, pedagogy, design direction, source interpretation, and quality gates.
-- ChatGPT executes approved repository changes while preserving repository reality.
+- ChatGPT/Codex execute approved repository changes while preserving repository reality.
 - Yaniv must not be forced to manage routine technical decisions.
 - No agent may ask Yaniv to repeat work or restate the full vision already documented in `docs/TRUE_GENERATOR_VISION_REQUIREMENTS.md`.
 
 ---
 
-## 3. Current true status
+## 3. Product target
+
+The final product target is:
+
+**A smart Hebrew math exercise generator.**
+
+The final product target is not:
+
+- a booklet system;
+- a worksheet builder;
+- a PDF workbook generator;
+- a bulk A4 worksheet mode.
+
+Do not plan, design, or implement worksheets/booklets unless Yaniv explicitly reopens that scope later.
+
+---
+
+## 4. Current true status
 
 As of 2026-06-10, the project is not at the beginning.
 
-Completed:
+Completed or present:
 
 - Source audit and source-learning phase completed.
 - Legacy root files archived.
@@ -60,18 +77,16 @@ Completed:
 - `PROJECT_STATUS.md` exists and must remain truthful.
 - Phase 2 execution report exists under `docs/reports/`.
 - Premium mobile-first RTL CSS redesign has been applied.
-- `core.js` contains minimal `qmeta` markup alignment for premium card styling.
 - Grade 9 remains locked because real worked example sources are missing.
 - 25 code-active legacy slices exist for Grades 7–8.
 - Yaniv's true generator vision is documented in `docs/TRUE_GENERATOR_VISION_REQUIREMENTS.md`.
 - A formal Phase 3A gate issue exists: `https://github.com/yanivmizrachiy/targilim/issues/1`.
-- Phase 3A engine code now exists for two pilots: `G7-03-ENGINE` and `N8-04-ENGINE`.
+- Phase 3A engine code exists for two pilots: `G7-03-ENGINE` and `N8-04-ENGINE`.
 
 Current limitation:
 
-- The live system is beyond the initial MVP but is still not the final intelligent generator.
-- Phase 3A pilot engine code exists, but final Phase 3A closure is pending verification workflows.
-- Worksheet mode has not yet been built.
+- The live system is beyond the initial MVP but is still not the full intelligent generator.
+- Most topics are still legacy slices, not full source-bound engine templates.
 - Full conversion of all 25 legacy topics to the engine has not yet been built.
 - The full dynamic diagram/graphics engine for all visual topics has not yet been built.
 - Real difficulty logic across all topics has not yet been built.
@@ -79,7 +94,7 @@ Current limitation:
 
 ---
 
-## 4. Active generator slices
+## 5. Active generator slices
 
 The project currently has 25 code-active legacy slices.
 
@@ -119,8 +134,6 @@ The project currently has 25 code-active legacy slices.
 - `G7-03-ENGINE` — Pythagoras true engine pilot: dynamic data, unknown switching, question types, real difficulty, dynamic SVG.
 - `N8-04-ENGINE` — Static percentages engine pilot: percent families, unknown switching, question types, real difficulty.
 
-These are code-present. Do not mark Phase 3A complete until the relevant Phase 3A verification workflows pass.
-
 ### Grade 9
 
 Grade 9 is locked.
@@ -129,7 +142,7 @@ Do not implement Grade 9 generator slices until Yaniv supplies real worked examp
 
 ---
 
-## 5. Do not repeat completed work
+## 6. Do not repeat completed work
 
 Future work must not repeat these completed actions:
 
@@ -146,13 +159,13 @@ Future work must not repeat these completed actions:
 - Do not recreate the Phase 3A engine foundation already present under `generator/engine/`.
 - Do not create duplicate topic IDs.
 - Do not mark `Live ✅` without actual verification.
-- Do not ask Yaniv to repeat the full Phase 3 generator vision.
+- Do not ask Yaniv to repeat the full generator vision.
 
 Every future change must first inspect repository reality.
 
 ---
 
-## 6. Protected files and folders
+## 7. Protected files and folders
 
 Do not touch these unless there is explicit need and a clear reason:
 
@@ -169,7 +182,7 @@ Do not delete files without explicit approval.
 
 ---
 
-## 7. Source-bound rule
+## 8. Source-bound rule
 
 Every exercise must remain source-bound.
 
@@ -192,7 +205,7 @@ If a topic lacks source-backed examples, mark it locked or pending.
 
 ---
 
-## 8. True generator vision rule
+## 9. True generator vision rule
 
 Phase 3 must not be another set of shallow slices.
 
@@ -209,14 +222,21 @@ Required future capabilities include:
 - dynamic SVG diagrams;
 - multiple question types: open, multiple choice, completion, true/false, matching, reasoning, mistake identification;
 - real difficulty levels: basic, standard, challenge;
-- full worksheet mode: 5/10/15 questions, with/without answers, answer key, A4 print;
 - mobile, print, and export compatibility;
 - no fake controls;
 - no demo-only UI.
 
+Explicitly out of scope:
+
+- worksheet mode;
+- booklet mode;
+- PDF workbook mode;
+- 5/10/15 question worksheet builder;
+- answer-key booklet system.
+
 ---
 
-## 9. Source-based question variety and mathematical writing
+## 10. Source-based question variety and mathematical writing
 
 The generator must create varied question types based on the actual question patterns found in the source PDFs and source-learning notes.
 
@@ -252,7 +272,7 @@ Do not create plain text-only questions when a source-based visual or mathematic
 
 ---
 
-## 10. UI, graphics, export and print rules
+## 11. UI, graphics, export and print rules
 
 The public site must remain:
 
@@ -267,7 +287,7 @@ The public site must remain:
 
 Graphics are first-class product behavior, not decoration.
 
-Dynamic visual work must follow the vision document and preserve:
+Dynamic visual work must preserve:
 
 - premium educational visual quality;
 - clean drawings and diagrams;
@@ -277,7 +297,6 @@ Dynamic visual work must follow the vision document and preserve:
 - export-safe SVG/HTML;
 - mobile-safe layout;
 - print-safe layout;
-- A4-safe worksheet rendering;
 - classroom-ready appearance.
 
 For every visual question family, define:
@@ -287,8 +306,7 @@ For every visual question family, define:
 - what labels appear;
 - what changes between versions;
 - what colors are used;
-- how overlap is prevented;
-- how the diagram appears in worksheet mode.
+- how overlap is prevented.
 
 The following must remain working:
 
@@ -300,7 +318,7 @@ Do not change `export.js` unless the export pipeline is proven broken.
 
 ---
 
-## 11. Deployment and verification rules
+## 12. Deployment and verification rules
 
 Public URL:
 
@@ -322,20 +340,6 @@ Required verification assets:
 - `.github/workflows/verify-phase3a-static.yml`
 - `.github/workflows/verify-phase3a.yml`
 
-Before claiming Phase 2 complete, verify:
-
-- public URL returns 200;
-- static verifier passes;
-- browser batch verifier passes or equivalent live browser test passes;
-- all 25 slices appear in selectors;
-- each active slice generates a card;
-- answer opens;
-- export buttons exist;
-- geometry SVGs fit where relevant;
-- mobile view has no horizontal scroll;
-- Grade 9 stays locked;
-- `PROJECT_STATUS.md` matches reality.
-
 Before claiming Phase 3A complete, verify:
 
 - `G7-03-ENGINE` appears in selector and generates correctly;
@@ -354,7 +358,7 @@ No `Live ✅` without real live verification.
 
 ---
 
-## 12. Documentation truth rule
+## 13. Documentation truth rule
 
 `PROJECT_STATUS.md` must describe the current truth.
 
@@ -377,22 +381,22 @@ Use honest statuses:
 
 ---
 
-## 13. Phase 3 execution rule
+## 14. Phase 3 execution rule
 
 Phase 3A code now exists. Future work must not restart Phase 3A.
 
 Before continuing beyond Phase 3A:
 
 1. Verify `.github/workflows/verify-phase3a-static.yml`.
-2. Verify `.github/workflows/verify-phase3a.yml`.
+2. Verify `.github/workflows/verify-phase3a.yml` or equivalent live/browser checks.
 3. If they pass, update `PROJECT_STATUS.md` and `docs/reports/PHASE3A_ENGINE_REPORT_2026-06-10.md` truthfully.
 4. If they fail, fix only the exact failing item.
-5. Do not start Phase 3B until Phase 3A is verified.
-6. Existing 25 slices must continue working.
-7. The current MVP must remain live.
-8. No Grade 9.
-9. No fake controls.
-10. No shallow demo.
+5. Existing 25 slices must continue working.
+6. The current MVP must remain live.
+7. No Grade 9.
+8. No fake controls.
+9. No shallow demo.
+10. No worksheet/booklet mode.
 11. Report truth only.
 
 Phase 3A acceptance requires:
@@ -413,13 +417,18 @@ Phase 3A acceptance requires:
 
 ---
 
-## 14. Current next action
+## 15. Current next action
 
-The next meaningful action is not more content slices and not Phase 3B.
+The next meaningful action is to continue building the smart generator engine only.
 
-The next required action is verification closure:
+Do not build worksheets/booklets.
 
-- wait for `.github/workflows/verify-phase3a-static.yml` and `.github/workflows/verify-phase3a.yml` to complete;
-- if they pass, mark `G7-03-ENGINE` and `N8-04-ENGINE` Live ✅;
-- if they fail, fix only the exact failing line/control/topic;
-- do not add worksheet mode or more engine topics until Phase 3A is verified.
+Next generator-engine work should convert additional legacy topics into true engine topics with:
+
+- source-bound template families;
+- dynamic data;
+- unknown switching;
+- Hebrew wording variation;
+- real question types;
+- real difficulty behavior;
+- premium dynamic graphics where relevant.
