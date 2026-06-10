@@ -18,21 +18,21 @@ jobs:
     steps:
       - name: Wait for Pages CDN
         run: sleep 30
-      - name: Check public Pages URL
+      - name: Check static Pages health endpoint
         run: |
           set -euo pipefail
-          URL="https://yanivmizrachiy.github.io/targilim/?healthcheck=phase2"
+          URL="https://yanivmizrachiy.github.io/targilim/site-health.json"
           echo "Checking $URL"
           for i in 1 2 3 4 5; do
-            code=$(curl -L -s -o /tmp/pages.html -w "%{http_code}" "$URL" || true)
+            code=$(curl -L -s -o /tmp/site-health.json -w "%{http_code}" "$URL" || true)
             echo "attempt=$i status=$code"
             if [ "$code" = "200" ]; then
-              if grep -q "תרגילים" /tmp/pages.html; then
-                echo "PAGES_HEALTHCHECK_OK"
+              if grep -q '"status": "ok"' /tmp/site-health.json && grep -q '"activeSlices": 25' /tmp/site-health.json; then
+                echo "PAGES_STATIC_HEALTHCHECK_OK"
                 exit 0
               fi
-              echo "HTTP 200 but Hebrew title not found"
-              cat /tmp/pages.html | head -40
+              echo "HTTP 200 but static health payload is wrong"
+              cat /tmp/site-health.json | head -40
               exit 1
             fi
             if [ "$code" = "403" ] || [ "$code" = "404" ]; then
@@ -40,6 +40,19 @@ jobs:
             fi
             sleep 30
           done
-          echo "PAGES_HEALTHCHECK_FAILED"
-          cat /tmp/pages.html | head -80 || true
+          echo "PAGES_STATIC_HEALTHCHECK_FAILED"
+          cat /tmp/site-health.json | head -80 || true
           exit 1
+      - name: Check app shell
+        run: |
+          set -euo pipefail
+          URL="https://yanivmizrachiy.github.io/targilim/?healthcheck=phase2"
+          echo "Checking $URL"
+          code=$(curl -L -s -o /tmp/pages.html -w "%{http_code}" "$URL" || true)
+          echo "app status=$code"
+          if [ "$code" != "200" ]; then
+            echo "App shell not reachable: HTTP $code"
+            exit 1
+          fi
+          grep -q "תרגילים" /tmp/pages.html
+          echo "PAGES_APP_SHELL_OK"
