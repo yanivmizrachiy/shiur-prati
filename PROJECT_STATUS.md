@@ -9,6 +9,7 @@
 | Phase 2: Archive + KB + generator MVP | ✅ Done |
 | Phase 2 continued: slice expansion | 🔄 Active |
 | Delta repair: weak slices + verification | ✅ Done |
+| Premium mobile-first UI redesign | ⚠️ Applied — pending live visual verification |
 | Pages hardening | ✅ Done |
 | Legacy archive | ✅ Done |
 | Grade 9 generator | 🔒 Locked — needs real example question sources |
@@ -18,7 +19,7 @@
 https://yanivmizrachiy.github.io/targilim/
 
 ## Architecture
-- generator/index.html — modular loader
+- generator/index.html — modular loader, mobile viewport, theme color
 - generator/core.js — base registry/router/renderCard
 - generator/export.js — copy-as-image / PNG / print
 - generator/geo.js — base geometry slices
@@ -27,7 +28,7 @@ https://yanivmizrachiy.github.io/targilim/
 - generator/stats.js — base uncertainty/statistics slices
 - generator/phase2-loader.js — loads Phase 2 slice modules
 - generator/.nojekyll — GitHub Pages artifact hardening marker
-- generator/style.css — styles
+- generator/style.css — premium mobile-first RTL styles
 
 ## Deployment
 - .github/workflows/deploy-pages.yml deploys the `generator/` folder through GitHub Actions Pages.
@@ -107,8 +108,14 @@ https://yanivmizrachiy.github.io/targilim/
 - Pages deployment hardened with `generator/.nojekyll` and a clean redeploy trigger.
 - Lightweight Pages healthcheck workflow added for fast 200/403/404 diagnosis.
 
+## Premium mobile-first UI redesign
+- `generator/style.css` was fully replaced according to Claude's premium mobile-first RTL design system.
+- `generator/index.html` received `<meta name="theme-color" content="#0f172a">` only.
+- No generator logic, slice files, `export.js`, `phase2-loader.js`, sources, archive, or Grade 9 logic were changed.
+- Status: applied in code, pending live visual verification.
+
 ## Current honest status
-The generator has 25 code-active slices. The original MVP slices were previously browser/workflow verified. The Phase 2 batch is connected through `phase2-loader.js` and is code-active. Claude-identified weak slices were repaired. A strict static verifier now checks repository structure, all 25 slice IDs, non-stub Phase 2 files, and Grade 9 lock. The browser workflow now handles async loader registration and Pages 403/404 clearly. Pages deployment is through GitHub Actions artifact upload from `generator/`, `.nojekyll` was added to harden artifact serving, and a lightweight Pages healthcheck workflow was added. The batch still needs one end-of-batch browser/live verification before marking the new slices Live ✅.
+The generator has 25 code-active slices. The original MVP slices were previously browser/workflow verified. The Phase 2 batch is connected through `phase2-loader.js` and is code-active. Claude-identified weak slices were repaired. A strict static verifier now checks repository structure, all 25 slice IDs, non-stub Phase 2 files, and Grade 9 lock. The browser workflow now handles async loader registration and Pages 403/404 clearly. Pages deployment is through GitHub Actions artifact upload from `generator/`, `.nojekyll` was added to harden artifact serving, and a lightweight Pages healthcheck workflow was added. Claude's premium mobile-first CSS redesign was applied. The batch still needs one end-of-batch browser/live and visual verification before marking the new slices Live ✅.
 
 ## Known caveat
 `G8-04` is currently implemented as Hebrew text-only with 4 variants. It is code-active and student-facing in Hebrew, but SVG can be added later if needed.
