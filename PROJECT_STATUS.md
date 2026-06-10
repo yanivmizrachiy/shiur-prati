@@ -34,7 +34,7 @@ https://yanivmizrachiy.github.io/targilim/
 | Live ✅ | verified by browser/workflow/manual live test |
 | 🔒 | locked because source examples are missing |
 
-## Active generator slices (22)
+## Active generator slices (25)
 | ID | Topic | Grade | Domain | Code | Live |
 |---|---|---|---|---|---|
 | G7-03 | Pythagoras — missing side | 7 | Geometry | ✅ | ✅ |
@@ -50,13 +50,16 @@ https://yanivmizrachiy.github.io/targilim/
 | A7-02 | Substitution in expression | 7 | Algebra | ✅ | ⚠️ |
 | A7-03 | First-degree equations | 7 | Algebra | ✅ | ✅ |
 | U7-01 | Frequency table | 7 | Uncertainty | ✅ | ⚠️ |
+| U7-02 | Basic probability | 7 | Uncertainty | ✅ | ⚠️ |
 | G8-01 | Circle circumference and area | 8 | Geometry | ✅ | ⚠️ |
+| G8-04 | Similarity / triangle scale factor | 8 | Geometry | ✅ | ⚠️ |
 | N8-01 | Ratio | 8 | Numeric | ✅ | ⚠️ |
 | N8-02 | Proportion | 8 | Numeric | ✅ | ⚠️ |
 | N8-03 | Scale | 8 | Numeric | ✅ | ⚠️ |
 | N8-04 | Static percentages | 8 | Numeric | ✅ | ✅ |
 | N8-05 | Dynamic percentages | 8 | Numeric | ✅ | ✅ |
 | A8-02 | Slope and line equation | 8 | Algebra | ✅ | ⚠️ |
+| A8-03 | Systems of equations | 8 | Algebra | ✅ | ⚠️ |
 | U8-01 | Mean, median, range | 8 | Uncertainty | ✅ | ✅ |
 | U8-02 | Basic probability | 8 | Uncertainty | ✅ | ⚠️ |
 
@@ -74,10 +77,16 @@ https://yanivmizrachiy.github.io/targilim/
 - generator/g8-01.js
 - generator/g7-02.js
 - generator/g7-01.js
+- generator/a8-03.js
+- generator/u7-02.js
+- generator/g8-04.js
 - generator/phase2-loader.js
 
 ## Current honest status
-The generator has 22 code-active slices. The original MVP slices were previously browser/workflow verified. The Phase 2 batch is connected through `phase2-loader.js` and is code-active, but it still needs one end-of-batch browser/live verification before marking those new slices Live ✅.
+The generator has 25 code-active slices. The original MVP slices were previously browser/workflow verified. The Phase 2 batch is connected through `phase2-loader.js` and is code-active, but it still needs one end-of-batch browser/live verification before marking the new slices Live ✅.
+
+## Known caveat
+`G8-04` is currently implemented as a minimal text-only similarity/scale-factor slice. It is code-active but should be improved later with Hebrew wording and SVG if tool constraints allow.
 
 ## Next required action
 Run final end-of-batch verification on the public URL. Do not add more content slices before confirming the Phase 2 batch loads and the selectors contain the new topics.
