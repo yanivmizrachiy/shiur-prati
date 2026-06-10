@@ -11,6 +11,8 @@
 | Delta repair: weak slices + verification | ✅ Done |
 | Premium mobile-first UI redesign | ⚠️ Applied — pending full visual/browser batch verification |
 | Live basic deployment | ✅ Passed — external Termux check |
+| Obsolete workflow cleanup | ✅ Done |
+| Verification hardening | ✅ Done — pending workflow results |
 | Rules sync / anti-duplication guard | ✅ Done |
 | Pages hardening | ✅ Done |
 | Legacy archive | ✅ Done |
@@ -63,10 +65,19 @@ Conclusion: public basic deployment is working. Full browser batch verification 
 - `generator/site-health.json` gives a JS-independent Pages health endpoint.
 
 ## Verification assets
-- tools/verify-phase2-static.mjs — strict repository static verifier, including non-stub Phase 2 file-size guard
+- tools/verify-phase2-static.mjs — strict repository static verifier: 25 slice IDs, loader coverage, export functions, site-health, anti-stub guard, mobile meta, Grade 9 lock, and truthful status checks
 - .github/workflows/verify-phase2-static.yml — static CI verification
 - .github/workflows/pages-healthcheck.yml — public Pages healthcheck that first checks `site-health.json`, then the app shell
-- .github/workflows/verify-phase2-batch.yml — browser/live-style verification against the public Pages URL; fails clearly on 403/404, waits for async loader registration, checks selectors/cards/answers/export buttons, and checks SVG for geometry slices that require SVG
+- .github/workflows/verify-phase2-batch.yml — full 25-slice browser/live verification against the public Pages URL; checks selectors, generation, question text, answer reveal, export buttons, required SVGs, and no horizontal scroll on mobile viewport; uploads mobile screenshot artifact
+
+## Workflow cleanup
+Disabled obsolete one-time apply workflows by removing their active `.yml` files from `.github/workflows/`:
+
+- `.github/workflows/apply-u8-01-slice.yml` — removed in commit `2a2ec16`
+- `.github/workflows/apply-n8-05-slice.yml` — removed in commit `90e2a51`
+- `.github/workflows/apply-claude-handoff-2026-06-09.yml` — removed in commit `8c36de0`
+
+Reason: those workflows attempted to re-apply already completed work and polluted GitHub Actions with false failures. They remain recoverable from Git history if ever needed.
 
 ## Status codes
 | Code | Meaning |
@@ -131,8 +142,8 @@ Conclusion: public basic deployment is working. Full browser batch verification 
 - N8-03 Scale: expanded from one hardcoded question to 4 randomized variants.
 - G8-04 Similarity: expanded from one hardcoded question to 4 randomized variants.
 - A8-03 Systems: expanded from one hardcoded question to 4 randomized variants, with integer-safe examples only.
-- Static verifier strengthened with a Phase 2 file-size guard to catch stub-like files.
-- Browser workflow strengthened to fail clearly on Pages 403/404 and to check SVG for relevant geometry slices.
+- Static verifier strengthened with Phase 2 file-size guard, export function checks, site-health checks, and mobile meta/status checks.
+- Browser workflow strengthened to verify all 25 slices, mobile viewport, answer reveal, export buttons, required SVGs, and no horizontal scroll.
 - Pages deployment hardened with `generator/.nojekyll` and a clean redeploy trigger.
 - Lightweight Pages healthcheck workflow added for fast 200/403/404 diagnosis.
 - Static `generator/site-health.json` endpoint added so Pages serving can be diagnosed without JavaScript.
@@ -151,10 +162,10 @@ Conclusion: public basic deployment is working. Full browser batch verification 
 - Purpose: prevent future agents from restarting completed work or duplicating slices.
 
 ## Current honest status
-The public external link is reachable and basic deployment is verified externally: `site-health.json`, app shell, `style.css`, and `core.js` all returned HTTP 200 from Termux. Deploy Pages and static structure workflows completed successfully on commit `1afaff9`. The generator has 25 code-active slices. The original MVP slices were previously browser/workflow verified. The Phase 2 batch is connected through `phase2-loader.js` and is code-active. Claude-identified weak slices were repaired. Claude's premium mobile-first CSS redesign is deployed. Grade 9 lock UX is fixed. `RULES.md` now reflects the real current state. The remaining unclosed item is full browser/live batch verification across all 25 slices before marking the remaining new slices Live ✅.
+The public external link is reachable and basic deployment is verified externally: `site-health.json`, app shell, `style.css`, and `core.js` all returned HTTP 200 from Termux. Deploy Pages and static structure workflows completed successfully on commit `1afaff9`. Obsolete one-time apply workflows were disabled. The strict static verifier and full browser batch workflow were strengthened. The generator has 25 code-active slices. The original MVP slices were previously browser/workflow verified. The Phase 2 batch is connected through `phase2-loader.js` and is code-active. Claude-identified weak slices were repaired. Claude's premium mobile-first CSS redesign is deployed. Grade 9 lock UX is fixed. `RULES.md` now reflects the real current state. The remaining unclosed item is waiting for the strengthened static/browser workflows to run and pass before marking the remaining new slices Live ✅.
 
 ## Known caveat
 `G8-04` is currently implemented as Hebrew text-only with 4 variants. It is code-active and student-facing in Hebrew, but SVG can be added later if needed.
 
 ## Next required action
-Run final browser batch verification on the public URL. Do not add more content slices before confirming the Phase 2 batch loads and the selectors contain the new topics.
+Wait for `verify-phase2-static.yml` and `verify-phase2-batch.yml` to complete on the latest commits. If they pass, update all remaining active slices to Live ✅ and mark Phase 2 complete. If they fail, fix only the exact failing item.
