@@ -163,7 +163,7 @@ Capabilities implemented in `G7-03-ENGINE`:
 - KaTeX-compatible mathematical solution steps;
 - existing export/PNG/print buttons preserved through the existing export pipeline.
 
-Known Phase 3A caveat: CSS enhancements were kept minimal/in-script due connector write-safety blocks; live visual verification is still required before `Live ✅`.
+Known Phase 3A caveat: dedicated engine CSS and a dedicated `verify-phase3a.yml` workflow were blocked by connector write-safety checks and were not committed. The engine currently relies on the existing premium `style.css` plus its generated SVG/card markup. Live visual verification is still required before `Live ✅`.
 
 ## Delta repairs completed after Claude audit
 - N8-01 Ratio: expanded from one hardcoded question to 4 randomized variants.
