@@ -1,5 +1,6 @@
 (function(){
   const E = window.TargilimEngine = window.TargilimEngine || {};
+  const ENGINE_TOPIC_IDS = ['G7-03-ENGINE','N8-01-ENGINE','N8-02-ENGINE','N8-03-ENGINE','N8-04-ENGINE','N8-05-ENGINE'];
 
   if(!document.querySelector('link[href="engine/engine.css"]')){
     const link=document.createElement('link');
@@ -40,11 +41,17 @@
   E.updatePanel = function(){
     const st = document.getElementById('st');
     const panel = document.getElementById('enginePanel');
-    if(panel && st) panel.style.display = (st.value === 'G7-03-ENGINE' || st.value === 'N8-03-ENGINE' || st.value === 'N8-04-ENGINE') ? 'block' : 'none';
+    if(panel && st) panel.style.display = ENGINE_TOPIC_IDS.indexOf(st.value) >= 0 ? 'block' : 'none';
   };
 
   if(typeof TOPICS !== 'undefined' && TOPICS[7] && TOPICS[7].geometry && !TOPICS[7].geometry.some(t=>t[0]==='G7-03-ENGINE')){
     TOPICS[7].geometry.push(['G7-03-ENGINE','פיתגורס — מנוע מלא ✦',1]);
+  }
+  if(typeof TOPICS !== 'undefined' && TOPICS[8] && TOPICS[8].numeric && !TOPICS[8].numeric.some(t=>t[0]==='N8-01-ENGINE')){
+    TOPICS[8].numeric.push(['N8-01-ENGINE','יחס — מנוע מלא ✦',1]);
+  }
+  if(typeof TOPICS !== 'undefined' && TOPICS[8] && TOPICS[8].numeric && !TOPICS[8].numeric.some(t=>t[0]==='N8-02-ENGINE')){
+    TOPICS[8].numeric.push(['N8-02-ENGINE','פרופורציה — מנוע מלא ✦',1]);
   }
   if(typeof TOPICS !== 'undefined' && TOPICS[8] && TOPICS[8].numeric && !TOPICS[8].numeric.some(t=>t[0]==='N8-04-ENGINE')){
     TOPICS[8].numeric.push(['N8-04-ENGINE','אחוזים סטטיים — מנוע מלא ✦',1]);
@@ -52,12 +59,29 @@
   if(typeof TOPICS !== 'undefined' && TOPICS[8] && TOPICS[8].numeric && !TOPICS[8].numeric.some(t=>t[0]==='N8-03-ENGINE')){
     TOPICS[8].numeric.push(['N8-03-ENGINE','קנה מידה — מנוע מלא ✦',1]);
   }
+  if(typeof TOPICS !== 'undefined' && TOPICS[8] && TOPICS[8].numeric && !TOPICS[8].numeric.some(t=>t[0]==='N8-05-ENGINE')){
+    TOPICS[8].numeric.push(['N8-05-ENGINE','אחוזים דינמיים — מנוע מלא ✦',1]);
+  }
 
   generators['G7-03-ENGINE'] = function(){
     const diff = document.getElementById('selDiff')?.value || document.getElementById('sl')?.value || 'standard';
     const qtype = document.getElementById('selQType')?.value || 'open';
     const result = E.generateG703Engine(diff, qtype);
     E.renderEngineCard('G7-03-ENGINE','פיתגורס — מנוע מלא',result);
+  };
+
+  generators['N8-01-ENGINE'] = function(){
+    const diff = document.getElementById('selDiff')?.value || document.getElementById('sl')?.value || 'standard';
+    const qtype = document.getElementById('selQType')?.value || 'open';
+    const result = E.generateN801Engine(diff, qtype);
+    E.renderEngineCard('N8-01-ENGINE','יחס — מנוע מלא',result);
+  };
+
+  generators['N8-02-ENGINE'] = function(){
+    const diff = document.getElementById('selDiff')?.value || document.getElementById('sl')?.value || 'standard';
+    const qtype = document.getElementById('selQType')?.value || 'open';
+    const result = E.generateN802Engine(diff, qtype);
+    E.renderEngineCard('N8-02-ENGINE','פרופורציה — מנוע מלא',result);
   };
 
   generators['N8-04-ENGINE'] = function(){
@@ -74,6 +98,13 @@
     const qtype = document.getElementById('selQType')?.value || 'open';
     const result = E.generateN803Engine(diff, qtype);
     E.renderEngineCard('N8-03-ENGINE','קנה מידה — מנוע מלא',result);
+  };
+
+  generators['N8-05-ENGINE'] = function(){
+    const diff = document.getElementById('selDiff')?.value || document.getElementById('sl')?.value || 'standard';
+    const qtype = document.getElementById('selQType')?.value || 'open';
+    const result = E.generateN805Engine(diff, qtype);
+    E.renderEngineCard('N8-05-ENGINE','אחוזים דינמיים — מנוע מלא',result);
   };
 
   const oldOnDomain = window.onDomain;

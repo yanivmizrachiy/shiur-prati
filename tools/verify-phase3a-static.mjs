@@ -18,8 +18,11 @@ const requiredFiles = [
   'generator/engine/question-types.js',
   'generator/engine/engine.css',
   'generator/engine/pilot-g7-03.js',
+  'generator/engine/pilot-n8-01.js',
+  'generator/engine/pilot-n8-02.js',
   'generator/engine/pilot-n8-03.js',
   'generator/engine/pilot-n8-04.js',
+  'generator/engine/pilot-n8-05.js',
   'generator/engine/pattern-engine.js'
 ];
 
@@ -33,8 +36,11 @@ const index = read('generator/index.html');
 const core = read('generator/core.js');
 const pattern = read('generator/engine/pattern-engine.js');
 const g703 = read('generator/engine/pilot-g7-03.js');
+const n801 = read('generator/engine/pilot-n8-01.js');
+const n802 = read('generator/engine/pilot-n8-02.js');
 const n803 = read('generator/engine/pilot-n8-03.js');
 const n804 = read('generator/engine/pilot-n8-04.js');
+const n805 = read('generator/engine/pilot-n8-05.js');
 const qtypes = read('generator/engine/question-types.js');
 const diagrams = read('generator/engine/diagrams.js');
 const css = read('generator/engine/engine.css');
@@ -62,11 +68,17 @@ mustInclude(index, 'value="mistake"', 'mistake question type');
 console.log('Engine controls exist ✅');
 
 mustInclude(pattern, 'G7-03-ENGINE', 'Pythagoras engine registration');
+mustInclude(pattern, 'N8-01-ENGINE', 'ratio engine registration');
+mustInclude(pattern, 'N8-02-ENGINE', 'proportion engine registration');
 mustInclude(pattern, 'N8-03-ENGINE', 'scale engine registration');
 mustInclude(pattern, 'N8-04-ENGINE', 'percent engine registration');
+mustInclude(pattern, 'N8-05-ENGINE', 'dynamic percent engine registration');
 mustInclude(pattern, 'generateG703Engine', 'Pythagoras engine call');
+mustInclude(pattern, 'generateN801Engine', 'ratio engine call');
+mustInclude(pattern, 'generateN802Engine', 'proportion engine call');
 mustInclude(pattern, 'generateN803Engine', 'scale engine call');
 mustInclude(pattern, 'generateN804Engine', 'percent engine call');
+mustInclude(pattern, 'generateN805Engine', 'dynamic percent engine call');
 mustInclude(pattern, 'updatePanel', 'engine panel visibility hook');
 console.log('Engine topics registered ✅');
 
@@ -75,7 +87,7 @@ for (const needle of ['open', 'mcq', 'tf', 'mistake']) {
 }
 console.log('Question type renderers present ✅');
 
-for (const needle of ['rightTriangleSvg', 'rectangleDiagonalSvg', 'scaleMapSvg', 'unknown', 'given']) {
+for (const needle of ['rightTriangleSvg', 'rectangleDiagonalSvg', 'scaleMapSvg', 'ratioBarSvg', 'proportionTableSvg', 'percentChangeSvg', 'unknown', 'given']) {
   mustInclude(diagrams, needle, `diagram engine ${needle}`);
 }
 console.log('Diagram engine present ✅');
@@ -84,6 +96,16 @@ for (const needle of ['generateG703Engine', 'rightTriangleSvg', 'rectangleDiagon
   mustInclude(g703, needle, `G7-03 engine ${needle}`);
 }
 console.log('G7-03 engine behavior present ✅');
+
+for (const needle of ['generateN801Engine', 'ratio_simplify', 'ratio_share', 'ratio_missing', 'ratioBarSvg', 'mcq', 'tf', 'mistake', 'basic', 'standard', 'challenge']) {
+  mustInclude(n801, needle, `N8-01 engine ${needle}`);
+}
+console.log('N8-01 engine behavior present ✅');
+
+for (const needle of ['generateN802Engine', 'proportion_missing', 'proportion_rate', 'proportion_verify', 'proportionTableSvg', 'mcq', 'tf', 'mistake', 'basic', 'standard', 'challenge']) {
+  mustInclude(n802, needle, `N8-02 engine ${needle}`);
+}
+console.log('N8-02 engine behavior present ✅');
 
 for (const needle of ['generateN803Engine', 'scale_real_distance', 'scale_map_distance', 'scale_factor', 'scaleMapSvg', 'mcq', 'tf', 'mistake', 'basic', 'standard', 'challenge']) {
   mustInclude(n803, needle, `N8-03 engine ${needle}`);
@@ -94,6 +116,11 @@ for (const needle of ['generateN804Engine', 'pct_of_n', 'find_whole', 'find_pct'
   mustInclude(n804, needle, `N8-04 engine ${needle}`);
 }
 console.log('N8-04 engine behavior present ✅');
+
+for (const needle of ['generateN805Engine', 'percent_increase', 'percent_decrease', 'percent_original', 'percent_two_step', 'percentChangeSvg', 'mcq', 'tf', 'mistake', 'basic', 'standard', 'challenge']) {
+  mustInclude(n805, needle, `N8-05 engine ${needle}`);
+}
+console.log('N8-05 engine behavior present ✅');
 
 for (const needle of ['engine-panel', 'engine-badge', 'mcq-choice', 'tf-statement', 'mistake-box']) {
   mustInclude(css, needle, `engine CSS ${needle}`);

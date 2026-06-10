@@ -51,7 +51,15 @@ jobs:
             await page.goto(BASE, { waitUntil: 'networkidle2', timeout: 45000 });
             await wait(1000);
 
-            const engineReady = await page.evaluate(() => !!(window.TargilimEngine && typeof window.TargilimEngine.generateG703Engine === 'function' && typeof window.TargilimEngine.generateN803Engine === 'function' && typeof window.TargilimEngine.generateN804Engine === 'function'));
+            const engineReady = await page.evaluate(() => {
+              return !!(window.TargilimEngine &&
+                typeof window.TargilimEngine.generateG703Engine === 'function' &&
+                typeof window.TargilimEngine.generateN801Engine === 'function' &&
+                typeof window.TargilimEngine.generateN802Engine === 'function' &&
+                typeof window.TargilimEngine.generateN803Engine === 'function' &&
+                typeof window.TargilimEngine.generateN804Engine === 'function' &&
+                typeof window.TargilimEngine.generateN805Engine === 'function');
+            });
             if (!engineReady) throw new Error('Phase 3A engine functions are not loaded');
 
             const grade9OptionExists = await page.$eval('#sg', sel => Array.from(sel.options).some(o => o.value === '9'));
@@ -59,8 +67,11 @@ jobs:
 
             const engineTopics = [
               { grade: '7', domain: 'geometry', id: 'G7-03-ENGINE', needsSvg: true },
+              { grade: '8', domain: 'numeric', id: 'N8-01-ENGINE', needsSvg: true },
+              { grade: '8', domain: 'numeric', id: 'N8-02-ENGINE', needsSvg: true },
               { grade: '8', domain: 'numeric', id: 'N8-03-ENGINE', needsSvg: true },
-              { grade: '8', domain: 'numeric', id: 'N8-04-ENGINE', needsSvg: false }
+              { grade: '8', domain: 'numeric', id: 'N8-04-ENGINE', needsSvg: false },
+              { grade: '8', domain: 'numeric', id: 'N8-05-ENGINE', needsSvg: true }
             ];
             const qtypes = ['open','mcq','tf','mistake'];
             const diffs = ['basic','standard','challenge'];
@@ -105,8 +116,11 @@ jobs:
 
             const legacyChecks = [
               { grade: '7', domain: 'geometry', id: 'G7-03' },
+              { grade: '8', domain: 'numeric', id: 'N8-01' },
+              { grade: '8', domain: 'numeric', id: 'N8-02' },
               { grade: '8', domain: 'numeric', id: 'N8-03' },
-              { grade: '8', domain: 'numeric', id: 'N8-04' }
+              { grade: '8', domain: 'numeric', id: 'N8-04' },
+              { grade: '8', domain: 'numeric', id: 'N8-05' }
             ];
             for (const legacy of legacyChecks) {
               await page.select('#sg', legacy.grade);

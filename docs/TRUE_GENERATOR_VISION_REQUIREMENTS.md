@@ -34,7 +34,7 @@ It includes:
 - `PROJECT_STATUS.md`;
 - health endpoint;
 - verification workflows;
-- Phase 3A engine topics in code: `G7-03-ENGINE`, `N8-03-ENGINE`, and `N8-04-ENGINE`.
+- Phase 3A engine topics in code: `G7-03-ENGINE`, `N8-01-ENGINE`, `N8-02-ENGINE`, `N8-03-ENGINE`, `N8-04-ENGINE`, and `N8-05-ENGINE`.
 
 The system is not yet the full intelligent generator because most topics are still legacy slices and have not yet been converted into full source-bound engine templates.
 
@@ -330,8 +330,11 @@ Phase 3A should:
 Current Phase 3A pilots:
 
 - `G7-03-ENGINE` — Pythagoras, graphics + unknown switching;
+- `N8-01-ENGINE` — ratio, source-bound families + unknown switching + ratio SVG;
+- `N8-02-ENGINE` — proportion, source-bound families + unknown switching + table SVG;
 - `N8-03-ENGINE` — scale, dynamic data + unknown switching + map/scale SVG;
-- `N8-04-ENGINE` — percentages, data/unknown/question-type logic.
+- `N8-04-ENGINE` — static percentages, data/unknown/question-type logic;
+- `N8-05-ENGINE` — dynamic percentages, increase/decrease/original/two-step logic + percent-change SVG.
 
 ---
 

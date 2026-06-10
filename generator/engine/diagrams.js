@@ -49,4 +49,73 @@
       <text x="135" y="137" fill="${scaleColor}" font-size="13" font-weight="800" text-anchor="middle">${scaleLabel}</text>
     </svg>`;
   };
+  E.ratioBarSvg = function(params, unknown){
+    const T = E.themes.geometry;
+    const W=270,H=150,x=34,y1=45,y2=91,maxW=172;
+    const r1 = Math.max(1, params.r1 || 1);
+    const r2 = Math.max(1, params.r2 || 1);
+    const sum = r1 + r2;
+    const w1 = Math.max(44, Math.round(maxW * r1 / sum));
+    const w2 = Math.max(44, Math.round(maxW * r2 / sum));
+    const leftValue = unknown === 'missing' && params.knownSide === 'right' ? '?' : (params.a || params.known || r1);
+    const rightValue = unknown === 'missing' && params.knownSide === 'left' ? '?' : (params.b || params.missing || r2);
+    const leftColor = unknown === 'missing' && params.knownSide === 'right' ? T.unknown : T.given;
+    const rightColor = unknown === 'missing' && params.knownSide === 'left' ? T.unknown : T.given;
+    return `<svg class="engine-svg" viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">
+      <rect x="20" y="18" width="230" height="112" rx="12" fill="${T.fill}" stroke="${T.stroke}" stroke-width="2.2"/>
+      <rect x="${x}" y="${y1}" width="${w1}" height="26" rx="7" fill="${T.helper}" opacity="0.78"/>
+      <rect x="${x}" y="${y2}" width="${w2}" height="26" rx="7" fill="${T.stroke}" opacity="0.82"/>
+      <text x="${x+w1+13}" y="${y1+18}" fill="${leftColor}" font-size="13" font-weight="800">${leftValue}</text>
+      <text x="${x+w2+13}" y="${y2+18}" fill="${rightColor}" font-size="13" font-weight="800">${rightValue}</text>
+      <text x="238" y="${y1+18}" fill="${T.label}" font-size="11" font-weight="800" text-anchor="end">${params.left || 'חלק א'}</text>
+      <text x="238" y="${y2+18}" fill="${T.label}" font-size="11" font-weight="800" text-anchor="end">${params.right || 'חלק ב'}</text>
+      <text x="135" y="139" fill="${T.label}" font-size="12" font-weight="800" text-anchor="middle">יחס ${r1}:${r2}</text>
+    </svg>`;
+  };
+  E.proportionTableSvg = function(params, unknown){
+    const T = E.themes.geometry;
+    const W=270,H=154,x=32,y=27,cw=86,ch=38;
+    const firstTop = params.a == null ? params.unitA || 'כמות' : params.a;
+    const firstBottom = params.b == null ? params.unitB || 'זמן' : params.b;
+    const secondTop = unknown === 'c' || unknown === 'result' ? '?' : (params.c || params.result || '');
+    const secondBottom = unknown === 'd' ? '?' : (params.d || params.target || '');
+    const topColor = unknown === 'c' || unknown === 'result' ? T.unknown : T.given;
+    const bottomColor = unknown === 'd' ? T.unknown : T.given;
+    return `<svg class="engine-svg" viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">
+      <rect x="20" y="16" width="230" height="120" rx="12" fill="${T.fill}" stroke="${T.stroke}" stroke-width="2.2"/>
+      <rect x="${x}" y="${y}" width="${cw*2}" height="${ch*2}" rx="8" fill="#fff" stroke="${T.stroke}" stroke-width="2"/>
+      <line x1="${x+cw}" y1="${y}" x2="${x+cw}" y2="${y+ch*2}" stroke="${T.stroke}" stroke-width="2"/>
+      <line x1="${x}" y1="${y+ch}" x2="${x+cw*2}" y2="${y+ch}" stroke="${T.stroke}" stroke-width="2"/>
+      <text x="${x+cw/2}" y="${y+25}" fill="${T.given}" font-size="15" font-weight="800" text-anchor="middle">${firstTop}</text>
+      <text x="${x+cw+cw/2}" y="${y+25}" fill="${topColor}" font-size="15" font-weight="800" text-anchor="middle">${secondTop}</text>
+      <text x="${x+cw/2}" y="${y+ch+25}" fill="${T.given}" font-size="15" font-weight="800" text-anchor="middle">${firstBottom}</text>
+      <text x="${x+cw+cw/2}" y="${y+ch+25}" fill="${bottomColor}" font-size="15" font-weight="800" text-anchor="middle">${secondBottom}</text>
+      <text x="135" y="126" fill="${T.label}" font-size="12" font-weight="800" text-anchor="middle">${params.thing || 'פרופורציה'}</text>
+    </svg>`;
+  };
+  E.percentChangeSvg = function(params, unknown){
+    const T = E.themes.geometry;
+    const W=270,H=154,x1=42,x2=134,x3=226,y=78;
+    const hasMid = params.mid != null;
+    const midX = hasMid ? x2 : x3;
+    const baseLabel = unknown === 'base' ? '?' : params.base;
+    const midLabel = hasMid ? params.mid : '';
+    const finalLabel = unknown === 'final' ? '?' : params.final;
+    const firstPct = params.p1 != null ? '+'+params.p1+'%' : params.change === 'decrease' ? '-'+params.p+'%' : '+'+params.p+'%';
+    const secondPct = params.p2 != null ? '-'+params.p2+'%' : '';
+    return `<svg class="engine-svg" viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">
+      <rect x="20" y="18" width="230" height="112" rx="12" fill="${T.fill}" stroke="${T.stroke}" stroke-width="2.2"/>
+      <line x1="${x1}" y1="${y}" x2="${midX}" y2="${y}" stroke="${T.stroke}" stroke-width="4" stroke-linecap="round"/>
+      ${hasMid ? `<line x1="${x2}" y1="${y}" x2="${x3}" y2="${y}" stroke="${T.stroke}" stroke-width="4" stroke-linecap="round"/>` : ''}
+      <circle cx="${x1}" cy="${y}" r="8" fill="${unknown === 'base' ? T.unknown : T.given}"/>
+      <circle cx="${midX}" cy="${y}" r="8" fill="${unknown === 'final' && !hasMid ? T.unknown : T.given}"/>
+      ${hasMid ? `<circle cx="${x3}" cy="${y}" r="8" fill="${unknown === 'final' ? T.unknown : T.given}"/>` : ''}
+      <text x="${x1}" y="${y-22}" fill="${unknown === 'base' ? T.unknown : T.given}" font-size="13" font-weight="800" text-anchor="middle">${baseLabel}</text>
+      <text x="${midX}" y="${y-22}" fill="${unknown === 'final' && !hasMid ? T.unknown : T.given}" font-size="13" font-weight="800" text-anchor="middle">${hasMid ? midLabel : finalLabel}</text>
+      ${hasMid ? `<text x="${x3}" y="${y-22}" fill="${unknown === 'final' ? T.unknown : T.given}" font-size="13" font-weight="800" text-anchor="middle">${finalLabel}</text>` : ''}
+      <text x="${(x1+midX)/2}" y="${y+31}" fill="${T.label}" font-size="12" font-weight="800" text-anchor="middle">${firstPct}</text>
+      ${hasMid ? `<text x="${(x2+x3)/2}" y="${y+31}" fill="${T.label}" font-size="12" font-weight="800" text-anchor="middle">${secondPct}</text>` : ''}
+      <text x="135" y="137" fill="${T.label}" font-size="11" font-weight="800" text-anchor="middle">${params.ctx || 'שינוי באחוזים'}</text>
+    </svg>`;
+  };
 })();
