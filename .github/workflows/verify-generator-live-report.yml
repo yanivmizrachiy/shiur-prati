@@ -74,7 +74,7 @@ jobs:
 
           function ok(name){ result.checks.push({ name, ok: true }); }
           function assertMathAnswer(label, text){
-            if (!text || text.trim().length < 2 || !/[abcABCd]|\d|פיתגורס|חזקה|שוויון|טעות/.test(text)) {
+            if (!text || text.trim().length < 2 || !/[abcABCd]|\d|%|פיתגורס|חזקה|שוויון|טעות|אחוז/.test(text)) {
               throw new Error(label + ' answer text is empty or not mathematical: ' + text);
             }
           }
@@ -88,7 +88,7 @@ jobs:
             if (requireSvg) await page.waitForSelector('.qcard svg', { timeout: 10000 });
             await page.waitForSelector('.qtext', { timeout: 10000 });
             const q = await page.locator('.qtext').innerText();
-            if (!q || q.trim().length < 3 || !/משולש|יתר|רגל|מלבן|אלכסון|שגוי|טעות/.test(q)) throw new Error(label + ' bad question text: ' + q);
+            if (!q || q.trim().length < 3 || !/משולש|יתר|רגל|מלבן|אלכסון|שגוי|טעות|אחוז|מתוך|כמה|מהווים/.test(q)) throw new Error(label + ' bad question text: ' + q);
             const count = await page.locator('.btn-exp').count();
             if (count < 3) throw new Error(label + ' expected at least 3 export buttons, found ' + count);
             await page.click('.btn-ans');
@@ -98,6 +98,19 @@ jobs:
             const hasHorizontalScroll = await page.evaluate(() => document.body.scrollWidth > window.innerWidth + 2);
             if (hasHorizontalScroll) throw new Error(label + ' horizontal scroll detected on mobile viewport');
             return { questionText: q, answerText: a, exportButtonCount: count };
+          }
+          async function verifyEngineTopic({grade,domain,id,qtypes,needSvg}){
+            await page.selectOption('#sg', grade);
+            await page.selectOption('#sd', domain);
+            await page.waitForFunction((topicId) => TOPICS?.[Number(document.querySelector('#sg').value)]?.[document.querySelector('#sd').value]?.some(t => t[0] === topicId), id, { timeout: 30000 });
+            await selectTopic(id);
+            for (const qtype of qtypes) {
+              await page.selectOption('#selQType', qtype);
+              await page.selectOption('#selDiff', qtype === 'open' ? 'basic' : 'standard');
+              const engineResult = await generateAssert('engine ' + id + ' ' + qtype, needSvg);
+              result.engineChecks.push({ id, qtype, ok: true, questionText: engineResult.questionText, exportButtonCount: engineResult.exportButtonCount });
+            }
+            ok('Phase 3A ' + id + ' verified: ' + qtypes.join(', '));
           }
 
           try {
@@ -121,16 +134,9 @@ jobs:
             result.exportButtonCount = legacy.exportButtonCount;
             ok('legacy G7-03 verified');
 
-            await page.waitForFunction(() => TOPICS[7]?.geometry?.some(t => t[0] === 'G7-03-ENGINE'), null, { timeout: 30000 });
-            await selectTopic('G7-03-ENGINE');
-            const qtypes = ['open', 'mcq', 'tf', 'mistake'];
-            for (const qtype of qtypes) {
-              await page.selectOption('#selQType', qtype);
-              await page.selectOption('#selDiff', qtype === 'open' ? 'basic' : 'challenge');
-              const engineResult = await generateAssert('engine G7-03-ENGINE ' + qtype, true);
-              result.engineChecks.push({ qtype, ok: true, questionText: engineResult.questionText, exportButtonCount: engineResult.exportButtonCount });
-            }
-            ok('Phase 3A G7-03-ENGINE verified: open, mcq, tf, mistake');
+            await verifyEngineTopic({grade:'7', domain:'geometry', id:'G7-03-ENGINE', qtypes:['open','mcq','tf','mistake'], needSvg:true});
+            await verifyEngineTopic({grade:'8', domain:'numeric', id:'N8-04-ENGINE', qtypes:['open','mcq','tf','mistake'], needSvg:false});
+
             await page.screenshot({ path: 'docs/verification/generator-live-smoke.png', fullPage: true });
             ok('screenshot saved');
             if (errors.length > 0) throw new Error('Browser console/page errors: ' + errors.join(' | '));
@@ -156,7 +162,7 @@ jobs:
           lines.push('');
           lines.push('## Engine checks');
           if (result.engineChecks.length) {
-            for (const check of result.engineChecks) lines.push('- PASS — G7-03-ENGINE / ' + check.qtype + ' / exportButtonCount=' + check.exportButtonCount);
+            for (const check of result.engineChecks) lines.push('- PASS — ' + check.id + ' / ' + check.qtype + ' / exportButtonCount=' + check.exportButtonCount);
           } else {
             lines.push('- Not reached');
           }
