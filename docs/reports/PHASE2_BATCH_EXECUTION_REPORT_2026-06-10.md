@@ -12,6 +12,8 @@ Implemented a large Phase 2 source-bound batch without adding Grade 9 and withou
 
 The new slices are loaded through `generator/phase2-loader.js`, which keeps the existing modular architecture intact.
 
+A strict static verifier was added after the implementation. It verifies that all 25 slice IDs exist in generator code and in `PROJECT_STATUS.md`, that `phase2-loader.js` is loaded by `index.html`, and that Grade 9 remains locked.
+
 ## Scope rule followed
 
 - Grade 9 was not implemented.
@@ -25,13 +27,16 @@ Base commit before this implementation wave:
 
 `388e0aa0c1da5c022de68bbda9189d5e1aaa1184`
 
-Current branch is ahead of that baseline by 29 commits.
-
 ## Files added or changed
 
-### Added workflow
+### Added workflows
 
-- `.github/workflows/verify-phase2-batch.yml`
+- `.github/workflows/verify-phase2-batch.yml` — browser/live-style verification against the public Pages URL
+- `.github/workflows/verify-phase2-static.yml` — static repository verification
+
+### Added static verifier
+
+- `tools/verify-phase2-static.mjs`
 
 ### Updated status
 
@@ -68,10 +73,6 @@ Current branch is ahead of that baseline by 29 commits.
 - `generator/g7-02.js` — Flat shape areas
 - `generator/g8-01.js` — Circle circumference and area
 - `generator/g8-04.js` — Similarity / triangle scale factor
-
-### Updated loader
-
-- `generator/index.html` was changed only minimally to load `phase2-loader.js`.
 
 ## Slices active now
 
@@ -117,9 +118,27 @@ Total: **25 code-active slices**
 - `PROJECT_STATUS.md` reflects 25 code-active slices.
 - Grade 9 remains locked.
 
+## Static verification
+
+Strict static verifier added:
+
+- `tools/verify-phase2-static.mjs`
+- `.github/workflows/verify-phase2-static.yml`
+
+The verifier checks:
+
+- required generator files exist
+- `index.html` loads `phase2-loader.js`
+- `phase2-loader.js` loads all Phase 2 slice modules
+- all 25 slice IDs exist in generator code
+- all 25 slice IDs exist in `PROJECT_STATUS.md`
+- `PROJECT_STATUS.md` reports `Active generator slices (25)`
+- Grade 9 is clearly locked
+- not-yet-live-verified slices remain marked `Live ⚠️`
+
 ## Live / browser verification
 
-A consolidated workflow was added:
+A consolidated workflow exists:
 
 `.github/workflows/verify-phase2-batch.yml`
 
@@ -127,11 +146,11 @@ It checks all 25 expected active slices on the public GitHub Pages URL:
 
 https://yanivmizrachiy.github.io/targilim/
 
-Current truthful status: workflow file exists, but the new Phase 2 batch should still be considered **Live ⚠️** until the workflow or a browser test confirms it.
+Current truthful status: browser/live verification should still be considered **Live ⚠️** until the workflow or a browser test confirms it.
 
 ## Known caveats
 
-- `G8-04` is implemented as Hebrew text-only. SVG should be added later if tool constraints allow.
+- `G8-04` is implemented as Hebrew text-only. SVG can be added later if tool constraints allow.
 - Some new slices are intentionally compact to avoid tool write blocks. They are code-active and pedagogically valid, but can be enriched later.
 - No Grade 9 implementation was done.
 
@@ -142,6 +161,7 @@ Do not add more slices until the Phase 2 batch is live/browser verified.
 Next action:
 
 1. Wait for GitHub Pages deployment.
-2. Run/inspect `.github/workflows/verify-phase2-batch.yml`.
-3. If it passes, update `PROJECT_STATUS.md` Live column for all new slices.
-4. If it fails, fix the exact failing selector/module only.
+2. Run/inspect `.github/workflows/verify-phase2-static.yml`.
+3. Run/inspect `.github/workflows/verify-phase2-batch.yml`.
+4. If browser verification passes, update `PROJECT_STATUS.md` Live column for all new slices.
+5. If it fails, fix the exact failing selector/module only.
