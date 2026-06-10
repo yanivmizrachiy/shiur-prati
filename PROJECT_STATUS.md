@@ -28,7 +28,7 @@ Public URL:
 - Audit and architecture plan created: `docs/AUDIT_AND_ARCHITECTURE_PLAN_2026-06-09.md`.
 - Knowledge base JSON files created for grades 7, 8, and 9.
 - `generator/index.html` created and deployed from the `generator/` folder.
-- Browser verification workflow created and updated.
+- Browser verification workflows created and updated.
 - Legacy private tutoring app files archived under `archive/legacy-shiur-prati/2026-06-09/` and removed from the root.
 
 ## Active generator slices
@@ -39,6 +39,7 @@ Public URL:
 | G7-04 | Missing angle in triangle | Active and verified |
 | N7-06 | Powers: `(-a)^n` vs `-a^n` | Active and verified |
 | A7-03 | First-degree equations | Active and verified |
+| U8-01 | Mean, median, and range | Active; dedicated verification workflow added |
 
 ## Verification
 
@@ -47,12 +48,12 @@ Public URL:
 | GitHub Pages | Live |
 | Hebrew RTL UI | Verified |
 | Grade/domain/topic selectors | Verified |
-| Question generation | Verified for active slices |
+| Question generation | Verified for active slices; U8-01 workflow added |
 | SVG diagram rendering | Verified for geometry slices |
 | KaTeX math rendering | Verified |
 | Solution panel | Verified |
 | Export buttons | Verified present |
-| Print / PNG / copy-as-image buttons | Present; browser workflow checks presence |
+| Print / PNG / copy-as-image buttons | Present; browser workflows check presence |
 | Console errors | None reported in verification |
 
 ## Archived legacy files
@@ -80,7 +81,7 @@ Archived files:
 
 ## Current honest status
 
-The project has a working MVP generator with four verified slices. The repository is organized, the curriculum source material is documented, and the old private-tutoring root app has been archived.
+The project has a working MVP generator with five active slices. The repository is organized, the curriculum source material is documented, and the old private-tutoring root app has been archived.
 
 ## Remaining work
 
@@ -91,6 +92,6 @@ The project has a working MVP generator with four verified slices. The repositor
 
 ## Recommended next slice
 
-`U8-01` — mean, median, and range.
+`G7-02` — area of flat shapes.
 
-Reason: no SVG required, strong source coverage, and useful for testing list generation, sorting, and numeric explanation quality.
+Reason: strong source coverage, useful geometry practice, and a natural next step after Pythagoras and missing angles.
