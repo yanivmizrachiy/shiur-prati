@@ -33,9 +33,10 @@ jobs:
           await page.goto('https://yanivmizrachiy.github.io/targilim/', { waitUntil: 'networkidle', timeout: 60000 });
           await page.waitForSelector('text=תרגילים');
           const checks = [
-            {id:'G7-03', domain:'geometry', re:/משולש|יתר|רגל/},
-            {id:'G7-04', domain:'geometry', re:/זוויות|∠|180/},
-            {id:'N7-06', domain:'numeric', re:/חזקות|סוגריים|בסיס|חזקה/}
+            {id:'G7-03', domain:'geometry', re:/משולש|יתר|רגל/, needsSvg:true},
+            {id:'G7-04', domain:'geometry', re:/זוויות|∠|180/, needsSvg:true},
+            {id:'N7-06', domain:'numeric', re:/חזקות|סוגריים|בסיס|חזקה/, needsSvg:false},
+            {id:'A7-03', domain:'algebra', re:/משוואה|פתרון|בדיקה|x/, needsSvg:false}
           ];
           for (const item of checks) {
             await page.selectOption('#sg','7');
@@ -50,10 +51,10 @@ jobs:
             const buttons = await page.locator('.btn-exp').count();
             if (buttons < 3) throw new Error(item.id + ' export buttons missing');
             if (!item.re.test(q+a)) throw new Error(item.id + ' wording failed: ' + q + ' / ' + a);
-            if (item.id !== 'N7-06') await page.waitForSelector('.qcard svg');
+            if (item.needsSvg) await page.waitForSelector('.qcard svg');
           }
           if (errors.length) throw new Error(errors.join(' | '));
           await browser.close();
-          console.log('GENERATOR_SLICES_G7_03_G7_04_N7_06_OK');
+          console.log('GENERATOR_SLICES_G7_03_G7_04_N7_06_A7_03_OK');
           EOF
           node verify.mjs
