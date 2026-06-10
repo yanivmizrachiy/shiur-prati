@@ -1,14 +1,18 @@
 import fs from 'node:fs';
 
+const phase2Files = [
+  'n7-03.js','n7-04.js','n7-05.js',
+  'n8-ratio.js','n8-03.js',
+  'u7-01.js','u7-02.js','u8-02.js',
+  'a7-01.js','a7-02.js','a8-02.js','a8-03.js',
+  'g7-01.js','g7-02.js','g8-01.js','g8-04.js'
+];
+
 const requiredFiles = [
   'generator/index.html',
   'generator/core.js',
   'generator/phase2-loader.js',
-  'generator/n7-03.js','generator/n7-04.js','generator/n7-05.js',
-  'generator/n8-ratio.js','generator/n8-03.js',
-  'generator/u7-01.js','generator/u7-02.js','generator/u8-02.js',
-  'generator/a7-01.js','generator/a7-02.js','generator/a8-02.js','generator/a8-03.js',
-  'generator/g7-01.js','generator/g7-02.js','generator/g8-01.js','generator/g8-04.js',
+  ...phase2Files.map(f => 'generator/' + f),
   'PROJECT_STATUS.md'
 ];
 
@@ -34,9 +38,10 @@ const index = read('generator/index.html');
 if (!index.includes('phase2-loader.js')) throw new Error('index.html does not load phase2-loader.js');
 
 const loader = read('generator/phase2-loader.js');
-for (const file of requiredFiles.filter(f => f.startsWith('generator/') && /^(generator\/(n7|n8|u7|u8|a7|a8|g7|g8)-|generator\/n8-ratio)/.test(f))) {
-  const short = file.replace('generator/', '');
-  if (!loader.includes(short)) throw new Error('phase2-loader.js does not load ' + short);
+for (const file of phase2Files) {
+  if (!loader.includes(file)) throw new Error('phase2-loader.js does not load ' + file);
+  const size = fs.statSync('generator/' + file).size;
+  if (size < 200) throw new Error('Stub-like Phase 2 slice file detected: ' + file + ' is only ' + size + ' bytes');
 }
 
 const allJs = fs.readdirSync('generator')
@@ -55,4 +60,4 @@ if (!status.includes('Grade 9 generator |')) throw new Error('Grade 9 status mis
 if (!status.includes('Locked')) throw new Error('Grade 9 is not clearly locked');
 if (!status.includes('Live ⚠️')) throw new Error('PROJECT_STATUS.md should distinguish not-yet-live-verified slices');
 
-console.log('PHASE2_STATIC_VERIFY_STRICT_OK: 25 slice IDs exist in code and status; loader and Grade 9 lock verified.');
+console.log('PHASE2_STATIC_VERIFY_STRICT_OK: 25 slice IDs exist in code and status; loader, non-stub Phase 2 files, and Grade 9 lock verified.');
