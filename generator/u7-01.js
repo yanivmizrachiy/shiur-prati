@@ -1,2 +1,2 @@
-TOPICS[7].uncertainty.push(['U7-01','Frequency table',1]);
-generators['U7-01']=function(){renderCard('U7-01','Frequency table','','$80,70,90,80,60$','60:1\\n70:1\\n80:2\\n90:1','unc')};
+TOPICS[7].uncertainty.push(['U7-01','\u05d8\u05d1\u05dc\u05ea \u05ea\u05d3\u05d9\u05e8\u05d5\u05ea',1]);
+generators['U7-01']=function(){let q='\u05dc\u05e4\u05e0\u05d9\u05db\u05dd \u05e6\u05d9\u05d5\u05e0\u05d9\u05dd:\n$80,70,90,80,60,70,80,100,90,70$\n\u05d0\u05e8\u05d2\u05e0\u05d5 \u05d1\u05d8\u05d1\u05dc\u05ea \u05ea\u05d3\u05d9\u05e8\u05d5\u05ea.',a='\u05ea\u05d3\u05d9\u05e8\u05d5\u05d9\u05d5\u05ea:\n60: 1\n70: 3\n80: 3\n90: 2\n100: 1\n\u05e1\u05da \u05d4\u05db\u05dc: 10';renderCard('U7-01','\u05d8\u05d1\u05dc\u05ea \u05ea\u05d3\u05d9\u05e8\u05d5\u05ea','',q,a,'unc')};
