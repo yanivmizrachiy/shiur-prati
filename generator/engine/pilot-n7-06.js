@@ -25,7 +25,7 @@
     const correct = x.p;
     const wrongs = [x.np === correct ? -correct : x.np, Math.abs(correct), x.a * x.n];
     const values=[correct].concat(wrongs).filter((v,i,a)=>a.indexOf(v)===i).slice(0,4);
-    while(values.length<4) values.push(correct + (values.length*5*(correct<0?-1:1)));
+    while(values.length<4){ let f=correct + (values.length*5*(correct<0?-1:1)); while(values.indexOf(f)>=0) f++; values.push(f); }
     return E.shuffle(values).map((v,i)=>({label:['א','ב','ג','ד'][i], text:'$'+v+'$', correct:v===correct}));
   }
 

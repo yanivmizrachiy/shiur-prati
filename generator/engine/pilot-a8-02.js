@@ -33,7 +33,7 @@
     }
     else { correct = x.m>0?'עולה':'יורדת'; wrongs=[x.m>0?'יורדת':'עולה','קבועה']; }
     const values=[correct].concat(wrongs).filter((v,i,a)=>a.indexOf(v)===i).slice(0,4);
-    while(values.length<4 && typeof correct==='number') values.push(correct+values.length);
+    while(values.length<4 && typeof correct==='number'){ let f=correct+values.length; while(values.indexOf(f)>=0) f++; values.push(f); }
     return E.shuffle(values).map((v,i)=>({label:['א','ב','ג','ד'][i], text: typeof v==='number' ? '$'+v+'$' : '$'+v+'$', correct:v===correct}));
   }
 

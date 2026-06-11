@@ -58,7 +58,7 @@
     if(family==='missing_addend'){ correct=x.m; wrongs=[-x.m, x.r-x.a===x.m?x.r+x.a:x.r-x.a, x.m+2]; }
     else { correct=x.r; wrongs=[-x.r, family==='sub_neg'?x.a-Math.abs(x.b):x.a+Math.abs(x.b), x.r+3]; }
     const values=[correct].concat(wrongs).filter((v,i,a)=>a.indexOf(v)===i).slice(0,4);
-    while(values.length<4) values.push(correct - values.length*2);
+    while(values.length<4){ let f=correct - values.length*2; while(values.indexOf(f)>=0) f++; values.push(f); }
     return E.shuffle(values).map((v,i)=>({label:['א','ב','ג','ד'][i], text:'$'+v+'$', correct:v===correct}));
   }
 

@@ -4,7 +4,7 @@
 
 ## Snapshot
 
-- REAL_PROGRESS_PERCENT: 80%
+- REAL_PROGRESS_PERCENT: 90%
 - Active engine count: 25 (all preserved; none deleted or restarted)
 - Batches DONE and merged: 1/1.1/1.2 (`a72625f`/`8333446`/`e678e85`), 2 governance (`f530a5c`), 3 alignment map (`d618ef9`), 4.1 N7-04 (`dc0d030`), 4.2 U7-01 (`6f1f7f8`)
 - Completion sprint (branch `claude/full-completion-sprint`): DONE for its scope —
@@ -13,6 +13,10 @@
   - Visual quality audit: DONE (`docs/VISUAL_QUALITY_AUDIT.md`)
 - Source alignment implementation: DONE for all 25 engines per `docs/SOURCE_ALIGNMENT.md`
 - Final QA polish sprint (branch `claude/final-qa-polish-sprint`): DONE — Hebrew/UI de-jargonized (גרסה חכמה / רמת קושי), A7-01 singular-form bug fixed, G8-04 MCQ de-trivialized, x/y axis letters, export-safety code review passed, `docs/QA_CHECKLIST.md` created; 10,800-generation harness, 0 failures
+- Automated release hardening (branch `claude/automated-release-hardening`): DONE —
+  - New permanent tools: `tools/harness-engines.mjs` (runtime harness, all 25 engines) and `tools/release-audit.mjs` (23 static release/RULES invariants)
+  - Harness found and fixed a real pre-existing bug: G8-01 radius-from-circumference MCQ could show duplicate choices (a distractor always equaled the correct doubling); also hardened the shared MCQ filler loop in 16 engine files against collisions
+  - Full run: 45,000 generations (25 engines × 3 difficulties × 4 types × 150) — 0 failures; release audit — 23/23 PASS
 - Current known risks: visual mode + copy-image verified by unit tests and code review, not yet by a human in a browser; pedagogical depth audited by AI only
 - Next major work: Yaniv runs `docs/QA_CHECKLIST.md` live (the gate to 90%+), then gap-list patterns (new topics beyond the 25)
 

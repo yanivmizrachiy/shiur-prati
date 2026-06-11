@@ -47,7 +47,7 @@
     else if(family === 'scale_factor'){ correct=x.k; wrongs=[x.s2-x.s1, x.s2, x.k+1]; }
     else { correct=x.a2; wrongs=[x.a1+x.k, x.b2, x.a2+x.k]; }
     const values=[correct].concat(wrongs).filter((v,i,a)=>a.indexOf(v)===i && v>0).slice(0,4);
-    while(values.length<4) values.push(correct+values.length*2);
+    while(values.length<4){ let f=correct+values.length*2; while(values.indexOf(f)>=0) f++; values.push(f); }
     return E.shuffle(values).map((v,i)=>({label:['א','ב','ג','ד'][i], text:'$'+v+'$', correct:v===correct}));
   }
 

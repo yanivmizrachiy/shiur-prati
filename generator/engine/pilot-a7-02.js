@@ -32,7 +32,7 @@
     else if(family==='sub_neg') wrongs = [x.k*Math.abs(x.v)+x.c, x.r-2*x.c, -x.r];
     else wrongs = [x.k+x.c+x.v, x.r+x.k, x.r-x.c];
     const values=[correct].concat(wrongs).filter((v,i,a)=>a.indexOf(v)===i).slice(0,4);
-    while(values.length<4) values.push(correct+values.length*2);
+    while(values.length<4){ let f=correct+values.length*2; while(values.indexOf(f)>=0) f++; values.push(f); }
     return E.shuffle(values).map((v,i)=>({label:['א','ב','ג','ד'][i], text:'$'+v+'$', correct:v===correct}));
   }
 

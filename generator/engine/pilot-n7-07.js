@@ -37,7 +37,7 @@
     else if(family==='missing_sq'){ correct=x.n; wrongs=[x.r*2, x.n+x.r, (x.r+1)*(x.r+1)]; }
     else { correct=Math.sqrt(x.a+x.b); wrongs=[x.wrong, x.a+x.b, x.wrong+1]; }
     const values=[correct].concat(wrongs).filter((v,i,a)=>a.indexOf(v)===i && v>0).slice(0,4);
-    while(values.length<4) values.push(correct+values.length);
+    while(values.length<4){ let f=correct+values.length; while(values.indexOf(f)>=0) f++; values.push(f); }
     return E.shuffle(values).map((v,i)=>({label:['א','ב','ג','ד'][i], text:'$'+v+'$', correct:v===correct}));
   }
 

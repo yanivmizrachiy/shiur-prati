@@ -44,7 +44,7 @@
     const correct = correctValue(sub,x);
     const wrong = [correct+10, correct-5, Math.max(1, Math.round(correct/2)), correct*2].filter(v=>v!==correct && v>0);
     const values = [correct].concat(wrong).filter((v,i,a)=>a.indexOf(v)===i).slice(0,4);
-    while(values.length<4) values.push(values[values.length-1]+3);
+    while(values.length<4){ let f=values[values.length-1]+3; while(values.indexOf(f)>=0) f++; values.push(f); }
     return E.shuffle(values).map((v,i)=>({label:['א','ב','ג','ד'][i], text:choiceText(sub,v,x), correct:v===correct}));
   }
 

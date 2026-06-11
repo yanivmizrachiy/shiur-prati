@@ -44,7 +44,7 @@
     else if(family === 'box_volume') wrongs = [x.l+x.w+x.h, x.l*x.w, x.V+x.h];
     else wrongs = [x.V-x.l*x.w, x.h+2, x.w];
     const values = [correct].concat(wrongs).filter((v,i,a)=>a.indexOf(v)===i && v>0).slice(0,4);
-    while(values.length<4) values.push(correct+values.length*3);
+    while(values.length<4){ let f=correct+values.length*3; while(values.indexOf(f)>=0) f++; values.push(f); }
     return E.shuffle(values).map((v,i)=>({label:['א','ב','ג','ד'][i], text:'$'+v+'$', correct:v===correct}));
   }
 

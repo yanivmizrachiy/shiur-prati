@@ -31,7 +31,7 @@
     const given = ['A','B','C'].filter(k=>k!==unknown).map(k=>x[k]);
     const wrongs = [180 - given[0], given[0]+given[1], correct+10].filter(v=>v!==correct && v>0 && v<180);
     const values = [correct].concat(wrongs).filter((v,i,a)=>a.indexOf(v)===i).slice(0,4);
-    while(values.length<4) values.push(correct + values.length*5);
+    while(values.length<4){ let f=correct + values.length*5; while(values.indexOf(f)>=0) f++; values.push(f); }
     return E.shuffle(values).map((v,i)=>({label:['א','ב','ג','ד'][i], text:'$'+v+'°$', correct:v===correct}));
   }
 

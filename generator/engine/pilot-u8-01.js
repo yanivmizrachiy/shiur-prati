@@ -33,7 +33,7 @@
     else if(family==='range'){ correct=x.range; wrongs=[Math.max.apply(null,x.d), Math.min.apply(null,x.d), x.range+10]; }
     else { correct=x.missing; wrongs=[x.mean, x.missing-10, x.missing+5]; }
     const values=[correct].concat(wrongs).filter((v,i,a)=>a.indexOf(v)===i && v>0).slice(0,4);
-    while(values.length<4) values.push(correct+values.length*5);
+    while(values.length<4){ let f=correct+values.length*5; while(values.indexOf(f)>=0) f++; values.push(f); }
     return E.shuffle(values).map((v,i)=>({label:['א','ב','ג','ד'][i], text:'$'+v+'$', correct:v===correct}));
   }
 

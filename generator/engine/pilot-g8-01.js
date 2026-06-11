@@ -29,9 +29,9 @@
     if(family === 'circ_from_radius'){ correct=2*x.r; wrongs=[x.r*x.r, x.r, 4*x.r]; suffix='\\pi'; }
     else if(family === 'area_from_radius'){ correct=x.r*x.r; wrongs=[2*x.r, x.r, 4*x.r]; suffix='\\pi'; }
     else if(family === 'circ_from_diameter'){ correct=x.d; wrongs=[2*x.d, x.d/2, x.d*x.d]; suffix='\\pi'; }
-    else { correct=x.r; wrongs=[x.Ck, 2*x.Ck, x.r*2]; }
+    else { correct=x.r; wrongs=[x.Ck, 2*x.Ck, x.r*x.r]; }
     const values=[correct].concat(wrongs).filter((v,i,a)=>a.indexOf(v)===i && v>0).slice(0,4);
-    while(values.length<4) values.push(correct+values.length*2);
+    while(values.length<4){ let f=correct+values.length*2; while(values.indexOf(f)>=0) f++; values.push(f); }
     return E.shuffle(values).map((v,i)=>({label:['א','ב','ג','ד'][i], text:'$'+v+suffix+'$', correct:v===correct}));
   }
 

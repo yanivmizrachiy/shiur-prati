@@ -84,6 +84,16 @@ Statuses: DONE / PARTIAL / NOT DONE / NEEDS REVIEW / BLOCKED.
 - Docs: created docs/QA_CHECKLIST.md (manual live QA list); VISUAL_QUALITY_AUDIT updated; PROJECT_STATUS 75% → 80%.
 - Tests: node --check (5 files) PASS; harness 10,800 generations across 6 engines (N7-03, N7-04, A7-01, A8-02, G8-04, U7-01) — 0 failures, MCQ exactly-1-correct + unique choices, non-word guard clean; mainTitle strip unit test PASS; both static verifiers PASS; git diff --check clean.
 
+## Automated release hardening — branch `claude/automated-release-hardening` (2026-06-11) — DONE (scope)
+
+- New permanent tools: `tools/harness-engines.mjs` (loads all engine files in a Node VM, generates every difficulty × question type; checks empty/undefined/NaN, MCQ exactly-1-correct, unique choices, SVG roots) and `tools/release-audit.mjs` (23 static invariants: files/registrations, no teacher-facing jargon, credit/title site-only, export exclusions, visual-mode wiring, collision-safe MCQ fillers, docs coherence).
+- Real bug found by the harness and fixed: G8-01 radius-from-circumference MCQ duplicate choices (distractor r×2 always equals Ck). Fix: distractor replaced with r² (area confusion) + collision-safe filler.
+- Systematic hardening: the shared unsafe MCQ filler loop (`while(values.length<4) values.push(...)`) replaced with a collision-safe loop in 16 engine files.
+- Hebrew/UI static scan: zero hits for מנוע מלא / רמת מנוע / מנוע חדש; no visible technical ids; credit + main title verified site-only by audit.
+- Visual/export code inspection: all invariants PASS (see release-audit output). No bug found in export path; export.js untouched.
+- Tests: harness 45,000 generations — 0 failures; release audit 23/23 PASS; node --check on all 25 pilots; both static verifiers PASS; git diff --check clean.
+- Progress: 82% → 90%. Remaining to 100%: human live-browser QA only (docs/QA_CHECKLIST.md sections C+D especially), plus optional gap-list topics.
+
 ## Next action
 
-- Yaniv runs docs/QA_CHECKLIST.md on the live site (desktop + phone). File FAILs as NEEDS REVIEW; fix in small batches. That human pass is the main gate to 90%+.
+- Yaniv runs docs/QA_CHECKLIST.md live (sections C/D are the human-only items). On PASS → release-ready for the 25 topics.

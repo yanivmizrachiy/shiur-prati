@@ -2,6 +2,8 @@
 
 **Purpose:** the only items standing between current state and broad teacher distribution. Run on the live site (https://yanivmizrachiy.github.io/targilim/), preferably once on desktop and once on a phone. Mark each PASS / FAIL with a note.
 
+**Automated coverage note (2026-06-11):** `node tools/release-audit.mjs` (23 static invariants) and `node tools/harness-engines.mjs` (45,000 generations, all 25 engines) both PASS. Sections C and D below remain the human-only gate — rendering, copy-image pixels, and print output cannot be verified from code.
+
 ## A. Generation sanity (per domain)
 
 - [ ] כיתה ז׳ → each domain → pick a ✦ topic → צור תרגיל: card renders, no English/technical leakage
