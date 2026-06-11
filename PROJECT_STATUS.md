@@ -2,6 +2,29 @@
 
 **Last updated:** 2026-06-11
 
+## Snapshot
+
+- REAL_PROGRESS_PERCENT: 35%
+- Batches merged into main: `e678e85` (Batch 1.2); HEAD/main at time of writing: `9956ba9` (CI live-report commit on top of `e678e85`)
+- Active engine count: 25
+- Batch 1 (cleanup, typo fix, header credit, site-only main title): DONE — commit `a72625f`
+- Batch 1.1 (clean qcard: no technical ids / engine badges / topic title in image): DONE — commit `8333446`
+- Batch 1.2 (export bar excluded from copied PNG via `data-html2canvas-ignore`): DONE — commit `e678e85`
+- Current known risk: manual copy-image check still recommended (html2canvas ignore attribute not yet browser-verified by Yaniv); not a blocker for the docs batch
+- Next major work: source alignment map, then UI/variety/visual modes
+
+### Not done yet
+
+- Full source alignment of all 25 engines: NOT DONE
+- RULES enforcement in tests: NOT DONE
+- Full pedagogical audit: NOT DONE
+- Color/grayscale/black-white visual mode: NOT DONE
+- Graph/diagram upgrades: NOT DONE
+- UI polish: NOT DONE
+- Final live QA: NOT DONE
+
+Status vocabulary for work items: DONE / PARTIAL / NOT DONE / NEEDS REVIEW / BLOCKED (see `RULES.md` §0.6).
+
 ## Product target
 
 Smart Hebrew math exercise generator for Grades 7–8 only.

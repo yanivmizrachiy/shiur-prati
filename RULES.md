@@ -4,7 +4,53 @@ Repository: `yanivmizrachiy/targilim`
 
 Hebrew project name: `תרגילים`
 
-Last updated: 2026-06-10
+Last updated: 2026-06-11
+
+---
+
+## 0. Governance — read this first
+
+Every worker (human or AI) must read this file and `PROJECT_STATUS.md` before any change.
+
+### 0.1 Product definition
+
+- The product is a Hebrew smart math exercise generator for Grades 7–8 only.
+- No active Grade 9. Grade 9 may exist only as locked source/reference material, never as active product.
+- No worksheet mode. No booklet mode. No PDF workbook mode.
+- No `engine2`. No `new-engine`. There is one engine; improve it in place.
+- No fake controls.
+
+### 0.2 Preservation rule
+
+- Do not delete or restart existing working engines.
+- The 25 existing working engine topics are preserved by default.
+- Existing working engines must be improved in place, not replaced or rewritten from scratch.
+
+### 0.3 Content authority
+
+- Source files/pages uploaded to the repo (`sources/`, `source-materials/`, `source-learning/`) are the content authority.
+- Current engine code is implementation, not content authority.
+- If engine IDs differ from source topic IDs: do not delete engines — map/remap and document the mapping.
+- Every active topic must be traceable to: source file, source topic/skill, question families, and visual requirement when relevant.
+
+### 0.4 Pedagogy rules
+
+- Questions must be pedagogically aligned with the sources, not generic math filler.
+- Difficulty must be mathematically real, not just longer text.
+- MCQ distractors must represent real student misconceptions.
+- True/false items must be non-trivial.
+- Mistake/critique questions must test real misconceptions.
+- UI must be Hebrew, teacher-friendly, and grammatically correct.
+
+### 0.5 Worker obligations
+
+- Every worker must update `PROJECT_STATUS.md` and `docs/WORKLOG.md` after real work.
+- Do not claim DONE without evidence/tests.
+- Progress percentage (`REAL_PROGRESS_PERCENT` in `PROJECT_STATUS.md`) is an honest estimate weighing: engines existing in code, source alignment completed, pedagogical audit completed, visual/UI completion, and live verification. It only moves with evidence.
+
+### 0.6 Status vocabulary
+
+Use only these statuses for work items: `DONE`, `PARTIAL`, `NOT DONE`, `NEEDS REVIEW`, `BLOCKED`.
 
 ---
 
