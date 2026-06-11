@@ -4,27 +4,27 @@
 
 ## Snapshot
 
-- REAL_PROGRESS_PERCENT: 51%
-- Batches merged into main: Batch 1/1.1/1.2 (`e678e85`), Batch 2 governance docs (`f530a5c` = main HEAD at time of writing)
-- Active engine count: 25
-- Batch 3 (source alignment map, `docs/SOURCE_ALIGNMENT.md`, 25/25 engines mapped): DONE
-- Source alignment implementation: PARTIAL — Batch 4.1 fixed N7-04 (estimation family); Batch 4.2 fixed U7-01 (relative-frequency family, fraction/decimal/percent; 2,400-generation sample harness, 0 failures). Remaining: N7-03 (ADD MISSING FAMILY — number line), A7-01, A8-02 (PATCH QUESTIONS). Targeted fixes only, not a rewrite
-- Batch 1 (cleanup, typo fix, header credit, site-only main title): DONE — commit `a72625f`
-- Batch 1.1 (clean qcard: no technical ids / engine badges / topic title in image): DONE — commit `8333446`
-- Batch 1.2 (export bar excluded from copied PNG via `data-html2canvas-ignore`): DONE — commit `e678e85`
-- Current known risk: manual copy-image check still recommended (html2canvas ignore attribute not yet browser-verified by Yaniv); not a blocker for the docs batch
-- Next major work: source alignment map, then UI/variety/visual modes
+- REAL_PROGRESS_PERCENT: 72%
+- Active engine count: 25 (all preserved; none deleted or restarted)
+- Batches DONE and merged: 1/1.1/1.2 (`a72625f`/`8333446`/`e678e85`), 2 governance (`f530a5c`), 3 alignment map (`d618ef9`), 4.1 N7-04 (`dc0d030`), 4.2 U7-01 (`6f1f7f8`)
+- Completion sprint (branch `claude/full-completion-sprint`): DONE for its scope —
+  - Source-alignment fixes for all remaining map actions: A7-01 (rectangle family), N7-03 (fraction placement on number line), A8-02 (linearGraphSvg in all families), G8-04 (area-ratio family): DONE — 9,600-generation harness, 0 failures
+  - Visual mode (color / grayscale / black-and-white) affecting real SVG DOM, export/print-safe: DONE in code, NEEDS REVIEW live in browser
+  - Visual quality audit: DONE (`docs/VISUAL_QUALITY_AUDIT.md`)
+- Source alignment implementation: DONE for all 25 engines per `docs/SOURCE_ALIGNMENT.md`
+- Current known risks: visual mode + copy-image behavior verified by unit tests, not yet by a human in a browser; pedagogical depth audited by AI only
+- Next major work: human teacher review + live browser QA, then gap-list patterns (new topics beyond the 25)
 
-### Not done yet
+### Remaining before 100%
 
-- Source alignment map of all 25 engines: DONE (`docs/SOURCE_ALIGNMENT.md`)
-- Source alignment implementation (fix actions from the map): PARTIAL — N7-04 DONE (4.1), U7-01 DONE (4.2); N7-03, A7-01, A8-02 NOT DONE
-- RULES enforcement in tests: NOT DONE
-- Full pedagogical audit: NOT DONE
-- Color/grayscale/black-white visual mode: NOT DONE
-- Graph/diagram upgrades: NOT DONE
-- UI polish: NOT DONE
-- Final live QA: NOT DONE
+- Human/live browser QA of visual mode, copy-image, and the new families: NEEDS REVIEW
+- Full pedagogical audit by a human teacher: NOT DONE (AI-level audit done in sprint)
+- RULES enforcement in automated tests: NOT DONE
+- Gap-list source patterns (N7-01/N7-02 coordinates, A7-04, A8-01 applied graphs, U7-02 bar chart, U7-03 group comparison, and curriculum-only topics): NOT DONE — these are new topics, not part of the 25
+- U7-01 raw-data→table construction family: NOT DONE
+- Final live QA pass on GitHub Pages: NOT DONE
+
+Why not 100%: the product is feature-complete for the 25 source-mapped topics and statically verified, but broad teacher distribution requires the human/live checks above.
 
 Status vocabulary for work items: DONE / PARTIAL / NOT DONE / NEEDS REVIEW / BLOCKED (see `RULES.md` §0.6).
 

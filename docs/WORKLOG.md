@@ -66,6 +66,16 @@ Statuses: DONE / PARTIAL / NOT DONE / NEEDS REVIEW / BLOCKED.
 - Tests: node --check PASS; sample harness 2,400 generations — 0 failures, MCQ exactly 1 correct + unique choices, rel_freq active (598×); both static verifiers PASS; git diff --check clean.
 - Progress: 48% → 51%.
 
+## Completion sprint — branch `claude/full-completion-sprint` (2026-06-11) — DONE (scope), product NEEDS REVIEW
+
+- Commits: Sprint 1/3 engine fixes, Sprint 2/3 visual mode, Sprint 3/3 docs.
+- Engine fixes (closes all SOURCE_ALIGNMENT actions): A7-01 rectangle k-times-side family (perimeter 2(x+kx), area kx²; perimeter/area-confusion mistake type); N7-03 fraction placement family on number line (incl. −3.5 style, finer ticks via new step param) + fixed pre-existing MCQ filler collision; A8-02 new `linearGraphSvg` (axes/grid/line/labeled points) wired into all 4 families; G8-04 area-ratio family (k² rule; ×k misconception distractor).
+- Visual mode: תצוגת שרטוטים = צבע / גווני אפור / שחור-לבן; rewrites SVG fill/stroke in the DOM (originals cached) so copy/PNG/print honor it; auto-applied in both render paths. Unit-tested in Node; browser check pending.
+- Docs: created `docs/VISUAL_QUALITY_AUDIT.md`; SOURCE_ALIGNMENT rows N7-03/A7-01/A8-02 → KEEP, G8-04 family gap closed; PROJECT_STATUS rewritten (51% → 72%).
+- Tests: node --check on all edited JS; harness 9,600 generations across 4 engines — 0 failures, MCQ exactly-1-correct + unique choices; visual-mode unit test (gray/bw/restore) PASS; both static verifiers PASS; git diff --check clean.
+- Not touched: export.js, digital-pdf-book, legacy slice files, unrelated engines, RULES.md.
+
 ## Next action
 
-- Batch 4.3+ (pending Yaniv approval): remaining targeted fixes — N7-03 (number-line families, needs `number_line` visual), A7-01/A8-02 (PATCH QUESTIONS). Then UI/variety/visual modes. No rewrites.
+- Human/live QA: open the site, generate from each domain, test visual mode + copy-image + print, review new families with teacher eyes.
+- Then: gap-list patterns (new topics), U7-01 table-construction family, RULES-enforcement tests.

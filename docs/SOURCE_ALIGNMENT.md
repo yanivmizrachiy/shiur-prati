@@ -32,12 +32,12 @@ Source files cited as learning notes (`source-learning/2026-06-09/`); originals 
 | G7-02 | שטחי צורות שטוחות | 7 | Geometry | 03 + 09 | Pattern G7-02 שטח צורה שטוחה | KEEP |
 | G7-03 | משפט פיתגורס | 7 | Geometry | 03 + 09 | Pattern G7-03; curric. G7-07 | KEEP |
 | G7-04 | זווית חסרה במשולש | 7 | Geometry | 03 + 09 | Pattern G7-01 זווית חסרה | REMAP |
-| N7-03 | מספרים שליליים על ציר | 7 | Numeric | 05 + 07 | Pattern N7-03; curric. N7-02 | ADD MISSING FAMILY |
+| N7-03 | מספרים שליליים על ציר | 7 | Numeric | 05 + 07 | Pattern N7-03; curric. N7-02 | KEEP |
 | N7-04 | חיבור וחיסור מכוונים | 7 | Numeric | 05 + 07 | Pattern N7-04; curric. N7-03 | KEEP |
 | N7-05 | כפל וחילוק מכוונים | 7 | Numeric | 05 + 07 | Pattern N7-05; curric. N7-04 | KEEP |
 | N7-06 | חזקות (−a)ⁿ/−aⁿ | 7 | Numeric | 05 + 07 | Pattern N7-06; curric. N7-05 | KEEP |
 | N7-07 | שורש ריבועי | 7 | Numeric | 05 + 07 | Pattern N7-07; curric. N7-06 | KEEP |
-| A7-01 | ביטויים אלגבריים | 7 | Algebra | 01 + 08 | Pattern A7-01 | PATCH QUESTIONS |
+| A7-01 | ביטויים אלגבריים | 7 | Algebra | 01 + 08 | Pattern A7-01 | KEEP |
 | A7-02 | הצבה בביטוי | 7 | Algebra | 01 + 08 | Pattern A7-02 | KEEP |
 | A7-03 | משוואות מדרגה ראשונה | 7 | Algebra | 01 + 08 | Pattern A7-03 | KEEP |
 | U7-01 | טבלת תדירות | 7 | Uncertainty | 06 | Pattern U7-01 | KEEP |
@@ -49,7 +49,7 @@ Source files cited as learning notes (`source-learning/2026-06-09/`); originals 
 | N8-03 | קנה מידה | 8 | Numeric | 07 | Pattern N8-03 | KEEP |
 | N8-04 | אחוזים סטטיים | 8 | Numeric | 07 | Pattern N8-04 | KEEP |
 | N8-05 | אחוזים דינמיים | 8 | Numeric | 07 | Pattern N8-05 | KEEP |
-| A8-02 | שיפוע ומשוואת ישר | 8 | Algebra | 02 + 08 | Pattern A8-02 | PATCH QUESTIONS |
+| A8-02 | שיפוע ומשוואת ישר | 8 | Algebra | 02 + 08 | Pattern A8-02 | KEEP |
 | A8-03 | מערכת משוואות | 8 | Algebra | 02 + 08 | Pattern A8-03; curric. A8-04 | KEEP |
 | U8-01 | ממוצע, חציון, טווח | 8 | Uncertainty | 06 | Pattern U8-01; curric. N8-06/U8-01 | KEEP |
 | U8-02 | הסתברות מטבלה | 8 | Uncertainty | 06 | Pattern U8-02 | KEEP |
@@ -70,11 +70,11 @@ Source file key: 01 grade-7 algebra · 02 grade-8 algebra · 03 grade-7 pre-dedu
 
 **G8-01 — KEEP.** Skills: C=2πr, A=πr², from radius/diameter, inverse, formula distinction. Visual: `circle_labeled` — present. Action: none.
 
-**G8-04 — REMAP.** Skills: similarity ratio, corresponding side, is-similar check; source also wants area ratio = k². Visual: `similar_triangles` — present. Reason: pattern index files this as G8-02; curriculum says G8-04. Action: ADD MISSING FAMILY later — area-ratio (יחס שטחים) family from pattern G8-02.
+**G8-04 — REMAP (family gap fixed in sprint).** Skills: similarity ratio, corresponding side, is-similar check, **area ratio = k²** (added in sprint; distractor/mistake = the real "areas scale by k" misconception). Visual: `similar_triangles` — present. Reason for REMAP: pattern index files this as G8-02; curriculum says G8-04 — documentation-only mapping. Action: none.
 
 ### Numeric grade 7
 
-**N7-03 — ADD MISSING FAMILY.** Skills: ordering, opposites, absolute value, number-line placement incl. fractions (−3.5, −½). Source families: mark P/Q/opposites **on a number line**. Visual: `number_line` — **missing** in engine (text-only). Action: add number-line SVG families; keep existing text families.
+**N7-03 — KEEP (fixed in sprint).** Skills: ordering, comparing, opposites, absolute value, number-line placement incl. fractions (−3.5 style). Correction to the Batch 3 map: the **engine** already rendered `numberLineSvg` (the "text-only" note applied to the legacy slice). Sprint added the source's `placement` family (P between which integers + opposite of P, fraction values, finer-tick number line) and fixed an MCQ filler-collision bug. Action: none.
 
 **N7-04 — KEEP (fixed in Batch 4.1).** Skills: signed add/sub in −20..20. Source families: compute, **estimation without computing**, **missing-addend**. Correction to the Batch 3 map: the engine already had a missing-addend family; the real gap was estimation. Batch 4.1 added an `estimate` family (sign reasoning without exact computation, all 4 question types; mistake/tf target the real misconception "הספרה הגדולה קובעת סימן חיובי") and 3 more missing-addend cases. Visual: none required. Action: none.
 
@@ -90,13 +90,13 @@ Source file key: 01 grade-7 algebra · 02 grade-8 algebra · 03 grade-7 pre-dedu
 
 ### Algebra
 
-**A7-01 — PATCH QUESTIONS.** Skills: build expression from situation. Source families: **cup-tower** (gradient + expression + evaluate) and **rectangle k-times side** (perimeter + area expression). Engine has cup-tower partially; rectangle family thin. Visual: none mandatory. Action: align wording to two source templates; add rectangle-expression family.
+**A7-01 — KEEP (fixed in sprint).** Skills: build expression from situation, simplify like terms. Sprint added the source's **rectangle k-times-side** family: perimeter expression $2(x+kx)$ and area expression $kx^2$; mistake type targets the real perimeter/area confusion ($x+kx$ as "area"). Cup-tower family already present with $n=1$ check. Action: none.
 
 **A7-02 — KEEP.** Skills: substitute values into expression. Source: multi-value substitution. Action: optionally extend to 3-value substitution per template.
 
 **A7-03 — KEEP.** Skills: solve ax±b=c, **check by substitution**, build equation from word problem. Engine implements solve+check+build. Visual: none. Action: none.
 
-**A8-02 — PATCH QUESTIONS.** Skills: m=(y₂−y₁)/(x₂−x₁), rising/falling, write line equation. Source requires visual `linear_graph`. Engine families match; **graph visual missing**. Action: add linear-graph SVG in graph/diagram upgrade batch (not now).
+**A8-02 — KEEP (fixed in sprint).** Skills: m=(y₂−y₁)/(x₂−x₁), rising/falling, value at x, write line equation. Sprint added `linearGraphSvg` (axes, grid, labeled points, drawn line) and wired it into all four families — the source-required `linear_graph` visual is now present. Action: none.
 
 **A8-03 — KEEP.** Skills: two-variable word systems (sum + difference). Matches pattern template. Curriculum numbering A8-04. Visual: none. Action: none.
 
@@ -122,6 +122,7 @@ Source file key: 01 grade-7 algebra · 02 grade-8 algebra · 03 grade-7 pre-dedu
 ## Summary
 
 - 25/25 engines mapped. Deletions: 0. Code renames: 0.
-- KEEP: 18 (N7-04 fixed 4.1, U7-01 fixed 4.2) · REMAP (doc-only): 4 (G7-01, G7-04, G8-04, U7-02) · PATCH QUESTIONS: 2 (A7-01, A8-02) · ADD MISSING FAMILY: 1 (N7-03)
-- Map status: DONE. Source-alignment implementation: NOT DONE.
-- Next: targeted fixes per "Action" notes — small batches, never a rewrite.
+- KEEP: 21 (N7-04 fixed 4.1, U7-01 fixed 4.2, N7-03/A7-01/A8-02 fixed in sprint) · REMAP (doc-only): 4 (G7-01, G7-04, G8-04, U7-02) · PATCH QUESTIONS: 0 · ADD MISSING FAMILY: 0
+- All fix actions from this map are now implemented. Remaining content work lives in the gap list (new patterns, not fixes to the 25).
+- Map status: DONE. Source-alignment implementation: DONE for all 25 engines (Batches 4.1, 4.2, and the completion sprint).
+- Next: gap-list patterns (new topics) and human pedagogical review — never a rewrite of working engines.
