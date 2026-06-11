@@ -38,6 +38,7 @@
     const gradeTag=grade==='8'?'כיתה ח׳':'כיתה ז׳';
     const domainTag=dom==='N'?'מספרי':dom==='A'?'אלגברי':dom==='U'?'אי-ודאות':'גאומטריה';
     const cls=dom==='N'?'num':dom==='A'?'alg':dom==='U'?'unc':'geo';
+    if(typeof setMainTitle==='function') setMainTitle(domainTag,title);
     document.getElementById('out').innerHTML = `<div class="qcard engine-card" id="${cid}">
       <div class="qmeta"><span class="tag ${cls}">${gradeTag}</span><span class="tag ${cls}">${domainTag}</span><span class="tag">${id}</span><span>${title}</span><span class="engine-badge">מנוע חדש ✦</span></div>
       ${result.questionHTML}
@@ -109,7 +110,7 @@
     TOPICS[7].algebra.push(['A7-02-ENGINE','הצבה בביטוי — מנוע מלא ✦',1]);
   }
   if(typeof TOPICS !== 'undefined' && TOPICS[7] && TOPICS[7].algebra && !TOPICS[7].algebra.some(t=>t[0]==='A7-03-ENGINE')){
-    TOPICS[7].algebra.push(['A7-03-ENGINE','משוואות מד ראשונה — מנוע מלא ✦',1]);
+    TOPICS[7].algebra.push(['A7-03-ENGINE','משוואות מדרגה ראשונה — מנוע מלא ✦',1]);
   }
   if(typeof TOPICS !== 'undefined' && TOPICS[7] && TOPICS[7].uncertainty && !TOPICS[7].uncertainty.some(t=>t[0]==='U7-01-ENGINE')){
     TOPICS[7].uncertainty.push(['U7-01-ENGINE','טבלת תדירות — מנוע מלא ✦',1]);

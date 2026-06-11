@@ -16,8 +16,9 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 </head>
 <body>
-<header class="hdr"><div><h1>תרגילים</h1><div class="sub">מחולל תרגילי מתמטיקה — כיתות ז׳–ח׳</div></div><span class="badge" id="gradeBadge">כיתה ז׳</span></header>
+<header class="hdr"><div><h1>תרגילים</h1><div class="sub">מחולל תרגילי מתמטיקה — כיתות ז׳–ח׳</div><div class="credit">האתר מנוהל על ידי יניב רז</div></div><span class="badge" id="gradeBadge">כיתה ז׳</span></header>
 <main>
+<div class="main-title" id="mainTitle" style="display:none"></div>
 <div class="card"><h2>הגדרות תרגיל</h2><div class="grid"><div><label for="sg">כיתה</label><select id="sg" onchange="onGrade()"><option value="7">כיתה ז׳</option><option value="8">כיתה ח׳</option></select></div><div><label for="sd">תחום</label><select id="sd" onchange="onDomain()"><option value="geometry">גאומטרי</option><option value="algebra">אלגברי</option><option value="numeric">מספרי</option><option value="uncertainty">אי-ודאות</option></select></div><div><label for="st">נושא</label><select id="st"></select></div><div><label for="sl">רמה</label><select id="sl"><option value="standard">סטנדרטית</option><option value="challenge">מאתגרת</option></select></div></div><button class="btn-gen" onclick="generate()">צור תרגיל ◀</button></div>
 <div class="engine-panel" id="enginePanel" style="display:none"><div class="engine-panel-inner"><div><label for="selQType">סוג שאלה</label><select id="selQType"><option value="open">שאלה פתוחה</option><option value="mcq">רב־ברירה</option><option value="tf">נכון / שגוי</option><option value="mistake">מצא את הטעות</option></select></div><div><label for="selDiff">רמת מנוע</label><select id="selDiff"><option value="standard">סטנדרטית</option><option value="basic">בסיסית</option><option value="challenge">מאתגרת</option></select></div></div></div>
 <div id="out"><div class="empty">בחרו כיתה, תחום ונושא — ולחצו על ״צור תרגיל ◀״</div></div>
