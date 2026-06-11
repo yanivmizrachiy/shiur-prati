@@ -217,10 +217,11 @@
     const T = E.themes.geometry;
     const W=300,H=80,x0=20,x1=280,y=44;
     const min=p.min!=null?p.min:-12, max=p.max!=null?p.max:12;
+    const step=p.step!=null?p.step:4;
     const sc=(W-40)/(max-min);
     function X(v){ return x0+(v-min)*sc; }
     let ticks='';
-    for(let v=min; v<=max; v+=4){
+    for(let v=min; v<=max; v+=step){
       ticks += '<line x1="'+X(v)+'" y1="'+(y-5)+'" x2="'+X(v)+'" y2="'+(y+5)+'" stroke="#64748b" stroke-width="1.5"/>'+
         '<text x="'+X(v)+'" y="'+(y+22)+'" fill="#334155" font-size="11" text-anchor="middle">'+v+'</text>';
     }
@@ -234,6 +235,43 @@
       '<polygon points="'+x1+','+y+' '+(x1-9)+','+(y-5)+' '+(x1-9)+','+(y+5)+'" fill="#334155"/>'+
       '<polygon points="'+x0+','+y+' '+(x0+9)+','+(y-5)+' '+(x0+9)+','+(y+5)+'" fill="#334155"/>'+
       ticks + pts + '</svg>';
+  };
+  E.linearGraphSvg = function(p){
+    const T = E.themes.geometry;
+    const W=260,H=220,pad=26;
+    const pts = p.pts || [];
+    const xs = pts.length ? pts.map(function(q){return q.x;}) : [0,4];
+    const xmin = Math.min(-1, Math.min.apply(null,xs)-1);
+    const xmax = Math.max(5, Math.max.apply(null,xs)+1);
+    function yAt(x){ return p.m*x + p.b; }
+    const ys = [yAt(xmin), yAt(xmax)].concat(pts.map(function(q){return q.y;})).concat([0]);
+    const ymin = Math.floor(Math.min.apply(null,ys))-1;
+    const ymax = Math.ceil(Math.max.apply(null,ys))+1;
+    const sx=(W-2*pad)/(xmax-xmin), sy=(H-2*pad)/(ymax-ymin);
+    function X(v){ return pad+(v-xmin)*sx; }
+    function Y(v){ return H-pad-(v-ymin)*sy; }
+    const xstep=Math.max(1,Math.ceil((xmax-xmin)/8)), ystep=Math.max(1,Math.ceil((ymax-ymin)/8));
+    let grid='';
+    for(let v=Math.ceil(xmin); v<=xmax; v+=xstep){
+      grid += '<line x1="'+X(v)+'" y1="'+Y(ymin)+'" x2="'+X(v)+'" y2="'+Y(ymax)+'" stroke="#e2e8f0" stroke-width="1"/>';
+      if(v!==0) grid += '<text x="'+X(v)+'" y="'+(Y(0)+14)+'" fill="#64748b" font-size="9" text-anchor="middle">'+v+'</text>';
+    }
+    for(let v=Math.ceil(ymin); v<=ymax; v+=ystep){
+      grid += '<line x1="'+X(xmin)+'" y1="'+Y(v)+'" x2="'+X(xmax)+'" y2="'+Y(v)+'" stroke="#e2e8f0" stroke-width="1"/>';
+      if(v!==0) grid += '<text x="'+(X(0)-7)+'" y="'+(Y(v)+3)+'" fill="#64748b" font-size="9" text-anchor="end">'+v+'</text>';
+    }
+    const axes = '<line x1="'+X(xmin)+'" y1="'+Y(0)+'" x2="'+X(xmax)+'" y2="'+Y(0)+'" stroke="#334155" stroke-width="1.8"/>'+
+      '<line x1="'+X(0)+'" y1="'+Y(ymin)+'" x2="'+X(0)+'" y2="'+Y(ymax)+'" stroke="#334155" stroke-width="1.8"/>'+
+      '<polygon points="'+X(xmax)+','+Y(0)+' '+(X(xmax)-7)+','+(Y(0)-4)+' '+(X(xmax)-7)+','+(Y(0)+4)+'" fill="#334155"/>'+
+      '<polygon points="'+X(0)+','+Y(ymax)+' '+(X(0)-4)+','+(Y(ymax)+7)+' '+(X(0)+4)+','+(Y(ymax)+7)+'" fill="#334155"/>'+
+      '<text x="'+(X(0)-7)+'" y="'+(Y(0)+14)+'" fill="#64748b" font-size="9" text-anchor="end">0</text>';
+    const line = '<line x1="'+X(xmin)+'" y1="'+Y(yAt(xmin))+'" x2="'+X(xmax)+'" y2="'+Y(yAt(xmax))+'" stroke="#2563eb" stroke-width="2.5"/>';
+    let dots='';
+    pts.forEach(function(q){
+      dots += '<circle cx="'+X(q.x)+'" cy="'+Y(q.y)+'" r="4.5" fill="'+T.unknown+'"/>'+
+        '<text x="'+(X(q.x)+7)+'" y="'+(Y(q.y)-7)+'" fill="'+T.unknown+'" font-size="10" font-weight="800">('+q.x+','+q.y+')</text>';
+    });
+    return '<svg class="engine-svg" viewBox="0 0 '+W+' '+H+'" xmlns="http://www.w3.org/2000/svg">'+grid+axes+line+dots+'</svg>';
   };
   E.freqTableHtml = function(headers, rows){
     let h = '<table class="engine-table" dir="rtl"><thead><tr>';

@@ -81,10 +81,14 @@
     difficulty = difficulty || 'standard'; questionType = questionType || 'open';
     const family = pickFamily(difficulty);
     const x = pickCase(family);
+    let svg;
+    if(family==='value_at') svg = E.linearGraphSvg({m:x.m,b:x.b,pts:[{x:x.x,y:x.y}]});
+    else if(family==='rising_falling') svg = E.linearGraphSvg({m:x.m,b:x.b});
+    else svg = E.linearGraphSvg({m:x.m,b:x.b,pts:[{x:x.x1,y:x.y1},{x:x.x2,y:x.y2}]});
     const q = question(family,x,questionType), a = answer(family,x,questionType);
-    if(questionType==='mcq') return E.questionTypes.mcq({question:q,answer:a,svg:'',choices:choices(family,x)});
-    if(questionType==='tf') return E.questionTypes.tf({question:q,answer:a,svg:'',isTrue:false});
-    if(questionType==='mistake') return E.questionTypes.mistake({question:q,answer:a,svg:''});
-    return E.questionTypes.open({question:q,answer:a,svg:''});
+    if(questionType==='mcq') return E.questionTypes.mcq({question:q,answer:a,svg:svg,choices:choices(family,x)});
+    if(questionType==='tf') return E.questionTypes.tf({question:q,answer:a,svg:svg,isTrue:false});
+    if(questionType==='mistake') return E.questionTypes.mistake({question:q,answer:a,svg:svg});
+    return E.questionTypes.open({question:q,answer:a,svg:svg});
   };
 })();

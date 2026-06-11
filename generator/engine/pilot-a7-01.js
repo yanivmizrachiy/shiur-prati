@@ -17,22 +17,29 @@
   const TOWER = [
     {first:8,step:6,expr:'6n+2'},{first:10,step:5,expr:'5n+5'},{first:9,step:4,expr:'4n+5'}
   ];
+  // Rectangle family — source pattern A7-01: one side k times the other; perimeter and area expressions
+  const RECT = [{k:2},{k:3},{k:4},{k:5}];
 
   function pickFamily(diff){
     if(diff === 'basic') return E.pick(['from_words','simplify']);
-    if(diff === 'challenge') return E.pick(['tower','simplify_mixed','tower']);
-    return E.pick(['from_words','simplify','simplify_mixed','tower']);
+    if(diff === 'challenge') return E.pick(['tower','simplify_mixed','tower','rect_expr']);
+    return E.pick(['from_words','simplify','simplify_mixed','tower','rect_expr']);
   }
   function pickCase(f){
     if(f==='simplify') return E.pick(SIMPLIFY);
     if(f==='simplify_mixed') return E.pick(SIMPLIFY_MIXED);
     if(f==='tower') return E.pick(TOWER);
+    if(f==='rect_expr') return E.pick(RECT);
     return E.pick(FROM_WORDS);
   }
 
   function choices(family,x){
     let correct, wrongs;
-    if(family==='from_words'){ correct=x.expr; wrongs=['n+'+x.k, 'n-'+x.k, '\\frac{n}{'+x.k+'}']; }
+    if(family==='rect_expr'){
+      correct=(2*(x.k+1))+'x';
+      wrongs=[(x.k+1)+'x', x.k+'x^2', (2*x.k)+'x'];
+    }
+    else if(family==='from_words'){ correct=x.expr; wrongs=['n+'+x.k, 'n-'+x.k, '\\frac{n}{'+x.k+'}']; }
     else if(family==='simplify'){ correct=x.r+x.v; wrongs=[(x.t1*x.t2)+x.v, x.r+x.v+'^2', ''+(x.t1+x.t2)]; }
     else if(family==='simplify_mixed'){ correct=x.r; wrongs=[(x.t1-x.t2+x.c)+x.v, (x.t1+x.t2)+x.v+'+'+x.c, (x.t1-x.t2)+x.v+x.c]; }
     else { correct=x.expr; wrongs=[x.step+'n+'+x.first, x.step+'n', 'n+'+(x.first+x.step)]; }
@@ -56,6 +63,12 @@
       if(qtype==='mistake') return `תלמיד פישט: "$${x.t1}${x.v}-${x.t2}${x.v}+${x.c} = ${x.t1-x.t2+x.c}${x.v}$" — חיבר את $${x.c}$ למקדם.`;
       return `פשטו את הביטוי: $$${x.t1}${x.v}-${x.t2}${x.v}+${x.c}$$`;
     }
+    if(family==='rect_expr'){
+      if(qtype==='tf') return `במלבן, צלע אחת ארוכה פי $${x.k}$ מהאחרת, והצלע הקצרה היא $x$. היקף המלבן הוא $${x.k+1}x$.`;
+      if(qtype==='mistake') return `במלבן כזה (צלעות $x$ ו-$${x.k}x$) תלמיד כתב לשטח: "$x+${x.k}x=${x.k+1}x$".`;
+      if(qtype==='mcq') return `במלבן, צלע אחת ארוכה פי $${x.k}$ מהאחרת. הצלע הקצרה: $x$.\nאיזה ביטוי מתאר את היקף המלבן?`;
+      return `במלבן, צלע אחת ארוכה פי $${x.k}$ מהצלע השנייה. סמנו את הצלע הקצרה ב-$x$.\nא. כתבו ביטוי להיקף המלבן.\nב. כתבו ביטוי לשטח המלבן.`;
+    }
     // tower
     if(qtype==='tf') return `מגדל מכוס אחת: $${x.first}$ ס״מ. כל כוס נוספת: $+${x.step}$ ס״מ. הביטוי לגובה מגדל $n$ כוסות: $${x.step}n+${x.first}$.`;
     if(qtype==='mistake') return `מגדל מכוס אחת: $${x.first}$ ס״מ, כל כוס נוספת $+${x.step}$ ס״מ. תלמיד כתב: "גובה $n$ כוסות: $${x.step}n+${x.first}$".`;
@@ -75,6 +88,12 @@
     if(family==='simplify_mixed'){
       const prefix = wrong ? 'שגוי — מספר חופשי ($'+x.c+'$) אינו איבר דומה ל-$'+x.v+'$, ואי אפשר לחבר אותו למקדם.\n' : '';
       return `${prefix}$$${x.t1}${x.v}-${x.t2}${x.v}+${x.c}=(${x.t1}-${x.t2})${x.v}+${x.c}=${x.r}$$`;
+    }
+    if(family==='rect_expr'){
+      const per=2*(x.k+1);
+      if(wrong && qtype==='mistake') return `שגוי — שטח הוא מכפלת הצלעות, לא סכומן (הסכום שייך להיקף):\n$$S=x\\cdot ${x.k}x=${x.k}x^2$$`;
+      const prefix = wrong ? 'שגוי — היקף הוא סכום כל ארבע הצלעות, ולכן יש להכפיל ב-2.\n' : '';
+      return `${prefix}הצלעות: $x$ ו-$${x.k}x$.\nהיקף: $$P=2(x+${x.k}x)=2\\cdot ${x.k+1}x=${per}x$$\nשטח: $$S=x\\cdot ${x.k}x=${x.k}x^2$$`;
     }
     const prefix = wrong ? 'הביטוי שנכתב כמעט נכון — נבדוק אם הוא מתאים גם לכוס אחת:\n' : '';
     return `${prefix}כל כוס אחרי הראשונה מוסיפה $${x.step}$, כלומר $(n-1)$ תוספות:\n$$${x.first}+${x.step}(n-1)=${x.step}n+${x.first-x.step}$$\nכלומר הביטוי הנכון: $${x.expr}$.\nבדיקה ל-$n=1$: $${x.step}\\cdot 1+${x.first-x.step}=${x.first}$ ✓`;
