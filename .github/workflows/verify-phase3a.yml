@@ -58,7 +58,26 @@ jobs:
                 typeof window.TargilimEngine.generateN802Engine === 'function' &&
                 typeof window.TargilimEngine.generateN803Engine === 'function' &&
                 typeof window.TargilimEngine.generateN804Engine === 'function' &&
-                typeof window.TargilimEngine.generateN805Engine === 'function');
+                typeof window.TargilimEngine.generateN805Engine === 'function' &&
+                typeof window.TargilimEngine.generateG701Engine === 'function' &&
+                typeof window.TargilimEngine.generateG702Engine === 'function' &&
+                typeof window.TargilimEngine.generateG704Engine === 'function' &&
+                typeof window.TargilimEngine.generateG801Engine === 'function' &&
+                typeof window.TargilimEngine.generateG804Engine === 'function' &&
+                typeof window.TargilimEngine.generateN703Engine === 'function' &&
+                typeof window.TargilimEngine.generateN704Engine === 'function' &&
+                typeof window.TargilimEngine.generateN705Engine === 'function' &&
+                typeof window.TargilimEngine.generateN706Engine === 'function' &&
+                typeof window.TargilimEngine.generateN707Engine === 'function' &&
+                typeof window.TargilimEngine.generateA701Engine === 'function' &&
+                typeof window.TargilimEngine.generateA702Engine === 'function' &&
+                typeof window.TargilimEngine.generateA703Engine === 'function' &&
+                typeof window.TargilimEngine.generateU701Engine === 'function' &&
+                typeof window.TargilimEngine.generateU702Engine === 'function' &&
+                typeof window.TargilimEngine.generateA802Engine === 'function' &&
+                typeof window.TargilimEngine.generateA803Engine === 'function' &&
+                typeof window.TargilimEngine.generateU801Engine === 'function' &&
+                typeof window.TargilimEngine.generateU802Engine === 'function');
             });
             if (!engineReady) throw new Error('Phase 3A engine functions are not loaded');
 
@@ -71,7 +90,26 @@ jobs:
               { grade: '8', domain: 'numeric', id: 'N8-02-ENGINE', needsSvg: true },
               { grade: '8', domain: 'numeric', id: 'N8-03-ENGINE', needsSvg: true },
               { grade: '8', domain: 'numeric', id: 'N8-04-ENGINE', needsSvg: false },
-              { grade: '8', domain: 'numeric', id: 'N8-05-ENGINE', needsSvg: true }
+              { grade: '8', domain: 'numeric', id: 'N8-05-ENGINE', needsSvg: true },
+              { grade: '7', domain: 'geometry', id: 'G7-01-ENGINE', needsSvg: true },
+              { grade: '7', domain: 'geometry', id: 'G7-02-ENGINE', needsSvg: true },
+              { grade: '7', domain: 'geometry', id: 'G7-04-ENGINE', needsSvg: true },
+              { grade: '8', domain: 'geometry', id: 'G8-01-ENGINE', needsSvg: true },
+              { grade: '8', domain: 'geometry', id: 'G8-04-ENGINE', needsSvg: true },
+              { grade: '7', domain: 'numeric', id: 'N7-03-ENGINE', needsSvg: true },
+              { grade: '7', domain: 'numeric', id: 'N7-04-ENGINE', needsSvg: false },
+              { grade: '7', domain: 'numeric', id: 'N7-05-ENGINE', needsSvg: false },
+              { grade: '7', domain: 'numeric', id: 'N7-06-ENGINE', needsSvg: false },
+              { grade: '7', domain: 'numeric', id: 'N7-07-ENGINE', needsSvg: false },
+              { grade: '7', domain: 'algebra', id: 'A7-01-ENGINE', needsSvg: false },
+              { grade: '7', domain: 'algebra', id: 'A7-02-ENGINE', needsSvg: false },
+              { grade: '7', domain: 'algebra', id: 'A7-03-ENGINE', needsSvg: false },
+              { grade: '7', domain: 'uncertainty', id: 'U7-01-ENGINE', needsSvg: false },
+              { grade: '7', domain: 'uncertainty', id: 'U7-02-ENGINE', needsSvg: false },
+              { grade: '8', domain: 'algebra', id: 'A8-02-ENGINE', needsSvg: false },
+              { grade: '8', domain: 'algebra', id: 'A8-03-ENGINE', needsSvg: false },
+              { grade: '8', domain: 'uncertainty', id: 'U8-01-ENGINE', needsSvg: false },
+              { grade: '8', domain: 'uncertainty', id: 'U8-02-ENGINE', needsSvg: false }
             ];
             const qtypes = ['open','mcq','tf','mistake'];
             const diffs = ['basic','standard','challenge'];

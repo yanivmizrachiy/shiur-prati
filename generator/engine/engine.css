@@ -93,3 +93,10 @@
   .engine-panel, .engine-badge { display: none !important; }
   .mcq-choice { padding: 5px 10px; border: 1px solid #ccc; }
 }
+
+/* Engine data tables (frequency / two-way) */
+.engine-table{border-collapse:collapse;margin:8px auto;direction:rtl;font-size:.92rem}
+.engine-table th,.engine-table td{border:1.5px solid #2563eb;padding:7px 16px;text-align:center}
+.engine-table th{background:#eff6ff;font-weight:800;color:#1e40af}
+.engine-table td{background:#fff;color:#0f172a;font-weight:600}
+@media print{.engine-table th{background:#fff}}

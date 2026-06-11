@@ -1,0 +1,82 @@
+// generator/engine/pilot-u7-02.js
+// U7-02 Basic Probability (Grade 7) — Smart Engine
+// Source: source-learning/2026-06-09/06_uncertainty_domain_curriculum_examples.learning.md + 00 (probability in grade 7)
+(function(){
+  const E = window.TargilimEngine = window.TargilimEngine || {};
+
+  const BAGS = [
+    {r:4,b:6,total:10,pr:'\\frac{2}{5}',prc:'\\frac{3}{5}'},
+    {r:3,b:9,total:12,pr:'\\frac{1}{4}',prc:'\\frac{3}{4}'},
+    {r:5,b:5,total:10,pr:'\\frac{1}{2}',prc:'\\frac{1}{2}'},
+    {r:8,b:4,total:12,pr:'\\frac{2}{3}',prc:'\\frac{1}{3}'},
+    {r:6,b:9,total:15,pr:'\\frac{2}{5}',prc:'\\frac{3}{5}'}
+  ];
+  const DIE = [
+    {ev:'מספר זוגי',fav:3,p:'\\frac{1}{2}'},
+    {ev:'מספר גדול מ-4',fav:2,p:'\\frac{1}{3}'},
+    {ev:'מספר קטן מ-3',fav:2,p:'\\frac{1}{3}'},
+    {ev:'המספר 6',fav:1,p:'\\frac{1}{6}'}
+  ];
+
+  function pickFamily(diff){
+    if(diff === 'basic') return 'bag_simple';
+    if(diff === 'challenge') return E.pick(['complement','die','complement']);
+    return E.pick(['bag_simple','complement','die']);
+  }
+  function pickCase(f){
+    if(f==='die') return E.pick(DIE);
+    return E.pick(BAGS);
+  }
+
+  function choices(family,x){
+    let correct, wrongs;
+    if(family==='die'){ correct='$'+x.p+'$'; wrongs=['$\\frac{'+x.fav+'}{'+(6-x.fav)+'}$','$\\frac{1}{6}$'==='$'+x.p+'$'?'$\\frac{1}{3}$':'$\\frac{1}{6}$','$\\frac{'+(6-x.fav)+'}{6}$']; }
+    else if(family==='complement'){ correct='$'+x.prc+'$'; wrongs=['$'+x.pr+'$','$\\frac{'+x.b+'}{'+x.r+'}$','$1$']; }
+    else { correct='$'+x.pr+'$'; wrongs=['$'+x.prc+'$','$\\frac{'+x.r+'}{'+x.b+'}$','$\\frac{1}{'+x.r+'}$']; }
+    const values=[correct].concat(wrongs).filter((v,i,a)=>a.indexOf(v)===i).slice(0,4);
+    while(values.length<4) values.push('$\\frac{1}{'+(values.length+5)+'}$');
+    return E.shuffle(values).map((v,i)=>({label:['א','ב','ג','ד'][i], text:v, correct:v===correct}));
+  }
+
+  function question(family,x,qtype){
+    if(family==='die'){
+      if(qtype==='tf') return `מטילים קובייה הוגנת. ההסתברות לקבל ${x.ev} היא $\\frac{${x.fav}}{${6-x.fav}}$.`;
+      if(qtype==='mistake') return `מטילים קובייה. תלמיד חישב הסתברות ל${x.ev}: "$\\frac{${x.fav}}{${6-x.fav}}$ — מצליחים חלקי לא-מצליחים".`;
+      return `מטילים קובייה הוגנת.\nמה ההסתברות לקבל ${x.ev}?`;
+    }
+    const bag = `בשקית $${x.r}$ כדורים אדומים ו-$${x.b}$ כחולים`;
+    if(family==='complement'){
+      if(qtype==='tf') return `${bag}. שולפים כדור אחד. ההסתברות שלא אדום היא $${x.pr}$.`;
+      if(qtype==='mistake') return `${bag}. תלמיד חישב P(לא אדום): "$1+${x.pr}$".`;
+      return `${bag}. שולפים כדור אחד באקראי.\nמה ההסתברות שהכדור אינו אדום?`;
+    }
+    if(qtype==='tf') return `${bag}. שולפים כדור אחד. ההסתברות לאדום היא $\\frac{${x.r}}{${x.b}}$.`;
+    if(qtype==='mistake') return `${bag}. תלמיד חישב P(אדום): "$\\frac{${x.r}}{${x.b}}$ — אדומים חלקי כחולים".`;
+    return `${bag}. שולפים כדור אחד באקראי.\nמה ההסתברות שהכדור אדום?`;
+  }
+
+  function answer(family,x,qtype){
+    const wrong = qtype==='mistake' || qtype==='tf';
+    if(family==='die'){
+      const prefix = wrong ? 'שגוי — המכנה הוא סך כל התוצאות האפשריות ($6$), לא הכישלונות.\n' : '';
+      return `${prefix}תוצאות אפשריות: $6$. תוצאות מתאימות: $${x.fav}$.\n$$P=\\frac{${x.fav}}{6}=${x.p}$$`;
+    }
+    if(family==='complement'){
+      const prefix = wrong ? 'שגוי — הסתברות משלימה: $P(\\text{לא }A)=1-P(A)$.\n' : '';
+      return `${prefix}$$P(\\text{אדום})=\\frac{${x.r}}{${x.total}}=${x.pr}$$\n$$P(\\text{לא אדום})=1-${x.pr}=${x.prc}$$`;
+    }
+    const prefix = wrong ? 'שגוי — המכנה הוא סך כל הכדורים, לא רק הכחולים.\n' : '';
+    return `${prefix}סך הכדורים: $${x.r}+${x.b}=${x.total}$.\n$$P(\\text{אדום})=\\frac{${x.r}}{${x.total}}=${x.pr}$$`;
+  }
+
+  E.generateU702Engine = function(difficulty, questionType){
+    difficulty = difficulty || 'standard'; questionType = questionType || 'open';
+    const family = pickFamily(difficulty);
+    const x = pickCase(family);
+    const q = question(family,x,questionType), a = answer(family,x,questionType);
+    if(questionType==='mcq') return E.questionTypes.mcq({question:q,answer:a,svg:'',choices:choices(family,x)});
+    if(questionType==='tf') return E.questionTypes.tf({question:q,answer:a,svg:'',isTrue:false});
+    if(questionType==='mistake') return E.questionTypes.mistake({question:q,answer:a,svg:''});
+    return E.questionTypes.open({question:q,answer:a,svg:''});
+  };
+})();

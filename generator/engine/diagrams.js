@@ -118,4 +118,132 @@
       <text x="135" y="137" fill="${T.label}" font-size="11" font-weight="800" text-anchor="middle">${params.ctx || 'שינוי באחוזים'}</text>
     </svg>`;
   };
+  E.rectangleSvg = function(p, unknown){
+    const T = E.themes.geometry;
+    const W=260,H=160,x1=40,y1=30,x2=220,y2=130;
+    const lL = p.l==null?'?':p.l+' ס״מ', lW = p.w==null?'?':p.w+' ס״מ';
+    const cL = unknown==='l'?T.unknown:T.given, cW = unknown==='w'?T.unknown:T.given;
+    return `<svg class="engine-svg" viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">
+      <rect x="${x1}" y="${y1}" width="${x2-x1}" height="${y2-y1}" rx="6" fill="${T.fill}" stroke="${T.stroke}" stroke-width="2.5"/>
+      <text x="${(x1+x2)/2}" y="${y2+22}" fill="${cL}" font-size="14" font-weight="800" text-anchor="middle">${lL}</text>
+      <text x="${x1-22}" y="${(y1+y2)/2+5}" fill="${cW}" font-size="14" font-weight="800" text-anchor="middle">${lW}</text>
+    </svg>`;
+  };
+  E.boxSvg = function(p, unknown){
+    const T = E.themes.geometry;
+    const W=270,H=180,x=46,y=64,w=130,h=72,dx=44,dy=30;
+    const lL=p.l==null?'?':p.l+' ס״מ', lW=p.w==null?'?':p.w+' ס״מ', lH=p.h==null?'?':p.h+' ס״מ';
+    const cL=unknown==='l'?T.unknown:T.given, cW=unknown==='w'?T.unknown:T.given, cH=unknown==='h'?T.unknown:T.given;
+    return `<svg class="engine-svg" viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">
+      <rect x="${x}" y="${y}" width="${w}" height="${h}" fill="${T.fill}" stroke="${T.stroke}" stroke-width="2.3"/>
+      <polygon points="${x},${y} ${x+dx},${y-dy} ${x+dx+w},${y-dy} ${x+w},${y}" fill="${T.fill}" stroke="${T.stroke}" stroke-width="2.3"/>
+      <polygon points="${x+w},${y} ${x+dx+w},${y-dy} ${x+dx+w},${y-dy+h} ${x+w},${y+h}" fill="${T.fill}" stroke="${T.stroke}" stroke-width="2.3"/>
+      <text x="${x+w/2}" y="${y+h+22}" fill="${cL}" font-size="13" font-weight="800" text-anchor="middle">${lL}</text>
+      <text x="${x+w+dx/2+16}" y="${y+h-dy/2+12}" fill="${cW}" font-size="13" font-weight="800" text-anchor="middle">${lW}</text>
+      <text x="${x-22}" y="${y+h/2+5}" fill="${cH}" font-size="13" font-weight="800" text-anchor="middle">${lH}</text>
+    </svg>`;
+  };
+  E.triangleBaseHeightSvg = function(p, unknown, shape){
+    const T = E.themes.geometry;
+    const W=260,H=170,x1=40,x2=220,yB=130,yT=40;
+    const lB=p.b==null?'?':p.b+' ס״מ', lH=p.h==null?'?':p.h+' ס״מ';
+    const cB=unknown==='b'?T.unknown:T.given, cH=unknown==='h'?T.unknown:T.given;
+    let body='';
+    if(shape==='para'){
+      body=`<polygon points="${x1+26},${yT} ${x2},${yT} ${x2-26},${yB} ${x1},${yB}" fill="${T.fill}" stroke="${T.stroke}" stroke-width="2.5" stroke-linejoin="round"/>
+      <line x1="${x1+58}" y1="${yT}" x2="${x1+58}" y2="${yB}" stroke="${T.helper}" stroke-width="2" stroke-dasharray="5 4"/>`;
+    } else if(shape==='trap'){
+      const lA=p.a==null?'?':p.a+' ס״מ';
+      const cA=unknown==='a'?T.unknown:T.given;
+      body=`<polygon points="${x1+44},${yT} ${x2-44},${yT} ${x2},${yB} ${x1},${yB}" fill="${T.fill}" stroke="${T.stroke}" stroke-width="2.5" stroke-linejoin="round"/>
+      <line x1="${(x1+x2)/2}" y1="${yT}" x2="${(x1+x2)/2}" y2="${yB}" stroke="${T.helper}" stroke-width="2" stroke-dasharray="5 4"/>
+      <text x="${(x1+x2)/2}" y="${yT-10}" fill="${cA}" font-size="13" font-weight="800" text-anchor="middle">${lA}</text>`;
+    } else {
+      body=`<polygon points="${(x1+x2)/2},${yT} ${x1},${yB} ${x2},${yB}" fill="${T.fill}" stroke="${T.stroke}" stroke-width="2.5" stroke-linejoin="round"/>
+      <line x1="${(x1+x2)/2}" y1="${yT}" x2="${(x1+x2)/2}" y2="${yB}" stroke="${T.helper}" stroke-width="2" stroke-dasharray="5 4"/>`;
+    }
+    return `<svg class="engine-svg" viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">${body}
+      <text x="${(x1+x2)/2}" y="${yB+22}" fill="${cB}" font-size="14" font-weight="800" text-anchor="middle">${lB}</text>
+      <text x="${(x1+x2)/2+24}" y="${(yT+yB)/2}" fill="${cH}" font-size="13" font-weight="800" text-anchor="middle">${lH}</text>
+    </svg>`;
+  };
+  E.triangleAnglesSvg = function(p, unknown){
+    const T = E.themes.geometry;
+    const W=260,H=175,Ax=130,Ay=34,Bx=42,By=140,Cx=218,Cy=140;
+    const lA=p.A==null?'?':p.A+'°', lB=p.B==null?'?':p.B+'°', lC=p.C==null?'?':p.C+'°';
+    const cA=unknown==='A'?T.unknown:T.given, cB=unknown==='B'?T.unknown:T.given, cC=unknown==='C'?T.unknown:T.given;
+    return `<svg class="engine-svg" viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">
+      <polygon points="${Ax},${Ay} ${Bx},${By} ${Cx},${Cy}" fill="${T.fill}" stroke="${T.stroke}" stroke-width="2.5" stroke-linejoin="round"/>
+      <text x="${Ax}" y="${Ay+26}" fill="${cA}" font-size="14" font-weight="800" text-anchor="middle">${lA}</text>
+      <text x="${Bx+26}" y="${By-10}" fill="${cB}" font-size="14" font-weight="800" text-anchor="middle">${lB}</text>
+      <text x="${Cx-26}" y="${Cy-10}" fill="${cC}" font-size="14" font-weight="800" text-anchor="middle">${lC}</text>
+    </svg>`;
+  };
+  E.circleSvg = function(p, unknown){
+    const T = E.themes.geometry;
+    const W=240,H=180,cx=120,cy=88,R=62;
+    let line='', label='', color = unknown==='r'||unknown==='d' ? T.unknown : T.given;
+    if(p.mode==='d'){
+      const lD=p.d==null?'?':p.d+' ס״מ';
+      line=`<line x1="${cx-R}" y1="${cy}" x2="${cx+R}" y2="${cy}" stroke="${color}" stroke-width="3"/><circle cx="${cx-R}" cy="${cy}" r="4" fill="${color}"/><circle cx="${cx+R}" cy="${cy}" r="4" fill="${color}"/>`;
+      label=`<text x="${cx}" y="${cy-10}" fill="${color}" font-size="14" font-weight="800" text-anchor="middle">${lD}</text>`;
+    } else {
+      const lR=p.r==null?'?':p.r+' ס״מ';
+      line=`<line x1="${cx}" y1="${cy}" x2="${cx+R}" y2="${cy}" stroke="${color}" stroke-width="3"/><circle cx="${cx}" cy="${cy}" r="4" fill="${T.stroke}"/>`;
+      label=`<text x="${cx+R/2}" y="${cy-10}" fill="${color}" font-size="14" font-weight="800" text-anchor="middle">${lR}</text>`;
+    }
+    return `<svg class="engine-svg" viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="${cx}" cy="${cy}" r="${R}" fill="${T.fill}" stroke="${T.stroke}" stroke-width="2.5"/>
+      ${line}${label}
+    </svg>`;
+  };
+  E.similarTrianglesSvg = function(p, unknown){
+    const T = E.themes.geometry;
+    const W=290,H=170;
+    const s={Ax:62,Ay:62,Bx:24,By:128,Cx:104,Cy:128};
+    const L={Ax:206,Ay:30,Bx:148,By:142,Cx:272,Cy:142};
+    const l1=p.s1==null?'?':p.s1+' ס״מ', l2=p.s2==null?'?':p.s2+' ס״מ';
+    const c1=unknown==='s1'?T.unknown:T.given, c2=unknown==='s2'?T.unknown:T.given;
+    return `<svg class="engine-svg" viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">
+      <polygon points="${s.Ax},${s.Ay} ${s.Bx},${s.By} ${s.Cx},${s.Cy}" fill="${T.fill}" stroke="${T.stroke}" stroke-width="2.3" stroke-linejoin="round"/>
+      <polygon points="${L.Ax},${L.Ay} ${L.Bx},${L.By} ${L.Cx},${L.Cy}" fill="${T.fill}" stroke="${T.stroke}" stroke-width="2.3" stroke-linejoin="round"/>
+      <text x="${(s.Bx+s.Cx)/2}" y="${s.By+18}" fill="${c1}" font-size="13" font-weight="800" text-anchor="middle">${l1}</text>
+      <text x="${(L.Bx+L.Cx)/2}" y="${L.By+18}" fill="${c2}" font-size="13" font-weight="800" text-anchor="middle">${l2}</text>
+      <text x="${s.Ax}" y="${s.Ay-8}" fill="${T.label}" font-size="11" font-weight="700" text-anchor="middle">קטן</text>
+      <text x="${L.Ax}" y="${L.Ay-8}" fill="${T.label}" font-size="11" font-weight="700" text-anchor="middle">גדול</text>
+    </svg>`;
+  };
+  E.numberLineSvg = function(p){
+    const T = E.themes.geometry;
+    const W=300,H=80,x0=20,x1=280,y=44;
+    const min=p.min!=null?p.min:-12, max=p.max!=null?p.max:12;
+    const sc=(W-40)/(max-min);
+    function X(v){ return x0+(v-min)*sc; }
+    let ticks='';
+    for(let v=min; v<=max; v+=4){
+      ticks += '<line x1="'+X(v)+'" y1="'+(y-5)+'" x2="'+X(v)+'" y2="'+(y+5)+'" stroke="#64748b" stroke-width="1.5"/>'+
+        '<text x="'+X(v)+'" y="'+(y+22)+'" fill="#334155" font-size="11" text-anchor="middle">'+v+'</text>';
+    }
+    let pts='';
+    (p.points||[]).forEach(function(v){
+      pts += '<circle cx="'+X(v)+'" cy="'+y+'" r="6" fill="'+T.unknown+'"/>'+
+        '<text x="'+X(v)+'" y="'+(y-12)+'" fill="'+T.unknown+'" font-size="12" font-weight="800" text-anchor="middle">'+v+'</text>';
+    });
+    return '<svg class="engine-svg" viewBox="0 0 '+W+' '+H+'" xmlns="http://www.w3.org/2000/svg">'+
+      '<line x1="'+x0+'" y1="'+y+'" x2="'+x1+'" y2="'+y+'" stroke="#334155" stroke-width="2.5"/>'+
+      '<polygon points="'+x1+','+y+' '+(x1-9)+','+(y-5)+' '+(x1-9)+','+(y+5)+'" fill="#334155"/>'+
+      '<polygon points="'+x0+','+y+' '+(x0+9)+','+(y-5)+' '+(x0+9)+','+(y+5)+'" fill="#334155"/>'+
+      ticks + pts + '</svg>';
+  };
+  E.freqTableHtml = function(headers, rows){
+    let h = '<table class="engine-table" dir="rtl"><thead><tr>';
+    headers.forEach(function(x){ h += '<th>'+x+'</th>'; });
+    h += '</tr></thead><tbody>';
+    rows.forEach(function(r){
+      h += '<tr>';
+      r.forEach(function(c){ h += '<td>'+c+'</td>'; });
+      h += '</tr>';
+    });
+    return h + '</tbody></table>';
+  };
 })();

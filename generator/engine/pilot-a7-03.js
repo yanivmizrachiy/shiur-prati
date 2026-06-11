@@ -1,0 +1,100 @@
+// generator/engine/pilot-a7-03.js
+// A7-03 First-Degree Equations — Smart Engine
+// Source: source-learning/2026-06-09/01_grade-7_algebra_curriculum.learning.md, 08
+(function(){
+  const E = window.TargilimEngine = window.TargilimEngine || {};
+
+  const ONE_STEP = [
+    {a:1,b:7,c:12,x:5},{a:1,b:-4,c:9,x:13},{a:5,b:0,c:35,x:7},{a:6,b:0,c:42,x:7},{a:1,b:9,c:15,x:6}
+  ];
+  const TWO_STEP = [
+    {a:3,b:5,c:20,x:5},{a:4,b:-3,c:17,x:5},{a:2,b:7,c:19,x:6},{a:5,b:4,c:39,x:7},{a:7,b:-6,c:29,x:5}
+  ];
+  const PARENS = [
+    {k:3,b:2,c:21,x:5},{k:2,b:5,c:18,x:4},{k:4,b:1,c:28,x:6},{k:5,b:3,c:40,x:5}
+  ];
+  const VERIFY = [
+    {a:3,b:5,c:20,x:5,ok:true},{a:2,b:7,c:19,x:5,ok:false},{a:4,b:-3,c:17,x:5,ok:true},{a:5,b:4,c:39,x:8,ok:false}
+  ];
+
+  function pickFamily(diff){
+    if(diff === 'basic') return 'one_step';
+    if(diff === 'challenge') return E.pick(['parens','verify','parens']);
+    return E.pick(['one_step','two_step','parens','verify']);
+  }
+  function pickCase(f){
+    if(f==='two_step') return E.pick(TWO_STEP);
+    if(f==='parens') return E.pick(PARENS);
+    if(f==='verify') return E.pick(VERIFY);
+    return E.pick(ONE_STEP);
+  }
+  function eqStr(x,f){
+    if(f==='parens') return `${x.k}(x+${x.b})=${x.c}`;
+    if(x.a===1) return x.b>=0 ? `x+${x.b}=${x.c}` : `x-${-x.b}=${x.c}`;
+    if(x.b===0) return `${x.a}x=${x.c}`;
+    return x.b>=0 ? `${x.a}x+${x.b}=${x.c}` : `${x.a}x-${-x.b}=${x.c}`;
+  }
+
+  function choices(family,x){
+    const correct = x.x;
+    const wrongs = family==='verify'
+      ? []
+      : [x.c-x.b, x.x+1, x.x-1].filter(v=>v!==correct);
+    if(family==='verify'){
+      const c2 = x.ok ? 'כן, פתרון' : 'לא פתרון';
+      return E.shuffle([c2, x.ok?'לא פתרון':'כן, פתרון']).map((v,i)=>({label:['א','ב'][i], text:v, correct:v===c2}));
+    }
+    const values=[correct].concat(wrongs).filter((v,i,a)=>a.indexOf(v)===i).slice(0,4);
+    while(values.length<4) values.push(correct+values.length+1);
+    return E.shuffle(values).map((v,i)=>({label:['א','ב','ג','ד'][i], text:'$'+v+'$', correct:v===correct}));
+  }
+
+  function question(family,x,qtype){
+    const eq = eqStr(x,family);
+    if(family==='verify'){
+      if(qtype==='mistake') return `תלמיד בדק אם $x=${x.x}$ פתרון של $${eq}$ והציב רק באגף שמאל בלי להשוות: "$${x.a}\\cdot ${x.x}${x.b>=0?'+'+x.b:'-'+(-x.b)}=${x.a*x.x+x.b}$ — סיימתי".`;
+      return `האם $x=${x.x}$ הוא פתרון של המשוואה $${eq}$? בדקו.`;
+    }
+    if(qtype==='tf') return `פתרון המשוואה $${eq}$ הוא $x=${x.x+1}$.`;
+    if(qtype==='mistake'){
+      if(family==='parens') return `במשוואה $${eq}$ תלמיד פתח סוגריים: "$${x.k}x+${x.b}=${x.c}$" — הכפיל רק את $x$.`;
+      return `במשוואה $${eq}$ תלמיד העביר אגף: "$${x.a}x=${x.c}+${Math.abs(x.b)}$" — בלי להפוך סימן.`;
+    }
+    return `פתרו את המשוואה ובדקו:\n$$${eq}$$`;
+  }
+
+  function answer(family,x,qtype){
+    if(family==='verify'){
+      const lhs = x.a*x.x + x.b;
+      const prefix = qtype==='mistake' ? 'הטעות: בדיקת פתרון דורשת השוואה לאגף ימין, לא רק חישוב.\n' : '';
+      return `${prefix}מציבים $x=${x.x}$:\n$$${x.a}\\cdot ${x.x}${x.b>=0?'+'+x.b:'-'+(-x.b)}=${lhs}$$\n${x.ok ? `$${lhs}=${x.c}$ ✓ — אכן פתרון.` : `$${lhs}\\ne ${x.c}$ ✗ — אינו פתרון.`}`;
+    }
+    const wrong = qtype==='mistake' || qtype==='tf';
+    if(family==='parens'){
+      const prefix = wrong ? 'שגוי — חוק הפילוג: מכפילים את שני האיברים בסוגריים.\n' : '';
+      return `${prefix}$$${x.k}(x+${x.b})=${x.c}$$\n$$${x.k}x+${x.k*x.b}=${x.c}$$\n$$${x.k}x=${x.c-x.k*x.b}$$\n$$x=${x.x}$$\nבדיקה: $${x.k}(${x.x}+${x.b})=${x.k}\\cdot ${x.x+x.b}=${x.c}$ ✓`;
+    }
+    const prefix = wrong ? 'שגוי — בהעברת אגף הסימן מתהפך.\n' : '';
+    if(x.a===1){
+      return `${prefix}$$x=${x.c}${x.b>=0?'-'+x.b:'+'+(-x.b)}=${x.x}$$\nבדיקה: $${x.x}${x.b>=0?'+'+x.b:'-'+(-x.b)}=${x.c}$ ✓`;
+    }
+    if(x.b===0){
+      return `${prefix}$$x=\\frac{${x.c}}{${x.a}}=${x.x}$$\nבדיקה: $${x.a}\\cdot ${x.x}=${x.c}$ ✓`;
+    }
+    return `${prefix}$$${x.a}x=${x.c}${x.b>=0?'-'+x.b:'+'+(-x.b)}=${x.c-x.b}$$\n$$x=\\frac{${x.c-x.b}}{${x.a}}=${x.x}$$\nבדיקה: $${x.a}\\cdot ${x.x}${x.b>=0?'+'+x.b:'-'+(-x.b)}=${x.c}$ ✓`;
+  }
+
+  E.generateA703Engine = function(difficulty, questionType){
+    difficulty = difficulty || 'standard'; questionType = questionType || 'open';
+    const family = pickFamily(difficulty);
+    const x = pickCase(family);
+    const q = question(family,x,questionType), a = answer(family,x,questionType);
+    if(questionType==='mcq') return E.questionTypes.mcq({question:q,answer:a,svg:'',choices:choices(family,x)});
+    if(questionType==='tf'){
+      const isTrue = family==='verify' ? x.ok : false;
+      return E.questionTypes.tf({question:q,answer:a,svg:'',isTrue:isTrue});
+    }
+    if(questionType==='mistake') return E.questionTypes.mistake({question:q,answer:a,svg:''});
+    return E.questionTypes.open({question:q,answer:a,svg:''});
+  };
+})();

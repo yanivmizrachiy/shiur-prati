@@ -63,7 +63,7 @@ Verified locally on 2026-06-11:
 
 Previous local browser verification from 2026-06-10 remains recorded for `G7-03-ENGINE`, `N8-03-ENGINE`, and `N8-04-ENGINE`.
 
-Conclusion: Phase 2 remains statically verified. Phase 3A contains six engine topics in code. Wave 1 adds `N8-01-ENGINE`, `N8-02-ENGINE`, and `N8-05-ENGINE` with source-bound template families, dynamic data, unknown switching, Hebrew wording variation, real question types, real difficulty behavior, dynamic SVG where relevant, and preserved legacy topics. Browser/live verification is still required before marking the Wave 1 topics live.
+Conclusion: Phase 2 remains statically verified. ALL 25 ENGINE TOPICS EXIST IN CODE — Stage 2A (5 geometry), Stage 2B (5 numeric + 3 algebra grade 7), Stage 2C (2 grade-7 uncertainty + 2 grade-8 algebra + 2 grade-8 uncertainty) completed 2026-06-11. Runtime harness: 6840 generations (19 new engines × 3 difficulties × 4 question types × 30 runs) — 0 failures. Live ✅ pending verify-phase3a.yml browser run. Wave 1 adds `N8-01-ENGINE`, `N8-02-ENGINE`, and `N8-05-ENGINE` with source-bound template families, dynamic data, unknown switching, Hebrew wording variation, real question types, real difficulty behavior, dynamic SVG where relevant, and preserved legacy topics. Browser/live verification is still required before marking the Wave 1 topics live.
 
 ---
 
@@ -159,6 +159,37 @@ U8-02 Live ⚠️
 | N8-03-ENGINE | Scale — true engine topic | 8 | Numeric | ✅ | Local Live ✅ |
 | N8-04-ENGINE | Static percentages — engine pilot | 8 | Numeric | ✅ | Local Live ✅ |
 | N8-05-ENGINE | Dynamic percentages — true engine topic | 8 | Numeric | ✅ | ⚠️ |
+| G7-01-ENGINE | Rectangle and box — true engine topic | 7 | Geometry | ✅ | ⚠️ |
+| G7-02-ENGINE | Flat shape areas — true engine topic | 7 | Geometry | ✅ | ⚠️ |
+| G7-04-ENGINE | Missing angle — true engine topic | 7 | Geometry | ✅ | ⚠️ |
+| G8-01-ENGINE | Circle circumference and area — true engine topic | 8 | Geometry | ✅ | ⚠️ |
+| G8-04-ENGINE | Triangle similarity — true engine topic | 8 | Geometry | ✅ | ⚠️ |
+| N7-03-ENGINE | Negative numbers on number line | 7 | Numeric | ✅ | ⚠️ |
+| N7-04-ENGINE | Signed addition/subtraction | 7 | Numeric | ✅ | ⚠️ |
+| N7-05-ENGINE | Signed multiplication/division | 7 | Numeric | ✅ | ⚠️ |
+| N7-06-ENGINE | Powers (−a)ⁿ vs −aⁿ | 7 | Numeric | ✅ | ⚠️ |
+| N7-07-ENGINE | Square root exact/estimation | 7 | Numeric | ✅ | ⚠️ |
+| A7-01-ENGINE | Algebraic expressions | 7 | Algebra | ✅ | ⚠️ |
+| A7-02-ENGINE | Substitution in expression | 7 | Algebra | ✅ | ⚠️ |
+| A7-03-ENGINE | First-degree equations | 7 | Algebra | ✅ | ⚠️ |
+| U7-01-ENGINE | Frequency table | 7 | Uncertainty | ✅ | ⚠️ |
+| U7-02-ENGINE | Basic probability | 7 | Uncertainty | ✅ | ⚠️ |
+| A8-02-ENGINE | Slope and line equation | 8 | Algebra | ✅ | ⚠️ |
+| A8-03-ENGINE | Systems of equations | 8 | Algebra | ✅ | ⚠️ |
+| U8-01-ENGINE | Mean, median, range | 8 | Uncertainty | ✅ | ⚠️ |
+| U8-02-ENGINE | Probability from table | 8 | Uncertainty | ✅ | ⚠️ |
+
+
+## Stage 2A geometry engines (2026-06-11)
+
+Added in code, pending live browser verification:
+- `G7-01-ENGINE` — families: rect_area, rect_perimeter, rect_missing_side_area, rect_missing_side_perimeter, box_volume, box_missing_dim. SVG: dynamic rectangle and cuboid.
+- `G7-02-ENGINE` — families: tri_area, para_area, trap_area, tri_missing_height. SVG: triangle/parallelogram/trapezoid with dashed height.
+- `G7-04-ENGINE` — families: missing_angle, possible_triangle (validity check). SVG: triangle with dynamic angle labels, unknown highlighted.
+- `G8-01-ENGINE` — families: circ_from_radius, area_from_radius, circ_from_diameter, radius_from_circ, formula_distinction. Exact π answers plus decimal approximation. SVG: circle with radius/diameter.
+- `G8-04-ENGINE` — families: scale_factor, corresponding_side, is_similar. SVG: paired similar triangles.
+
+All five support open / mcq / true-false / mistake question types and basic / standard / challenge difficulty. Runtime harness: 1800 generations (5 engines × 3 difficulties × 4 types × 30 runs), 0 failures, MCQ always exactly one correct choice.
 
 Capabilities implemented in `G7-03-ENGINE`:
 

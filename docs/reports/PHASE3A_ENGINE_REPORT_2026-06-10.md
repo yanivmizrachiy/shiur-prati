@@ -302,3 +302,44 @@ If it fails:
 - fix only the exact failing item reported by the workflow;
 - do not add new features;
 - do not rewrite the engine.
+
+
+## Stage 2A — Geometry smart engines (2026-06-11)
+
+HEAD before work: 24b454f
+
+Files created:
+- generator/engine/pilot-g7-01.js (rectangle and box)
+- generator/engine/pilot-g7-02.js (flat shape areas)
+- generator/engine/pilot-g7-04.js (missing angle in triangle)
+- generator/engine/pilot-g8-01.js (circle circumference and area)
+- generator/engine/pilot-g8-04.js (triangle similarity)
+
+Files modified:
+- generator/engine/diagrams.js — added rectangleSvg, boxSvg, triangleBaseHeightSvg (tri/para/trap), triangleAnglesSvg, circleSvg, similarTrianglesSvg
+- generator/engine/pattern-engine.js — registered 5 Stage 2A topics; fixed renderEngineCard grade/domain derivation (G8 topics previously tagged as grade 7)
+- generator/index.html — 5 pilot script tags
+- tools/verify-phase3a-static.mjs — Stage 2A registration, behavior, and diagram checks
+- .github/workflows/verify-phase3a.yml — 5 Stage 2A live topics added, engineReady extended
+- PROJECT_STATUS.md — truthful Stage 2A rows (Code ✅ / Live ⚠️)
+
+Verification:
+- node tools/verify-phase3a-static.mjs — PASS (including Stage 2A checks)
+- node tools/verify-phase2-static.mjs — PHASE2_STATIC_VERIFY_STRICT_OK
+- node --check on all changed JS — PASS
+- Runtime harness: 1800 generations across 5 engines × 3 difficulties × 4 question types — 0 failures, no undefined/NaN, MCQ exactly one correct
+
+Not yet verified live in browser: G7-01-ENGINE, G7-02-ENGINE, G7-04-ENGINE, G8-01-ENGINE, G8-04-ENGINE (Live ⚠️ until verify-phase3a.yml passes).
+
+Preserved untouched: export.js, phase2-loader.js, sources/, archive/, all legacy slices, existing 6 engine topics. Grade 9 locked. No worksheet/booklet scope.
+
+## Stage 2B + 2C — Full conversion complete (2026-06-11)
+
+Files created (14): pilot-n7-03/04/05/06/07.js, pilot-a7-01/02/03.js, pilot-u7-01/02.js, pilot-a8-02/03.js, pilot-u8-01/02.js
+Files modified: diagrams.js (+numberLineSvg, +freqTableHtml), engine.css (+engine-table), pattern-engine.js (25 ENGINE_TOPIC_IDS, 14 new registrations+generators), index.html (14 script tags), verify-phase3a-static.mjs, verify-phase3a.yml, PROJECT_STATUS.md.
+
+Source binding: 05+07 (N7-03/04/05/06/07), 01+08 (A7-01/02/03), 06 (U7-01/02, U8-01/02), 02+08 (A8-02/03). All families traceable to learning notes; probability in grade 7 backed by official curriculum note 00.
+
+Verification: static PASS (all 25 engines), phase2 strict OK, node --check all files, runtime harness 6840 generations 0 failures, MCQ always exactly one correct.
+
+Engine total: 25/25. Live ⚠️ for 19 new engines until verify-phase3a.yml browser run passes. Grade 9 locked. No worksheet/booklet. export.js and phase2-loader.js untouched.
