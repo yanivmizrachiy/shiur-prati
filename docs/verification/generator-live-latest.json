@@ -40,66 +40,66 @@
     }
   ],
   "error": null,
-  "questionText": "במשולש ישר-זווית, היתר \n25\n25 ס\"מ והרגל \n7\n7 ס\"מ.\nחשבו את הרגל השנייה.",
-  "answerText": "7\n2\n+\n𝑏\n2\n=\n2\n5\n2\n7\n2\n+b\n2\n=25\n2\n\n\n𝑏\n2\n=\n625\n−\n49\n=\n576\nb\n2\n=625−49=576\n\n\n𝑏\n=\n24\nb=24",
+  "questionText": "במשולש ישר-זווית, היתר \n17\n17 ס\"מ והרגל \n15\n15 ס\"מ.\nחשבו את הרגל השנייה.",
+  "answerText": "𝑎\n2\n+\n1\n5\n2\n=\n1\n7\n2\na\n2\n+15\n2\n=17\n2\n\n\n𝑎\n2\n=\n289\n−\n225\n=\n64\na\n2\n=289−225=64\n\n\n𝑎\n=\n8\na=8",
   "exportButtonCount": 3,
   "engineChecks": [
     {
       "id": "G7-03-ENGINE",
       "qtype": "open",
       "ok": true,
-      "questionText": "במשולש ישר-זווית, הרגליים הן \n5\n5 ס״מ ו-\n12\n12 ס״מ.\nחשבו את אורך היתר.",
+      "questionText": "במשולש ישר-זווית, הרגליים הן \n6\n6 ס״מ ו-\n8\n8 ס״מ.\nחשבו את אורך היתר.",
       "exportButtonCount": 3
     },
     {
       "id": "G7-03-ENGINE",
       "qtype": "mcq",
       "ok": true,
-      "questionText": "במשולש ישר-זווית, היתר הוא \n15\n15 ס״מ ורגל אחת היא \n12\n12 ס״מ.\nחשבו את אורך הרגל החסרה.",
+      "questionText": "במשולש ישר-זווית, היתר הוא \n10\n10 ס״מ ורגל אחת היא \n6\n6 ס״מ.\nחשבו את אורך הרגל החסרה.",
       "exportButtonCount": 3
     },
     {
       "id": "G7-03-ENGINE",
       "qtype": "tf",
       "ok": true,
-      "questionText": "נכון / שגוי: משולש עם צלעות \n5\n5, \n12\n12, \n13\n13 הוא ישר-זווית.",
+      "questionText": "נכון / שגוי: אם הרגליים הן \n9\n9 ס״מ ו-\n12\n12 ס״מ, אז היתר הוא \n21\n21 ס״מ.",
       "exportButtonCount": 3
     },
     {
       "id": "G7-03-ENGINE",
       "qtype": "mistake",
       "ok": true,
-      "questionText": "תלמיד כתב: \n9\n+\n12\n=\n21\n9+12=21, ולכן היתר הוא \n21\n21 ס״מ.",
+      "questionText": "תלמיד כתב: \n8\n+\n15\n=\n23\n8+15=23, ולכן היתר הוא \n23\n23 ס״מ.",
       "exportButtonCount": 3
     },
     {
       "id": "N8-04-ENGINE",
       "qtype": "open",
       "ok": true,
-      "questionText": "במגרש יש \n250\n250 מוצרים.\n\n40\n%\n40% מהם משתתפים בפעילות.\nכמה מוצרים משתתפים?",
+      "questionText": "בבית ספר יש \n150\n150 תלמידים.\n\n20\n%\n20% מהם משתתפים בפעילות.\nכמה תלמידים משתתפים?",
       "exportButtonCount": 3
     },
     {
       "id": "N8-04-ENGINE",
       "qtype": "mcq",
       "ok": true,
-      "questionText": "מתוך \n60\n60 שקלים, \n30\n30 שקלים השלימו משימה.\nכמה אחוזים מהשקלים השלימו?",
+      "questionText": "30\n30 שקלים מהווים \n50\n%\n50% מכלל השקלים.\nכמה שקלים יש בסך הכל?",
       "exportButtonCount": 3
     },
     {
       "id": "N8-04-ENGINE",
       "qtype": "tf",
       "ok": true,
-      "questionText": "נכון / שגוי: \"\n20\n%\n20% מתוך \n150\n150 תלמידים הם \n40\n40 תלמידים.\"",
+      "questionText": "נכון / שגוי: אם \n30\n30 שקלים הם \n75\n%\n75%, אז בסך הכל יש \n50\n50 שקלים.",
       "exportButtonCount": 3
     },
     {
       "id": "N8-04-ENGINE",
       "qtype": "mistake",
       "ok": true,
-      "questionText": "תלמיד חישב: \"\n80\n÷\n20\n×\n100\n80÷20×100\" כדי למצוא את האחוז.\nמצאו את הטעות.",
+      "questionText": "תלמיד חישב: \"\n200\n÷\n60\n×\n100\n200÷60×100\" כדי למצוא את האחוז.\nמצאו את הטעות.",
       "exportButtonCount": 3
     }
   ],
-  "timestamp": "2026-06-11T10:43:13.145Z"
+  "timestamp": "2026-06-11T11:13:43.068Z"
 }
