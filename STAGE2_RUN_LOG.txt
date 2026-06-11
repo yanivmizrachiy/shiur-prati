@@ -1,0 +1,58 @@
+**********************
+PowerShell transcript start
+Start time: 20260611072020
+Username: מזרחי\yaniv
+RunAs User: מזרחי\yaniv
+Configuration Name: 
+Machine: מזרחי (Microsoft Windows NT 10.0.26200.0)
+Host Application: C:\Program Files\PowerShell\7\pwsh.dll -WorkingDirectory ~
+Process ID: 26776
+PSVersion: 7.6.1
+PSEdition: Core
+GitCommitId: 7.6.1
+OS: Microsoft Windows 10.0.26200
+Platform: Win32NT
+PSCompatibleVersions: 1.0, 2.0, 3.0, 4.0, 5.0, 5.1, 6.0, 7.0
+PSRemotingProtocolVersion: 2.4
+SerializationVersion: 1.1.0.1
+WSManStackVersion: 3.0
+**********************
+Transcript started, output file is C:\Users\yaniv\Desktop\targilim\STAGE2_RUN_LOG.txt
+PS C:\Users\yaniv\Desktop\targilim>
+PS C:\Users\yaniv\Desktop\targilim>
+PS>Write-Host "=== STAGE 2 AUTO FIND + RUN + VERIFY + PUSH ===" -ForegroundColor Cyan
+=== STAGE 2 AUTO FIND + RUN + VERIFY + PUSH ===
+PS C:\Users\yaniv\Desktop\targilim>
+PS C:\Users\yaniv\Desktop\targilim>
+PS># 1. ודא שהריפו נקי ומסונכרן
+PS C:\Users\yaniv\Desktop\targilim>
+PS>git fetch origin
+
+PS C:\Users\yaniv\Desktop\targilim>
+PS>$local = git rev-parse HEAD
+PS C:\Users\yaniv\Desktop\targilim>
+PS>$remote = git rev-parse origin/main
+PS C:\Users\yaniv\Desktop\targilim>
+PS>$status = git status --short
+PS C:\Users\yaniv\Desktop\targilim>
+PS C:\Users\yaniv\Desktop\targilim>
+PS>Write-Host "LOCAL : $local"
+LOCAL : 24b454f6fa7d248eabd96c5be00ee9410f95ea61
+PS C:\Users\yaniv\Desktop\targilim>
+PS>Write-Host "REMOTE: $remote"
+REMOTE: 24b454f6fa7d248eabd96c5be00ee9410f95ea61
+PS C:\Users\yaniv\Desktop\targilim>
+PS C:\Users\yaniv\Desktop\targilim>
+PS>if ($local -ne $remote -or $status) {
+  Write-Host "STOP: repo is not clean/synced before Stage 2." -ForegroundColor Red
+  git status --short
+  Stop-Transcript
+  pause
+  return
+}
+STOP: repo is not clean/synced before Stage 2.
+?? STAGE2_RUN_LOG.txt
+**********************
+PowerShell transcript end
+End time: 20260611072022
+**********************
