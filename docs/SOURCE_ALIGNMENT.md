@@ -40,7 +40,7 @@ Source files cited as learning notes (`source-learning/2026-06-09/`); originals 
 | A7-01 | ביטויים אלגבריים | 7 | Algebra | 01 + 08 | Pattern A7-01 | PATCH QUESTIONS |
 | A7-02 | הצבה בביטוי | 7 | Algebra | 01 + 08 | Pattern A7-02 | KEEP |
 | A7-03 | משוואות מדרגה ראשונה | 7 | Algebra | 01 + 08 | Pattern A7-03 | KEEP |
-| U7-01 | טבלת תדירות | 7 | Uncertainty | 06 | Pattern U7-01 | ADD MISSING FAMILY |
+| U7-01 | טבלת תדירות | 7 | Uncertainty | 06 | Pattern U7-01 | KEEP |
 | U7-02 | הסתברות בסיסית | 7 | Uncertainty | 06 | Pattern U8-02; curric. U7-02 | REMAP |
 | G8-01 | עיגול — היקף ושטח | 8 | Geometry | 04 + 09 | Pattern G8-01 | KEEP |
 | G8-04 | דמיון משולשים | 8 | Geometry | 04 + 09 | Pattern G8-02; curric. G8-04 | REMAP |
@@ -102,7 +102,7 @@ Source file key: 01 grade-7 algebra · 02 grade-8 algebra · 03 grade-7 pre-dedu
 
 ### Uncertainty
 
-**U7-01 — ADD MISSING FAMILY.** Skills: organize data into frequency table, **relative frequency**. Engine covers tables; relative-frequency family and `frequency_table` visual rendering need review against pattern U7-01. Action: add relative-frequency family; review table rendering.
+**U7-01 — KEEP (fixed in Batch 4.2).** Skills: read frequency table, most frequent, total, missing frequency, **relative frequency** (count ÷ total, expressed as fraction/decimal/percent per source line "הביעו כשבר/עשרוני/אחוז"). Batch 4.2 added a `rel_freq` family (all 4 question types; tf/mistake target the real misconception of reading the absolute count as the relative frequency). `frequency_table` visual already rendered via `E.freqTableHtml`. Action: none. Note: raw-data→table construction family ("ארגנו בטבלת תדירות") remains NOT DONE — fits a future variety batch.
 
 **U7-02 — REMAP.** Skills: theoretical probability P=favorable/total, complement. Pattern index files basic probability as U8-02; curriculum places it in grade 7 too (U7-02). Engine correct pedagogically. Action: none beyond mapping.
 
@@ -122,6 +122,6 @@ Source file key: 01 grade-7 algebra · 02 grade-8 algebra · 03 grade-7 pre-dedu
 ## Summary
 
 - 25/25 engines mapped. Deletions: 0. Code renames: 0.
-- KEEP: 17 (N7-04 fixed in Batch 4.1) · REMAP (doc-only): 4 (G7-01, G7-04, G8-04, U7-02) · PATCH QUESTIONS: 2 (A7-01, A8-02) · ADD MISSING FAMILY: 2 (N7-03, U7-01)
+- KEEP: 18 (N7-04 fixed 4.1, U7-01 fixed 4.2) · REMAP (doc-only): 4 (G7-01, G7-04, G8-04, U7-02) · PATCH QUESTIONS: 2 (A7-01, A8-02) · ADD MISSING FAMILY: 1 (N7-03)
 - Map status: DONE. Source-alignment implementation: NOT DONE.
 - Next: targeted fixes per "Action" notes — small batches, never a rewrite.

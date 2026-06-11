@@ -57,6 +57,15 @@ Statuses: DONE / PARTIAL / NOT DONE / NEEDS REVIEW / BLOCKED.
 - Tests: node --check PASS; sample harness 2,400 generations (3 diff × 4 types × 200) — 0 failures, MCQ always exactly 1 correct, estimation family active; both static verifiers PASS; git diff --check clean.
 - Progress: 45% → 48%.
 
+## Batch 4.2 — branch `claude/batch4-2-u7-01-relative-frequency` (2026-06-11) — DONE
+
+- Files: `generator/engine/pilot-u7-01.js`, `docs/SOURCE_ALIGNMENT.md`, `PROJECT_STATUS.md`, this file.
+- Added `rel_freq` family per source file 06 ("חשבו תדירות יחסית... הביעו כשבר/עשרוני/אחוז"): open = fraction + decimal + percent with simplification steps; mcq = percent answer, distractors include the absolute count (real misconception); tf/mistake = student reads the absolute count as the relative frequency. All totals 20 → clean fractions/decimals/percents.
+- Existing families (read_freq, most_frequent, total_check, missing_freq) and table SVG preserved. No other engines touched; export untouched.
+- Noted in map: raw-data→table construction family still NOT DONE (future variety batch).
+- Tests: node --check PASS; sample harness 2,400 generations — 0 failures, MCQ exactly 1 correct + unique choices, rel_freq active (598×); both static verifiers PASS; git diff --check clean.
+- Progress: 48% → 51%.
+
 ## Next action
 
-- Batch 4.2+ (pending Yaniv approval): remaining targeted fixes — N7-03 (number-line families), U7-01 (relative frequency), A7-01/A8-02 (PATCH QUESTIONS). Then UI/variety/visual modes. No rewrites.
+- Batch 4.3+ (pending Yaniv approval): remaining targeted fixes — N7-03 (number-line families, needs `number_line` visual), A7-01/A8-02 (PATCH QUESTIONS). Then UI/variety/visual modes. No rewrites.

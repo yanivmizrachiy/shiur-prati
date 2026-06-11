@@ -12,10 +12,11 @@
   ];
 
   function pickFamily(diff){
-    if(diff === 'basic') return E.pick(['read_freq','most_frequent']);
-    if(diff === 'challenge') return E.pick(['missing_freq','total_check','missing_freq']);
-    return E.pick(['read_freq','most_frequent','total_check','missing_freq']);
+    if(diff === 'basic') return E.pick(['read_freq','most_frequent','rel_freq']);
+    if(diff === 'challenge') return E.pick(['missing_freq','total_check','missing_freq','rel_freq']);
+    return E.pick(['read_freq','most_frequent','total_check','missing_freq','rel_freq']);
   }
+  function gcd(a,b){ return b ? gcd(b,a%b) : a; }
 
   function setup(family){
     const t = E.pick(TABLES);
@@ -30,6 +31,16 @@
 
   function choices(family,s){
     const t=s.t, idx=s.idx;
+    if(family==='rel_freq'){
+      const c=t.counts[idx], p=Math.round(c*100/t.total);
+      const opts=[
+        {text:'$'+p+'\\%$', correct:true},
+        {text:'$'+c+'$', correct:false},
+        {text:'$'+(100-p)+'\\%$', correct:false},
+        {text:'$'+(p+5)+'\\%$', correct:false}
+      ];
+      return E.shuffle(opts).map((o,i)=>({label:['א','ב','ג','ד'][i], text:o.text, correct:o.correct}));
+    }
     let correct, wrongs;
     if(family==='read_freq'){ correct=t.counts[idx]; wrongs=[t.vals[idx], t.counts[idx]+1, t.total]; }
     else if(family==='most_frequent'){
@@ -50,6 +61,13 @@
 
   function question(family,s,qtype){
     const t=s.t, idx=s.idx;
+    if(family==='rel_freq'){
+      const c=t.counts[idx];
+      if(qtype==='tf') return `התדירות היחסית של ${t.label} $${t.vals[idx]}$ היא $${c}$, כי זו התדירות הרשומה בטבלה.`;
+      if(qtype==='mistake') return `תלמיד טען: "התדירות היחסית של ${t.label} $${t.vals[idx]}$ היא $${c}$ — פשוט קוראים מהטבלה".`;
+      if(qtype==='mcq') return `מה התדירות היחסית של ${t.label} $${t.vals[idx]}$?`;
+      return `מה התדירות היחסית של ${t.label} $${t.vals[idx]}$?\nהביעו אותה כשבר, כמספר עשרוני וכאחוז.`;
+    }
     if(family==='read_freq'){
       if(qtype==='tf') return `לפי הטבלה, התדירות של ${t.label} $${t.vals[idx]}$ היא $${t.counts[idx]+1}$.`;
       if(qtype==='mistake') return `תלמיד קרא מהטבלה: "התדירות של $${t.vals[idx]}$ היא $${t.vals[idx]}$".`;
@@ -76,6 +94,13 @@
   function answer(family,s,qtype){
     const t=s.t, idx=s.idx;
     const wrong = qtype==='mistake' || qtype==='tf';
+    if(family==='rel_freq'){
+      const c=t.counts[idx], g=gcd(c,t.total), fn=c/g, fd=t.total/g;
+      const dec=c/t.total, p=Math.round(c*100/t.total);
+      const prefix = wrong ? `שגוי — $${c}$ היא התדירות המוחלטת (הספירה). תדירות יחסית היא החלק מתוך הסך הכול: תדירות ÷ סך הנבדקים.\n` : 'תדירות יחסית = תדירות ÷ סך הנבדקים:\n';
+      const steps = g>1 ? `\\frac{${c}}{${t.total}}=\\frac{${fn}}{${fd}}=${dec}=${p}\\%` : `\\frac{${c}}{${t.total}}=${dec}=${p}\\%`;
+      return `${prefix}$$${steps}$$`;
+    }
     if(family==='read_freq'){
       const prefix = wrong ? 'שגוי — התדירות היא המספר בעמודת התדירות, לא הערך עצמו.\n' : '';
       return `${prefix}בשורת ${t.label} $${t.vals[idx]}$ — התדירות היא $${t.counts[idx]}$.`;
