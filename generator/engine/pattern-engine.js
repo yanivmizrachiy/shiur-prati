@@ -47,6 +47,7 @@
       <div class="expbar" data-html2canvas-ignore="true"><button class="btn-exp" onclick="copyImg('${cid}',this)">העתק כתמונה</button><button class="btn-exp" onclick="dlPNG('${cid}',this)">PNG</button><button class="btn-exp" onclick="window.print()">הדפס</button><span class="expstat" id="st-${cid}"></span></div>
     </div>`;
     renderMathInElement(document.getElementById('out'),{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false});
+    if(typeof applyVisualMode==='function') applyVisualMode();
   };
 
   E.updatePanel = function(){
