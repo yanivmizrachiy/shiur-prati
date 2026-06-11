@@ -38,9 +38,9 @@
     const gradeTag=grade==='8'?'כיתה ח׳':'כיתה ז׳';
     const domainTag=dom==='N'?'מספרי':dom==='A'?'אלגברי':dom==='U'?'אי-ודאות':'גאומטריה';
     const cls=dom==='N'?'num':dom==='A'?'alg':dom==='U'?'unc':'geo';
-    if(typeof setMainTitle==='function') setMainTitle(domainTag,title);
+    if(typeof setMainTitle==='function') setMainTitle(cls,title);
     document.getElementById('out').innerHTML = `<div class="qcard engine-card" id="${cid}">
-      <div class="qmeta"><span class="tag ${cls}">${gradeTag}</span><span class="tag ${cls}">${domainTag}</span><span class="tag">${id}</span><span>${title}</span><span class="engine-badge">מנוע חדש ✦</span></div>
+      <div class="qmeta"><span class="tag ${cls}">${gradeTag}</span><span class="tag ${cls}">${domainTag}</span></div>
       ${result.questionHTML}
       <button class="btn-ans" onclick="document.getElementById('${aid}').classList.toggle('open')">הצג פתרון</button>
       <div class="answer" id="${aid}">${result.answerHTML}</div>
