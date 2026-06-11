@@ -4,11 +4,11 @@
 
 ## Snapshot
 
-- REAL_PROGRESS_PERCENT: 45%
+- REAL_PROGRESS_PERCENT: 48%
 - Batches merged into main: Batch 1/1.1/1.2 (`e678e85`), Batch 2 governance docs (`f530a5c` = main HEAD at time of writing)
 - Active engine count: 25
 - Batch 3 (source alignment map, `docs/SOURCE_ALIGNMENT.md`, 25/25 engines mapped): DONE
-- Source alignment implementation (applying PATCH/ADD-FAMILY actions): NOT DONE — next work is targeted source-alignment fixes per the map, not a rewrite
+- Source alignment implementation: PARTIAL — Batch 4.1 fixed N7-04 (estimation family added, missing-addend extended; 2,400-generation sample harness, 0 failures). Remaining: N7-03, U7-01 (ADD MISSING FAMILY), A7-01, A8-02 (PATCH QUESTIONS). Targeted fixes only, not a rewrite
 - Batch 1 (cleanup, typo fix, header credit, site-only main title): DONE — commit `a72625f`
 - Batch 1.1 (clean qcard: no technical ids / engine badges / topic title in image): DONE — commit `8333446`
 - Batch 1.2 (export bar excluded from copied PNG via `data-html2canvas-ignore`): DONE — commit `e678e85`
@@ -18,7 +18,7 @@
 ### Not done yet
 
 - Source alignment map of all 25 engines: DONE (`docs/SOURCE_ALIGNMENT.md`)
-- Source alignment implementation (fix actions from the map): NOT DONE
+- Source alignment implementation (fix actions from the map): PARTIAL — N7-04 DONE (Batch 4.1); N7-03, U7-01, A7-01, A8-02 NOT DONE
 - RULES enforcement in tests: NOT DONE
 - Full pedagogical audit: NOT DONE
 - Color/grayscale/black-white visual mode: NOT DONE

@@ -33,7 +33,7 @@ Source files cited as learning notes (`source-learning/2026-06-09/`); originals 
 | G7-03 | משפט פיתגורס | 7 | Geometry | 03 + 09 | Pattern G7-03; curric. G7-07 | KEEP |
 | G7-04 | זווית חסרה במשולש | 7 | Geometry | 03 + 09 | Pattern G7-01 זווית חסרה | REMAP |
 | N7-03 | מספרים שליליים על ציר | 7 | Numeric | 05 + 07 | Pattern N7-03; curric. N7-02 | ADD MISSING FAMILY |
-| N7-04 | חיבור וחיסור מכוונים | 7 | Numeric | 05 + 07 | Pattern N7-04; curric. N7-03 | ADD MISSING FAMILY |
+| N7-04 | חיבור וחיסור מכוונים | 7 | Numeric | 05 + 07 | Pattern N7-04; curric. N7-03 | KEEP |
 | N7-05 | כפל וחילוק מכוונים | 7 | Numeric | 05 + 07 | Pattern N7-05; curric. N7-04 | KEEP |
 | N7-06 | חזקות (−a)ⁿ/−aⁿ | 7 | Numeric | 05 + 07 | Pattern N7-06; curric. N7-05 | KEEP |
 | N7-07 | שורש ריבועי | 7 | Numeric | 05 + 07 | Pattern N7-07; curric. N7-06 | KEEP |
@@ -76,7 +76,7 @@ Source file key: 01 grade-7 algebra · 02 grade-8 algebra · 03 grade-7 pre-dedu
 
 **N7-03 — ADD MISSING FAMILY.** Skills: ordering, opposites, absolute value, number-line placement incl. fractions (−3.5, −½). Source families: mark P/Q/opposites **on a number line**. Visual: `number_line` — **missing** in engine (text-only). Action: add number-line SVG families; keep existing text families.
 
-**N7-04 — ADD MISSING FAMILY.** Skills: signed add/sub in −20..20. Source families: compute, **estimation without computing**, **missing-addend** (`[a]+__<0`). Engine has compute only. Visual: none required. Action: add estimation + missing-value families.
+**N7-04 — KEEP (fixed in Batch 4.1).** Skills: signed add/sub in −20..20. Source families: compute, **estimation without computing**, **missing-addend**. Correction to the Batch 3 map: the engine already had a missing-addend family; the real gap was estimation. Batch 4.1 added an `estimate` family (sign reasoning without exact computation, all 4 question types; mistake/tf target the real misconception "הספרה הגדולה קובעת סימן חיובי") and 3 more missing-addend cases. Visual: none required. Action: none.
 
 **N7-05 — KEEP.** Skills: signed mult/div in −12..12, incl. triple products. Visual: none. Action: optionally add 3-factor family (source template shows one).
 
@@ -122,6 +122,6 @@ Source file key: 01 grade-7 algebra · 02 grade-8 algebra · 03 grade-7 pre-dedu
 ## Summary
 
 - 25/25 engines mapped. Deletions: 0. Code renames: 0.
-- KEEP: 16 · REMAP (doc-only): 4 (G7-01, G7-04, G8-04, U7-02) · PATCH QUESTIONS: 2 (A7-01, A8-02) · ADD MISSING FAMILY: 3 (N7-03, N7-04, U7-01)
+- KEEP: 17 (N7-04 fixed in Batch 4.1) · REMAP (doc-only): 4 (G7-01, G7-04, G8-04, U7-02) · PATCH QUESTIONS: 2 (A7-01, A8-02) · ADD MISSING FAMILY: 2 (N7-03, U7-01)
 - Map status: DONE. Source-alignment implementation: NOT DONE.
 - Next: targeted fixes per "Action" notes — small batches, never a rewrite.

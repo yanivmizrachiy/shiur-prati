@@ -49,6 +49,14 @@ Statuses: DONE / PARTIAL / NOT DONE / NEEDS REVIEW / BLOCKED.
 - `PROJECT_STATUS.md`: REAL_PROGRESS_PERCENT 35% → 45% (map complete for 25/25); map DONE, implementation NOT DONE.
 - Tests: `verify-phase3a-static.mjs` PASS, `verify-phase2-static.mjs` PASS, `git diff --check` clean.
 
+## Batch 4.1 — branch `claude/batch4-1-n7-04-source-fix` (2026-06-11) — DONE
+
+- Files: `generator/engine/pilot-n7-04.js`, `docs/SOURCE_ALIGNMENT.md`, `PROJECT_STATUS.md`, this file.
+- Added `estimate` family per source pattern N7-04 ("בלי לחשב..."): open (classify 3 exercises by sign with reasoning), mcq (exactly one negative result among 4), tf/mistake (misconception: "הספרה הגדולה ⇒ תוצאה חיובית"). Extended missing-addend with 3 cases. No other engines touched; export untouched.
+- Map correction: Batch 3 map wrongly said N7-04 had compute only — missing-addend already existed; real gap was estimation. N7-04 now KEEP.
+- Tests: node --check PASS; sample harness 2,400 generations (3 diff × 4 types × 200) — 0 failures, MCQ always exactly 1 correct, estimation family active; both static verifiers PASS; git diff --check clean.
+- Progress: 45% → 48%.
+
 ## Next action
 
-- Batch 4 (pending Yaniv approval): targeted source-alignment fixes per SOURCE_ALIGNMENT.md actions (PATCH QUESTIONS / ADD MISSING FAMILY), then UI/variety/visual modes. No rewrites.
+- Batch 4.2+ (pending Yaniv approval): remaining targeted fixes — N7-03 (number-line families), U7-01 (relative frequency), A7-01/A8-02 (PATCH QUESTIONS). Then UI/variety/visual modes. No rewrites.
