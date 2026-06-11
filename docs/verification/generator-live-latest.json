@@ -40,36 +40,36 @@
     }
   ],
   "error": null,
-  "questionText": "במשולש ישר-זווית, היתר \n13\n13 ס\"מ והרגל \n12\n12 ס\"מ.\nחשבו את הרגל השנייה.",
-  "answerText": "𝑎\n2\n+\n1\n2\n2\n=\n1\n3\n2\na\n2\n+12\n2\n=13\n2\n\n\n𝑎\n2\n=\n169\n−\n144\n=\n25\na\n2\n=169−144=25\n\n\n𝑎\n=\n5\na=5",
+  "questionText": "במשולש ישר-זווית, שתי הרגליים הן \n5\n5 ס\"מ ו-\n12\n12 ס\"מ.\nחשבו את היתר.",
+  "answerText": "5\n2\n+\n1\n2\n2\n=\n𝑐\n2\n5\n2\n+12\n2\n=c\n2\n\n\n25\n+\n144\n=\n169\n25+144=169\n\n\n𝑐\n=\n13\nc=13",
   "exportButtonCount": 3,
   "engineChecks": [
     {
       "id": "G7-03-ENGINE",
       "qtype": "open",
       "ok": true,
-      "questionText": "במשולש ישר-זווית, הרגליים הן \n5\n5 ס״מ ו-\n12\n12 ס״מ.\nחשבו את אורך היתר.",
+      "questionText": "במשולש ישר-זווית, הרגליים הן \n3\n3 ס״מ ו-\n4\n4 ס״מ.\nחשבו את אורך היתר.",
       "exportButtonCount": 3
     },
     {
       "id": "G7-03-ENGINE",
       "qtype": "mcq",
       "ok": true,
-      "questionText": "במשולש ישר-זווית, היתר הוא \n10\n10 ס״מ ורגל אחת היא \n6\n6 ס״מ.\nחשבו את אורך הרגל החסרה.",
+      "questionText": "במשולש ישר-זווית, הרגליים הן \n5\n5 ס״מ ו-\n12\n12 ס״מ.\nחשבו את אורך היתר.",
       "exportButtonCount": 3
     },
     {
       "id": "G7-03-ENGINE",
       "qtype": "tf",
       "ok": true,
-      "questionText": "נכון / שגוי: משולש עם צלעות \n7\n7, \n24\n24, \n25\n25 הוא ישר-זווית.",
+      "questionText": "נכון / שגוי: אם הרגליים הן \n6\n6 ס״מ ו-\n8\n8 ס״מ, אז היתר הוא \n14\n14 ס״מ.",
       "exportButtonCount": 3
     },
     {
       "id": "G7-03-ENGINE",
       "qtype": "mistake",
       "ok": true,
-      "questionText": "תלמיד כתב: \n3\n+\n4\n=\n7\n3+4=7, ולכן היתר הוא \n7\n7 ס״מ.",
+      "questionText": "תלמיד כתב: \n5\n+\n12\n=\n17\n5+12=17, ולכן היתר הוא \n17\n17 ס״מ.",
       "exportButtonCount": 3
     },
     {
@@ -83,7 +83,7 @@
       "id": "N8-04-ENGINE",
       "qtype": "mcq",
       "ok": true,
-      "questionText": "30\n30 מוצרים מהווים \n20\n%\n20% מכלל המוצרים.\nכמה מוצרים יש בסך הכל?",
+      "questionText": "במגרש יש \n250\n250 מוצרים.\n\n40\n%\n40% מהם משתתפים בפעילות.\nכמה מוצרים משתתפים?",
       "exportButtonCount": 3
     },
     {
@@ -97,9 +97,9 @@
       "id": "N8-04-ENGINE",
       "qtype": "mistake",
       "ok": true,
-      "questionText": "תלמיד חישב: \"\n30\n×\n75\n÷\n100\n30×75÷100\" כדי למצוא את הכמות הכוללת.\nמצאו את הטעות.",
+      "questionText": "תלמיד חישב: \"\n75\n%\n75% מ-\n40\n40 = \n40\n÷\n75\n=\n1\n40÷75=1\".\nמצאו את הטעות.",
       "exportButtonCount": 3
     }
   ],
-  "timestamp": "2026-06-10T21:43:23.526Z"
+  "timestamp": "2026-06-11T04:43:23.715Z"
 }
