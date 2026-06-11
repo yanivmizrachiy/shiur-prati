@@ -264,7 +264,9 @@
       '<line x1="'+X(0)+'" y1="'+Y(ymin)+'" x2="'+X(0)+'" y2="'+Y(ymax)+'" stroke="#334155" stroke-width="1.8"/>'+
       '<polygon points="'+X(xmax)+','+Y(0)+' '+(X(xmax)-7)+','+(Y(0)-4)+' '+(X(xmax)-7)+','+(Y(0)+4)+'" fill="#334155"/>'+
       '<polygon points="'+X(0)+','+Y(ymax)+' '+(X(0)-4)+','+(Y(ymax)+7)+' '+(X(0)+4)+','+(Y(ymax)+7)+'" fill="#334155"/>'+
-      '<text x="'+(X(0)-7)+'" y="'+(Y(0)+14)+'" fill="#64748b" font-size="9" text-anchor="end">0</text>';
+      '<text x="'+(X(0)-7)+'" y="'+(Y(0)+14)+'" fill="#64748b" font-size="9" text-anchor="end">0</text>'+
+      '<text x="'+(X(xmax)-4)+'" y="'+(Y(0)-8)+'" fill="#334155" font-size="11" font-style="italic" text-anchor="end">x</text>'+
+      '<text x="'+(X(0)+10)+'" y="'+(Y(ymax)+10)+'" fill="#334155" font-size="11" font-style="italic">y</text>';
     const line = '<line x1="'+X(xmin)+'" y1="'+Y(yAt(xmin))+'" x2="'+X(xmax)+'" y2="'+Y(yAt(xmax))+'" stroke="#2563eb" stroke-width="2.5"/>';
     let dots='';
     pts.forEach(function(q){

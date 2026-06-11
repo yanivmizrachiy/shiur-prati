@@ -39,8 +39,8 @@
   function choices(family,x){
     if(family === 'is_similar'){
       const correct = x.sim ? 'כן, דומים' : 'לא דומים';
-      const values = [correct, x.sim ? 'לא דומים' : 'כן, דומים'];
-      return E.shuffle(values).map((v,i)=>({label:['א','ב'][i], text:v, correct:v===correct}));
+      const values = [correct, x.sim ? 'לא דומים' : 'כן, דומים', 'אי אפשר לקבוע לפי הנתונים'];
+      return E.shuffle(values).map((v,i)=>({label:['א','ב','ג'][i], text:v, correct:v===correct}));
     }
     let correct, wrongs;
     if(family === 'area_ratio'){ correct=x.A2; wrongs=[x.A1*x.k, x.A1+x.k, x.A1*x.k*2]; }

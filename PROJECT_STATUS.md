@@ -4,7 +4,7 @@
 
 ## Snapshot
 
-- REAL_PROGRESS_PERCENT: 72%
+- REAL_PROGRESS_PERCENT: 80%
 - Active engine count: 25 (all preserved; none deleted or restarted)
 - Batches DONE and merged: 1/1.1/1.2 (`a72625f`/`8333446`/`e678e85`), 2 governance (`f530a5c`), 3 alignment map (`d618ef9`), 4.1 N7-04 (`dc0d030`), 4.2 U7-01 (`6f1f7f8`)
 - Completion sprint (branch `claude/full-completion-sprint`): DONE for its scope —
@@ -12,8 +12,9 @@
   - Visual mode (color / grayscale / black-and-white) affecting real SVG DOM, export/print-safe: DONE in code, NEEDS REVIEW live in browser
   - Visual quality audit: DONE (`docs/VISUAL_QUALITY_AUDIT.md`)
 - Source alignment implementation: DONE for all 25 engines per `docs/SOURCE_ALIGNMENT.md`
-- Current known risks: visual mode + copy-image behavior verified by unit tests, not yet by a human in a browser; pedagogical depth audited by AI only
-- Next major work: human teacher review + live browser QA, then gap-list patterns (new topics beyond the 25)
+- Final QA polish sprint (branch `claude/final-qa-polish-sprint`): DONE — Hebrew/UI de-jargonized (גרסה חכמה / רמת קושי), A7-01 singular-form bug fixed, G8-04 MCQ de-trivialized, x/y axis letters, export-safety code review passed, `docs/QA_CHECKLIST.md` created; 10,800-generation harness, 0 failures
+- Current known risks: visual mode + copy-image verified by unit tests and code review, not yet by a human in a browser; pedagogical depth audited by AI only
+- Next major work: Yaniv runs `docs/QA_CHECKLIST.md` live (the gate to 90%+), then gap-list patterns (new topics beyond the 25)
 
 ### Remaining before 100%
 

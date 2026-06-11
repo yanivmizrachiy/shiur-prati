@@ -57,100 +57,100 @@
   };
 
   if(typeof TOPICS !== 'undefined' && TOPICS[7] && TOPICS[7].geometry && !TOPICS[7].geometry.some(t=>t[0]==='G7-03-ENGINE')){
-    TOPICS[7].geometry.push(['G7-03-ENGINE','פיתגורס — מנוע מלא ✦',1]);
+    TOPICS[7].geometry.push(['G7-03-ENGINE','פיתגורס — גרסה חכמה ✦',1]);
   }
   if(typeof TOPICS !== 'undefined' && TOPICS[8] && TOPICS[8].numeric && !TOPICS[8].numeric.some(t=>t[0]==='N8-01-ENGINE')){
-    TOPICS[8].numeric.push(['N8-01-ENGINE','יחס — מנוע מלא ✦',1]);
+    TOPICS[8].numeric.push(['N8-01-ENGINE','יחס — גרסה חכמה ✦',1]);
   }
   if(typeof TOPICS !== 'undefined' && TOPICS[8] && TOPICS[8].numeric && !TOPICS[8].numeric.some(t=>t[0]==='N8-02-ENGINE')){
-    TOPICS[8].numeric.push(['N8-02-ENGINE','פרופורציה — מנוע מלא ✦',1]);
+    TOPICS[8].numeric.push(['N8-02-ENGINE','פרופורציה — גרסה חכמה ✦',1]);
   }
   if(typeof TOPICS !== 'undefined' && TOPICS[8] && TOPICS[8].numeric && !TOPICS[8].numeric.some(t=>t[0]==='N8-04-ENGINE')){
-    TOPICS[8].numeric.push(['N8-04-ENGINE','אחוזים סטטיים — מנוע מלא ✦',1]);
+    TOPICS[8].numeric.push(['N8-04-ENGINE','אחוזים סטטיים — גרסה חכמה ✦',1]);
   }
   if(typeof TOPICS !== 'undefined' && TOPICS[8] && TOPICS[8].numeric && !TOPICS[8].numeric.some(t=>t[0]==='N8-03-ENGINE')){
-    TOPICS[8].numeric.push(['N8-03-ENGINE','קנה מידה — מנוע מלא ✦',1]);
+    TOPICS[8].numeric.push(['N8-03-ENGINE','קנה מידה — גרסה חכמה ✦',1]);
   }
   if(typeof TOPICS !== 'undefined' && TOPICS[8] && TOPICS[8].numeric && !TOPICS[8].numeric.some(t=>t[0]==='N8-05-ENGINE')){
-    TOPICS[8].numeric.push(['N8-05-ENGINE','אחוזים דינמיים — מנוע מלא ✦',1]);
+    TOPICS[8].numeric.push(['N8-05-ENGINE','אחוזים דינמיים — גרסה חכמה ✦',1]);
   }
   if(typeof TOPICS !== 'undefined' && TOPICS[7] && TOPICS[7].geometry && !TOPICS[7].geometry.some(t=>t[0]==='G7-01-ENGINE')){
-    TOPICS[7].geometry.push(['G7-01-ENGINE','מלבן ותיבה — מנוע מלא ✦',1]);
+    TOPICS[7].geometry.push(['G7-01-ENGINE','מלבן ותיבה — גרסה חכמה ✦',1]);
   }
   if(typeof TOPICS !== 'undefined' && TOPICS[7] && TOPICS[7].geometry && !TOPICS[7].geometry.some(t=>t[0]==='G7-02-ENGINE')){
-    TOPICS[7].geometry.push(['G7-02-ENGINE','שטחי צורות — מנוע מלא ✦',1]);
+    TOPICS[7].geometry.push(['G7-02-ENGINE','שטחי צורות — גרסה חכמה ✦',1]);
   }
   if(typeof TOPICS !== 'undefined' && TOPICS[7] && TOPICS[7].geometry && !TOPICS[7].geometry.some(t=>t[0]==='G7-04-ENGINE')){
-    TOPICS[7].geometry.push(['G7-04-ENGINE','זווית חסרה — מנוע מלא ✦',1]);
+    TOPICS[7].geometry.push(['G7-04-ENGINE','זווית חסרה — גרסה חכמה ✦',1]);
   }
   if(typeof TOPICS !== 'undefined' && TOPICS[8] && TOPICS[8].geometry && !TOPICS[8].geometry.some(t=>t[0]==='G8-01-ENGINE')){
-    TOPICS[8].geometry.push(['G8-01-ENGINE','עיגול — מנוע מלא ✦',1]);
+    TOPICS[8].geometry.push(['G8-01-ENGINE','עיגול — גרסה חכמה ✦',1]);
   }
   if(typeof TOPICS !== 'undefined' && TOPICS[8] && TOPICS[8].geometry && !TOPICS[8].geometry.some(t=>t[0]==='G8-04-ENGINE')){
-    TOPICS[8].geometry.push(['G8-04-ENGINE','דמיון משולשים — מנוע מלא ✦',1]);
+    TOPICS[8].geometry.push(['G8-04-ENGINE','דמיון משולשים — גרסה חכמה ✦',1]);
   }
   if(typeof TOPICS !== 'undefined' && TOPICS[7] && TOPICS[7].numeric && !TOPICS[7].numeric.some(t=>t[0]==='N7-03-ENGINE')){
-    TOPICS[7].numeric.push(['N7-03-ENGINE','מספרים שליליים — מנוע מלא ✦',1]);
+    TOPICS[7].numeric.push(['N7-03-ENGINE','מספרים שליליים — גרסה חכמה ✦',1]);
   }
   if(typeof TOPICS !== 'undefined' && TOPICS[7] && TOPICS[7].numeric && !TOPICS[7].numeric.some(t=>t[0]==='N7-04-ENGINE')){
-    TOPICS[7].numeric.push(['N7-04-ENGINE','חיבור וחיסור מכוונים — מנוע מלא ✦',1]);
+    TOPICS[7].numeric.push(['N7-04-ENGINE','חיבור וחיסור מכוונים — גרסה חכמה ✦',1]);
   }
   if(typeof TOPICS !== 'undefined' && TOPICS[7] && TOPICS[7].numeric && !TOPICS[7].numeric.some(t=>t[0]==='N7-05-ENGINE')){
-    TOPICS[7].numeric.push(['N7-05-ENGINE','כפל וחילוק מכוונים — מנוע מלא ✦',1]);
+    TOPICS[7].numeric.push(['N7-05-ENGINE','כפל וחילוק מכוונים — גרסה חכמה ✦',1]);
   }
   if(typeof TOPICS !== 'undefined' && TOPICS[7] && TOPICS[7].numeric && !TOPICS[7].numeric.some(t=>t[0]==='N7-06-ENGINE')){
-    TOPICS[7].numeric.push(['N7-06-ENGINE','חזקות — מנוע מלא ✦',1]);
+    TOPICS[7].numeric.push(['N7-06-ENGINE','חזקות — גרסה חכמה ✦',1]);
   }
   if(typeof TOPICS !== 'undefined' && TOPICS[7] && TOPICS[7].numeric && !TOPICS[7].numeric.some(t=>t[0]==='N7-07-ENGINE')){
-    TOPICS[7].numeric.push(['N7-07-ENGINE','שורש ריבועי — מנוע מלא ✦',1]);
+    TOPICS[7].numeric.push(['N7-07-ENGINE','שורש ריבועי — גרסה חכמה ✦',1]);
   }
   if(typeof TOPICS !== 'undefined' && TOPICS[7] && TOPICS[7].algebra && !TOPICS[7].algebra.some(t=>t[0]==='A7-01-ENGINE')){
-    TOPICS[7].algebra.push(['A7-01-ENGINE','ביטויים אלגבריים — מנוע מלא ✦',1]);
+    TOPICS[7].algebra.push(['A7-01-ENGINE','ביטויים אלגבריים — גרסה חכמה ✦',1]);
   }
   if(typeof TOPICS !== 'undefined' && TOPICS[7] && TOPICS[7].algebra && !TOPICS[7].algebra.some(t=>t[0]==='A7-02-ENGINE')){
-    TOPICS[7].algebra.push(['A7-02-ENGINE','הצבה בביטוי — מנוע מלא ✦',1]);
+    TOPICS[7].algebra.push(['A7-02-ENGINE','הצבה בביטוי — גרסה חכמה ✦',1]);
   }
   if(typeof TOPICS !== 'undefined' && TOPICS[7] && TOPICS[7].algebra && !TOPICS[7].algebra.some(t=>t[0]==='A7-03-ENGINE')){
-    TOPICS[7].algebra.push(['A7-03-ENGINE','משוואות מדרגה ראשונה — מנוע מלא ✦',1]);
+    TOPICS[7].algebra.push(['A7-03-ENGINE','משוואות מדרגה ראשונה — גרסה חכמה ✦',1]);
   }
   if(typeof TOPICS !== 'undefined' && TOPICS[7] && TOPICS[7].uncertainty && !TOPICS[7].uncertainty.some(t=>t[0]==='U7-01-ENGINE')){
-    TOPICS[7].uncertainty.push(['U7-01-ENGINE','טבלת תדירות — מנוע מלא ✦',1]);
+    TOPICS[7].uncertainty.push(['U7-01-ENGINE','טבלת תדירות — גרסה חכמה ✦',1]);
   }
   if(typeof TOPICS !== 'undefined' && TOPICS[7] && TOPICS[7].uncertainty && !TOPICS[7].uncertainty.some(t=>t[0]==='U7-02-ENGINE')){
-    TOPICS[7].uncertainty.push(['U7-02-ENGINE','הסתברות בסיסית — מנוע מלא ✦',1]);
+    TOPICS[7].uncertainty.push(['U7-02-ENGINE','הסתברות בסיסית — גרסה חכמה ✦',1]);
   }
   if(typeof TOPICS !== 'undefined' && TOPICS[8] && TOPICS[8].algebra && !TOPICS[8].algebra.some(t=>t[0]==='A8-02-ENGINE')){
-    TOPICS[8].algebra.push(['A8-02-ENGINE','שיפוע ומשוואת ישר — מנוע מלא ✦',1]);
+    TOPICS[8].algebra.push(['A8-02-ENGINE','שיפוע ומשוואת ישר — גרסה חכמה ✦',1]);
   }
   if(typeof TOPICS !== 'undefined' && TOPICS[8] && TOPICS[8].algebra && !TOPICS[8].algebra.some(t=>t[0]==='A8-03-ENGINE')){
-    TOPICS[8].algebra.push(['A8-03-ENGINE','מערכת משוואות — מנוע מלא ✦',1]);
+    TOPICS[8].algebra.push(['A8-03-ENGINE','מערכת משוואות — גרסה חכמה ✦',1]);
   }
   if(typeof TOPICS !== 'undefined' && TOPICS[8] && TOPICS[8].uncertainty && !TOPICS[8].uncertainty.some(t=>t[0]==='U8-01-ENGINE')){
-    TOPICS[8].uncertainty.push(['U8-01-ENGINE','ממוצע, חציון, טווח — מנוע מלא ✦',1]);
+    TOPICS[8].uncertainty.push(['U8-01-ENGINE','ממוצע, חציון, טווח — גרסה חכמה ✦',1]);
   }
   if(typeof TOPICS !== 'undefined' && TOPICS[8] && TOPICS[8].uncertainty && !TOPICS[8].uncertainty.some(t=>t[0]==='U8-02-ENGINE')){
-    TOPICS[8].uncertainty.push(['U8-02-ENGINE','הסתברות מטבלה — מנוע מלא ✦',1]);
+    TOPICS[8].uncertainty.push(['U8-02-ENGINE','הסתברות מטבלה — גרסה חכמה ✦',1]);
   }
 
   generators['G7-03-ENGINE'] = function(){
     const diff = document.getElementById('selDiff')?.value || document.getElementById('sl')?.value || 'standard';
     const qtype = document.getElementById('selQType')?.value || 'open';
     const result = E.generateG703Engine(diff, qtype);
-    E.renderEngineCard('G7-03-ENGINE','פיתגורס — מנוע מלא',result);
+    E.renderEngineCard('G7-03-ENGINE','פיתגורס — גרסה חכמה',result);
   };
 
   generators['N8-01-ENGINE'] = function(){
     const diff = document.getElementById('selDiff')?.value || document.getElementById('sl')?.value || 'standard';
     const qtype = document.getElementById('selQType')?.value || 'open';
     const result = E.generateN801Engine(diff, qtype);
-    E.renderEngineCard('N8-01-ENGINE','יחס — מנוע מלא',result);
+    E.renderEngineCard('N8-01-ENGINE','יחס — גרסה חכמה',result);
   };
 
   generators['N8-02-ENGINE'] = function(){
     const diff = document.getElementById('selDiff')?.value || document.getElementById('sl')?.value || 'standard';
     const qtype = document.getElementById('selQType')?.value || 'open';
     const result = E.generateN802Engine(diff, qtype);
-    E.renderEngineCard('N8-02-ENGINE','פרופורציה — מנוע מלא',result);
+    E.renderEngineCard('N8-02-ENGINE','פרופורציה — גרסה חכמה',result);
   };
 
   generators['N8-04-ENGINE'] = function(){
@@ -158,7 +158,7 @@
     const qtype = document.getElementById('selQType')?.value || 'open';
     ensureN804Loaded(function(){
       const result = E.generateN804Engine(diff, qtype);
-      E.renderEngineCard('N8-04-ENGINE','אחוזים סטטיים — מנוע מלא',result);
+      E.renderEngineCard('N8-04-ENGINE','אחוזים סטטיים — גרסה חכמה',result);
     });
   };
 
@@ -166,128 +166,128 @@
     const diff = document.getElementById('selDiff')?.value || document.getElementById('sl')?.value || 'standard';
     const qtype = document.getElementById('selQType')?.value || 'open';
     const result = E.generateN803Engine(diff, qtype);
-    E.renderEngineCard('N8-03-ENGINE','קנה מידה — מנוע מלא',result);
+    E.renderEngineCard('N8-03-ENGINE','קנה מידה — גרסה חכמה',result);
   };
 
   generators['N8-05-ENGINE'] = function(){
     const diff = document.getElementById('selDiff')?.value || document.getElementById('sl')?.value || 'standard';
     const qtype = document.getElementById('selQType')?.value || 'open';
     const result = E.generateN805Engine(diff, qtype);
-    E.renderEngineCard('N8-05-ENGINE','אחוזים דינמיים — מנוע מלא',result);
+    E.renderEngineCard('N8-05-ENGINE','אחוזים דינמיים — גרסה חכמה',result);
   };
 
   generators['G7-01-ENGINE'] = function(){
     const diff = document.getElementById('selDiff')?.value || document.getElementById('sl')?.value || 'standard';
     const qtype = document.getElementById('selQType')?.value || 'open';
-    E.renderEngineCard('G7-01-ENGINE','מלבן ותיבה — מנוע מלא', E.generateG701Engine(diff, qtype));
+    E.renderEngineCard('G7-01-ENGINE','מלבן ותיבה — גרסה חכמה', E.generateG701Engine(diff, qtype));
   };
 
   generators['G7-02-ENGINE'] = function(){
     const diff = document.getElementById('selDiff')?.value || document.getElementById('sl')?.value || 'standard';
     const qtype = document.getElementById('selQType')?.value || 'open';
-    E.renderEngineCard('G7-02-ENGINE','שטחי צורות — מנוע מלא', E.generateG702Engine(diff, qtype));
+    E.renderEngineCard('G7-02-ENGINE','שטחי צורות — גרסה חכמה', E.generateG702Engine(diff, qtype));
   };
 
   generators['G7-04-ENGINE'] = function(){
     const diff = document.getElementById('selDiff')?.value || document.getElementById('sl')?.value || 'standard';
     const qtype = document.getElementById('selQType')?.value || 'open';
-    E.renderEngineCard('G7-04-ENGINE','זווית חסרה — מנוע מלא', E.generateG704Engine(diff, qtype));
+    E.renderEngineCard('G7-04-ENGINE','זווית חסרה — גרסה חכמה', E.generateG704Engine(diff, qtype));
   };
 
   generators['G8-01-ENGINE'] = function(){
     const diff = document.getElementById('selDiff')?.value || document.getElementById('sl')?.value || 'standard';
     const qtype = document.getElementById('selQType')?.value || 'open';
-    E.renderEngineCard('G8-01-ENGINE','עיגול — מנוע מלא', E.generateG801Engine(diff, qtype));
+    E.renderEngineCard('G8-01-ENGINE','עיגול — גרסה חכמה', E.generateG801Engine(diff, qtype));
   };
 
   generators['G8-04-ENGINE'] = function(){
     const diff = document.getElementById('selDiff')?.value || document.getElementById('sl')?.value || 'standard';
     const qtype = document.getElementById('selQType')?.value || 'open';
-    E.renderEngineCard('G8-04-ENGINE','דמיון משולשים — מנוע מלא', E.generateG804Engine(diff, qtype));
+    E.renderEngineCard('G8-04-ENGINE','דמיון משולשים — גרסה חכמה', E.generateG804Engine(diff, qtype));
   };
 
   generators['N7-03-ENGINE'] = function(){
     const diff = document.getElementById('selDiff')?.value || document.getElementById('sl')?.value || 'standard';
     const qtype = document.getElementById('selQType')?.value || 'open';
-    E.renderEngineCard('N7-03-ENGINE','מספרים שליליים — מנוע מלא', E.generateN703Engine(diff, qtype));
+    E.renderEngineCard('N7-03-ENGINE','מספרים שליליים — גרסה חכמה', E.generateN703Engine(diff, qtype));
   };
 
   generators['N7-04-ENGINE'] = function(){
     const diff = document.getElementById('selDiff')?.value || document.getElementById('sl')?.value || 'standard';
     const qtype = document.getElementById('selQType')?.value || 'open';
-    E.renderEngineCard('N7-04-ENGINE','חיבור וחיסור מכוונים — מנוע מלא', E.generateN704Engine(diff, qtype));
+    E.renderEngineCard('N7-04-ENGINE','חיבור וחיסור מכוונים — גרסה חכמה', E.generateN704Engine(diff, qtype));
   };
 
   generators['N7-05-ENGINE'] = function(){
     const diff = document.getElementById('selDiff')?.value || document.getElementById('sl')?.value || 'standard';
     const qtype = document.getElementById('selQType')?.value || 'open';
-    E.renderEngineCard('N7-05-ENGINE','כפל וחילוק מכוונים — מנוע מלא', E.generateN705Engine(diff, qtype));
+    E.renderEngineCard('N7-05-ENGINE','כפל וחילוק מכוונים — גרסה חכמה', E.generateN705Engine(diff, qtype));
   };
 
   generators['N7-06-ENGINE'] = function(){
     const diff = document.getElementById('selDiff')?.value || document.getElementById('sl')?.value || 'standard';
     const qtype = document.getElementById('selQType')?.value || 'open';
-    E.renderEngineCard('N7-06-ENGINE','חזקות — מנוע מלא', E.generateN706Engine(diff, qtype));
+    E.renderEngineCard('N7-06-ENGINE','חזקות — גרסה חכמה', E.generateN706Engine(diff, qtype));
   };
 
   generators['N7-07-ENGINE'] = function(){
     const diff = document.getElementById('selDiff')?.value || document.getElementById('sl')?.value || 'standard';
     const qtype = document.getElementById('selQType')?.value || 'open';
-    E.renderEngineCard('N7-07-ENGINE','שורש ריבועי — מנוע מלא', E.generateN707Engine(diff, qtype));
+    E.renderEngineCard('N7-07-ENGINE','שורש ריבועי — גרסה חכמה', E.generateN707Engine(diff, qtype));
   };
 
   generators['A7-01-ENGINE'] = function(){
     const diff = document.getElementById('selDiff')?.value || document.getElementById('sl')?.value || 'standard';
     const qtype = document.getElementById('selQType')?.value || 'open';
-    E.renderEngineCard('A7-01-ENGINE','ביטויים אלגבריים — מנוע מלא', E.generateA701Engine(diff, qtype));
+    E.renderEngineCard('A7-01-ENGINE','ביטויים אלגבריים — גרסה חכמה', E.generateA701Engine(diff, qtype));
   };
 
   generators['A7-02-ENGINE'] = function(){
     const diff = document.getElementById('selDiff')?.value || document.getElementById('sl')?.value || 'standard';
     const qtype = document.getElementById('selQType')?.value || 'open';
-    E.renderEngineCard('A7-02-ENGINE','הצבה בביטוי — מנוע מלא', E.generateA702Engine(diff, qtype));
+    E.renderEngineCard('A7-02-ENGINE','הצבה בביטוי — גרסה חכמה', E.generateA702Engine(diff, qtype));
   };
 
   generators['A7-03-ENGINE'] = function(){
     const diff = document.getElementById('selDiff')?.value || document.getElementById('sl')?.value || 'standard';
     const qtype = document.getElementById('selQType')?.value || 'open';
-    E.renderEngineCard('A7-03-ENGINE','משוואות — מנוע מלא', E.generateA703Engine(diff, qtype));
+    E.renderEngineCard('A7-03-ENGINE','משוואות — גרסה חכמה', E.generateA703Engine(diff, qtype));
   };
 
   generators['U7-01-ENGINE'] = function(){
     const diff = document.getElementById('selDiff')?.value || document.getElementById('sl')?.value || 'standard';
     const qtype = document.getElementById('selQType')?.value || 'open';
-    E.renderEngineCard('U7-01-ENGINE','טבלת תדירות — מנוע מלא', E.generateU701Engine(diff, qtype));
+    E.renderEngineCard('U7-01-ENGINE','טבלת תדירות — גרסה חכמה', E.generateU701Engine(diff, qtype));
   };
 
   generators['U7-02-ENGINE'] = function(){
     const diff = document.getElementById('selDiff')?.value || document.getElementById('sl')?.value || 'standard';
     const qtype = document.getElementById('selQType')?.value || 'open';
-    E.renderEngineCard('U7-02-ENGINE','הסתברות בסיסית — מנוע מלא', E.generateU702Engine(diff, qtype));
+    E.renderEngineCard('U7-02-ENGINE','הסתברות בסיסית — גרסה חכמה', E.generateU702Engine(diff, qtype));
   };
 
   generators['A8-02-ENGINE'] = function(){
     const diff = document.getElementById('selDiff')?.value || document.getElementById('sl')?.value || 'standard';
     const qtype = document.getElementById('selQType')?.value || 'open';
-    E.renderEngineCard('A8-02-ENGINE','שיפוע ומשוואת ישר — מנוע מלא', E.generateA802Engine(diff, qtype));
+    E.renderEngineCard('A8-02-ENGINE','שיפוע ומשוואת ישר — גרסה חכמה', E.generateA802Engine(diff, qtype));
   };
 
   generators['A8-03-ENGINE'] = function(){
     const diff = document.getElementById('selDiff')?.value || document.getElementById('sl')?.value || 'standard';
     const qtype = document.getElementById('selQType')?.value || 'open';
-    E.renderEngineCard('A8-03-ENGINE','מערכת משוואות — מנוע מלא', E.generateA803Engine(diff, qtype));
+    E.renderEngineCard('A8-03-ENGINE','מערכת משוואות — גרסה חכמה', E.generateA803Engine(diff, qtype));
   };
 
   generators['U8-01-ENGINE'] = function(){
     const diff = document.getElementById('selDiff')?.value || document.getElementById('sl')?.value || 'standard';
     const qtype = document.getElementById('selQType')?.value || 'open';
-    E.renderEngineCard('U8-01-ENGINE','ממוצע חציון טווח — מנוע מלא', E.generateU801Engine(diff, qtype));
+    E.renderEngineCard('U8-01-ENGINE','ממוצע חציון טווח — גרסה חכמה', E.generateU801Engine(diff, qtype));
   };
 
   generators['U8-02-ENGINE'] = function(){
     const diff = document.getElementById('selDiff')?.value || document.getElementById('sl')?.value || 'standard';
     const qtype = document.getElementById('selQType')?.value || 'open';
-    E.renderEngineCard('U8-02-ENGINE','הסתברות מטבלה — מנוע מלא', E.generateU802Engine(diff, qtype));
+    E.renderEngineCard('U8-02-ENGINE','הסתברות מטבלה — גרסה חכמה', E.generateU802Engine(diff, qtype));
   };
 
   const oldOnDomain = window.onDomain;

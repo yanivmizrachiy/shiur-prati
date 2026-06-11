@@ -75,7 +75,15 @@ Statuses: DONE / PARTIAL / NOT DONE / NEEDS REVIEW / BLOCKED.
 - Tests: node --check on all edited JS; harness 9,600 generations across 4 engines — 0 failures, MCQ exactly-1-correct + unique choices; visual-mode unit test (gray/bw/restore) PASS; both static verifiers PASS; git diff --check clean.
 - Not touched: export.js, digital-pdf-book, legacy slice files, unrelated engines, RULES.md.
 
+## Final QA polish sprint — branch `claude/final-qa-polish-sprint` (2026-06-11) — DONE (scope)
+
+- Hebrew/UI: dropdown "— מנוע מלא ✦" → "— גרסה חכמה ✦" (25 topics + 25 card titles); panel label "רמת מנוע" → "רמת קושי"; mainTitle strip regex extended; fixed A7-01 singular-form bug ("כרטיסיס"/"מחבריס") with proper gendered forms; answer wording uses the actual item.
+- Question quality: G8-04 is-similar MCQ now has 3 options ("אי אפשר לקבוע לפי הנתונים") — no longer guessable coin flip. Audited N7-03/N7-04/A8-02/U7-01 wording — no further clear issues found (deeper judgment left to human review).
+- Visual: linearGraphSvg gained italic x/y axis letters. Other diagrams KEEP per audit.
+- Export risk review (code evidence): expbar data-html2canvas-ignore in both render paths ✓; applyVisualMode runs on render and on mode change (DOM current before copy) ✓; credit/title outside qcard and hidden in print ✓; engine panel hidden in print ✓.
+- Docs: created docs/QA_CHECKLIST.md (manual live QA list); VISUAL_QUALITY_AUDIT updated; PROJECT_STATUS 75% → 80%.
+- Tests: node --check (5 files) PASS; harness 10,800 generations across 6 engines (N7-03, N7-04, A7-01, A8-02, G8-04, U7-01) — 0 failures, MCQ exactly-1-correct + unique choices, non-word guard clean; mainTitle strip unit test PASS; both static verifiers PASS; git diff --check clean.
+
 ## Next action
 
-- Human/live QA: open the site, generate from each domain, test visual mode + copy-image + print, review new families with teacher eyes.
-- Then: gap-list patterns (new topics), U7-01 table-construction family, RULES-enforcement tests.
+- Yaniv runs docs/QA_CHECKLIST.md on the live site (desktop + phone). File FAILs as NEEDS REVIEW; fix in small batches. That human pass is the main gate to 90%+.

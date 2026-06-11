@@ -5,8 +5,8 @@
   const E = window.TargilimEngine = window.TargilimEngine || {};
 
   const FROM_WORDS = [
-    {k:4,item:'כרטיסים',unit:'שקלים',expr:'4n'},{k:7,item:'מחברות',unit:'שקלים',expr:'7n'},
-    {k:3,item:'כדורים',unit:'שקלים',expr:'3n'},{k:6,item:'ספרים',unit:'שקלים',expr:'6n'}
+    {k:4,item:'כרטיסים',sing:'כרטיס אחד',unit:'שקלים',expr:'4n'},{k:7,item:'מחברות',sing:'מחברת אחת',unit:'שקלים',expr:'7n'},
+    {k:3,item:'כדורים',sing:'כדור אחד',unit:'שקלים',expr:'3n'},{k:6,item:'ספרים',sing:'ספר אחד',unit:'שקלים',expr:'6n'}
   ];
   const SIMPLIFY = [
     {t1:3,t2:5,r:8,v:'x'},{t1:7,t2:2,r:9,v:'a'},{t1:6,t2:4,r:10,v:'m'},{t1:9,t2:3,r:12,v:'y'}
@@ -49,9 +49,9 @@
 
   function question(family,x,qtype){
     if(family==='from_words'){
-      if(qtype==='tf') return `מחיר ${x.item.slice(0,-2)+'יס'} אחד הוא $n$ ${x.unit}. מחיר $${x.k}$ ${x.item} הוא $n+${x.k}$ ${x.unit}.`;
-      if(qtype==='mistake') return `מחיר פריט אחד: $n$ ${x.unit}. תלמיד כתב ביטוי ל-$${x.k}$ פריטים: "$n+${x.k}$".`;
-      return `מחיר פריט אחד הוא $n$ ${x.unit}.\nכתבו ביטוי אלגברי למחיר $${x.k}$ ${x.item}.`;
+      if(qtype==='tf') return `מחיר ${x.sing} הוא $n$ ${x.unit}. מחיר $${x.k}$ ${x.item} הוא $n+${x.k}$ ${x.unit}.`;
+      if(qtype==='mistake') return `מחיר ${x.sing}: $n$ ${x.unit}. תלמיד כתב ביטוי למחיר $${x.k}$ ${x.item}: "$n+${x.k}$".`;
+      return `מחיר ${x.sing} הוא $n$ ${x.unit}.\nכתבו ביטוי אלגברי למחיר $${x.k}$ ${x.item}.`;
     }
     if(family==='simplify'){
       if(qtype==='tf') return `$${x.t1}${x.v}+${x.t2}${x.v} = ${x.t1*x.t2}${x.v}$.`;
@@ -79,7 +79,7 @@
     const wrong = qtype==='mistake' || qtype==='tf';
     if(family==='from_words'){
       const prefix = wrong ? 'שגוי — "פי" או "כפול" פירושם כפל, לא חיבור.\n' : '';
-      return `${prefix}$${x.k}$ פריטים = $${x.k}$ פעמים המחיר:\n$$${x.expr}$$`;
+      return `${prefix}$${x.k}$ ${x.item} = $${x.k}$ פעמים מחיר ${x.sing}:\n$$${x.expr}$$`;
     }
     if(family==='simplify'){
       const prefix = wrong ? 'שגוי — באיברים דומים מחברים מקדמים; המשתנה נשאר באותה חזקה.\n' : '';

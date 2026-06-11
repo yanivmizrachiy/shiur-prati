@@ -20,7 +20,7 @@ Principle: visuals must support teaching (accurate values, clear labels, RTL-saf
 | `circleSvg` | G8-01 | KEEP | |
 | `similarTrianglesSvg` | G8-04 | KEEP | Also reused for the new area-ratio family (sides 1 and k) |
 | `numberLineSvg` | N7-03 | IMPROVED | New `step` parameter; placement family uses −6..6 with step 2 so fraction points are readable |
-| `linearGraphSvg` | A8-02 | ADDED | Axes with arrows, light grid, integer tick labels, blue line, labeled red points; auto-ranges around the data |
+| `linearGraphSvg` | A8-02 | ADDED | Axes with arrows + italic x/y letters (QA sprint), light grid, integer tick labels, blue line, labeled red points; auto-ranges around the data |
 | `freqTableHtml` | U7-01, U8-02 | KEEP | HTML table, not SVG — unaffected by visual mode (acceptable: already monochrome) |
 
 ## Legacy slice inline SVGs (`geo.js`, `g7-01.js`, `g7-02.js`, `g8-01.js`)
@@ -32,6 +32,13 @@ Verdict: KEEP for now. Static but mathematically labeled and print-safe. They pr
 - Teacher control "תצוגת שרטוטים": צבע / גווני אפור / שחור-לבן.
 - Implemented by rewriting SVG `fill`/`stroke` attributes in the DOM (originals cached), so copy-image/PNG/print all honor the mode.
 - Verified by unit test (gray luminance mapping, BW mapping, restore-to-color). NEEDS REVIEW (human, in browser): B/W renders the light grid of `linearGraphSvg` in black — legible but denser than the color version; judge with teacher eyes.
+
+## QA-sprint polish (2026-06-11)
+
+- `linearGraphSvg`: added italic x/y axis letters.
+- Teacher-facing label cleanup: dropdown topics now say "— גרסה חכמה ✦" instead of the technical "— מנוע מלא ✦"; engine panel difficulty label is "רמת קושי" instead of "רמת מנוע". Main title still strips the suffix.
+- G8-04 is-similar MCQ gained a third option (no longer a coin flip).
+- A7-01: fixed broken singular-form hack that produced non-words ("כרטיסיס"); proper gendered singular forms in data.
 
 ## Known visual gaps (future work)
 
