@@ -40,6 +40,15 @@ Statuses: DONE / PARTIAL / NOT DONE / NEEDS REVIEW / BLOCKED.
 - Created `docs/WORKLOG.md` (this file).
 - Tests run: `node tools/verify-phase3a-static.mjs`, `node tools/verify-phase2-static.mjs`, `git diff --check` — all PASS.
 
+## Batch 3 — branch `claude/batch3-source-alignment-map` (2026-06-11) — DONE
+
+- Commit: see branch head (docs-only; no engine/export/UI code touched).
+- Created `docs/SOURCE_ALIGNMENT.md`: full alignment matrix for all 25 engines — engine ID, site name, grade, domain, source file, source topic/pattern, skills, question families, visual requirement, status, reason, action.
+- Key finding: engine IDs follow PATTERN_INDEX pattern IDs, not curriculum topic IDs; canonical translation table added (G7-01↔pattern G7-04, G7-04↔pattern G7-01, G8-04↔pattern G8-02, U7-02↔pattern U8-02, N7 numbering off by one vs curriculum, A8-03↔curriculum A8-04). No deletions, no code renames — REMAP is documentation-only.
+- Statuses: KEEP 16, REMAP 4, PATCH QUESTIONS 2 (A7-01, A8-02), ADD MISSING FAMILY 3 (N7-03, N7-04, U7-01). Gap list of unimplemented source patterns recorded.
+- `PROJECT_STATUS.md`: REAL_PROGRESS_PERCENT 35% → 45% (map complete for 25/25); map DONE, implementation NOT DONE.
+- Tests: `verify-phase3a-static.mjs` PASS, `verify-phase2-static.mjs` PASS, `git diff --check` clean.
+
 ## Next action
 
-- Batch 3 (pending Yaniv approval): source alignment map — trace each of the 25 engines to source file, topic/skill, question families, visual requirement. Then UI/variety/visual modes.
+- Batch 4 (pending Yaniv approval): targeted source-alignment fixes per SOURCE_ALIGNMENT.md actions (PATCH QUESTIONS / ADD MISSING FAMILY), then UI/variety/visual modes. No rewrites.
