@@ -25,7 +25,7 @@
 
 ## D. Export
 
-- [ ] העתק כתמונה: pasted image contains NO export buttons, NO topic title, NO credit, NO technical ids
+- [ ] העתק כתמונה: pasted image contains NO export buttons, NO topic title, NO credit (האתר מנוהל ע"י יניב רז), NO technical ids
 - [ ] Copied image honors the selected visual mode
 - [ ] PNG הורדה: same checks
 - [ ] הדפס: header/settings/buttons hidden; solution box visible; diagram prints correctly

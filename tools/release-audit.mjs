@@ -25,7 +25,9 @@ check('qmeta has no id span (core.js)', !/qmeta[^']*'\+id\+/.test(read('generato
 
 // 3. Credit and main title — present, site-only
 const index = read('generator/index.html');
-check('credit present', index.includes('האתר מנוהל על ידי יניב רז'));
+check('credit present, exact wording', index.includes('האתר מנוהל ע"י יניב רז'));
+check('credit is white and small', /\.hdr \.credit \{[^}]*font-size: 0\.68rem;[^}]*color: #ffffff;/.test(read('generator/style.css')));
+check('credit outside qcard', !/qcard[\s\S]*credit/.test(read('generator/core.js')));
 check('main title element present', index.includes('id="mainTitle"'));
 const css = read('generator/style.css');
 check('header hidden in print', /@media print[\s\S]*\.hdr,/.test(css));
