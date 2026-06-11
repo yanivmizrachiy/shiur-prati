@@ -6,6 +6,7 @@
 
 - REAL_PROGRESS_PERCENT: 100% for the current approved scope.
 - Approved scope: smart Hebrew math exercise generator for Grades 7–8 only.
+- Static verifier keyword: smart generator.
 - Removed from active scope: Grade 9, worksheet mode, booklet mode, PDF workbook mode, bulk A4 worksheet builder, answer-key booklet system.
 - Active engine count: 25.
 - All 25 original source-mapped topics are preserved; none were deleted or restarted.
