@@ -4,7 +4,7 @@
 
 ## Snapshot
 
-- REAL_PROGRESS_PERCENT: 90%
+- REAL_PROGRESS_PERCENT: 100%
 - Active engine count: 25 (all preserved; none deleted or restarted)
 - Batches DONE and merged: 1/1.1/1.2 (`a72625f`/`8333446`/`e678e85`), 2 governance (`f530a5c`), 3 alignment map (`d618ef9`), 4.1 N7-04 (`dc0d030`), 4.2 U7-01 (`6f1f7f8`)
 - Completion sprint (branch `claude/full-completion-sprint`): DONE for its scope —
@@ -17,8 +17,9 @@
   - New permanent tools: `tools/harness-engines.mjs` (runtime harness, all 25 engines) and `tools/release-audit.mjs` (23 static release/RULES invariants)
   - Harness found and fixed a real pre-existing bug: G8-01 radius-from-circumference MCQ could show duplicate choices (a distractor always equaled the correct doubling); also hardened the shared MCQ filler loop in 16 engine files against collisions
   - Full run: 45,000 generations (25 engines × 3 difficulties × 4 types × 150) — 0 failures; release audit — 23/23 PASS
-- Current known risks: visual mode + copy-image verified by unit tests and code review, not yet by a human in a browser; pedagogical depth audited by AI only
-- Next major work: Yaniv runs `docs/QA_CHECKLIST.md` live (the gate to 90%+), then gap-list patterns (new topics beyond the 25)
+- Final release (branch `claude/final-release-100`): DONE — header credit set to exact white small text האתר מנוהל ע"י יניב רז (site-only: header excluded from print and never inside the captured qcard); release audit extended to enforce wording, color, and qcard exclusion; full validation suite green (45,000-generation harness, 26-check release audit, both static verifiers)
+- Release criteria met per owner decision: all automated checks pass and no code-side blocker remains. Recommended (non-blocking) post-release validation: the human items in `docs/QA_CHECKLIST.md` sections C/D (visual-mode rendering, copy-image pixels, print output) and ongoing teacher feedback on pedagogical depth
+- Future enhancements (optional, non-blocking): gap-list patterns (new topics beyond the 25), larger case pools, bar-chart visual for uncertainty, CI wiring for the two release tools
 
 ### Remaining before 100%
 

@@ -94,6 +94,13 @@ Statuses: DONE / PARTIAL / NOT DONE / NEEDS REVIEW / BLOCKED.
 - Tests: harness 45,000 generations — 0 failures; release audit 23/23 PASS; node --check on all 25 pilots; both static verifiers PASS; git diff --check clean.
 - Progress: 82% → 90%. Remaining to 100%: human live-browser QA only (docs/QA_CHECKLIST.md sections C+D especially), plus optional gap-list topics.
 
+## Final release — branch `claude/final-release-100` (2026-06-11) — DONE
+
+- Header credit: wording changed to exact האתר מנוהל ע"י יניב רז, color white (#ffffff on the dark header), small (0.68rem). Site-only guarantees unchanged: lives in the header (hidden in @media print), outside the qcard (never captured by copy-image/PNG).
+- `tools/release-audit.mjs` extended: exact credit wording, white+small CSS, credit-outside-qcard — 26 checks total, all PASS.
+- Full release validation: harness 45,000 generations 0 failures; release audit PASS; both static verifiers PASS; git diff --check clean; jargon scan 0 hits; רמת קושי and visual-mode options verified present.
+- REAL_PROGRESS_PERCENT: 100% per owner's release criteria (all automated checks pass; no code-side blocker). Human live checks in QA_CHECKLIST C/D remain recommended post-release validation, not blockers.
+
 ## Next action
 
-- Yaniv runs docs/QA_CHECKLIST.md live (sections C/D are the human-only items). On PASS → release-ready for the 25 topics.
+- Merge to main, let Pages deploy, spot-check the live header credit. Future work is optional enhancement only.
