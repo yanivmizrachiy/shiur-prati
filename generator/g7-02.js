@@ -20,3 +20,21 @@ generators['G7-06']=function(){
   const a='שטח המלבן הגדול: $15\\cdot9=135$. שטח החלק החסר: $7\\cdot4=28$. לכן שטח הצורה: $135-28=107$ סמ״ר.';
   renderCard('G7-06','שטח צורה מורכבת',svg,q,a,'geo');
 };
+
+TOPICS[7].geometry.push(['G7-09','פיתגורס בבעיה מצוירת ✦ מקור',1]);
+generators['G7-09']=function(){
+  const cases=[[6,8,10],[5,12,13],[9,12,15],[8,15,17]], c=cases[Math.floor(Math.random()*cases.length)], a=c[0], b=c[1], h=c[2];
+  const svg='<svg class="engine-svg" viewBox="0 0 270 190" xmlns="http://www.w3.org/2000/svg"><rect x="12" y="10" width="246" height="160" rx="14" fill="#f0f9ff" stroke="#0369a1" stroke-width="1.8"/><polygon points="70,135 210,135 70,45" fill="#bae6fd" stroke="#0369a1" stroke-width="2"/><rect x="70" y="122" width="13" height="13" fill="none" stroke="#0369a1" stroke-width="2"/><text x="135" y="153" font-size="12" font-weight="900">'+b+'</text><text x="48" y="92" font-size="12" font-weight="900">'+a+'</text><text x="148" y="82" font-size="12" font-weight="900" fill="#dc2626">?</text><text x="135" y="182" text-anchor="middle" font-size="11" font-weight="800" fill="#075985">משולש ישר־זווית — משפט פיתגורס</text></svg>';
+  const q='בסולם/מסלול מתקבל משולש ישר־זווית. הניצבים הם $'+a+'$ ו־$'+b+'$ מטר. מצאו את אורך היתר.';
+  const ans='לפי משפט פיתגורס: $a^2+b^2=c^2$. לכן $'+a+'^2+'+b+'^2='+h+'^2$, ומכאן אורך היתר הוא $'+h+'$ מטר.';
+  renderCard('G7-09','פיתגורס בבעיה מצוירת',svg,q,ans,'geo');
+};
+
+TOPICS[7].geometry.push(['G7-10','זוויות סביב ישר ונקודה ✦ מקור',1]);
+generators['G7-10']=function(){
+  const cases=[[65,115],[72,108],[43,137],[120,60]], c=cases[Math.floor(Math.random()*cases.length)], x=c[0], y=c[1];
+  const svg='<svg class="engine-svg" viewBox="0 0 270 170" xmlns="http://www.w3.org/2000/svg"><rect x="12" y="10" width="246" height="138" rx="14" fill="#fff7ed" stroke="#ea580c" stroke-width="1.8"/><line x1="45" y1="105" x2="225" y2="105" stroke="#9a3412" stroke-width="3"/><line x1="135" y1="105" x2="190" y2="45" stroke="#9a3412" stroke-width="3"/><path d="M90 105 A45 45 0 0 1 162 74" fill="none" stroke="#dc2626" stroke-width="2"/><path d="M162 74 A45 45 0 0 1 180 105" fill="none" stroke="#16a34a" stroke-width="2"/><text x="113" y="78" font-size="13" font-weight="900" fill="#dc2626">'+x+'°</text><text x="178" y="87" font-size="13" font-weight="900" fill="#16a34a">?</text><text x="135" y="162" text-anchor="middle" font-size="11" font-weight="800" fill="#9a3412">זוויות צמודות על ישר משלימות ל־180°</text></svg>';
+  const q='בשרטוט זווית אחת על ישר היא $'+x+'^\\circ$. מה גודל הזווית הצמודה לה?';
+  const ans='זוויות צמודות על ישר משלימות ל־$180^\\circ$. לכן $180-'+x+'='+y+'$. הזווית החסרה היא $'+y+'^\\circ$.';
+  renderCard('G7-10','זוויות סביב ישר ונקודה',svg,q,ans,'geo');
+};
