@@ -4,15 +4,26 @@
 (function(){
   const E = window.TargilimEngine = window.TargilimEngine || {};
 
-  const MUL = [
-    {a:6,b:-4,r:-24},{a:-3,b:-7,r:21},{a:-5,b:8,r:-40},{a:-9,b:-4,r:36},{a:7,b:-6,r:-42}
-  ];
-  const DIV = [
-    {a:-24,b:6,r:-4},{a:-36,b:-9,r:4},{a:42,b:-7,r:-6},{a:-45,b:9,r:-5},{a:-48,b:-6,r:8}
-  ];
-  const MISSING_FACTOR = [
-    {a:-4,r:20,m:-5},{a:6,r:-18,m:-3},{a:-7,r:-28,m:4},{a:-8,r:40,m:-5},{a:9,r:-36,m:-4}
-  ];
+  // Source ranges (PATTERN_INDEX N7-05: factors −12..12; learning file 05:
+  // values changeable, sign rules fixed). Cases generated dynamically with at
+  // least one negative factor, so directed-sign reasoning is always exercised.
+  function rnd(lo,hi){ return lo + Math.floor(Math.random()*(hi-lo+1)); }
+  function sgn(){ return Math.random()<0.5 ? -1 : 1; }
+  function caseMul(){
+    let a=rnd(2,9)*sgn(), b=rnd(2,9)*sgn();
+    if(a>0 && b>0) a=-a;
+    return {a:a,b:b,r:a*b};
+  }
+  function caseDiv(){
+    let d=rnd(2,9)*sgn(), q=rnd(2,8)*sgn();
+    if(d>0 && q>0) d=-d;
+    return {a:d*q,b:d,r:q};
+  }
+  function caseMissingFactor(){
+    let a=rnd(2,9)*sgn(), m=rnd(2,8)*sgn();
+    if(a>0 && m>0) m=-m;
+    return {a:a,r:a*m,m:m};
+  }
 
   function pickFamily(diff){
     if(diff === 'basic') return 'mul';
@@ -20,9 +31,9 @@
     return E.pick(['mul','div','missing_factor']);
   }
   function pickCase(f){
-    if(f==='div') return E.pick(DIV);
-    if(f==='missing_factor') return E.pick(MISSING_FACTOR);
-    return E.pick(MUL);
+    if(f==='div') return caseDiv();
+    if(f==='missing_factor') return caseMissingFactor();
+    return caseMul();
   }
   function wrap(n){ return n < 0 ? '(' + n + ')' : '' + n; }
 
@@ -34,18 +45,18 @@
     return E.shuffle(values).map((v,i)=>({label:['א','ב','ג','ד'][i], text:'$'+v+'$', correct:v===correct}));
   }
 
-  function question(family,x,qtype){
+  function question(family,x,qtype,tfTrue){
     if(family==='mul'){
-      if(qtype==='tf') return `$${wrap(x.a)} \\times ${wrap(x.b)} = ${-x.r}$.`;
+      if(qtype==='tf') return `$${wrap(x.a)} \\times ${wrap(x.b)} = ${tfTrue?x.r:-x.r}$.`;
       if(qtype==='mistake') return `תלמיד חישב: "$${wrap(x.a)} \\times ${wrap(x.b)} = ${-x.r}$" — טעה בסימן.`;
       return `חשבו: $$${wrap(x.a)} \\times ${wrap(x.b)} = ?$$`;
     }
     if(family==='div'){
-      if(qtype==='tf') return `$${wrap(x.a)} \\div ${wrap(x.b)} = ${-x.r}$.`;
+      if(qtype==='tf') return `$${wrap(x.a)} \\div ${wrap(x.b)} = ${tfTrue?x.r:-x.r}$.`;
       if(qtype==='mistake') return `תלמיד חישב: "$${wrap(x.a)} \\div ${wrap(x.b)} = ${-x.r}$" — טעה בכלל הסימנים.`;
       return `חשבו: $$${wrap(x.a)} \\div ${wrap(x.b)} = ?$$`;
     }
-    if(qtype==='tf') return `$${wrap(x.a)} \\times \\square = ${x.r}$ — הגורם החסר הוא $${-x.m}$.`;
+    if(qtype==='tf') return `$${wrap(x.a)} \\times \\square = ${x.r}$ — הגורם החסר הוא $${tfTrue?x.m:-x.m}$.`;
     if(qtype==='mistake') return `$${wrap(x.a)} \\times \\square = ${x.r}$. תלמיד כתב: "$\\square=${-x.m}$".`;
     return `השלימו את הגורם החסר:\n$$${wrap(x.a)} \\times \\square = ${x.r}$$`;
   }
@@ -54,8 +65,8 @@
     return (a<0) === (b<0) ? 'סימנים זהים → תוצאה חיובית' : 'סימנים שונים → תוצאה שלילית';
   }
 
-  function answer(family,x,qtype){
-    const wrong = qtype==='mistake' || qtype==='tf';
+  function answer(family,x,qtype,tfTrue){
+    const wrong = qtype==='mistake' || (qtype==='tf' && !tfTrue);
     if(family==='mul'){
       const prefix = wrong ? 'שגוי בסימן.\n' : '';
       return `${prefix}${signRule(x.a,x.b)}:\n$$${wrap(x.a)} \\times ${wrap(x.b)} = ${x.r}$$`;
@@ -72,9 +83,10 @@
     difficulty = difficulty || 'standard'; questionType = questionType || 'open';
     const family = pickFamily(difficulty);
     const x = pickCase(family);
-    const q = question(family,x,questionType), a = answer(family,x,questionType);
+    const tfTrue = questionType==='tf' && Math.random()<0.5;
+    const q = question(family,x,questionType,tfTrue), a = answer(family,x,questionType,tfTrue);
     if(questionType==='mcq') return E.questionTypes.mcq({question:q,answer:a,svg:'',choices:choices(family,x)});
-    if(questionType==='tf') return E.questionTypes.tf({question:q,answer:a,svg:'',isTrue:false});
+    if(questionType==='tf') return E.questionTypes.tf({question:q,answer:a,svg:'',isTrue:tfTrue});
     if(questionType==='mistake') return E.questionTypes.mistake({question:q,answer:a,svg:''});
     return E.questionTypes.open({question:q,answer:a,svg:''});
   };

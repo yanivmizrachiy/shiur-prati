@@ -1,5 +1,23 @@
 (function(){
   const E = window.TargilimEngine = window.TargilimEngine || {};
+
+  // Central math-formatting helpers. Every math token embedded in Hebrew text
+  // must go through these (or be hand-wrapped KaTeX) — never raw "B=80°"/"-4"
+  // inside an RTL sentence.
+  E.fmt = {
+    inline: function(tex){ return '$' + tex + '$'; },
+    block: function(tex){ return '$$' + tex + '$$'; },
+    deg: function(v){ return '$' + v + '^\\circ$'; },
+    angle: function(label, value){
+      return value == null
+        ? '$\\sphericalangle ' + label + '$'
+        : '$\\sphericalangle ' + label + '=' + value + '^\\circ$';
+    },
+    eq: function(left, right){ return '$' + left + '=' + right + '$'; },
+    signed: function(n){ return n < 0 ? '(' + n + ')' : '' + n; },
+    point: function(x, y){ return '$(' + x + ',' + y + ')$'; }
+  };
+
   E.questionTypes = {
     open: function(o){ return { questionHTML:(o.svg?'<div class="diagram">'+o.svg+'</div>':'')+'<div class="qtext">'+o.question+'</div>', answerHTML:o.answer }; },
     mcq: function(o){

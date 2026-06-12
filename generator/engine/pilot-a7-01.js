@@ -47,36 +47,36 @@
     return E.shuffle(values).map((v,i)=>({label:['א','ב','ג','ד'][i], text:'$'+v+'$', correct:v===correct}));
   }
 
-  function question(family,x,qtype){
+  function question(family,x,qtype,tfTrue){
     if(family==='from_words'){
-      if(qtype==='tf') return `מחיר ${x.sing} הוא $n$ ${x.unit}. מחיר $${x.k}$ ${x.item} הוא $n+${x.k}$ ${x.unit}.`;
+      if(qtype==='tf') return `מחיר ${x.sing} הוא $n$ ${x.unit}. מחיר $${x.k}$ ${x.item} הוא $${tfTrue?x.expr:'n+'+x.k}$ ${x.unit}.`;
       if(qtype==='mistake') return `מחיר ${x.sing}: $n$ ${x.unit}. תלמיד כתב ביטוי למחיר $${x.k}$ ${x.item}: "$n+${x.k}$".`;
       return `מחיר ${x.sing} הוא $n$ ${x.unit}.\nכתבו ביטוי אלגברי למחיר $${x.k}$ ${x.item}.`;
     }
     if(family==='simplify'){
-      if(qtype==='tf') return `$${x.t1}${x.v}+${x.t2}${x.v} = ${x.t1*x.t2}${x.v}$.`;
+      if(qtype==='tf') return `$${x.t1}${x.v}+${x.t2}${x.v} = ${tfTrue?x.r:x.t1*x.t2}${x.v}$.`;
       if(qtype==='mistake') return `תלמיד פישט: "$${x.t1}${x.v}+${x.t2}${x.v} = ${x.r}${x.v}^2$".`;
       return `פשטו את הביטוי: $$${x.t1}${x.v}+${x.t2}${x.v}$$`;
     }
     if(family==='simplify_mixed'){
-      if(qtype==='tf') return `$${x.t1}${x.v}-${x.t2}${x.v}+${x.c} = ${x.t1-x.t2+x.c}${x.v}$.`;
+      if(qtype==='tf') return `$${x.t1}${x.v}-${x.t2}${x.v}+${x.c} = ${tfTrue?x.r:(x.t1-x.t2+x.c)+x.v}$.`;
       if(qtype==='mistake') return `תלמיד פישט: "$${x.t1}${x.v}-${x.t2}${x.v}+${x.c} = ${x.t1-x.t2+x.c}${x.v}$" — חיבר את $${x.c}$ למקדם.`;
       return `פשטו את הביטוי: $$${x.t1}${x.v}-${x.t2}${x.v}+${x.c}$$`;
     }
     if(family==='rect_expr'){
-      if(qtype==='tf') return `במלבן, צלע אחת ארוכה פי $${x.k}$ מהאחרת, והצלע הקצרה היא $x$. היקף המלבן הוא $${x.k+1}x$.`;
+      if(qtype==='tf') return `במלבן, צלע אחת ארוכה פי $${x.k}$ מהאחרת, והצלע הקצרה היא $x$. היקף המלבן הוא $${tfTrue?2*(x.k+1):x.k+1}x$.`;
       if(qtype==='mistake') return `במלבן כזה (צלעות $x$ ו-$${x.k}x$) תלמיד כתב לשטח: "$x+${x.k}x=${x.k+1}x$".`;
       if(qtype==='mcq') return `במלבן, צלע אחת ארוכה פי $${x.k}$ מהאחרת. הצלע הקצרה: $x$.\nאיזה ביטוי מתאר את היקף המלבן?`;
       return `במלבן, צלע אחת ארוכה פי $${x.k}$ מהצלע השנייה. סמנו את הצלע הקצרה ב-$x$.\nא. כתבו ביטוי להיקף המלבן.\nב. כתבו ביטוי לשטח המלבן.`;
     }
     // tower
-    if(qtype==='tf') return `מגדל מכוס אחת: $${x.first}$ ס״מ. כל כוס נוספת: $+${x.step}$ ס״מ. הביטוי לגובה מגדל $n$ כוסות: $${x.step}n+${x.first}$.`;
+    if(qtype==='tf') return `מגדל מכוס אחת: $${x.first}$ ס״מ. כל כוס נוספת: $+${x.step}$ ס״מ. הביטוי לגובה מגדל $n$ כוסות: $${tfTrue?x.expr:x.step+'n+'+x.first}$.`;
     if(qtype==='mistake') return `מגדל מכוס אחת: $${x.first}$ ס״מ, כל כוס נוספת $+${x.step}$ ס״מ. תלמיד כתב: "גובה $n$ כוסות: $${x.step}n+${x.first}$".`;
     return `גובה מגדל מכוס אחת: $${x.first}$ ס״מ. כל כוס נוספת מוסיפה $${x.step}$ ס״מ.\nכתבו ביטוי אלגברי לגובה מגדל של $n$ כוסות.`;
   }
 
-  function answer(family,x,qtype){
-    const wrong = qtype==='mistake' || qtype==='tf';
+  function answer(family,x,qtype,tfTrue){
+    const wrong = qtype==='mistake' || (qtype==='tf' && !tfTrue);
     if(family==='from_words'){
       const prefix = wrong ? 'שגוי — "פי" או "כפול" פירושם כפל, לא חיבור.\n' : '';
       return `${prefix}$${x.k}$ ${x.item} = $${x.k}$ פעמים מחיר ${x.sing}:\n$$${x.expr}$$`;
@@ -103,9 +103,10 @@
     difficulty = difficulty || 'standard'; questionType = questionType || 'open';
     const family = pickFamily(difficulty);
     const x = pickCase(family);
-    const q = question(family,x,questionType), a = answer(family,x,questionType);
+    const tfTrue = questionType==='tf' && Math.random()<0.5;
+    const q = question(family,x,questionType,tfTrue), a = answer(family,x,questionType,tfTrue);
     if(questionType==='mcq') return E.questionTypes.mcq({question:q,answer:a,svg:'',choices:choices(family,x)});
-    if(questionType==='tf') return E.questionTypes.tf({question:q,answer:a,svg:'',isTrue:false});
+    if(questionType==='tf') return E.questionTypes.tf({question:q,answer:a,svg:'',isTrue:tfTrue});
     if(questionType==='mistake') return E.questionTypes.mistake({question:q,answer:a,svg:''});
     return E.questionTypes.open({question:q,answer:a,svg:''});
   };

@@ -3,19 +3,29 @@
   E.rightTriangleSvg = function(params, unknown){
     const T = E.themes.geometry;
     const W=250,H=180,p=34;
-    const Ax=p, Ay=p+8, Bx=p, By=H-p, Cx=W-p, Cy=H-p;
+    // Orientation variation: the right angle can sit at any of the four corners,
+    // so worksheets don't repeat the same drawing with different numbers.
+    const mx = E.pick([0,1]), my = E.pick([0,1]);
+    const sx = mx?-1:1, sy = my?-1:1;
+    function FX(x){ return mx ? W-x : x; }
+    function FY(y){ return my ? H-y : y; }
+    const Ax=FX(p), Ay=FY(p+8), Bx=FX(p), By=FY(H-p), Cx=FX(W-p), Cy=FY(H-p);
     const a = params.a == null ? '?' : params.a + ' ס״מ';
     const b = params.b == null ? '?' : params.b + ' ס״מ';
     const c = params.c == null ? '?' : params.c + ' ס״מ';
     const ca = unknown==='a'?T.unknown:T.given;
     const cb = unknown==='b'?T.unknown:T.given;
     const cc = unknown==='c'?T.unknown:T.given;
+    const midX=(Ax+Cx)/2, midY=(Ay+Cy)/2;
+    const hx = midX + (midX-Bx)*0.24, hy = midY + (midY-By)*0.24;
+    let ang = Math.atan2(Cy-Ay, Cx-Ax)*180/Math.PI;
+    if(ang>90) ang-=180; if(ang<-90) ang+=180;
     return `<svg class="engine-svg" viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">
       <polygon points="${Ax},${Ay} ${Bx},${By} ${Cx},${Cy}" fill="${T.fill}" stroke="${T.stroke}" stroke-width="2.5" stroke-linejoin="round"/>
-      <polyline points="${Bx+12},${By} ${Bx+12},${By-12} ${Bx},${By-12}" fill="none" stroke="${T.stroke}" stroke-width="1.8"/>
-      <text x="${Bx-22}" y="${(Ay+By)/2+6}" fill="${ca}" font-size="14" font-weight="800" text-anchor="middle">${a}</text>
-      <text x="${(Bx+Cx)/2}" y="${By+21}" fill="${cb}" font-size="14" font-weight="800" text-anchor="middle">${b}</text>
-      <text x="${(Ax+Cx)/2+22}" y="${(Ay+Cy)/2-10}" fill="${cc}" font-size="14" font-weight="800" text-anchor="middle" transform="rotate(-36 ${(Ax+Cx)/2+22} ${(Ay+Cy)/2-10})">${c}</text>
+      <polyline points="${Bx+12*sx},${By} ${Bx+12*sx},${By-12*sy} ${Bx},${By-12*sy}" fill="none" stroke="${T.stroke}" stroke-width="1.8"/>
+      <text x="${Bx-22*sx}" y="${(Ay+By)/2+6}" fill="${ca}" font-size="14" font-weight="800" text-anchor="middle">${a}</text>
+      <text x="${(Bx+Cx)/2}" y="${my ? By-13 : By+21}" fill="${cb}" font-size="14" font-weight="800" text-anchor="middle">${b}</text>
+      <text x="${hx}" y="${hy}" fill="${cc}" font-size="14" font-weight="800" text-anchor="middle" transform="rotate(${Math.round(ang)} ${hx} ${hy})">${c}</text>
     </svg>`;
   };
   E.rectangleDiagonalSvg = function(r){
@@ -120,7 +130,13 @@
   };
   E.rectangleSvg = function(p, unknown){
     const T = E.themes.geometry;
-    const W=260,H=160,x1=40,y1=30,x2=220,y2=130;
+    // Aspect ratio follows the actual side values (clamped), so a 12×3 rectangle
+    // really looks long and a 6×5 looks almost square.
+    const W=260,H=160;
+    let ratio = (p.l>0 && p.w>0) ? p.w/p.l : 0.55;
+    ratio = Math.max(0.3, Math.min(0.85, ratio));
+    const rw = 180, rh = Math.round(rw*ratio*0.78);
+    const x1=40, x2=x1+rw, y1=Math.round((H-20-rh)/2)+8, y2=y1+rh;
     const lL = p.l==null?'?':p.l+' ס״מ', lW = p.w==null?'?':p.w+' ס״מ';
     const cL = unknown==='l'?T.unknown:T.given, cW = unknown==='w'?T.unknown:T.given;
     return `<svg class="engine-svg" viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">
@@ -159,38 +175,102 @@
       <line x1="${(x1+x2)/2}" y1="${yT}" x2="${(x1+x2)/2}" y2="${yB}" stroke="${T.helper}" stroke-width="2" stroke-dasharray="5 4"/>
       <text x="${(x1+x2)/2}" y="${yT-10}" fill="${cA}" font-size="13" font-weight="800" text-anchor="middle">${lA}</text>`;
     } else {
-      body=`<polygon points="${(x1+x2)/2},${yT} ${x1},${yB} ${x2},${yB}" fill="${T.fill}" stroke="${T.stroke}" stroke-width="2.5" stroke-linejoin="round"/>
-      <line x1="${(x1+x2)/2}" y1="${yT}" x2="${(x1+x2)/2}" y2="${yB}" stroke="${T.helper}" stroke-width="2" stroke-dasharray="5 4"/>`;
+      // Scalene look: apex shifts left/right instead of one fixed isosceles template.
+      const apexX=(x1+x2)/2 + E.pick([-52,-26,0,26,52]);
+      body=`<polygon points="${apexX},${yT} ${x1},${yB} ${x2},${yB}" fill="${T.fill}" stroke="${T.stroke}" stroke-width="2.5" stroke-linejoin="round"/>
+      <line x1="${apexX}" y1="${yT}" x2="${apexX}" y2="${yB}" stroke="${T.helper}" stroke-width="2" stroke-dasharray="5 4"/>`;
+      return `<svg class="engine-svg" viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">${body}
+      <text x="${(x1+x2)/2}" y="${yB+22}" fill="${cB}" font-size="14" font-weight="800" text-anchor="middle">${lB}</text>
+      <text x="${apexX+24}" y="${(yT+yB)/2}" fill="${cH}" font-size="13" font-weight="800" text-anchor="middle">${lH}</text>
+    </svg>`;
     }
     return `<svg class="engine-svg" viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">${body}
       <text x="${(x1+x2)/2}" y="${yB+22}" fill="${cB}" font-size="14" font-weight="800" text-anchor="middle">${lB}</text>
       <text x="${(x1+x2)/2+24}" y="${(yT+yB)/2}" fill="${cH}" font-size="13" font-weight="800" text-anchor="middle">${lH}</text>
     </svg>`;
   };
-  E.triangleAnglesSvg = function(p, unknown){
+  // Triangle drawn FROM its actual angle values (like a textbook figure), with
+  // angle arcs, values placed along the interior bisector, and vertex letters
+  // placed outside along the exterior bisector. Structural variation comes from
+  // mirroring, inversion, base rotation and base-length jitter.
+  // p = display values ({A,B,C}, null → "?"); geom = true angle values for the
+  // construction (falls back to p, then to 60/60/60; non-180 sums are scaled).
+  E.triangleAnglesSvg = function(p, unknown, geom){
     const T = E.themes.geometry;
-    const W=260,H=175,Ax=130,Ay=34,Bx=42,By=140,Cx=218,Cy=140;
-    const lA=p.A==null?'?':p.A+'°', lB=p.B==null?'?':p.B+'°', lC=p.C==null?'?':p.C+'°';
-    const cA=unknown==='A'?T.unknown:T.given, cB=unknown==='B'?T.unknown:T.given, cC=unknown==='C'?T.unknown:T.given;
+    const W=270,H=190,PAD=30;
+    let gA=(geom&&geom.A)!=null?geom.A:(p.A!=null?p.A:60);
+    let gB=(geom&&geom.B)!=null?geom.B:(p.B!=null?p.B:60);
+    let gC=(geom&&geom.C)!=null?geom.C:(p.C!=null?p.C:60);
+    const sum=gA+gB+gC;
+    if(sum!==180 && sum>0){ gA=gA*180/sum; gB=gB*180/sum; gC=gC*180/sum; }
+    gB=Math.max(18,Math.min(132,gB)); gC=Math.max(18,Math.min(132,gC)); gA=180-gB-gC;
+    if(gA<18){ const d=(18-gA)/2; gB-=d; gC-=d; gA=18; }
+    if(gA>132){ const d=(gA-132)/2; gB+=d; gC+=d; gA=132; }
+    // Construct in math coordinates: B at origin, C on x axis, A above.
+    const rB=gB*Math.PI/180, rC=gC*Math.PI/180;
+    const ax=Math.tan(rC)/(Math.tan(rB)+Math.tan(rC)); // A.x as fraction of BC
+    const ay=ax*Math.tan(rB);
+    let pts=[{x:ax,y:ay},{x:0,y:0},{x:1,y:0}]; // [A,B,C], y up
+    // Structural variation
+    if(E.pick([0,1])) pts=pts.map(q=>({x:1-q.x,y:q.y}));          // mirror
+    if(E.pick([0,0,1])) pts=pts.map(q=>({x:q.x,y:-q.y}));         // invert (apex down)
+    const rot=E.pick([0,0,-10,8,14,-16])*Math.PI/180;             // base rotation
+    pts=pts.map(q=>({x:q.x*Math.cos(rot)-q.y*Math.sin(rot), y:q.x*Math.sin(rot)+q.y*Math.cos(rot)}));
+    // Fit into viewBox (flip y to screen coordinates)
+    const xs=pts.map(q=>q.x), ys=pts.map(q=>q.y);
+    const minx=Math.min.apply(null,xs), maxx=Math.max.apply(null,xs);
+    const miny=Math.min.apply(null,ys), maxy=Math.max.apply(null,ys);
+    const sc=Math.min((W-2*PAD)/(maxx-minx||1),(H-2*PAD)/(maxy-miny||1));
+    const ox=(W-(maxx-minx)*sc)/2, oy=(H-(maxy-miny)*sc)/2;
+    const V=pts.map(q=>({x:ox+(q.x-minx)*sc, y:H-(oy+(q.y-miny)*sc)}));
+    function unit(dx,dy){ const d=Math.sqrt(dx*dx+dy*dy)||1; return {x:dx/d,y:dy/d}; }
+    const NAMES=['A','B','C'];
+    const disp=[p.A,p.B,p.C], degs=[gA,gB,gC];
+    let arcs='', labels='', letters='';
+    for(let i=0;i<3;i++){
+      const v=V[i], o1=V[(i+1)%3], o2=V[(i+2)%3];
+      const u1=unit(o1.x-v.x,o1.y-v.y), u2=unit(o2.x-v.x,o2.y-v.y);
+      let bis=unit(u1.x+u2.x,u1.y+u2.y);
+      if(!isFinite(bis.x)||(!bis.x&&!bis.y)) bis=unit(-(o1.y-v.y),o1.x-v.x);
+      const isUnknown=unknown===NAMES[i];
+      const col=isUnknown?T.unknown:T.given;
+      // angle arc (small, inside) — sweep chosen by cross-product orientation
+      const r=15;
+      const a1={x:v.x+u1.x*r,y:v.y+u1.y*r}, a2={x:v.x+u2.x*r,y:v.y+u2.y*r};
+      const cross=u1.x*u2.y-u1.y*u2.x;
+      arcs+=`<path d="M ${a1.x.toFixed(1)} ${a1.y.toFixed(1)} A ${r} ${r} 0 0 ${cross>0?1:0} ${a2.x.toFixed(1)} ${a2.y.toFixed(1)}" fill="none" stroke="${col}" stroke-width="1.6"/>`;
+      // angle value along the interior bisector; acute angles get extra distance
+      const dist=degs[i]<38?40:degs[i]<60?32:27;
+      const lx=v.x+bis.x*dist, ly=v.y+bis.y*dist;
+      const txt=disp[i]==null?'?':disp[i]+'°';
+      labels+=`<text x="${lx.toFixed(1)}" y="${ly.toFixed(1)}" fill="${col}" font-size="13" font-weight="800" text-anchor="middle" dominant-baseline="middle">${txt}</text>`;
+      // vertex letter outside, along the exterior bisector
+      const vx=v.x-bis.x*13, vy=v.y-bis.y*13;
+      letters+=`<text x="${vx.toFixed(1)}" y="${vy.toFixed(1)}" fill="${T.label}" font-size="13" font-weight="700" font-style="italic" text-anchor="middle" dominant-baseline="middle">${NAMES[i]}</text>`;
+    }
     return `<svg class="engine-svg" viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">
-      <polygon points="${Ax},${Ay} ${Bx},${By} ${Cx},${Cy}" fill="${T.fill}" stroke="${T.stroke}" stroke-width="2.5" stroke-linejoin="round"/>
-      <text x="${Ax}" y="${Ay+26}" fill="${cA}" font-size="14" font-weight="800" text-anchor="middle">${lA}</text>
-      <text x="${Bx+26}" y="${By-10}" fill="${cB}" font-size="14" font-weight="800" text-anchor="middle">${lB}</text>
-      <text x="${Cx-26}" y="${Cy-10}" fill="${cC}" font-size="14" font-weight="800" text-anchor="middle">${lC}</text>
+      <polygon points="${V.map(q=>q.x.toFixed(1)+','+q.y.toFixed(1)).join(' ')}" fill="${T.fill}" stroke="${T.stroke}" stroke-width="2.2" stroke-linejoin="round"/>
+      ${arcs}${labels}${letters}
     </svg>`;
   };
   E.circleSvg = function(p, unknown){
     const T = E.themes.geometry;
     const W=240,H=180,cx=120,cy=88,R=62;
     let line='', label='', color = unknown==='r'||unknown==='d' ? T.unknown : T.given;
+    // Radius/diameter drawn at a varying angle — not always the same horizontal line.
+    const deg = E.pick([0,-32,38,155,207]);
+    const rad = deg*Math.PI/180;
+    const ex = cx + Math.round(R*Math.cos(rad)), ey = cy + Math.round(R*Math.sin(rad));
+    const ox = cx - Math.round(R*Math.cos(rad)), oy = cy - Math.round(R*Math.sin(rad));
+    const lmx = Math.round((cx+ex)/2 - 16*Math.sin(rad)), lmy = Math.round((cy+ey)/2 - 16*Math.cos(rad)*Math.cos(rad)) - 4;
     if(p.mode==='d'){
       const lD=p.d==null?'?':p.d+' ס״מ';
-      line=`<line x1="${cx-R}" y1="${cy}" x2="${cx+R}" y2="${cy}" stroke="${color}" stroke-width="3"/><circle cx="${cx-R}" cy="${cy}" r="4" fill="${color}"/><circle cx="${cx+R}" cy="${cy}" r="4" fill="${color}"/>`;
-      label=`<text x="${cx}" y="${cy-10}" fill="${color}" font-size="14" font-weight="800" text-anchor="middle">${lD}</text>`;
+      line=`<line x1="${ox}" y1="${oy}" x2="${ex}" y2="${ey}" stroke="${color}" stroke-width="3"/><circle cx="${ox}" cy="${oy}" r="4" fill="${color}"/><circle cx="${ex}" cy="${ey}" r="4" fill="${color}"/>`;
+      label=`<text x="${cx - Math.round(14*Math.sin(rad))}" y="${cy - 10 - Math.round(6*Math.cos(rad))}" fill="${color}" font-size="14" font-weight="800" text-anchor="middle">${lD}</text>`;
     } else {
       const lR=p.r==null?'?':p.r+' ס״מ';
-      line=`<line x1="${cx}" y1="${cy}" x2="${cx+R}" y2="${cy}" stroke="${color}" stroke-width="3"/><circle cx="${cx}" cy="${cy}" r="4" fill="${T.stroke}"/>`;
-      label=`<text x="${cx+R/2}" y="${cy-10}" fill="${color}" font-size="14" font-weight="800" text-anchor="middle">${lR}</text>`;
+      line=`<line x1="${cx}" y1="${cy}" x2="${ex}" y2="${ey}" stroke="${color}" stroke-width="3"/><circle cx="${cx}" cy="${cy}" r="4" fill="${T.stroke}"/>`;
+      label=`<text x="${lmx}" y="${lmy}" fill="${color}" font-size="14" font-weight="800" text-anchor="middle">${lR}</text>`;
     }
     return `<svg class="engine-svg" viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">
       <circle cx="${cx}" cy="${cy}" r="${R}" fill="${T.fill}" stroke="${T.stroke}" stroke-width="2.5"/>
@@ -200,8 +280,14 @@
   E.similarTrianglesSvg = function(p, unknown){
     const T = E.themes.geometry;
     const W=290,H=170;
-    const s={Ax:62,Ay:62,Bx:24,By:128,Cx:104,Cy:128};
-    const L={Ax:206,Ay:30,Bx:148,By:142,Cx:272,Cy:142};
+    // Variation: small/large swap sides, and apexes shift so pairs differ between sheets.
+    const swap = E.pick([0,1]);
+    const dxS = E.pick([-10,0,12]), dxL = E.pick([-14,0,14]);
+    const s0={Ax:62+dxS,Ay:62,Bx:24,By:128,Cx:104,Cy:128};
+    const L0={Ax:206+dxL,Ay:30,Bx:148,By:142,Cx:272,Cy:142};
+    function shift(t,dx){ return {Ax:t.Ax+dx,Ay:t.Ay,Bx:t.Bx+dx,By:t.By,Cx:t.Cx+dx,Cy:t.Cy}; }
+    const s = swap ? shift(s0,166) : s0;
+    const L = swap ? shift(L0,-124) : L0;
     const l1=p.s1==null?'?':p.s1+' ס״מ', l2=p.s2==null?'?':p.s2+' ס״מ';
     const c1=unknown==='s1'?T.unknown:T.given, c2=unknown==='s2'?T.unknown:T.given;
     return `<svg class="engine-svg" viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">

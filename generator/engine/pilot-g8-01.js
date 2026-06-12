@@ -35,35 +35,35 @@
     return E.shuffle(values).map((v,i)=>({label:['א','ב','ג','ד'][i], text:'$'+v+suffix+'$', correct:v===correct}));
   }
 
-  function question(family,x,qtype){
+  function question(family,x,qtype,tfTrue){
     if(family === 'circ_from_radius'){
-      if(qtype==='tf') return `היקף עיגול שרדיוסו $${x.r}$ ס״מ הוא $${x.r*x.r}\\pi$ ס״מ.`;
+      if(qtype==='tf') return `היקף עיגול שרדיוסו $${x.r}$ ס״מ הוא $${tfTrue?2*x.r:x.r*x.r}\\pi$ ס״מ.`;
       if(qtype==='mistake') return `תלמיד חישב היקף עיגול שרדיוסו $${x.r}$: "$\\pi r^2=${x.r*x.r}\\pi$ ס״מ".`;
       return `עיגול שרדיוסו $${x.r}$ ס״מ.\nחשבו את היקף העיגול. (השאירו את התשובה עם $\\pi$.)`;
     }
     if(family === 'area_from_radius'){
-      if(qtype==='tf') return `שטח עיגול שרדיוסו $${x.r}$ ס״מ הוא $${2*x.r}\\pi$ סמ״ר.`;
+      if(qtype==='tf') return `שטח עיגול שרדיוסו $${x.r}$ ס״מ הוא $${tfTrue?x.r*x.r:2*x.r}\\pi$ סמ״ר.`;
       if(qtype==='mistake') return `תלמיד חישב שטח עיגול שרדיוסו $${x.r}$: "$2\\pi r=${2*x.r}\\pi$ סמ״ר".`;
       return `עיגול שרדיוסו $${x.r}$ ס״מ.\nחשבו את שטח העיגול. (השאירו את התשובה עם $\\pi$.)`;
     }
     if(family === 'circ_from_diameter'){
-      if(qtype==='tf') return `היקף עיגול שקוטרו $${x.d}$ ס״מ הוא $${2*x.d}\\pi$ ס״מ.`;
+      if(qtype==='tf') return `היקף עיגול שקוטרו $${x.d}$ ס״מ הוא $${tfTrue?x.d:2*x.d}\\pi$ ס״מ.`;
       if(qtype==='mistake') return `קוטר עיגול $${x.d}$ ס״מ. תלמיד חישב היקף: "$2\\pi d=${2*x.d}\\pi$ ס״מ".`;
       return `עיגול שקוטרו $${x.d}$ ס״מ.\nחשבו את היקף העיגול.`;
     }
     if(family === 'radius_from_circ'){
-      if(qtype==='tf') return `היקף עיגול הוא $${x.Ck}\\pi$ ס״מ. הרדיוס הוא $${x.Ck}$ ס״מ.`;
+      if(qtype==='tf') return `היקף עיגול הוא $${x.Ck}\\pi$ ס״מ. הרדיוס הוא $${tfTrue?x.r:x.Ck}$ ס״מ.`;
       if(qtype==='mistake') return `היקף עיגול $${x.Ck}\\pi$ ס״מ. תלמיד מצא רדיוס: "$r=${x.Ck}$ — מוחקים את $\\pi$".`;
       return `היקף עיגול הוא $${x.Ck}\\pi$ ס״מ.\nמה רדיוס העיגול?`;
     }
     // formula_distinction
     if(qtype==='mistake') return `תלמיד כתב: "היקף עיגול: $\\pi r^2$, שטח עיגול: $2\\pi r$".`;
-    if(qtype==='tf') return `הנוסחה לשטח עיגול היא $2\\pi r$.`;
+    if(qtype==='tf') return `הנוסחה לשטח עיגול היא $${tfTrue?'\\pi r^2':'2\\pi r'}$.`;
     return `לעיגול שרדיוסו $${x.r}$ ס״מ — כתבו את הנוסחה להיקף ואת הנוסחה לשטח, וחשבו את שניהם.`;
   }
 
-  function answer(family,x,qtype){
-    const wrong = qtype==='mistake' || qtype==='tf';
+  function answer(family,x,qtype,tfTrue){
+    const wrong = qtype==='mistake' || (qtype==='tf' && !tfTrue);
     if(family === 'circ_from_radius'){
       const prefix = wrong ? 'שגוי — $\\pi r^2$ היא נוסחת השטח. היקף: $2\\pi r$.\n' : '';
       return `${prefix}$$C=2\\pi r=2\\pi\\times ${x.r}=${2*x.r}\\pi$$\nהיקף העיגול: $${2*x.r}\\pi\\approx ${Math.round(2*x.r*3.14*10)/10}$ ס״מ.`;
@@ -94,10 +94,11 @@
     if(family === 'circ_from_diameter') svg = E.circleSvg({mode:'d', d:x.d}, null);
     else if(family === 'radius_from_circ') svg = E.circleSvg({mode:'r', r:null}, 'r');
     else svg = E.circleSvg({mode:'r', r:x.r}, null);
-    const q = question(family,x,questionType);
-    const a = answer(family,x,questionType);
+    const tfTrue = questionType==='tf' && Math.random()<0.5;
+    const q = question(family,x,questionType,tfTrue);
+    const a = answer(family,x,questionType,tfTrue);
     if(questionType === 'mcq') return E.questionTypes.mcq({question:q,answer:a,svg:svg,choices:choices(family,x)});
-    if(questionType === 'tf') return E.questionTypes.tf({question:q,answer:a,svg:svg,isTrue:false});
+    if(questionType === 'tf') return E.questionTypes.tf({question:q,answer:a,svg:svg,isTrue:tfTrue});
     if(questionType === 'mistake') return E.questionTypes.mistake({question:q,answer:a,svg:svg});
     return E.questionTypes.open({question:q,answer:a,svg:svg});
   };

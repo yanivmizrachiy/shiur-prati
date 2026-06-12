@@ -38,25 +38,29 @@
     return E.shuffle(values).map((v,i)=>({label:['א','ב','ג','ד'][i], text:v, correct:v===correct}));
   }
 
-  function question(family,x,qtype){
+  function question(family,x,qtype,tfTrue){
     if(family==='die'){
-      if(qtype==='tf') return `מטילים קובייה הוגנת. ההסתברות לקבל ${x.ev} היא $\\frac{${x.fav}}{${6-x.fav}}$.`;
+      if(qtype==='tf') return tfTrue
+        ? `מטילים קובייה הוגנת. ההסתברות לקבל ${x.ev} היא $${x.p}$.`
+        : `מטילים קובייה הוגנת. ההסתברות לקבל ${x.ev} היא $\\frac{${x.fav}}{${6-x.fav}}$.`;
       if(qtype==='mistake') return `מטילים קובייה. תלמיד חישב הסתברות ל${x.ev}: "$\\frac{${x.fav}}{${6-x.fav}}$ — מצליחים חלקי לא-מצליחים".`;
       return `מטילים קובייה הוגנת.\nמה ההסתברות לקבל ${x.ev}?`;
     }
     const bag = `בשקית $${x.r}$ כדורים אדומים ו-$${x.b}$ כחולים`;
     if(family==='complement'){
-      if(qtype==='tf') return `${bag}. שולפים כדור אחד. ההסתברות שלא אדום היא $${x.pr}$.`;
+      if(qtype==='tf') return `${bag}. שולפים כדור אחד. ההסתברות שלא אדום היא $${tfTrue?x.prc:x.pr}$.`;
       if(qtype==='mistake') return `${bag}. תלמיד חישב P(לא אדום): "$1+${x.pr}$".`;
       return `${bag}. שולפים כדור אחד באקראי.\nמה ההסתברות שהכדור אינו אדום?`;
     }
-    if(qtype==='tf') return `${bag}. שולפים כדור אחד. ההסתברות לאדום היא $\\frac{${x.r}}{${x.b}}$.`;
+    if(qtype==='tf') return tfTrue
+      ? `${bag}. שולפים כדור אחד. ההסתברות לאדום היא $${x.pr}$.`
+      : `${bag}. שולפים כדור אחד. ההסתברות לאדום היא $\\frac{${x.r}}{${x.b}}$.`;
     if(qtype==='mistake') return `${bag}. תלמיד חישב P(אדום): "$\\frac{${x.r}}{${x.b}}$ — אדומים חלקי כחולים".`;
     return `${bag}. שולפים כדור אחד באקראי.\nמה ההסתברות שהכדור אדום?`;
   }
 
-  function answer(family,x,qtype){
-    const wrong = qtype==='mistake' || qtype==='tf';
+  function answer(family,x,qtype,tfTrue){
+    const wrong = qtype==='mistake' || (qtype==='tf' && !tfTrue);
     if(family==='die'){
       const prefix = wrong ? 'שגוי — המכנה הוא סך כל התוצאות האפשריות ($6$), לא הכישלונות.\n' : '';
       return `${prefix}תוצאות אפשריות: $6$. תוצאות מתאימות: $${x.fav}$.\n$$P=\\frac{${x.fav}}{6}=${x.p}$$`;
@@ -73,9 +77,10 @@
     difficulty = difficulty || 'standard'; questionType = questionType || 'open';
     const family = pickFamily(difficulty);
     const x = pickCase(family);
-    const q = question(family,x,questionType), a = answer(family,x,questionType);
+    const tfTrue = questionType==='tf' && Math.random()<0.5;
+    const q = question(family,x,questionType,tfTrue), a = answer(family,x,questionType,tfTrue);
     if(questionType==='mcq') return E.questionTypes.mcq({question:q,answer:a,svg:'',choices:choices(family,x)});
-    if(questionType==='tf') return E.questionTypes.tf({question:q,answer:a,svg:'',isTrue:false});
+    if(questionType==='tf') return E.questionTypes.tf({question:q,answer:a,svg:'',isTrue:tfTrue});
     if(questionType==='mistake') return E.questionTypes.mistake({question:q,answer:a,svg:''});
     return E.questionTypes.open({question:q,answer:a,svg:''});
   };

@@ -51,19 +51,19 @@
     return E.shuffle(values).map((v,i)=>({label:['א','ב','ג','ד'][i], text:'$'+v+'$', correct:v===correct}));
   }
 
-  function question(family,x,qtype){
+  function question(family,x,qtype,tfTrue){
     if(family === 'scale_factor'){
-      if(qtype==='tf') return `שני משולשים דומים. צלע במשולש הקטן: $${x.s1}$ ס״מ, הצלע המתאימה בגדול: $${x.s2}$ ס״מ. יחס הדמיון הוא $${x.s2-x.s1}$.`;
+      if(qtype==='tf') return `שני משולשים דומים. צלע במשולש הקטן: $${x.s1}$ ס״מ, הצלע המתאימה בגדול: $${x.s2}$ ס״מ. יחס הדמיון הוא $${tfTrue?x.k:(x.s2-x.s1===x.k?x.k+1:x.s2-x.s1)}$.`;
       if(qtype==='mistake') return `צלעות מתאימות: $${x.s1}$ ו-$${x.s2}$ ס״מ. תלמיד מצא יחס דמיון: "$${x.s2}-${x.s1}=${x.s2-x.s1}$".`;
       return `שני משולשים דומים. צלע במשולש הקטן: $${x.s1}$ ס״מ, והצלע המתאימה בגדול: $${x.s2}$ ס״מ.\nמהו יחס הדמיון?`;
     }
     if(family === 'corresponding_side'){
-      if(qtype==='tf') return `שני משולשים דומים ביחס $1:${x.k}$. צלע במשולש הקטן: $${x.a1}$ ס״מ. הצלע המתאימה בגדול: $${x.a1+x.k}$ ס״מ.`;
+      if(qtype==='tf') return `שני משולשים דומים ביחס $1:${x.k}$. צלע במשולש הקטן: $${x.a1}$ ס״מ. הצלע המתאימה בגדול: $${tfTrue?x.a2:(x.a1+x.k===x.a2?x.a2+1:x.a1+x.k)}$ ס״מ.`;
       if(qtype==='mistake') return `יחס דמיון $1:${x.k}$, צלע קטנה $${x.a1}$ ס״מ. תלמיד מצא צלע מתאימה: "$${x.a1}+${x.k}=${x.a1+x.k}$ ס״מ".`;
       return `שני משולשים דומים ביחס $1:${x.k}$. צלע במשולש הקטן: $${x.a1}$ ס״מ.\nמה אורך הצלע המתאימה במשולש הגדול?`;
     }
     if(family === 'area_ratio'){
-      if(qtype==='tf') return `שני משולשים דומים ביחס $1:${x.k}$. שטח הקטן: $${x.A1}$ סמ״ר. שטח הגדול: $${x.A1*x.k}$ סמ״ר.`;
+      if(qtype==='tf') return `שני משולשים דומים ביחס $1:${x.k}$. שטח הקטן: $${x.A1}$ סמ״ר. שטח הגדול: $${tfTrue?x.A2:(x.A1*x.k===x.A2?x.A2+x.k:x.A1*x.k)}$ סמ״ר.`;
       if(qtype==='mistake') return `שני משולשים דומים ביחס $1:${x.k}$, שטח הקטן $${x.A1}$ סמ״ר. תלמיד חישב: "שטח הגדול $=${x.A1}\\times ${x.k}=${x.A1*x.k}$".`;
       return `שני משולשים דומים ביחס $1:${x.k}$. שטח המשולש הקטן: $${x.A1}$ סמ״ר.\nמה שטח המשולש הגדול?`;
     }
@@ -74,8 +74,8 @@
     return `${sides}.\nהאם המשולשים דומים? נמקו.`;
   }
 
-  function answer(family,x,qtype){
-    const wrong = qtype==='mistake' || qtype==='tf';
+  function answer(family,x,qtype,tfTrue){
+    const wrong = qtype==='mistake' || (qtype==='tf' && !(family==='is_similar' ? x.sim : tfTrue));
     if(family === 'scale_factor'){
       const prefix = wrong ? 'שגוי — יחס דמיון נמצא בחילוק, לא בחיסור.\n' : '';
       return `${prefix}$$k=\\frac{${x.s2}}{${x.s1}}=${x.k}$$\nיחס הדמיון: $1:${x.k}$.`;
@@ -105,11 +105,12 @@
     else if(family === 'area_ratio') svg = E.similarTrianglesSvg({s1:1, s2:x.k}, null);
     else if(family === 'corresponding_side') svg = E.similarTrianglesSvg({s1:x.a1, s2:null}, 's2');
     else svg = E.similarTrianglesSvg({s1:x.a1, s2:x.a2}, null);
-    const q = question(family,x,questionType);
-    const a = answer(family,x,questionType);
+    const tfTrue = questionType==='tf' && family!=='is_similar' && Math.random()<0.5;
+    const q = question(family,x,questionType,tfTrue);
+    const a = answer(family,x,questionType,tfTrue);
     if(questionType === 'mcq') return E.questionTypes.mcq({question:q,answer:a,svg:svg,choices:choices(family,x)});
     if(questionType === 'tf'){
-      const isTrue = family === 'is_similar' ? x.sim : false;
+      const isTrue = family === 'is_similar' ? x.sim : tfTrue;
       return E.questionTypes.tf({question:q,answer:a,svg:svg,isTrue:isTrue});
     }
     if(questionType === 'mistake') return E.questionTypes.mistake({question:q,answer:a,svg:svg});

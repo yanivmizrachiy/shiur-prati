@@ -37,30 +37,30 @@
     return E.shuffle(values).map((v,i)=>({label:['א','ב','ג','ד'][i], text: typeof v==='number' ? '$'+v+'$' : '$'+v+'$', correct:v===correct}));
   }
 
-  function question(family,x,qtype){
+  function question(family,x,qtype,tfTrue){
     if(family==='slope_two_points'){
-      if(qtype==='tf') return `שיפוע הישר העובר דרך $(${x.x1},${x.y1})$ ו-$(${x.x2},${x.y2})$ הוא $${-x.m}$.`;
+      if(qtype==='tf') return `שיפוע הישר העובר דרך $(${x.x1},${x.y1})$ ו-$(${x.x2},${x.y2})$ הוא $${tfTrue?x.m:-x.m}$.`;
       if(qtype==='mistake') return `תלמיד חישב שיפוע דרך $(${x.x1},${x.y1})$ ו-$(${x.x2},${x.y2})$: "$m=\\frac{${x.x2}-${x.x1}}{${x.y2}-${x.y1}}$" — הפך מונה ומכנה.`;
       return `מצאו את שיפוע הישר העובר דרך הנקודות $(${x.x1},${x.y1})$ ו-$(${x.x2},${x.y2})$.`;
     }
     if(family==='value_at'){
-      if(qtype==='tf') return `בפונקציה $y=${x.m}x${x.b>=0?'+'+x.b:x.b}$, כאשר $x=${x.x}$ מתקבל $y=${x.m+x.b+x.x}$.`;
+      if(qtype==='tf') return `בפונקציה $y=${x.m}x${x.b>=0?'+'+x.b:x.b}$, כאשר $x=${x.x}$ מתקבל $y=${tfTrue?x.y:x.m+x.b+x.x}$.`;
       if(qtype==='mistake') return `בפונקציה $y=${x.m}x${x.b>=0?'+'+x.b:x.b}$ תלמיד הציב $x=${x.x}$: "$y=${x.m}+${x.x}${x.b>=0?'+'+x.b:x.b}=${x.m+x.x+x.b}$".`;
       return `נתונה הפונקציה $y=${x.m}x${x.b>=0?'+'+x.b:x.b}$.\nמה ערך $y$ כאשר $x=${x.x}$?`;
     }
     if(family==='equation_from_points'){
-      if(qtype==='tf') return `הישר העובר דרך $(${x.x1},${x.y1})$ ו-$(${x.x2},${x.y2})$ הוא $y=${-x.m}x${x.b>=0?'+'+x.b:x.b}$.`;
+      if(qtype==='tf') return `הישר העובר דרך $(${x.x1},${x.y1})$ ו-$(${x.x2},${x.y2})$ הוא $y=${tfTrue?(x.m===1?'':x.m===-1?'-':x.m):-x.m}x${x.b>=0?'+'+x.b:x.b}$.`;
       if(qtype==='mistake') return `לישר דרך $(${x.x1},${x.y1})$ ו-$(${x.x2},${x.y2})$ תלמיד כתב: "$y=${x.b}x${x.m>=0?'+'+x.m:x.m}$" — החליף בין השיפוע לחיתוך.`;
       return `כתבו את משוואת הישר העובר דרך $(${x.x1},${x.y1})$ ו-$(${x.x2},${x.y2})$.`;
     }
     // rising_falling
-    if(qtype==='tf') return `הפונקציה $y=${x.m}x${x.b>=0?'+'+x.b:x.b}$ היא פונקציה ${x.m>0?'יורדת':'עולה'}.`;
+    if(qtype==='tf') return `הפונקציה $y=${x.m}x${x.b>=0?'+'+x.b:x.b}$ היא פונקציה ${tfTrue?(x.m>0?'עולה':'יורדת'):(x.m>0?'יורדת':'עולה')}.`;
     if(qtype==='mistake') return `על $y=${x.m}x${x.b>=0?'+'+x.b:x.b}$ תלמיד אמר: "${x.m>0?'יורדת':'עולה'}, כי ${x.m>0?'יש בה מספר חיובי קטן':'המינוס הופך אותה לעולה'}".`;
     return `האם הפונקציה $y=${x.m}x${x.b>=0?'+'+x.b:x.b}$ עולה או יורדת? נמקו.`;
   }
 
-  function answer(family,x,qtype){
-    const wrong = qtype==='mistake' || qtype==='tf';
+  function answer(family,x,qtype,tfTrue){
+    const wrong = qtype==='mistake' || (qtype==='tf' && !tfTrue);
     if(family==='slope_two_points'){
       const prefix = wrong ? 'שגוי — שיפוע: הפרש $y$ חלקי הפרש $x$ (באותו סדר).\n' : '';
       return `${prefix}$$m=\\frac{y_2-y_1}{x_2-x_1}=\\frac{${x.y2}-${x.y1}}{${x.x2}-${x.x1}}=\\frac{${x.y2-x.y1}}{${x.x2-x.x1}}=${x.m}$$`;
@@ -85,9 +85,10 @@
     if(family==='value_at') svg = E.linearGraphSvg({m:x.m,b:x.b,pts:[{x:x.x,y:x.y}]});
     else if(family==='rising_falling') svg = E.linearGraphSvg({m:x.m,b:x.b});
     else svg = E.linearGraphSvg({m:x.m,b:x.b,pts:[{x:x.x1,y:x.y1},{x:x.x2,y:x.y2}]});
-    const q = question(family,x,questionType), a = answer(family,x,questionType);
+    const tfTrue = questionType==='tf' && Math.random()<0.5;
+    const q = question(family,x,questionType,tfTrue), a = answer(family,x,questionType,tfTrue);
     if(questionType==='mcq') return E.questionTypes.mcq({question:q,answer:a,svg:svg,choices:choices(family,x)});
-    if(questionType==='tf') return E.questionTypes.tf({question:q,answer:a,svg:svg,isTrue:false});
+    if(questionType==='tf') return E.questionTypes.tf({question:q,answer:a,svg:svg,isTrue:tfTrue});
     if(questionType==='mistake') return E.questionTypes.mistake({question:q,answer:a,svg:svg});
     return E.questionTypes.open({question:q,answer:a,svg:svg});
   };

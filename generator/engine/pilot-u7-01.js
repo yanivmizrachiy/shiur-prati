@@ -59,41 +59,43 @@
     return E.shuffle(values).map((v,i)=>({label:['א','ב','ג','ד'][i], text:'$'+v+'$', correct:v===correct}));
   }
 
-  function question(family,s,qtype){
+  function question(family,s,qtype,tfTrue){
     const t=s.t, idx=s.idx;
     if(family==='rel_freq'){
       const c=t.counts[idx];
-      if(qtype==='tf') return `התדירות היחסית של ${t.label} $${t.vals[idx]}$ היא $${c}$, כי זו התדירות הרשומה בטבלה.`;
+      if(qtype==='tf') return tfTrue
+        ? `התדירות היחסית של ${t.label} $${t.vals[idx]}$ היא $${Math.round(c*100/t.total)}\\%$.`
+        : `התדירות היחסית של ${t.label} $${t.vals[idx]}$ היא $${c}$, כי זו התדירות הרשומה בטבלה.`;
       if(qtype==='mistake') return `תלמיד טען: "התדירות היחסית של ${t.label} $${t.vals[idx]}$ היא $${c}$ — פשוט קוראים מהטבלה".`;
       if(qtype==='mcq') return `מה התדירות היחסית של ${t.label} $${t.vals[idx]}$?`;
       return `מה התדירות היחסית של ${t.label} $${t.vals[idx]}$?\nהביעו אותה כשבר, כמספר עשרוני וכאחוז.`;
     }
     if(family==='read_freq'){
-      if(qtype==='tf') return `לפי הטבלה, התדירות של ${t.label} $${t.vals[idx]}$ היא $${t.counts[idx]+1}$.`;
+      if(qtype==='tf') return `לפי הטבלה, התדירות של ${t.label} $${t.vals[idx]}$ היא $${tfTrue?t.counts[idx]:t.counts[idx]+1}$.`;
       if(qtype==='mistake') return `תלמיד קרא מהטבלה: "התדירות של $${t.vals[idx]}$ היא $${t.vals[idx]}$".`;
       return `לפניכם טבלת תדירות.\nמה התדירות של ${t.label} $${t.vals[idx]}$?`;
     }
     if(family==='most_frequent'){
       const maxC=Math.max.apply(null,t.counts);
       const minC=Math.min.apply(null,t.counts);
-      if(qtype==='tf') return `ה${t.label} השכיח ביותר בטבלה הוא $${t.vals[t.counts.indexOf(minC)]}$.`;
+      if(qtype==='tf') return `ה${t.label} השכיח ביותר בטבלה הוא $${t.vals[t.counts.indexOf(tfTrue?maxC:minC)]}$.`;
       if(qtype==='mistake') return `תלמיד טען: "השכיח ביותר הוא $${Math.max.apply(null,t.vals)}$ — הערך הגדול ביותר בטבלה".`;
       return `לפי הטבלה — מהו ה${t.label} השכיח ביותר?`;
     }
     if(family==='total_check'){
-      if(qtype==='tf') return `סך כל הנבדקים בטבלה הוא $${t.total+2}$.`;
+      if(qtype==='tf') return `סך כל הנבדקים בטבלה הוא $${tfTrue?t.total:t.total+2}$.`;
       if(qtype==='mistake') return `תלמיד חישב סך נבדקים: "$${t.vals.join('+')}=${t.vals.reduce((a,b)=>a+b,0)}$" — חיבר את הערכים.`;
       return `כמה נבדקים יש בסך הכל לפי הטבלה?`;
     }
     // missing_freq
-    if(qtype==='tf') return `בטבלה חסרה תדירות אחת. אם סך הנבדקים $${t.total}$, התדירות החסרה היא $${t.counts[idx]+1}$.`;
+    if(qtype==='tf') return `בטבלה חסרה תדירות אחת. אם סך הנבדקים $${t.total}$, התדירות החסרה היא $${tfTrue?t.counts[idx]:t.counts[idx]+1}$.`;
     if(qtype==='mistake') return `סך הנבדקים $${t.total}$ ותדירות אחת חסרה. תלמיד כתב: "החסרה היא $${t.total}$ פחות הערך $${t.vals[idx]}$".`;
     return `סך כל הנבדקים הוא $${t.total}$, ובטבלה חסרה תדירות אחת (מסומנת ?).\nמה התדירות החסרה?`;
   }
 
-  function answer(family,s,qtype){
+  function answer(family,s,qtype,tfTrue){
     const t=s.t, idx=s.idx;
-    const wrong = qtype==='mistake' || qtype==='tf';
+    const wrong = qtype==='mistake' || (qtype==='tf' && !tfTrue);
     if(family==='rel_freq'){
       const c=t.counts[idx], g=gcd(c,t.total), fn=c/g, fd=t.total/g;
       const dec=c/t.total, p=Math.round(c*100/t.total);
@@ -125,9 +127,10 @@
     const family = pickFamily(difficulty);
     const s = setup(family);
     const svg = tableSvg(s.t, family==='missing_freq' ? s.idx : -1);
-    const q = question(family,s,questionType), a = answer(family,s,questionType);
+    const tfTrue = questionType==='tf' && Math.random()<0.5;
+    const q = question(family,s,questionType,tfTrue), a = answer(family,s,questionType,tfTrue);
     if(questionType==='mcq') return E.questionTypes.mcq({question:q,answer:a,svg:svg,choices:choices(family,s)});
-    if(questionType==='tf') return E.questionTypes.tf({question:q,answer:a,svg:svg,isTrue:false});
+    if(questionType==='tf') return E.questionTypes.tf({question:q,answer:a,svg:svg,isTrue:tfTrue});
     if(questionType==='mistake') return E.questionTypes.mistake({question:q,answer:a,svg:svg});
     return E.questionTypes.open({question:q,answer:a,svg:svg});
   };

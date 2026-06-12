@@ -4,15 +4,24 @@
 (function(){
   const E = window.TargilimEngine = window.TargilimEngine || {};
 
-  const SUB_POS = [
-    {k:2,c:7,v:3,r:13},{k:3,c:5,v:4,r:17},{k:5,c:2,v:6,r:32},{k:4,c:9,v:2,r:17},{k:6,c:1,v:5,r:31}
-  ];
-  const SUB_NEG = [
-    {k:2,c:7,v:-3,r:1},{k:3,c:10,v:-2,r:4},{k:4,c:5,v:-1,r:1},{k:5,c:20,v:-3,r:5}
-  ];
-  const SUB_POWER = [
-    {v:3,c:1,r:10},{v:4,c:2,r:18},{v:5,c:3,r:28},{v:-3,c:1,r:10},{v:-4,c:2,r:18}
-  ];
+  // Learning files 01+08: substitution values are teacher-changeable; cases are
+  // generated dynamically (k·x+c with positive/negative x, x²+c) instead of a
+  // fixed 4–5 item pool. sub_pos / sub_neg / sub_power family names preserved.
+  function rnd(lo,hi){ return lo + Math.floor(Math.random()*(hi-lo+1)); }
+  function caseSubPos(){
+    let k=rnd(2,6), v=rnd(2,6);
+    while(k===2 && v===2) v=rnd(3,6); // keep k+c+v distinct from k·v+c (TF distractor)
+    const c=rnd(1,9);
+    return {k:k,c:c,v:v,r:k*v+c};
+  }
+  function caseSubNeg(){
+    const k=rnd(2,5), v=-rnd(1,4), c=rnd(5,20);
+    return {k:k,c:c,v:v,r:k*v+c};
+  }
+  function caseSubPower(){
+    const v=rnd(3,6)*(Math.random()<0.5?-1:1), c=rnd(1,4);
+    return {v:v,c:c,r:v*v+c};
+  }
 
   function pickFamily(diff){
     if(diff === 'basic') return 'sub_pos';
@@ -20,9 +29,9 @@
     return E.pick(['sub_pos','sub_neg','sub_power']);
   }
   function pickCase(f){
-    if(f==='sub_neg') return E.pick(SUB_NEG);
-    if(f==='sub_power') return E.pick(SUB_POWER);
-    return E.pick(SUB_POS);
+    if(f==='sub_neg') return caseSubNeg();
+    if(f==='sub_power') return caseSubPower();
+    return caseSubPos();
   }
   function wrap(n){ return n < 0 ? '(' + n + ')' : '' + n; }
 
@@ -36,20 +45,20 @@
     return E.shuffle(values).map((v,i)=>({label:['א','ב','ג','ד'][i], text:'$'+v+'$', correct:v===correct}));
   }
 
-  function question(family,x,qtype){
+  function question(family,x,qtype,tfTrue){
     if(family==='sub_power'){
-      if(qtype==='tf') return `ערך הביטוי $x^2+${x.c}$ כאשר $x=${x.v}$ הוא $${x.v<0 ? -(x.v*x.v)+x.c : x.r+1}$.`;
+      if(qtype==='tf') return `ערך הביטוי $x^2+${x.c}$ כאשר $x=${x.v}$ הוא $${tfTrue ? x.r : (x.v<0 ? -(x.v*x.v)+x.c : x.r+1)}$.`;
       if(qtype==='mistake') return `תלמיד הציב $x=${x.v}$ בביטוי $x^2+${x.c}$: "$${x.v}^2=${x.v<0?-(x.v*x.v):x.v*2}$, ועוד $${x.c}$: $${x.v<0?-(x.v*x.v)+x.c:x.v*2+x.c}$".`;
       return `חשבו את ערך הביטוי $x^2+${x.c}$ כאשר $x=${x.v}$.`;
     }
     const expr = `${x.k}x+${x.c}`;
-    if(qtype==='tf') return `ערך הביטוי $${expr}$ כאשר $x=${x.v}$ הוא $${x.k+x.c+x.v}$.`;
+    if(qtype==='tf') return `ערך הביטוי $${expr}$ כאשר $x=${x.v}$ הוא $${tfTrue ? x.r : x.k+x.c+x.v}$.`;
     if(qtype==='mistake') return `תלמיד הציב $x=${wrap(x.v)}$ בביטוי $${expr}$: "$${x.k}+${x.v}+${x.c}=${x.k+x.v+x.c}$".`;
     return `חשבו את ערך הביטוי $${expr}$ כאשר $x=${wrap(x.v)}$.`;
   }
 
-  function answer(family,x,qtype){
-    const wrong = qtype==='mistake' || qtype==='tf';
+  function answer(family,x,qtype,tfTrue){
+    const wrong = qtype==='mistake' || (qtype==='tf' && !tfTrue);
     if(family==='sub_power'){
       const sq = x.v*x.v;
       const prefix = wrong ? 'שגוי — ' + (x.v<0 ? 'מספר שלילי בריבוע נותן תוצאה חיובית: $(-a)^2=a^2$.' : 'חזקה היא כפל עצמי, לא כפל ב-$2$.') + '\n' : '';
@@ -63,9 +72,10 @@
     difficulty = difficulty || 'standard'; questionType = questionType || 'open';
     const family = pickFamily(difficulty);
     const x = pickCase(family);
-    const q = question(family,x,questionType), a = answer(family,x,questionType);
+    const tfTrue = questionType==='tf' && Math.random()<0.5;
+    const q = question(family,x,questionType,tfTrue), a = answer(family,x,questionType,tfTrue);
     if(questionType==='mcq') return E.questionTypes.mcq({question:q,answer:a,svg:'',choices:choices(family,x)});
-    if(questionType==='tf') return E.questionTypes.tf({question:q,answer:a,svg:'',isTrue:false});
+    if(questionType==='tf') return E.questionTypes.tf({question:q,answer:a,svg:'',isTrue:tfTrue});
     if(questionType==='mistake') return E.questionTypes.mistake({question:q,answer:a,svg:''});
     return E.questionTypes.open({question:q,answer:a,svg:''});
   };

@@ -44,14 +44,14 @@
     return E.shuffle(values).map((v,i)=>({label:['א','ב','ג','ד'][i], text:'$'+v+'$', correct:v===correct}));
   }
 
-  function question(family,x,qtype){
+  function question(family,x,qtype,tfTrue){
     if(family==='sum_diff'){
-      if(qtype==='tf') return `סכום שני מספרים $${x.s}$ והפרשם $${x.d}$. המספר הגדול הוא $${x.s-x.d}$.`;
+      if(qtype==='tf') return `סכום שני מספרים $${x.s}$ והפרשם $${x.d}$. המספר הגדול הוא $${tfTrue?x.x:(x.s-x.d===x.x?x.x+1:x.s-x.d)}$.`;
       if(qtype==='mistake') return `סכום $${x.s}$, הפרש $${x.d}$. תלמיד מצא את הגדול: "$${x.s}-${x.d}=${x.s-x.d}$".`;
       return `סכום שני מספרים הוא $${x.s}$ וההפרש ביניהם $${x.d}$.\nמצאו את שני המספרים.`;
     }
     if(family==='more_than'){
-      if(qtype==='tf') return `ל${x.who1} ול${x.who2} יחד $${x.s}$ ${x.item}. ל${x.who1} יש $${x.k}$ יותר. ל${x.who1} יש $${Math.round(x.s/2)+x.k}$ ${x.item}.`;
+      if(qtype==='tf') return `ל${x.who1} ול${x.who2} יחד $${x.s}$ ${x.item}. ל${x.who1} יש $${x.k}$ יותר. ל${x.who1} יש $${tfTrue?x.big:Math.round(x.s/2)+x.k}$ ${x.item}.`;
       if(qtype==='mistake') return `יחד $${x.s}$ ${x.item}, ל${x.who1} $${x.k}$ יותר. תלמיד: "חצי מ-$${x.s}$ זה $${x.s/2}$, ועוד $${x.k}$: ל${x.who1} יש $${x.s/2+x.k}$".`;
       return `ל${x.who1} ול${x.who2} יחד $${x.s}$ ${x.item}. ל${x.who1} יש $${x.k}$ ${x.item} יותר מל${x.who2}.\nכמה ${x.item} יש לכל אחד?`;
     }
@@ -60,8 +60,8 @@
     return `האם הזוג $(x,y)=(${x.px},${x.py})$ הוא פתרון המערכת?\n$$${x.e1}$$\n$$${x.e2}$$`;
   }
 
-  function answer(family,x,qtype){
-    const wrong = qtype==='mistake' || qtype==='tf';
+  function answer(family,x,qtype,tfTrue){
+    const wrong = qtype==='mistake' || (qtype==='tf' && !tfTrue);
     if(family==='sum_diff'){
       const prefix = wrong ? 'שגוי — חיסור ההפרש מהסכום נותן פעמיים את הקטן, לא את הגדול.\n' : '';
       return `${prefix}$$x+y=${x.s}$$\n$$x-y=${x.d}$$\nחיבור המשוואות: $2x=${x.s+x.d}$, לכן $x=${x.x}$.\n$$y=${x.s}-${x.x}=${x.y}$$\nהמספרים: $${x.x}$ ו-$${x.y}$. בדיקה: $${x.x}-${x.y}=${x.d}$ ✓`;
@@ -80,10 +80,11 @@
     difficulty = difficulty || 'standard'; questionType = questionType || 'open';
     const family = pickFamily(difficulty);
     const x = pickCase(family);
-    const q = question(family,x,questionType), a = answer(family,x,questionType);
+    const tfTrue = questionType==='tf' && family!=='verify_pair' && Math.random()<0.5;
+    const q = question(family,x,questionType,tfTrue), a = answer(family,x,questionType,tfTrue);
     if(questionType==='mcq') return E.questionTypes.mcq({question:q,answer:a,svg:'',choices:choices(family,x)});
     if(questionType==='tf'){
-      const isTrue = family==='verify_pair' ? x.ok : false;
+      const isTrue = family==='verify_pair' ? x.ok : tfTrue;
       return E.questionTypes.tf({question:q,answer:a,svg:'',isTrue:isTrue});
     }
     if(questionType==='mistake') return E.questionTypes.mistake({question:q,answer:a,svg:''});
