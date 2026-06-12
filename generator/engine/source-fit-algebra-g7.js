@@ -12,18 +12,8 @@
   function topic(g,d,id,label){ if(typeof TOPICS==='undefined'||!TOPICS[g]||!TOPICS[g][d]) return; if(!TOPICS[g][d].some(t=>t[0]===id)) TOPICS[g][d].push([id,label,1]); }
   function sign(n){ return n<0 ? ' - '+Math.abs(n) : ' + '+n; }
   function term(c,v){ if(c===0) return ''; if(c===1) return v; if(c===-1) return '-'+v; return c+v; }
-  function expr(cx,k,v){
-    let out='';
-    if(cx!==0) out+=term(cx,v);
-    if(k!==0 || out==='') out+=(out==='' ? (''+k) : sign(k));
-    return out.replace('+ -','- ');
-  }
-  function uniqChoices(items){
-    const seen={}; const out=[];
-    items.forEach(it=>{ if(!seen[it.text]){ seen[it.text]=1; out.push(it); } });
-    while(out.length<4){ out.push({text:tex(expr(out.length+2,out.length+5,'x')), correct:false}); }
-    return out.slice(0,4);
-  }
+  function expr(cx,k,v){ let out=''; if(cx!==0) out+=term(cx,v); if(k!==0 || out==='') out+=(out==='' ? (''+k) : sign(k)); return out.replace('+ -','- '); }
+  function uniqChoices(items){ const seen={}; const out=[]; items.forEach(it=>{ if(!seen[it.text]){ seen[it.text]=1; out.push(it); } }); while(out.length<4){ out.push({text:tex(expr(out.length+2,out.length+5,'x')), correct:false}); } return out.slice(0,4); }
   function smallSvg(title){
     const T=E.themes&&E.themes.geometry?E.themes.geometry:{fill:'#eff6ff',stroke:'#2563eb',helper:'#93c5fd',given:'#1d4ed8',unknown:'#dc2626',label:'#334155'};
     return `<svg class="engine-svg" viewBox="0 0 292 126" xmlns="http://www.w3.org/2000/svg"><rect x="14" y="12" width="264" height="98" rx="14" fill="${T.fill}" stroke="${T.stroke}" stroke-width="1.8"/><text x="146" y="42" font-size="15" font-weight="900" text-anchor="middle" fill="${T.label}">${title}</text><text x="146" y="72" font-size="12" font-weight="800" text-anchor="middle" fill="${T.given}">פתיחת סוגריים · איברים דומים · ביטויים שקולים</text><text x="146" y="100" font-size="10.5" font-weight="800" text-anchor="middle" fill="${T.label}">מקור: אלגברה כיתה ז׳ + עקרונות אלגברה ז׳–ח׳</text></svg>`;
@@ -31,44 +21,24 @@
 
   function makeSimplifyCase(diff){
     const v=pick(['x','a','m','y']);
-    const family=diff==='challenge'?pick(['minusDist','factor','nestedLike']):pick(['plusDist','minusDist','likeTerms','factor']);
+    const family=diff==='challenge'?pick(['minusDist','factor','likeTerms']):pick(['plusDist','minusDist','likeTerms','factor']);
     if(family==='plusDist'){
       const p=pick([2,3,4,5]), q=pick([2,3,4,5,6]), r=pick([2,3,4]);
       const cx=p+r, k=p*q;
-      return {
-        family, v, given:`${p}(${v}+${q})+${r}${v}`,
-        correct:expr(cx,k,v),
-        answer:`פותחים סוגריים: ${tex(p+'('+v+'+'+q+')='+p+v+'+'+(p*q))}. אחר כך מחברים איברים דומים: ${tex(p+v+'+'+r+v+'='+(p+r)+v)}. לכן הביטוי השקול הוא ${tex(expr(cx,k,v))}.`,
-        wrong:[expr(p+r,q,v), expr(p*r,p*q,v), expr(p,p*q+r,v)]
-      };
+      return {given:`${p}(${v}+${q})+${r}${v}`, correct:expr(cx,k,v), answer:`פותחים סוגריים: ${tex(p+'('+v+'+'+q+')='+p+v+'+'+(p*q))}. אחר כך מחברים איברים דומים: ${tex(p+v+'+'+r+v+'='+(p+r)+v)}. לכן הביטוי השקול הוא ${tex(expr(cx,k,v))}.`, wrong:[expr(p+r,q,v), expr(p*r,p*q,v), expr(p,p*q+r,v)]};
     }
     if(family==='minusDist'){
       const p=pick([5,6,7,8]), b=pick([2,3,4]), c=pick([2,3,4,5]);
       const cx=p-b, k=b*c;
-      return {
-        family, v, given:`${p}${v}-${b}(${v}-${c})`,
-        correct:expr(cx,k,v),
-        answer:`כאשר יש מינוס לפני הסוגריים מחסרים את כל הביטוי: ${tex('-'+b+'('+v+'-'+c+')=-'+b+v+'+'+(b*c))}. לכן ${tex(p+v+'-'+b+'('+v+'-'+c+')='+expr(cx,k,v))}.`,
-        wrong:[expr(p-b,-b*c,v), expr(p+b,b*c,v), expr(cx,c,v)]
-      };
+      return {given:`${p}${v}-${b}(${v}-${c})`, correct:expr(cx,k,v), answer:`כאשר יש מינוס לפני הסוגריים מחסרים את כל הביטוי: ${tex('-'+b+'('+v+'-'+c+')=-'+b+v+'+'+(b*c))}. לכן ${tex(p+v+'-'+b+'('+v+'-'+c+')='+expr(cx,k,v))}.`, wrong:[expr(p-b,-b*c,v), expr(p+b,b*c,v), expr(cx,c,v)]};
     }
     if(family==='factor'){
       const f=pick([2,3,4,5]), q=pick([3,4,5,6]);
-      return {
-        family, v, given:`${f}${v}+${f*q}`,
-        correct:`${f}(${v}+${q})`,
-        answer:`מוציאים גורם משותף ${tex(''+f)}: ${tex(f+v+'+'+(f*q)+'='+f+'('+v+'+'+q+')')}.`,
-        wrong:[`${f}(${v}+${f*q})`, `${f}${v}+${q}`, `${f+q}(${v}+${f})`]
-      };
+      return {given:`${f}${v}+${f*q}`, correct:`${f}(${v}+${q})`, answer:`מוציאים גורם משותף ${tex(''+f)}: ${tex(f+v+'+'+(f*q)+'='+f+'('+v+'+'+q+')')}.`, wrong:[`${f}(${v}+${f*q})`, `${f}${v}+${q}`, `${f+q}(${v}+${f})`]};
     }
     const a=pick([6,7,8,9]), b=pick([2,3,4]), c=pick([3,4,5]), d=pick([4,5,6]);
     const cx=a-b, k=c+d;
-    return {
-      family:'likeTerms', v, given:`${a}${v}+${c}-${b}${v}+${d}`,
-      correct:expr(cx,k,v),
-      answer:`מחברים רק איברים דומים: ${tex(a+v+'-'+b+v+'='+(a-b)+v)} וגם ${tex(c+'+'+d+'='+(c+d))}. לכן מקבלים ${tex(expr(cx,k,v))}.`,
-      wrong:[expr(a+b,k,v), expr(cx,c-d,v), expr(a,k,v)]
-    };
+    return {given:`${a}${v}+${c}-${b}${v}+${d}`, correct:expr(cx,k,v), answer:`מחברים רק איברים דומים: ${tex(a+v+'-'+b+v+'='+(a-b)+v)} וגם ${tex(c+'+'+d+'='+(c+d))}. לכן מקבלים ${tex(expr(cx,k,v))}.`, wrong:[expr(a+b,k,v), expr(cx,c-d,v), expr(a,k,v)]};
   }
 
   function genA704(diff,qtype){
@@ -88,11 +58,6 @@
     }
     if(qtype==='mistake'){
       const wrong=pick(c.wrong);
-      q=`תלמיד פישט כך: ${tex(c.given+'='+wrong')}.`;
-      // fixed below by string construction that avoids escaped quote problems
-    }
-    if(qtype==='mistake'){
-      const wrong=pick(c.wrong);
       q='תלמיד פישט כך: '+tex(c.given+'='+wrong)+'. הסבירו מה הטעות ותקנו.';
       a='הפתרון של התלמיד אינו שקול לביטוי המקורי. התיקון: '+c.answer;
     }
@@ -102,23 +67,23 @@
     return E.questionTypes.open({question:q,answer:a,svg:svg});
   }
 
-  function makeMistakeCase(diff){
+  function makeMistakeCase(){
     const v=pick(['x','a','m','y']);
     const family=pick(['distribution','likePower','minusSign','constantLike']);
     if(family==='distribution'){
       const p=pick([2,3,4]), q=pick([4,5,6]);
-      return {v, wrong:`${p}(${v}+${q})=${p}${v}+${q}`, correct:`${p}(${v}+${q})=${p}${v}+${p*q}`, why:'הכפל צריך לחול על כל האיברים שבתוך הסוגריים, לא רק על האיבר עם המשתנה.'};
+      return {wrong:`${p}(${v}+${q})=${p}${v}+${q}`, correct:`${p}(${v}+${q})=${p}${v}+${p*q}`, why:'הכפל צריך לחול על כל האיברים שבתוך הסוגריים, לא רק על האיבר עם המשתנה.'};
     }
     if(family==='likePower'){
       const a=pick([2,3,4]), b=pick([3,4,5]);
-      return {v, wrong:`${a}${v}+${b}${v}=${a+b}${v}^2`, correct:`${a}${v}+${b}${v}=${a+b}${v}`, why:'בחיבור איברים דומים מחברים את המקדמים בלבד; החזקה של המשתנה לא משתנה.'};
+      return {wrong:`${a}${v}+${b}${v}=${a+b}${v}^2`, correct:`${a}${v}+${b}${v}=${a+b}${v}`, why:'בחיבור איברים דומים מחברים את המקדמים בלבד; החזקה של המשתנה לא משתנה.'};
     }
     if(family==='minusSign'){
       const p=pick([5,6,7]), b=pick([2,3]), q=pick([3,4,5]);
-      return {v, wrong:`${p}${v}-${b}(${v}+${q})=${p-b}${v}+${b*q}`, correct:`${p}${v}-${b}(${v}+${q})=${p-b}${v}-${b*q}`, why:'מינוס לפני סוגריים משנה את סימני כל האיברים שנכפלים בו.'};
+      return {wrong:`${p}${v}-${b}(${v}+${q})=${p-b}${v}+${b*q}`, correct:`${p}${v}-${b}(${v}+${q})=${p-b}${v}-${b*q}`, why:'מינוס לפני סוגריים משנה את סימני כל האיברים שנכפלים בו.'};
     }
     const a=pick([5,6,7]), k=pick([4,5,6]);
-    return {v, wrong:`${a}${v}+${k}=${a+k}${v}`, correct:`${a}${v}+${k}`, why:'איבר עם משתנה ואיבר מספרי אינם איברים דומים, ולכן לא מחברים אותם לאיבר אחד.'};
+    return {wrong:`${a}${v}+${k}=${a+k}${v}`, correct:`${a}${v}+${k}`, why:'איבר עם משתנה ואיבר מספרי אינם איברים דומים, ולכן לא מחברים אותם לאיבר אחד.'};
   }
 
   function genA705(diff,qtype){
@@ -134,13 +99,9 @@
       {text:'כל ביטוי עם אותו משתנה תמיד שקול לכל ביטוי אחר',correct:false}
     ]);
     let q=base+' מצאו את הטעות ותקנו.';
-    let isTrue=false;
     if(qtype==='open') return E.questionTypes.open({question:q,answer:ans,svg:svg});
     if(qtype==='mcq') return E.questionTypes.mcq({question:base+' מה סוג הטעות העיקרי?',answer:ans,svg:svg,choices:cs});
-    if(qtype==='tf'){
-      q='הפתרון '+tex(c.wrong)+' הוא פתרון נכון.';
-      return E.questionTypes.tf({question:q,answer:ans,svg:svg,isTrue:isTrue});
-    }
+    if(qtype==='tf') return E.questionTypes.tf({question:'הפתרון '+tex(c.wrong)+' הוא פתרון נכון.',answer:ans,svg:svg,isTrue:false});
     return E.questionTypes.mistake({question:base,answer:ans,svg:svg});
   }
 
