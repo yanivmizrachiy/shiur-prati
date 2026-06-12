@@ -21,6 +21,7 @@ const index = read('generator/index.html');
 const sourceFit = read('generator/engine/source-fit-extensions.js');
 const graphs = read('generator/engine/source-fit-graphs.js');
 const geometry = read('generator/engine/source-fit-geometry.js');
+const algebraSmartG7 = read('generator/engine/source-fit-algebra-g7.js');
 const uncertaintyLegacy = read('generator/u7-02.js');
 const algebraLegacy = read('generator/a7-02.js');
 const geometryG7Legacy = read('generator/g7-02.js');
@@ -46,11 +47,13 @@ includesAll('index source-fit runtime load order', index, [
   'engine/source-fit-extensions.js?v=20260612-source-fit-1',
   'engine/source-fit-graphs.js?v=20260612-source-fit-2',
   'engine/source-fit-geometry.js?v=20260612-source-fit-3',
+  'engine/source-fit-algebra-g7.js?v=20260612-source-fit-5',
   'exercise-set.js?v=20260612-chatgpt-sync'
 ]);
 assert('source-fit extensions load before exercise-set', index.indexOf('source-fit-extensions.js') < index.indexOf('exercise-set.js'));
 assert('source-fit graphs load before exercise-set', index.indexOf('source-fit-graphs.js') < index.indexOf('exercise-set.js'));
 assert('source-fit geometry loads before exercise-set', index.indexOf('source-fit-geometry.js') < index.indexOf('exercise-set.js'));
+assert('source-fit algebra g7 loads before exercise-set', index.indexOf('source-fit-algebra-g7.js') < index.indexOf('exercise-set.js'));
 
 includesAll('source-fit extension engine ids', sourceFit, [
   'N7-01-ENGINE',
@@ -70,13 +73,24 @@ includesAll('source-fit geometry engine ids', geometry, [
   'גליל ופריסה ✦ מקור',
   'זוויות בין מקבילים ✦ מקור'
 ]);
+includesAll('grade 7 algebra smart engine ids', algebraSmartG7, [
+  'A7-04-ENGINE',
+  'ביטויים שקולים ופישוט ✦ מנוע מקור',
+  'A7-05-ENGINE',
+  'מציאת טעות בביטויים ✦ מנוע מקור',
+  'open',
+  'mcq',
+  'tf',
+  'mistake',
+  'mixed'
+]);
 includesAll('advanced uncertainty active fallback topics', uncertaintyLegacy, [
   'U7-05',
   'דיאגרמת עוגה ושכיחות יחסית ✦ מקור',
   'U7-06',
   'תרשים מטעה — ביקורת ✦ מקור'
 ]);
-includesAll('grade 7 algebra active source-fit topics', algebraLegacy, [
+includesAll('grade 7 algebra active fallback topics', algebraLegacy, [
   'A7-04',
   'ביטויים שקולים ופישוט ✦ מקור',
   'A7-05',
@@ -116,8 +130,8 @@ const report = {
     'G8-03 parallel-line angles',
     'U7-05 pie chart and relative frequency fallback',
     'U7-06 misleading graph critique fallback',
-    'A7-04 equivalent expressions and simplification fallback',
-    'A7-05 expression mistake analysis fallback',
+    'A7-04 equivalent expressions smart engine',
+    'A7-05 expression mistake analysis smart engine',
     'G7-05 transformations fallback',
     'G7-06 composite area fallback',
     'G8-05 central angle and sector fallback',
