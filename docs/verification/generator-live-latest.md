@@ -1,6 +1,6 @@
 # Generator Live Verification Report
 
-Date: 2026-06-12T06:06:35.406Z
+Date: 2026-06-12T07:08:43.728Z
 URL: https://yanivmizrachiy.github.io/targilim/
 Status: FAIL
 
@@ -19,16 +19,16 @@ Status: FAIL
 ## Error
 ```
 locator.innerText: Error: strict mode violation: locator('.qtext') resolved to 10 elements:
-    1) <div class="qtext">…</div> aka getByText('במשולש ישר-זווית, שתי הרגליים הן 333 ס"מ ו-444 ס"מ. חשבו את היתר')
-    2) <div class="qtext">…</div> aka getByText('במשולש ישר-זווית, היתר 171717 ס"מ והרגל 888 ס"מ. חשבו את הרגל השנייה')
+    1) <div class="qtext">…</div> aka getByText('במשולש ישר-זווית, היתר 171717 ס"מ והרגל 151515 ס"מ. חשבו את הרגל השנייה')
+    2) <div class="qtext">…</div> aka getByText('במשולש ישר-זווית, היתר 151515 ס"מ והרגל 121212 ס"מ. חשבו את הרגל השנייה')
     3) <div class="qtext">…</div> aka getByText('במשולש ישר-זווית, שתי הרגליים הן 666 ס"מ ו-888 ס"מ. חשבו את היתר')
-    4) <div class="qtext">…</div> aka getByText('במשולש ישר-זווית, היתר 101010 ס"מ והרגל 888 ס"מ. חשבו את הרגל השנייה')
+    4) <div class="qtext">…</div> aka getByText('במשולש ישר-זווית, שתי הרגליים הן 999 ס"מ ו-121212 ס"מ. חשבו את היתר')
     5) <div class="qtext">…</div> aka getByText('במשולש ישר-זווית, היתר 252525')
-    6) <div class="qtext">…</div> aka getByText('במשולש ישר-זווית, היתר 101010 ס"מ והרגל 666 ס"מ. חשבו את הרגל השנייה')
-    7) <div class="qtext">…</div> aka getByText('במשולש ישר-זווית, היתר 151515 ס"מ והרגל 121212 ס"מ. חשבו את הרגל השנייה')
-    8) <div class="qtext">…</div> aka getByText('במשולש ישר-זווית, היתר 171717 ס"מ והרגל 151515 ס"מ. חשבו את הרגל השנייה')
-    9) <div class="qtext">…</div> aka getByText('במשולש ישר-זווית, היתר 555')
-    10) <div class="qtext">…</div> aka getByText('במשולש ישר-זווית, היתר 151515 ס"מ והרגל 999 ס"מ. חשבו את הרגל השנייה')
+    6) <div class="qtext">…</div> aka getByText('במשולש ישר-זווית, היתר 131313')
+    7) <div class="qtext">…</div> aka getByText('במשולש ישר-זווית, שתי הרגליים הן 333 ס"מ ו-444 ס"מ. חשבו את היתר')
+    8) <div class="qtext">…</div> aka getByText('במשולש ישר-זווית, היתר 171717 ס"מ והרגל 888 ס"מ. חשבו את הרגל השנייה')
+    9) <div class="qtext">…</div> aka getByText('במשולש ישר-זווית, היתר 151515 ס"מ והרגל 999 ס"מ. חשבו את הרגל השנייה')
+    10) <div class="qtext">…</div> aka getByText('במשולש ישר-זווית, היתר 101010')
 
 Call log:
   - waiting for locator('.qtext')
