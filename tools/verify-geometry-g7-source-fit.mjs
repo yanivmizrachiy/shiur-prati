@@ -30,11 +30,15 @@ must(g701, 'nets and cuboid topics', [
   'נפח תיבה מתוך פריסה ✦ מקור'
 ]);
 
-must(g702, 'transformations and composite area topics', [
+must(g702, 'transformations composite area pythagoras angles topics', [
   'G7-05',
   'הזזות שיקופים וסיבובים ✦ מקור',
   'G7-06',
-  'שטח צורה מורכבת ✦ מקור'
+  'שטח צורה מורכבת ✦ מקור',
+  'G7-09',
+  'פיתגורס בבעיה מצוירת ✦ מקור',
+  'G7-10',
+  'זוויות סביב ישר ונקודה ✦ מקור'
 ]);
 
 must(pyth, 'pythagoras smart engine', [
@@ -63,7 +67,7 @@ console.log(JSON.stringify({
     'cuboid volume and surface area',
     'transformations',
     'composite area',
-    'pythagoras',
-    'angle reasoning'
+    'pythagoras diagram applications',
+    'angle reasoning from diagrams'
   ]
 }, null, 2));
