@@ -25,6 +25,7 @@ const algebraSmartG7 = read('generator/engine/source-fit-algebra-g7.js');
 const uncertaintyLegacy = read('generator/u7-02.js');
 const numericG7Legacy = read('generator/n7-03.js');
 const numericG7Directed = read('generator/n7-04.js');
+const numericG7MulDiv = read('generator/n7-05.js');
 const algebraLegacy = read('generator/a7-02.js');
 const geometryG7Legacy = read('generator/g7-02.js');
 const geometryG8CircleLegacy = read('generator/g8-01.js');
@@ -108,6 +109,12 @@ includesAll('grade 7 directed-number active source-fit topics', numericG7Directe
   'N7-11',
   'חיבור וחיסור מכוונים בהקשר ✦ מקור'
 ]);
+includesAll('grade 7 directed multiplication and division topics', numericG7MulDiv, [
+  'N7-12',
+  'טעויות בכפל וחילוק מכוונים ✦ מקור',
+  'N7-13',
+  'כללי סימנים בכפל וחילוק ✦ מקור'
+]);
 includesAll('grade 7 algebra active fallback topics', algebraLegacy, [
   'A7-04',
   'ביטויים שקולים ופישוט ✦ מקור',
@@ -145,6 +152,8 @@ const report = {
     'N7-09 opposite number and absolute value context fallback',
     'N7-10 directed add/sub mistake analysis fallback',
     'N7-11 directed add/sub context fallback',
+    'N7-12 directed multiplication/division mistake analysis fallback',
+    'N7-13 directed multiplication/division sign rules fallback',
     'U7-03 relative-frequency comparison',
     'A8-01 applied graph/function reading',
     'U7-04 bar-chart reading',
