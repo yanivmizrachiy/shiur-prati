@@ -9,7 +9,7 @@
 - Static verifier keyword: smart generator.
 - Removed from active scope: Grade 9, booklet mode, PDF workbook mode, bulk A4 worksheet builder, answer-key booklet system.
 - Scope clarification (2026-06-12): a **browser-based multi-exercise set generator** (count control, מעורב, numbered set, answer key, browser print) is in scope and is now implemented. This is not a PDF workbook/booklet product.
-- Active engine count: 25.
+- Active engine count: 26 (25 original + N7-01 coordinate-system engine added 2026-06-12 per source file 05).
 - All 25 original source-mapped topics are preserved; none were deleted or restarted.
 - New runtime layer (branch `fix/deep-real-generator-upgrade-v1`): exercise-set generation on top of the existing 25 engines — מספר תרגילים (1/5/10/15/20), סוג שאלות including מעורב, numbered set renderer, מפתח תשובות toggle, browser print, duplicate avoidance. Single-card mode (count=1) with copy/PNG/print preserved.
 - True/false balance fixed in ALL 25 engines (measured 25–56% true; enforced by tools/verify-variety.mjs). Four real truth-mislabeling bugs fixed on the way (A7-03, G7-01, U8-01, N8-05 edge cases).
@@ -160,10 +160,10 @@ Recorded verification:
 
 ---
 
-## Active generator slices (25)
+## Active generator slices (26)
 
 G7-01, G7-02, G7-03, G7-04,
-N7-03, N7-04, N7-05, N7-06, N7-07,
+N7-01, N7-03, N7-04, N7-05, N7-06, N7-07,
 A7-01, A7-02, A7-03,
 U7-01, U7-02,
 G8-01, G8-04,
@@ -178,6 +178,7 @@ U8-01, U8-02.
 | ID | Topic | Grade | Domain | Code |
 |---|---|---|---|---|
 | G7-01-ENGINE | Rectangle and box | 7 | Geometry | ✅ |
+| N7-01-ENGINE | Coordinate system Quadrant I | 7 | Numeric | ✅ |
 | G7-02-ENGINE | Flat shape areas | 7 | Geometry | ✅ |
 | G7-03-ENGINE | Pythagoras | 7 | Geometry | ✅ |
 | G7-04-ENGINE | Missing angle | 7 | Geometry | ✅ |

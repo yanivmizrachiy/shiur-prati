@@ -7,12 +7,13 @@ let fails = 0;
 function check(name, ok){ console.log((ok?'PASS':'FAIL')+' — '+name); if(!ok) fails++; }
 function read(p){ return fs.readFileSync(p,'utf8'); }
 
-// 1. All 25 engine pilot files exist and all topics registered
+// 1. All 26 engine pilot files exist and all topics registered
+// (25 original + N7-01 coordinate system, added 2026-06-12 per source file 05)
 const pilots = fs.readdirSync('generator/engine').filter(f=>f.startsWith('pilot-'));
-check('25 engine pilot files exist', pilots.length === 25);
+check('26 engine pilot files exist', pilots.length === 26);
 const pattern = read('generator/engine/pattern-engine.js');
-const ids = ['G7-01','G7-02','G7-03','G7-04','N7-03','N7-04','N7-05','N7-06','N7-07','A7-01','A7-02','A7-03','U7-01','U7-02','G8-01','G8-04','N8-01','N8-02','N8-03','N8-04','N8-05','A8-02','A8-03','U8-01','U8-02'];
-check('all 25 ENGINE topics registered', ids.every(id=>pattern.includes(id+'-ENGINE')));
+const ids = ['G7-01','G7-02','G7-03','G7-04','N7-01','N7-03','N7-04','N7-05','N7-06','N7-07','A7-01','A7-02','A7-03','U7-01','U7-02','G8-01','G8-04','N8-01','N8-02','N8-03','N8-04','N8-05','A8-02','A8-03','U8-01','U8-02'];
+check('all 26 ENGINE topics registered', ids.every(id=>pattern.includes(id+'-ENGINE')));
 
 // 2. No teacher-facing technical jargon in UI strings
 const uiFiles = ['generator/index.html','generator/core.js','generator/engine/pattern-engine.js'];

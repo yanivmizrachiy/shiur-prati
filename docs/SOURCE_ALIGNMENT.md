@@ -1,4 +1,4 @@
-# Source Alignment Map — 25 Active Engines
+# Source Alignment Map — 26 Active Engines
 
 **Date:** 2026-06-11 | **Batch:** 3 (mapping/audit only — no engine code changed)
 
@@ -32,6 +32,7 @@ Source files cited as learning notes (`source-learning/2026-06-09/`); originals 
 | G7-02 | שטחי צורות שטוחות | 7 | Geometry | 03 + 09 | Pattern G7-02 שטח צורה שטוחה | KEEP |
 | G7-03 | משפט פיתגורס | 7 | Geometry | 03 + 09 | Pattern G7-03; curric. G7-07 | KEEP |
 | G7-04 | זווית חסרה במשולש | 7 | Geometry | 03 + 09 | Pattern G7-01 זווית חסרה | REMAP |
+| N7-01 | מערכת צירים — רביע ראשון | 7 | Numeric | 05 (+ pattern N7-01/N7-02) | Pattern N7-01 ציון נקודות רביע I; N7-02 אורך קטע; curric. N7-01 | NEW 2026-06-12 |
 | N7-03 | מספרים שליליים על ציר | 7 | Numeric | 05 + 07 | Pattern N7-03; curric. N7-02 | KEEP |
 | N7-04 | חיבור וחיסור מכוונים | 7 | Numeric | 05 + 07 | Pattern N7-04; curric. N7-03 | KEEP |
 | N7-05 | כפל וחילוק מכוונים | 7 | Numeric | 05 + 07 | Pattern N7-05; curric. N7-04 | KEEP |

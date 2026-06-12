@@ -2,6 +2,7 @@
   const E = window.TargilimEngine = window.TargilimEngine || {};
   const ENGINE_TOPIC_IDS = [
     'G7-01-ENGINE','G7-02-ENGINE','G7-03-ENGINE','G7-04-ENGINE',
+    'N7-01-ENGINE',
     'N7-03-ENGINE','N7-04-ENGINE','N7-05-ENGINE','N7-06-ENGINE','N7-07-ENGINE',
     'A7-01-ENGINE','A7-02-ENGINE','A7-03-ENGINE',
     'U7-01-ENGINE','U7-02-ENGINE',
@@ -57,6 +58,7 @@
     'G7-02-ENGINE':['generateG702Engine','שטחי צורות'],
     'G7-03-ENGINE':['generateG703Engine','משפט פיתגורס'],
     'G7-04-ENGINE':['generateG704Engine','זווית חסרה'],
+    'N7-01-ENGINE':['generateN701Engine','מערכת צירים — רביע ראשון'],
     'N7-03-ENGINE':['generateN703Engine','מספרים שליליים'],
     'N7-04-ENGINE':['generateN704Engine','חיבור וחיסור מכוונים'],
     'N7-05-ENGINE':['generateN705Engine','כפל וחילוק מכוונים'],
@@ -145,6 +147,9 @@
   }
   if(typeof TOPICS !== 'undefined' && TOPICS[8] && TOPICS[8].geometry && !TOPICS[8].geometry.some(t=>t[0]==='G8-04-ENGINE')){
     TOPICS[8].geometry.push(['G8-04-ENGINE','דמיון משולשים — גרסה חכמה ✦',1]);
+  }
+  if(typeof TOPICS !== 'undefined' && TOPICS[7] && TOPICS[7].numeric && !TOPICS[7].numeric.some(t=>t[0]==='N7-01-ENGINE')){
+    TOPICS[7].numeric.push(['N7-01-ENGINE','מערכת צירים — רביע ראשון ✦',1]);
   }
   if(typeof TOPICS !== 'undefined' && TOPICS[7] && TOPICS[7].numeric && !TOPICS[7].numeric.some(t=>t[0]==='N7-03-ENGINE')){
     TOPICS[7].numeric.push(['N7-03-ENGINE','מספרים שליליים — גרסה חכמה ✦',1]);
@@ -261,6 +266,12 @@
     const diff = document.getElementById('selDiff')?.value || document.getElementById('sl')?.value || 'standard';
     const qtype = document.getElementById('selQType')?.value || 'open';
     E.renderEngineCard('G8-04-ENGINE','דמיון משולשים — גרסה חכמה', E.generateG804Engine(diff, qtype));
+  };
+
+  generators['N7-01-ENGINE'] = function(){
+    const diff = document.getElementById('selDiff')?.value || document.getElementById('sl')?.value || 'standard';
+    const qtype = document.getElementById('selQType')?.value || 'open';
+    E.renderEngineCard('N7-01-ENGINE','מערכת צירים — רביע ראשון', E.generateN701Engine(diff, qtype));
   };
 
   generators['N7-03-ENGINE'] = function(){

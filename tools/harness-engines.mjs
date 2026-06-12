@@ -1,5 +1,5 @@
 // tools/harness-engines.mjs
-// Runtime robustness harness for all 25 engine topics.
+// Runtime robustness harness for all 26 engine topics.
 // Run: node tools/harness-engines.mjs [runsPerCombo]
 // Checks per generation: non-empty question/answer, no undefined/NaN leakage,
 // MCQ exactly one correct + unique choices, SVG/table root valid when present.
@@ -25,7 +25,7 @@ E.questionTypes = {
 };
 
 const gens = Object.keys(E).filter(k=>/^generate[A-Z]\d{3}Engine$/.test(k)).sort();
-if (gens.length !== 25) { console.error('Expected 25 generators, found '+gens.length+': '+gens.join(',')); process.exit(1); }
+if (gens.length !== 26) { console.error('Expected 26 generators, found '+gens.length+': '+gens.join(',')); process.exit(1); }
 
 let fails = 0, total = 0;
 const BAD = /undefined|NaN/;

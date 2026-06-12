@@ -361,6 +361,93 @@
     });
     return '<svg class="engine-svg" viewBox="0 0 '+W+' '+H+'" xmlns="http://www.w3.org/2000/svg">'+grid+axes+line+dots+'</svg>';
   };
+  // Quadrant-I coordinate grid (Grade 7, file 05 / patterns N7-01, N7-02).
+  // opts: { max (default 10), points:[{x,y,label,unknown}], connect:'polyline'|'polygon',
+  //         segment:{x1,y1,x2,y2}, rect:{x,y,w,h}, labelCoords:true|false }
+  E.coordinateGridSvg = function(opts){
+    const T = E.themes.geometry;
+    const o = opts || {};
+    const max = o.max || 10;
+    const W=270,H=250,padL=30,padB=28,padT=18,padR=20;
+    const uw=(W-padL-padR)/max, uh=(H-padT-padB)/max;
+    function X(v){ return padL+v*uw; }
+    function Y(v){ return H-padB-v*uh; }
+    const tickStep = max>8 ? 2 : 1;
+    let grid='';
+    for(let v=0; v<=max; v++){
+      grid += `<line x1="${X(v)}" y1="${Y(0)}" x2="${X(v)}" y2="${Y(max)}" stroke="#e2e8f0" stroke-width="1"/>`;
+      grid += `<line x1="${X(0)}" y1="${Y(v)}" x2="${X(max)}" y2="${Y(v)}" stroke="#e2e8f0" stroke-width="1"/>`;
+      if(v>0 && v%tickStep===0){
+        grid += `<text x="${X(v)}" y="${Y(0)+13}" fill="#64748b" font-size="9" text-anchor="middle">${v}</text>`;
+        grid += `<text x="${X(0)-7}" y="${Y(v)+3}" fill="#64748b" font-size="9" text-anchor="end">${v}</text>`;
+      }
+    }
+    const axes =
+      `<line x1="${X(0)}" y1="${Y(0)}" x2="${X(max)+8}" y2="${Y(0)}" stroke="#334155" stroke-width="1.8"/>`+
+      `<line x1="${X(0)}" y1="${Y(0)}" x2="${X(0)}" y2="${Y(max)-8}" stroke="#334155" stroke-width="1.8"/>`+
+      `<polygon points="${X(max)+8},${Y(0)} ${X(max)+1},${Y(0)-4} ${X(max)+1},${Y(0)+4}" fill="#334155"/>`+
+      `<polygon points="${X(0)},${Y(max)-8} ${X(0)-4},${Y(max)-1} ${X(0)+4},${Y(max)-1}" fill="#334155"/>`+
+      `<text x="${X(0)-7}" y="${Y(0)+13}" fill="#64748b" font-size="9" text-anchor="end">0</text>`+
+      `<text x="${X(max)+4}" y="${Y(0)-8}" fill="#334155" font-size="11" font-style="italic" text-anchor="end">x</text>`+
+      `<text x="${X(0)+10}" y="${Y(max)-2}" fill="#334155" font-size="11" font-style="italic">y</text>`;
+    let shapes='';
+    if(o.rect){
+      shapes += `<rect x="${X(o.rect.x)}" y="${Y(o.rect.y+o.rect.h)}" width="${o.rect.w*uw}" height="${o.rect.h*uh}" fill="${T.fill}" fill-opacity="0.85" stroke="${T.stroke}" stroke-width="2"/>`;
+    }
+    const pts = o.points || [];
+    if(o.connect && pts.length>1){
+      const coords = pts.map(p=>X(p.x)+','+Y(p.y)).join(' ');
+      shapes += o.connect==='polygon'
+        ? `<polygon points="${coords}" fill="${T.fill}" fill-opacity="0.85" stroke="${T.stroke}" stroke-width="2" stroke-linejoin="round"/>`
+        : `<polyline points="${coords}" fill="none" stroke="${T.stroke}" stroke-width="2" stroke-linejoin="round"/>`;
+    }
+    if(o.segment){
+      shapes += `<line x1="${X(o.segment.x1)}" y1="${Y(o.segment.y1)}" x2="${X(o.segment.x2)}" y2="${Y(o.segment.y2)}" stroke="${T.unknown}" stroke-width="3" stroke-linecap="round"/>`;
+    }
+    let dots='';
+    pts.forEach(function(p){
+      const col = p.unknown ? T.unknown : T.given;
+      const nearRight = p.x > max-2, nearTop = p.y > max-1;
+      const dx = nearRight ? -7 : 7, anchor = nearRight ? 'end' : 'start';
+      const dy = nearTop ? 14 : -7;
+      const txt = p.unknown ? p.label+'(?,?)' : (o.labelCoords===false ? p.label : p.label+'('+p.x+','+p.y+')');
+      dots += `<circle cx="${X(p.x)}" cy="${Y(p.y)}" r="3.6" fill="${col}"/>`+
+        `<text x="${X(p.x)+dx}" y="${Y(p.y)+dy}" fill="${col}" font-size="10.5" font-weight="800" text-anchor="${anchor}">${txt}</text>`;
+    });
+    return `<svg class="engine-svg" viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">${grid}${axes}${shapes}${dots}</svg>`;
+  };
+
+  // Bar chart (file 06 / patterns U-02, U-03): 3–6 categories, Hebrew labels,
+  // y-axis from zero, optional values above bars. RTL: first category on the right.
+  E.barChartSvg = function(opts){
+    const T = E.themes.geometry;
+    const o = opts || {};
+    const labels = o.labels || [], values = o.values || [];
+    const n = Math.max(1, values.length);
+    const W=290,H=200,padL=30,padB=36,padT=20,padR=12;
+    const maxV = Math.max.apply(null, values.concat([1]));
+    const step = maxV<=6 ? 1 : maxV<=12 ? 2 : maxV<=30 ? 5 : 10;
+    const top = Math.ceil(maxV/step)*step;
+    const plotW=W-padL-padR, plotH=H-padT-padB;
+    function Yv(v){ return padT + plotH*(1 - v/top); }
+    let grid='';
+    for(let v=0; v<=top; v+=step){
+      grid += `<line x1="${padL}" y1="${Yv(v)}" x2="${W-padR}" y2="${Yv(v)}" stroke="${v===0?'#334155':'#e2e8f0'}" stroke-width="${v===0?1.8:1}"/>`+
+        `<text x="${padL-6}" y="${Yv(v)+3}" fill="#64748b" font-size="9" text-anchor="end">${v}</text>`;
+    }
+    const slot = plotW/n, bw = Math.min(40, slot*0.62);
+    let bars='';
+    values.forEach(function(v,i){
+      // RTL reading order: first category drawn at the right edge
+      const cx = W-padR - slot*i - slot/2;
+      bars += `<rect x="${cx-bw/2}" y="${Yv(v)}" width="${bw}" height="${plotH*(v/top)}" rx="2" fill="${T.given}" fill-opacity="0.82" stroke="${T.stroke}" stroke-width="1"/>`;
+      if(o.showValues !== false) bars += `<text x="${cx}" y="${Yv(v)-5}" fill="${T.label}" font-size="10" font-weight="800" text-anchor="middle">${v}</text>`;
+      bars += `<text x="${cx}" y="${H-padB+14}" fill="${T.label}" font-size="9.5" font-weight="700" text-anchor="middle">${labels[i]||''}</text>`;
+    });
+    const title = o.title ? `<text x="${W/2}" y="${H-4}" fill="#64748b" font-size="9.5" font-weight="700" text-anchor="middle">${o.title}</text>` : '';
+    return `<svg class="engine-svg" viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">${grid}${bars}${title}</svg>`;
+  };
+
   E.freqTableHtml = function(headers, rows){
     let h = '<table class="engine-table" dir="rtl"><thead><tr>';
     headers.forEach(function(x){ h += '<th>'+x+'</th>'; });
