@@ -24,7 +24,8 @@ const geometry = read('generator/engine/source-fit-geometry.js');
 const uncertaintyLegacy = read('generator/u7-02.js');
 const algebraLegacy = read('generator/a7-02.js');
 const geometryG7Legacy = read('generator/g7-02.js');
-const geometryG8Legacy = read('generator/g8-01.js');
+const geometryG8CircleLegacy = read('generator/g8-01.js');
+const geometryG8TriangleLegacy = read('generator/g8-04.js');
 const manifest = read('sources/intake/2026-06-09/MANIFEST.md');
 
 includesAll('manifest source files', manifest, [
@@ -87,11 +88,19 @@ includesAll('grade 7 geometry active source-fit topics', geometryG7Legacy, [
   'G7-06',
   'שטח צורה מורכבת ✦ מקור'
 ]);
-includesAll('grade 8 circle active source-fit topics', geometryG8Legacy, [
+includesAll('grade 8 circle active source-fit topics', geometryG8CircleLegacy, [
   'G8-05',
   'זווית מרכזית וחלק מעיגול ✦ מקור',
   'G8-06',
   'קוטר רדיוס ומיתר ✦ מקור'
+]);
+includesAll('grade 8 triangle active source-fit topics', geometryG8TriangleLegacy, [
+  'G8-07',
+  'חפיפת משולשים לפי סימונים ✦ מקור',
+  'G8-08',
+  'משולש שווה שוקיים ✦ מקור',
+  'G8-09',
+  'דמיון וצללים ✦ מקור'
 ]);
 
 const report = {
@@ -112,7 +121,10 @@ const report = {
     'G7-05 transformations fallback',
     'G7-06 composite area fallback',
     'G8-05 central angle and sector fallback',
-    'G8-06 diameter radius and chord fallback'
+    'G8-06 diameter radius and chord fallback',
+    'G8-07 triangle congruence markings fallback',
+    'G8-08 isosceles triangle fallback',
+    'G8-09 similarity and shadows fallback'
   ]
 };
 console.log(JSON.stringify(report, null, 2));
