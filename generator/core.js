@@ -6,7 +6,24 @@ function onGrade(){document.getElementById('gradeBadge').textContent={7:'כית�
 function onDomain(){let s=document.getElementById('st');s.innerHTML='';let g=TOPICS[grade()]||TOPICS[7];let list=g[domain()]||[];if(!list.length){let o=document.createElement('option');o.value='';o.textContent='אין נושאים זמינים';s.appendChild(o);return}list.forEach(t=>{let o=document.createElement('option');o.value=t[0];o.textContent=t[1];s.appendChild(o)})}
 function generate(){let id=document.getElementById('st').value;if(!generators[id]){document.getElementById('out').innerHTML='<div class="qcard wip">נושא זה עדיין נעול או בפיתוח לפי חומרי המקור הקיימים.</div>';return}let count=+(document.getElementById('sn')?.value||1);if(count>1&&typeof generateSet==='function'){generateSet();return}let qsel=document.getElementById('selQType'),restore=null;if(qsel&&qsel.value==='mixed'){restore='mixed';let types=['open','mcq','tf','mistake'];qsel.value=types[Math.floor(Math.random()*types.length)]}try{generators[id]()}finally{if(restore!==null&&qsel)qsel.value=restore}}
 function visualMode(){let s=document.getElementById('sv');return s?s.value:'color'}
-function colorToGray(c){if(!/^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/.test(c))return null;let h=c.slice(1);if(h.length===3)h=h.split('').map(ch=>ch+ch).join('');const r=parseInt(h.slice(0,2),16),g=parseInt(h.slice(2,4),16),b=parseInt(h.slice(4,6),16),y=Math.round(0.299*r+0.587*g+0.114*b),hx=('0'+y.toString(16)).slice(-2);return{y:y,hex:'#'+hx+hx+hx}}
+function colorToGray(c){
+  if(!c)return null;
+  c=String(c).trim();
+  let r,g,b;
+  if(/^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/.test(c)){
+    let h=c.slice(1);
+    if(h.length===3)h=h.split('').map(ch=>ch+ch).join('');
+    r=parseInt(h.slice(0,2),16);g=parseInt(h.slice(2,4),16);b=parseInt(h.slice(4,6),16);
+  }else{
+    const m=c.match(/^rgba?\(\s*([0-9.]+)\s*,\s*([0-9.]+)\s*,\s*([0-9.]+)(?:\s*,\s*([0-9.]+))?\s*\)$/i);
+    if(!m)return null;
+    r=Math.max(0,Math.min(255,Math.round(+m[1])));
+    g=Math.max(0,Math.min(255,Math.round(+m[2])));
+    b=Math.max(0,Math.min(255,Math.round(+m[3])));
+  }
+  const y=Math.round(0.299*r+0.587*g+0.114*b),hx=('0'+y.toString(16)).slice(-2);
+  return{y:y,hex:'#'+hx+hx+hx};
+}
 function applyVisualMode(){const mode=visualMode(),out=document.getElementById('out');if(!out)return;out.querySelectorAll('svg').forEach(svg=>{svg.querySelectorAll('*').forEach(el=>{['fill','stroke'].forEach(attr=>{const key='data-orig-'+attr;let orig=el.getAttribute(key);if(orig===null){const v=el.getAttribute(attr);if(v===null)return;el.setAttribute(key,v);orig=v}if(orig==='none')return;if(mode==='color'){el.setAttribute(attr,orig);return}const g=colorToGray(orig);if(!g){el.setAttribute(attr,orig);return}if(mode==='gray'){el.setAttribute(attr,g.hex);return}if(attr==='stroke'){el.setAttribute(attr,'#000000')}else{el.setAttribute(attr,el.tagName.toLowerCase()!=='text'&&g.y>=140?'#ffffff':'#000000')}})})})}
 function onVisualMode(){applyVisualMode()}
 function setMainTitle(cls,topicLabel){let el=document.getElementById('mainTitle');if(!el)return;let domainName=cls==='geo'?'גאומטריה':cls==='alg'?'אלגברה':cls==='unc'?'אי־ודאות':'תחום מספרי';el.textContent=domainName+' — '+topicLabel.replace(/\s*—\s*(מנוע (מלא|חדש)|גרסה חכמה)\s*✦?\s*$/,'');el.style.display='block'}
