@@ -1,6 +1,6 @@
 {
   "url": "https://yanivmizrachiy.github.io/targilim/",
-  "status": "PASS",
+  "status": "FAIL",
   "checks": [
     {
       "name": "page loaded",
@@ -17,89 +17,12 @@
     {
       "name": "selected grade 7 geometry G7-03",
       "ok": true
-    },
-    {
-      "name": "legacy G7-03 verified",
-      "ok": true
-    },
-    {
-      "name": "Phase 3A G7-03-ENGINE verified: open, mcq, tf, mistake",
-      "ok": true
-    },
-    {
-      "name": "Phase 3A N8-04-ENGINE verified: open, mcq, tf, mistake",
-      "ok": true
-    },
-    {
-      "name": "screenshot saved",
-      "ok": true
-    },
-    {
-      "name": "no browser console errors",
-      "ok": true
     }
   ],
-  "error": null,
-  "questionText": "במשולש ישר-זווית, שתי הרגליים הן \n6\n6 ס\"מ ו-\n8\n8 ס\"מ.\nחשבו את היתר.",
-  "answerText": "6\n2\n+\n8\n2\n=\n𝑐\n2\n6\n2\n+8\n2\n=c\n2\n\n\n36\n+\n64\n=\n100\n36+64=100\n\n\n𝑐\n=\n10\nc=10",
-  "exportButtonCount": 3,
-  "engineChecks": [
-    {
-      "id": "G7-03-ENGINE",
-      "qtype": "open",
-      "ok": true,
-      "questionText": "במשולש ישר-זווית, הרגליים הן \n3\n3 ס״מ ו-\n4\n4 ס״מ.\nחשבו את אורך היתר.",
-      "exportButtonCount": 3
-    },
-    {
-      "id": "G7-03-ENGINE",
-      "qtype": "mcq",
-      "ok": true,
-      "questionText": "במשולש ישר-זווית, היתר הוא \n15\n15 ס״מ ורגל אחת היא \n12\n12 ס״מ.\nחשבו את אורך הרגל החסרה.",
-      "exportButtonCount": 3
-    },
-    {
-      "id": "G7-03-ENGINE",
-      "qtype": "tf",
-      "ok": true,
-      "questionText": "נכון / שגוי: משולש עם צלעות \n7\n7, \n24\n24, \n25\n25 הוא ישר-זווית.",
-      "exportButtonCount": 3
-    },
-    {
-      "id": "G7-03-ENGINE",
-      "qtype": "mistake",
-      "ok": true,
-      "questionText": "תלמיד כתב: \n5\n+\n12\n=\n17\n5+12=17, ולכן היתר הוא \n17\n17 ס״מ.",
-      "exportButtonCount": 3
-    },
-    {
-      "id": "N8-04-ENGINE",
-      "qtype": "open",
-      "ok": true,
-      "questionText": "בכיתה יש \n80\n80 תלמידים.\n\n25\n%\n25% מהם משתתפים בפעילות.\nכמה תלמידים משתתפים?",
-      "exportButtonCount": 3
-    },
-    {
-      "id": "N8-04-ENGINE",
-      "qtype": "mcq",
-      "ok": true,
-      "questionText": "מתוך \n80\n80 תלמידים, \n20\n20 תלמידים השלימו משימה.\nכמה אחוזים מהתלמידים השלימו?",
-      "exportButtonCount": 3
-    },
-    {
-      "id": "N8-04-ENGINE",
-      "qtype": "tf",
-      "ok": true,
-      "questionText": "נכון / שגוי: \"\n15\n%\n15% מתוך \n60\n60 ילדים הם \n19\n19 ילדים.\"",
-      "exportButtonCount": 3
-    },
-    {
-      "id": "N8-04-ENGINE",
-      "qtype": "mistake",
-      "ok": true,
-      "questionText": "תלמיד חישב: \"\n80\n÷\n20\n×\n100\n80÷20×100\" כדי למצוא את האחוז.\nמצאו את הטעות.",
-      "exportButtonCount": 3
-    }
-  ],
-  "timestamp": "2026-06-11T18:11:19.073Z"
+  "error": "locator.innerText: Error: strict mode violation: locator('.qtext') resolved to 10 elements:\n    1) <div class=\"qtext\">…</div> aka getByText('במשולש ישר-זווית, שתי הרגליים הן 333 ס\"מ ו-444 ס\"מ. חשבו את היתר')\n    2) <div class=\"qtext\">…</div> aka getByText('במשולש ישר-זווית, היתר 171717 ס\"מ והרגל 888 ס\"מ. חשבו את הרגל השנייה')\n    3) <div class=\"qtext\">…</div> aka getByText('במשולש ישר-זווית, שתי הרגליים הן 666 ס\"מ ו-888 ס\"מ. חשבו את היתר')\n    4) <div class=\"qtext\">…</div> aka getByText('במשולש ישר-זווית, היתר 101010 ס\"מ והרגל 888 ס\"מ. חשבו את הרגל השנייה')\n    5) <div class=\"qtext\">…</div> aka getByText('במשולש ישר-זווית, היתר 252525')\n    6) <div class=\"qtext\">…</div> aka getByText('במשולש ישר-זווית, היתר 101010 ס\"מ והרגל 666 ס\"מ. חשבו את הרגל השנייה')\n    7) <div class=\"qtext\">…</div> aka getByText('במשולש ישר-זווית, היתר 151515 ס\"מ והרגל 121212 ס\"מ. חשבו את הרגל השנייה')\n    8) <div class=\"qtext\">…</div> aka getByText('במשולש ישר-זווית, היתר 171717 ס\"מ והרגל 151515 ס\"מ. חשבו את הרגל השנייה')\n    9) <div class=\"qtext\">…</div> aka getByText('במשולש ישר-זווית, היתר 555')\n    10) <div class=\"qtext\">…</div> aka getByText('במשולש ישר-זווית, היתר 151515 ס\"מ והרגל 999 ס\"מ. חשבו את הרגל השנייה')\n\nCall log:\n  - waiting for locator('.qtext')\n\n    at generateAssert (/home/runner/work/targilim/targilim/verify-generator-live.mjs:41:42)\n    at async file:///home/runner/work/targilim/targilim/verify-generator-live.mjs:82:18",
+  "questionText": null,
+  "answerText": null,
+  "exportButtonCount": 0,
+  "engineChecks": [],
+  "timestamp": "2026-06-12T06:06:35.406Z"
 }
