@@ -85,6 +85,69 @@
     return points.map(p => pt(ox + (p.x-minx)*scale, oy + (p.y-miny)*scale));
   }
 
+  function distPointToSegment(p, a, b){
+    const ab = sub(b,a);
+    const ap = sub(p,a);
+    const t = Math.max(0, Math.min(1, (ap.x*ab.x + ap.y*ab.y) / ((ab.x*ab.x + ab.y*ab.y) || 1)));
+    const q = add(a, mul(ab,t));
+    return len(sub(p,q));
+  }
+
+  function insideBox(p,W,H,pad){
+    return p.x >= pad && p.x <= W-pad && p.y >= pad && p.y <= H-pad;
+  }
+
+  function minPairDistance(points){
+    let m = 9999;
+    for(let i=0;i<points.length;i++){
+      for(let j=i+1;j<points.length;j++){
+        m = Math.min(m, len(sub(points[i],points[j])));
+      }
+    }
+    return m;
+  }
+
+  function scoreTriangleLayout(V, labelPts, letterPts, W, H){
+    const edges = [[V[0],V[1]],[V[1],V[2]],[V[2],V[0]]];
+    let score = 1000;
+
+    labelPts.forEach(p => {
+      if(!insideBox(p,W,H,24)) score -= 160;
+      edges.forEach(e => {
+        const d = distPointToSegment(p,e[0],e[1]);
+        if(d < 12) score -= (12-d) * 18;
+      });
+    });
+
+    letterPts.forEach(p => {
+      if(!insideBox(p,W,H,18)) score -= 140;
+      edges.forEach(e => {
+        const d = distPointToSegment(p,e[0],e[1]);
+        if(d < 10) score -= (10-d) * 12;
+      });
+    });
+
+    const spread = minPairDistance(labelPts.concat(letterPts));
+    if(spread < 20) score -= (20-spread) * 8;
+
+    const xs = V.map(p=>p.x), ys = V.map(p=>p.y);
+    const width = Math.max(...xs) - Math.min(...xs);
+    const height = Math.max(...ys) - Math.min(...ys);
+    if(width < 105) score -= 80;
+    if(height < 80) score -= 80;
+
+    return score;
+  }
+
+  function plainHaloText(x,y,text,color,size,weight){
+    return `<text x="${fmt(x)}" y="${fmt(y)}"
+      fill="${color}"
+      font-size="${size || 14}"
+      font-weight="${weight || 800}"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      style="paint-order:stroke;stroke:#ffffff;stroke-width:4.8px;stroke-linejoin:round">${esc(text)}</text>`;
+  }
   function svgFrame(W,H,body){
     return `<svg class="engine-svg premium-geo-svg" viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" role="img">
       <defs>
@@ -117,146 +180,139 @@
   }
 
   E.triangleAnglesSvg = function(p, unknown, geom){
-    const W = 360, H = 250, PAD = 48;
+    const W = 370, H = 260, PAD = 54;
 
-    let gA = finite(geom && geom.A != null ? geom.A : p.A, 60);
-    let gB = finite(geom && geom.B != null ? geom.B : p.B, 60);
-    let gC = finite(geom && geom.C != null ? geom.C : p.C, 60);
+    function buildCandidate(seed){
+      let gA = finite(geom && geom.A != null ? geom.A : p.A, 60);
+      let gB = finite(geom && geom.B != null ? geom.B : p.B, 60);
+      let gC = finite(geom && geom.C != null ? geom.C : p.C, 60);
 
-    const s = gA + gB + gC;
-    if(s > 0 && Math.abs(s - 180) > 0.001){
-      gA = gA * 180 / s;
-      gB = gB * 180 / s;
-      gC = gC * 180 / s;
+      const s = gA + gB + gC;
+      if(s > 0 && Math.abs(s - 180) > 0.001){
+        gA = gA * 180 / s;
+        gB = gB * 180 / s;
+        gC = gC * 180 / s;
+      }
+
+      gB = Math.max(20, Math.min(130, gB));
+      gC = Math.max(20, Math.min(130, gC));
+      gA = 180 - gB - gC;
+      if(gA < 20){
+        const d = (20-gA)/2;
+        gB -= d;
+        gC -= d;
+        gA = 20;
+      }
+
+      const rB = gB * Math.PI / 180;
+      const rC = gC * Math.PI / 180;
+      const ax = Math.tan(rC) / (Math.tan(rB) + Math.tan(rC));
+      const ay = ax * Math.tan(rB);
+
+      let model = [pt(ax, -ay), pt(0,0), pt(1,0)];
+      const stretches = [0.92, 0.98, 1.04, 1.11, 1.17];
+      const rotations = [-14,-9,-5,0,5,9,14];
+      const stretch = stretches[seed % stretches.length];
+      const rot = rotations[(seed * 3) % rotations.length] * Math.PI / 180;
+
+      model = model.map(q => pt(q.x * stretch, q.y));
+
+      if(seed % 2 === 1) model = model.map(q => pt(1.16-q.x, q.y));
+      if(seed % 5 === 2) model = model.map(q => pt(q.x, -q.y));
+
+      model = model.map(q => pt(
+        q.x * Math.cos(rot) - q.y * Math.sin(rot),
+        q.x * Math.sin(rot) + q.y * Math.cos(rot)
+      ));
+
+      const V = fitPoints(model, W, H, PAD);
+      const CEN = centroid(V);
+      const names = ['A','B','C'];
+      const display = [p.A,p.B,p.C];
+      const degs = [gA,gB,gC];
+
+      const labelPts = [];
+      const letterPts = [];
+      const data = [];
+
+      for(let i=0;i<3;i++){
+        const v = V[i];
+        const o1 = V[(i+1)%3];
+        const o2 = V[(i+2)%3];
+
+        const u1 = unit(sub(o1,v));
+        const u2 = unit(sub(o2,v));
+        let bis = unit(add(u1,u2));
+        if(!isFinite(bis.x) || !isFinite(bis.y)) {
+          bis = unit(pt(-(o1.y-v.y), o1.x-v.x));
+        }
+
+        const isUnknown = unknown === names[i];
+        const baseDist =
+          degs[i] < 32 ? 57 :
+          degs[i] < 45 ? 51 :
+          degs[i] < 65 ? 44 :
+          degs[i] < 95 ? 38 : 33;
+
+        const lp = add(v, mul(bis, isUnknown ? baseDist + 4 : baseDist));
+        const outward = unit(sub(v, CEN));
+        const vp = add(v, mul(outward, 31));
+
+        labelPts.push(lp);
+        letterPts.push(vp);
+        data.push({v,o1,o2,bis,lp,vp,name:names[i],deg:degs[i],value:display[i],unknown:isUnknown});
+      }
+
+      return {
+        V,
+        CEN,
+        data,
+        score: scoreTriangleLayout(V, labelPts, letterPts, W, H)
+      };
     }
 
-    gB = Math.max(20, Math.min(130, gB));
-    gC = Math.max(20, Math.min(130, gC));
-    gA = 180 - gB - gC;
-
-    if(gA < 20){
-      const d = (20 - gA) / 2;
-      gB -= d;
-      gC -= d;
-      gA = 20;
+    let best = null;
+    for(let seed=0; seed<36; seed++){
+      const c = buildCandidate(seed);
+      if(!best || c.score > best.score) best = c;
     }
 
-    const rB = gB * Math.PI / 180;
-    const rC = gC * Math.PI / 180;
-    const ax = Math.tan(rC) / (Math.tan(rB) + Math.tan(rC));
-    const ay = ax * Math.tan(rB);
-
-    let model = [
-      pt(ax, -ay),
-      pt(0, 0),
-      pt(1, 0)
-    ];
-
-    const stretch = pick([0.9, 0.98, 1.06, 1.14]);
-    model = model.map(q => pt(q.x * stretch, q.y));
-
-    if(pick([0,1])) {
-      model = model.map(q => pt(1.14 - q.x, q.y));
-    }
-
-    if(pick([0,0,1])) {
-      model = model.map(q => pt(q.x, -q.y));
-    }
-
-    const rot = pick([-12, -7, -3, 0, 6, 10, 14]) * Math.PI / 180;
-    model = model.map(q => pt(
-      q.x * Math.cos(rot) - q.y * Math.sin(rot),
-      q.x * Math.sin(rot) + q.y * Math.cos(rot)
-    ));
-
-    const V = fitPoints(model, W, H, PAD);
-    const CEN = centroid(V);
-
-    const names = ['A','B','C'];
-    const display = [p.A, p.B, p.C];
-    const degs = [gA, gB, gC];
-
-    function angleValueText(x, y, text, color, unknownLabel){
-      const size = unknownLabel ? 16 : 14;
-      const weight = unknownLabel ? 900 : 800;
-      return `<text x="${fmt(x)}" y="${fmt(y)}"
-        fill="${color}"
-        font-size="${size}"
-        font-weight="${weight}"
-        text-anchor="middle"
-        dominant-baseline="middle"
-        style="paint-order:stroke;stroke:#ffffff;stroke-width:5px;stroke-linejoin:round">${esc(text)}</text>`;
-    }
-
-    function vertexText(v, text){
-      return `<text x="${fmt(v.x)}" y="${fmt(v.y)}"
-        fill="${P.label}"
-        font-size="16"
-        font-weight="800"
-        font-style="italic"
-        text-anchor="middle"
-        dominant-baseline="middle"
-        style="paint-order:stroke;stroke:#ffffff;stroke-width:4px;stroke-linejoin:round">${esc(text)}</text>`;
-    }
-
+    const V = best.V;
     let arcs = '';
     let labels = '';
     let letters = '';
     let dots = '';
 
-    for(let i=0;i<3;i++){
-      const v = V[i];
-      const o1 = V[(i+1)%3];
-      const o2 = V[(i+2)%3];
+    best.data.forEach(d => {
+      const color = d.unknown ? P.unknown : P.given;
+      const txt = d.value == null ? '?' : d.value + '°';
 
-      const u1 = unit(sub(o1, v));
-      const u2 = unit(sub(o2, v));
+      arcs += angleArc(d.v, d.o1, d.o2, d.unknown ? 28 : 23, color);
 
-      let bis = unit(add(u1, u2));
-      if(!isFinite(bis.x) || !isFinite(bis.y)) {
-        bis = unit(pt(-(o1.y-v.y), o1.x-v.x));
-      }
+      labels += plainHaloText(
+        d.lp.x,
+        d.lp.y,
+        txt,
+        color,
+        d.unknown ? 16 : 14,
+        d.unknown ? 900 : 800
+      );
 
-      const isUnknown = unknown === names[i];
-      const color = isUnknown ? P.unknown : P.given;
+      letters += plainHaloText(
+        d.vp.x,
+        d.vp.y,
+        d.name,
+        P.label,
+        16,
+        850
+      );
 
-      const arcR = isUnknown ? 27 : 23;
-      arcs += angleArc(v, o1, o2, arcR, color);
-
-      /*
-        Textbook placement:
-        - no colored box
-        - number sits INSIDE the angle
-        - unknown is slightly farther from the vertex
-        - small/acute angles are pushed inward enough to avoid the sides
-        - all text gets a white stroke halo instead of a box
-      */
-      const baseDist =
-        degs[i] < 32 ? 54 :
-        degs[i] < 45 ? 48 :
-        degs[i] < 65 ? 41 :
-        degs[i] < 95 ? 35 : 31;
-
-      const dist = isUnknown ? baseDist + 4 : baseDist;
-      const lp = add(v, mul(bis, dist));
-      const txt = display[i] == null ? '?' : display[i] + '°';
-
-      labels += angleValueText(lp.x, lp.y, txt, color, isUnknown);
-
-      /*
-        Vertex letters stay outside the triangle, away from the centroid.
-        This prevents A/B/C from sitting on a side.
-      */
-      const outward = unit(sub(v, CEN));
-      const vp = add(v, mul(outward, 27));
-      letters += vertexText(vp, names[i]);
-
-      dots += `<circle cx="${fmt(v.x)}" cy="${fmt(v.y)}" r="2.2" fill="${P.stroke}"/>`;
-    }
+      dots += `<circle cx="${fmt(d.v.x)}" cy="${fmt(d.v.y)}" r="2.2" fill="${P.stroke}"/>`;
+    });
 
     const poly = V.map(q => `${fmt(q.x)},${fmt(q.y)}`).join(' ');
 
-    return svgFrame(W, H, `
+    return svgFrame(W,H,`
       <polygon points="${poly}"
         fill="${P.fill}"
         stroke="${P.stroke}"
@@ -302,12 +358,12 @@
       <circle cx="${fmt(A.x)}" cy="${fmt(A.y)}" r="2.3" fill="${P.stroke}"/>
       <circle cx="${fmt(B.x)}" cy="${fmt(B.y)}" r="2.3" fill="${P.stroke}"/>
       <circle cx="${fmt(C.x)}" cy="${fmt(C.y)}" r="2.3" fill="${P.stroke}"/>
-      ${segmentLabel(A,B,CEN,la,ca,28,false)}
-      ${segmentLabel(B,C,CEN,lb,cb,28,false)}
-      ${segmentLabel(A,C,CEN,lc,cc,30,true)}
-      ${plainText(add(A,mul(unit(sub(A,CEN)),24)).x, add(A,mul(unit(sub(A,CEN)),24)).y, 'A', P.label, 15, 800)}
-      ${plainText(add(B,mul(unit(sub(B,CEN)),24)).x, add(B,mul(unit(sub(B,CEN)),24)).y, 'B', P.label, 15, 800)}
-      ${plainText(add(C,mul(unit(sub(C,CEN)),24)).x, add(C,mul(unit(sub(C,CEN)),24)).y, 'C', P.label, 15, 800)}
+      ${plainHaloText(add(mid(A,B),mul(awayNormal(A,B,CEN),28)).x, add(mid(A,B),mul(awayNormal(A,B,CEN),28)).y, la, ca, 13, 800)}
+      ${plainHaloText(add(mid(B,C),mul(awayNormal(B,C,CEN),28)).x, add(mid(B,C),mul(awayNormal(B,C,CEN),28)).y, lb, cb, 13, 800)}
+      ${plainHaloText(add(mid(A,C),mul(awayNormal(A,C,CEN),30)).x, add(mid(A,C),mul(awayNormal(A,C,CEN),30)).y, lc, cc, 13, 800)}
+      ${plainHaloText(add(A,mul(unit(sub(A,CEN)),26)).x, add(A,mul(unit(sub(A,CEN)),26)).y, 'A', P.label, 15, 850)}
+      ${plainHaloText(add(B,mul(unit(sub(B,CEN)),26)).x, add(B,mul(unit(sub(B,CEN)),26)).y, 'B', P.label, 15, 850)}
+      ${plainHaloText(add(C,mul(unit(sub(C,CEN)),26)).x, add(C,mul(unit(sub(C,CEN)),26)).y, 'C', P.label, 15, 850)}
     `);
   };
 
