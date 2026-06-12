@@ -23,6 +23,7 @@ const graphs = read('generator/engine/source-fit-graphs.js');
 const geometry = read('generator/engine/source-fit-geometry.js');
 const algebraSmartG7 = read('generator/engine/source-fit-algebra-g7.js');
 const uncertaintyLegacy = read('generator/u7-02.js');
+const numericG7Legacy = read('generator/n7-03.js');
 const algebraLegacy = read('generator/a7-02.js');
 const geometryG7Legacy = read('generator/g7-02.js');
 const geometryG8CircleLegacy = read('generator/g8-01.js');
@@ -94,6 +95,12 @@ includesAll('uncertainty active source-fit topics', uncertaintyLegacy, [
   'U7-08',
   'ממוצע חציון וטווח ✦ מקור'
 ]);
+includesAll('grade 7 numeric active source-fit topics', numericG7Legacy, [
+  'N7-08',
+  'ציר מספרים והשוואת שליליים ✦ מקור',
+  'N7-09',
+  'מספר נגדי וערך מוחלט בהקשר ✦ מקור'
+]);
 includesAll('grade 7 algebra active fallback topics', algebraLegacy, [
   'A7-04',
   'ביטויים שקולים ופישוט ✦ מקור',
@@ -127,6 +134,8 @@ const report = {
   checks: checks.length,
   sourceFitClusters: [
     'N7-01 coordinate system Q1',
+    'N7-08 number line comparison fallback',
+    'N7-09 opposite number and absolute value context fallback',
     'U7-03 relative-frequency comparison',
     'A8-01 applied graph/function reading',
     'U7-04 bar-chart reading',
