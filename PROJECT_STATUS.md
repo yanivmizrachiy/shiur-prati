@@ -18,6 +18,7 @@
 - Source-grounded dynamic case generation in N7-03/N7-04/N7-05/N7-06/A7-02 (ranges from learning file 05 / PATTERN_INDEX); diagram orientation/aspect variation in diagrams.js.
 - Round 3 (textbook quality): central E.fmt math layer (∢B=80^\circ, no raw math in Hebrew prose — scanned over 7,500 generations); triangleAnglesSvg rebuilt angle-faithful with arcs/bisector labels/vertex letters; G7-04 deep upgrade (12 phrasings, classify family, 50/50 unique questions+SVGs); professional slate palette; per-type answer areas (דרך/תשובה, נכון-שגוי+תיקון, הטעות+תיקון, נימוק); print is flat textbook layout with name/date line and answer key on its own page. Pre-existing N8-01 "undefined:NaN" MCQ filler bug found and fixed.
 - New tools: verify-math-bidi-quality.mjs, verify-worksheet-print-quality.mjs, verify-geometry-diagram-quality.mjs.
+- Source-fit sprints (2026-06-12): N7-01 coordinate engine + bar-chart reading (v1); compare_groups_relative_frequency in U7-01 with guaranteed U-05 trap + E.doubleBarSvg, and applied_graph_read in A8-02 (fuel/heating per file 02) with Hebrew-labeled applied graphs (v2).
 - Release validation recorded: 45,000-generation harness, 26-check release audit, both static verifiers green, plus tools/verify-real-generator-runtime.mjs (40 checks incl. VM runtime smoke) green.
 - Required before claiming more: human teacher QA of generated sets, answer-key print check on a real device, and source-citation review for G7-03 / N8-01..05.
 

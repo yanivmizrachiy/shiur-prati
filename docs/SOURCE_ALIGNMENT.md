@@ -127,3 +127,9 @@ Source file key: 01 grade-7 algebra · 02 grade-8 algebra · 03 grade-7 pre-dedu
 - All fix actions from this map are now implemented. Remaining content work lives in the gap list (new patterns, not fixes to the 25).
 - Map status: DONE. Source-alignment implementation: DONE for all 25 engines (Batches 4.1, 4.2, and the completion sprint).
 - Next: gap-list patterns (new topics) and human pedagogical review — never a rewrite of working engines.
+
+## Family-level additions (2026-06-12, source-fit sprints)
+
+- U7-01 += `bar_chart_read` (file 06 U-02/U-03) and `compare_groups_relative_frequency` (file 06 U-05, guaranteed absolute-vs-relative trap, double-bar visual).
+- A8-02 += `applied_graph_read` (file 02 A8-01 fuel graph + A8-03 liquid heating, Hebrew-labeled applied linear graphs).
+- No engine IDs added/renamed in these family-level changes; engine count remains 26 (incl. N7-01 added in sprint v1).

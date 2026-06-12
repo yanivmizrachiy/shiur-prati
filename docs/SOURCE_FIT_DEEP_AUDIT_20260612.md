@@ -35,17 +35,25 @@ file 05/06: swapped (x,y); counting grid points instead of intervals (len+1);
 adding coordinates instead of subtracting; area vs perimeter; reading the
 neighboring bar; "tallest = first/total" without checking the scale.
 
+## Sprint 2 additions (source-fit-visual-expansion-v2, 2026-06-12)
+
+| Addition | Where | Source evidence |
+|---|---|---|
+| `compare_groups_relative_frequency` family — every case is the U-05 trap (group A larger absolute count, LOWER rate; group B smaller count, higher rate); open/mcq/tf/mistake; mcq distractor is always the larger-absolute group | `pilot-u7-01.js` | File 06 pattern U-05 verbatim ("כיתה מי ספורטיבית יותר?"; "חובה להשוות k/n לא k") |
+| Double-bar comparison chart (n and k per group, values above bars, legend, RTL group order) | `diagrams.js` → `E.doubleBarSvg` | File 06 visual types ("תרשים עמודות כפול") + U-05 |
+| `applied_graph_read` family — fuel-cost (price/liter, threshold "עבור אילו כמויות העלות > …") and liquid-heating (start + rate×minutes, value-at / reach-threshold); open/mcq/tf/mistake; misconceptions: x-read-as-y, ignoring the start temperature, rate off-by | `pilot-a8-02.js` | File 02 Topic A8-01 fuel graph + A8-03 liquid-heating example, near-verbatim |
+| linearGraphSvg minimal upgrade: quadrant-I applied mode, Hebrew axis captions (ליטרים/עלות בשקלים, דקות/טמפרטורה), nice y-steps, vertical read-guide that does not reveal the y-value | `diagrams.js` | File 02 applied graphs requirement |
+
 ## Remaining source-fit gaps (honest, still open)
 
 - Four-quadrant coordinate work (file 05, Grade-7 round 2) — not yet built.
-- Pie chart, pictogram, double-bar chart, misleading-graph critique (file 06,
-  patterns U-06 and the critical-reading strand) — not yet built.
-- Linear-function graph READING tasks beyond A8-02's drawn graphs (file 02:
-  interpret a given graph, rate-of-change stories) — partial.
+- Pie chart, pictogram, misleading-graph critique (file 06, pattern U-06 and
+  the critical-reading strand) — not yet built. (Double-bar now exists.)
+- Kinneret-style piecewise/empirical graph reading (file 02) — only LINEAR
+  applied graphs are covered; non-linear/empirical curves are open.
 - Sequences→expression with drawings (file 01, A7-02 curricular round 1) —
   text-only today.
-- Compare-groups relative-frequency trap (pattern U-05) exists in U8-02's
-  compare family in table form; a double-bar-chart visual version is open.
+- Domain-marking tasks (file 02: "סמנו תחום לתדלוק…") — open.
 
 ## Verdict
 

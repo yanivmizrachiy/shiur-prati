@@ -324,19 +324,26 @@
   };
   E.linearGraphSvg = function(p){
     const T = E.themes.geometry;
-    const W=260,H=220,pad=26;
+    // p.applied: quadrant-I applied graph (file 02) with Hebrew axis captions
+    // p.xLabel / p.yLabel: axis captions; p.xmax: fixed range for applied mode
+    const W=260,H=p.applied?236:220,pad=p.applied?34:26;
     const pts = p.pts || [];
     const xs = pts.length ? pts.map(function(q){return q.x;}) : [0,4];
-    const xmin = Math.min(-1, Math.min.apply(null,xs)-1);
-    const xmax = Math.max(5, Math.max.apply(null,xs)+1);
+    const xmin = p.applied ? 0 : Math.min(-1, Math.min.apply(null,xs)-1);
+    const xmax = p.xmax || Math.max(5, Math.max.apply(null,xs)+1);
     function yAt(x){ return p.m*x + p.b; }
     const ys = [yAt(xmin), yAt(xmax)].concat(pts.map(function(q){return q.y;})).concat([0]);
-    const ymin = Math.floor(Math.min.apply(null,ys))-1;
-    const ymax = Math.ceil(Math.max.apply(null,ys))+1;
+    const ymin = p.applied ? 0 : Math.floor(Math.min.apply(null,ys))-1;
+    let ymax = Math.ceil(Math.max.apply(null,ys))+1;
+    const xstep=Math.max(1,Math.ceil((xmax-xmin)/8));
+    let ystep=Math.max(1,Math.ceil((ymax-ymin)/8));
+    if(p.applied){ // nice y steps for applied reading (5/10/20)
+      ystep = ymax<=12 ? 2 : ymax<=40 ? 5 : ymax<=90 ? 10 : 20;
+      ymax = Math.ceil(ymax/ystep)*ystep;
+    }
     const sx=(W-2*pad)/(xmax-xmin), sy=(H-2*pad)/(ymax-ymin);
     function X(v){ return pad+(v-xmin)*sx; }
     function Y(v){ return H-pad-(v-ymin)*sy; }
-    const xstep=Math.max(1,Math.ceil((xmax-xmin)/8)), ystep=Math.max(1,Math.ceil((ymax-ymin)/8));
     let grid='';
     for(let v=Math.ceil(xmin); v<=xmax; v+=xstep){
       grid += '<line x1="'+X(v)+'" y1="'+Y(ymin)+'" x2="'+X(v)+'" y2="'+Y(ymax)+'" stroke="#e2e8f0" stroke-width="1"/>';
@@ -351,13 +358,20 @@
       '<polygon points="'+X(xmax)+','+Y(0)+' '+(X(xmax)-7)+','+(Y(0)-4)+' '+(X(xmax)-7)+','+(Y(0)+4)+'" fill="#334155"/>'+
       '<polygon points="'+X(0)+','+Y(ymax)+' '+(X(0)-4)+','+(Y(ymax)+7)+' '+(X(0)+4)+','+(Y(ymax)+7)+'" fill="#334155"/>'+
       '<text x="'+(X(0)-7)+'" y="'+(Y(0)+14)+'" fill="#64748b" font-size="9" text-anchor="end">0</text>'+
-      '<text x="'+(X(xmax)-4)+'" y="'+(Y(0)-8)+'" fill="#334155" font-size="11" font-style="italic" text-anchor="end">x</text>'+
-      '<text x="'+(X(0)+10)+'" y="'+(Y(ymax)+10)+'" fill="#334155" font-size="11" font-style="italic">y</text>';
+      (p.xLabel
+        ? '<text x="'+(X(xmin)+(X(xmax)-X(xmin))/2)+'" y="'+(H-4)+'" fill="#334155" font-size="10" font-weight="700" text-anchor="middle">'+p.xLabel+'</text>'
+        : '<text x="'+(X(xmax)-4)+'" y="'+(Y(0)-8)+'" fill="#334155" font-size="11" font-style="italic" text-anchor="end">x</text>')+
+      (p.yLabel
+        ? '<text x="'+(X(0)+8)+'" y="'+(Y(ymax)+2)+'" fill="#334155" font-size="10" font-weight="700">'+p.yLabel+'</text>'
+        : '<text x="'+(X(0)+10)+'" y="'+(Y(ymax)+10)+'" fill="#334155" font-size="11" font-style="italic">y</text>');
     const line = '<line x1="'+X(xmin)+'" y1="'+Y(yAt(xmin))+'" x2="'+X(xmax)+'" y2="'+Y(yAt(xmax))+'" stroke="#2563eb" stroke-width="2.5"/>';
     let dots='';
     pts.forEach(function(q){
-      dots += '<circle cx="'+X(q.x)+'" cy="'+Y(q.y)+'" r="4.5" fill="'+T.unknown+'"/>'+
-        '<text x="'+(X(q.x)+7)+'" y="'+(Y(q.y)-7)+'" fill="'+T.unknown+'" font-size="10" font-weight="800">('+q.x+','+q.y+')</text>';
+      if(p.guides){ // vertical dashed guide only — the y-value must still be READ off the scale
+        dots += '<line x1="'+X(q.x)+'" y1="'+Y(q.y)+'" x2="'+X(q.x)+'" y2="'+Y(0)+'" stroke="'+T.unknown+'" stroke-width="1.3" stroke-dasharray="4 3"/>';
+      }
+      dots += '<circle cx="'+X(q.x)+'" cy="'+Y(q.y)+'" r="4.5" fill="'+T.unknown+'"/>';
+      if(!p.guides) dots += '<text x="'+(X(q.x)+7)+'" y="'+(Y(q.y)-7)+'" fill="'+T.unknown+'" font-size="10" font-weight="800">('+q.x+','+q.y+')</text>';
     });
     return '<svg class="engine-svg" viewBox="0 0 '+W+' '+H+'" xmlns="http://www.w3.org/2000/svg">'+grid+axes+line+dots+'</svg>';
   };
@@ -446,6 +460,49 @@
     });
     const title = o.title ? `<text x="${W/2}" y="${H-4}" fill="#64748b" font-size="9.5" font-weight="700" text-anchor="middle">${o.title}</text>` : '';
     return `<svg class="engine-svg" viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">${grid}${bars}${title}</svg>`;
+  };
+
+  // Grouped double-bar comparison chart (file 06 pattern U-05: compare two
+  // groups by relative frequency, not absolute count). Per group: one bar for
+  // the group size (n) and one for the count (k), absolute values above bars,
+  // legend below. RTL: first group on the right.
+  E.doubleBarSvg = function(opts){
+    const T = E.themes.geometry;
+    const o = opts || {};
+    const groups = o.groups || [], values = o.values || []; // values: [[n,k],...]
+    const series = o.series || ['סה"כ','מתוכם'];
+    const W=300,H=210,padL=32,padB=44,padT=20,padR=14;
+    const flat = values.reduce((a,b)=>a.concat(b),[1]);
+    const maxV = Math.max.apply(null, flat);
+    const step = maxV<=6 ? 1 : maxV<=12 ? 2 : maxV<=30 ? 5 : 10;
+    const top = Math.ceil(maxV/step)*step;
+    const plotW=W-padL-padR, plotH=H-padT-padB;
+    function Yv(v){ return padT + plotH*(1 - v/top); }
+    let grid='';
+    for(let v=0; v<=top; v+=step){
+      grid += `<line x1="${padL}" y1="${Yv(v)}" x2="${W-padR}" y2="${Yv(v)}" stroke="${v===0?'#334155':'#e2e8f0'}" stroke-width="${v===0?1.8:1}"/>`+
+        `<text x="${padL-6}" y="${Yv(v)+3}" fill="#64748b" font-size="9" text-anchor="end">${v}</text>`;
+    }
+    const ng = Math.max(1, groups.length);
+    const slot = plotW/ng, bw = Math.min(30, slot*0.26);
+    const cols = ['#94a3b8', T.given];
+    let bars='';
+    values.forEach(function(pair,gi){
+      const cx = W-padR - slot*gi - slot/2; // RTL: first group on the right
+      pair.forEach(function(v,si){
+        const bx = cx + (si===0 ? 2 : -bw-2);
+        bars += `<rect x="${bx}" y="${Yv(v)}" width="${bw}" height="${plotH*(v/top)}" rx="2" fill="${cols[si%2]}" fill-opacity="0.88" stroke="${T.stroke}" stroke-width="0.8"/>`+
+          `<text x="${bx+bw/2}" y="${Yv(v)-4}" fill="${T.label}" font-size="9.5" font-weight="800" text-anchor="middle">${v}</text>`;
+      });
+      bars += `<text x="${cx}" y="${H-padB+13}" fill="${T.label}" font-size="10" font-weight="700" text-anchor="middle">${groups[gi]||''}</text>`;
+    });
+    const ly = H-10;
+    const legend =
+      `<rect x="${W-padR-78}" y="${ly-8}" width="9" height="9" rx="2" fill="${cols[0]}"/>`+
+      `<text x="${W-padR-65}" y="${ly}" fill="#475569" font-size="9">${series[0]}</text>`+
+      `<rect x="${W-padR-160}" y="${ly-8}" width="9" height="9" rx="2" fill="${cols[1]}"/>`+
+      `<text x="${W-padR-147}" y="${ly}" fill="#475569" font-size="9">${series[1]}</text>`;
+    return `<svg class="engine-svg" viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">${grid}${bars}${legend}</svg>`;
   };
 
   E.freqTableHtml = function(headers, rows){

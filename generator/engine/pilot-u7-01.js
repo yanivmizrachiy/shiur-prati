@@ -23,12 +23,33 @@
 
   function pickFamily(diff){
     if(diff === 'basic') return E.pick(['read_freq','most_frequent','rel_freq','bar_chart_read']);
-    if(diff === 'challenge') return E.pick(['missing_freq','total_check','missing_freq','rel_freq']);
-    return E.pick(['read_freq','most_frequent','total_check','missing_freq','rel_freq','bar_chart_read']);
+    if(diff === 'challenge') return E.pick(['missing_freq','total_check','compare_groups_relative_frequency','rel_freq','compare_groups_relative_frequency']);
+    return E.pick(['read_freq','most_frequent','total_check','missing_freq','rel_freq','bar_chart_read','compare_groups_relative_frequency']);
   }
   function gcd(a,b){ return b ? gcd(b,a%b) : a; }
 
+  // Pattern U-05 (file 06) — the misconception trap is GUARANTEED in every
+  // case: group A always has the larger absolute count but the LOWER rate;
+  // group B has fewer in absolute terms but the higher rate (k/n).
+  const COMPARE_CTX = [
+    {g1:'כיתה א׳',g2:'כיתה ב׳',what:'מתעמלים',adj:'ספורטיבית'},
+    {g1:'כיתה ז׳1',g2:'כיתה ז׳2',what:'קוראים ספר מדי ערב',adj:'קוראת'},
+    {g1:'שכבת ז׳',g2:'שכבת ח׳',what:'משתתפים בחוג מדעים',adj:'מדעית'}
+  ];
+  function caseCompareGroups(){
+    // clean percentages: nA from 20..40 (mult. of 10/20/25...), rates as exact %
+    const nA = E.pick([20,25,30,40]);
+    const rA = E.pick([20,25,30,40]);               // lower rate, big group
+    const rB = E.pick([50,60,70,80]);               // higher rate, small group
+    const nB = E.pick([10,15,20].filter(n=>n<nA));
+    let kA = nA*rA/100, kB = nB*rB/100;
+    if(!Number.isInteger(kA) || !Number.isInteger(kB) || kA<=kB) return caseCompareGroups();
+    const ctx = E.pick(COMPARE_CTX);
+    return {nA:nA,kA:kA,rA:rA,nB:nB,kB:kB,rB:rB,ctx:ctx};
+  }
+
   function setup(family){
+    if(family==='compare_groups_relative_frequency') return caseCompareGroups();
     if(family==='bar_chart_read'){
       const c = E.pick(CHARTS);
       const idx = Math.floor(Math.random()*c.cats.length);
@@ -52,6 +73,11 @@
   }
 
   function choices(family,s){
+    if(family==='compare_groups_relative_frequency'){
+      // distractors MUST include the larger-absolute-count group (s.ctx.g1)
+      const values=[s.ctx.g2, s.ctx.g1, 'השיעור שווה בשתי הקבוצות'];
+      return E.shuffle(values).map((v,i)=>({label:['א','ב','ג'][i], text:v, correct:v===s.ctx.g2}));
+    }
     if(family==='bar_chart_read'){
       const c=s.c;
       if(s.sub==='value'){
@@ -105,6 +131,14 @@
   }
 
   function question(family,s,qtype,tfTrue){
+    if(family==='compare_groups_relative_frequency'){
+      const c=s.ctx;
+      const data=`ב${c.g1} $${s.nA}$ תלמידים, ומתוכם $${s.kA}$ ${c.what}. ב${c.g2} $${s.nB}$ תלמידים, ומתוכם $${s.kB}$ ${c.what}.`;
+      if(qtype==='tf') return `${data}\nהקבוצה שבה שיעור ה${c.what} גבוה יותר היא ${tfTrue?c.g2:c.g1}.`;
+      if(qtype==='mistake') return `${data}\nתלמיד קבע: "${c.g1} ${c.adj} יותר, כי $${s.kA}$ גדול מ-$${s.kB}$".`;
+      if(qtype==='mcq') return `${data}\nבאיזו קבוצה שיעור ה${c.what} גבוה יותר?`;
+      return `${data}\nאיזו קבוצה ${c.adj} יותר? הסבירו באמצעות תדירות יחסית.`;
+    }
     if(family==='bar_chart_read'){
       const c=s.c, cat=c.cats[s.idx], v=c.counts[s.idx];
       if(s.sub==='value'){
@@ -159,6 +193,13 @@
 
   function answer(family,s,qtype,tfTrue){
     const wrong = qtype==='mistake' || (qtype==='tf' && !tfTrue);
+    if(family==='compare_groups_relative_frequency'){
+      const c=s.ctx;
+      const prefix = wrong
+        ? `שגוי — משווים שיעור (תדירות יחסית $k/n$), לא ספירה מוחלטת. $${s.kA}$ אומנם גדול מ-$${s.kB}$, אבל הקבוצות בגדלים שונים.\n`
+        : 'משווים תדירות יחסית — חלק מתוך הקבוצה, לא ספירה:\n';
+      return `${prefix}${c.g1}: $$\\frac{${s.kA}}{${s.nA}}=${s.rA}\\%$$\n${c.g2}: $$\\frac{${s.kB}}{${s.nB}}=${s.rB}\\%$$\n$${s.rB}\\% > ${s.rA}\\%$ — ולכן ${c.g2} ${c.adj} יותר, למרות שמספר ה${c.what} בה קטן יותר.`;
+    }
     if(family==='bar_chart_read'){
       const c=s.c, cat=c.cats[s.idx], v=c.counts[s.idx];
       if(s.sub==='value'){
@@ -207,7 +248,9 @@
     difficulty = difficulty || 'standard'; questionType = questionType || 'open';
     const family = pickFamily(difficulty);
     const s = setup(family);
-    const svg = family==='bar_chart_read'
+    const svg = family==='compare_groups_relative_frequency'
+      ? E.doubleBarSvg({groups:[s.ctx.g1,s.ctx.g2], series:['תלמידים בקבוצה',s.ctx.what], values:[[s.nA,s.kA],[s.nB,s.kB]]})
+      : family==='bar_chart_read'
       ? E.barChartSvg({labels:s.c.cats, values:s.c.counts, title:s.c.title, showValues:s.sub!=='value'})
       : tableSvg(s.t, family==='missing_freq' ? s.idx : -1);
     const tfTrue = questionType==='tf' && Math.random()<0.5;
