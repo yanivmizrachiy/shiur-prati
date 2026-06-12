@@ -22,6 +22,7 @@ const sourceFit = read('generator/engine/source-fit-extensions.js');
 const graphs = read('generator/engine/source-fit-graphs.js');
 const geometry = read('generator/engine/source-fit-geometry.js');
 const uncertaintyLegacy = read('generator/u7-02.js');
+const algebraLegacy = read('generator/a7-02.js');
 const manifest = read('sources/intake/2026-06-09/MANIFEST.md');
 
 includesAll('manifest source files', manifest, [
@@ -72,6 +73,12 @@ includesAll('advanced uncertainty active fallback topics', uncertaintyLegacy, [
   'U7-06',
   'תרשים מטעה — ביקורת ✦ מקור'
 ]);
+includesAll('grade 7 algebra active source-fit topics', algebraLegacy, [
+  'A7-04',
+  'ביטויים שקולים ופישוט ✦ מקור',
+  'A7-05',
+  'מציאת טעות בביטויים ✦ מקור'
+]);
 
 const report = {
   ok: true,
@@ -85,7 +92,9 @@ const report = {
     'G8-02 cylinder and net',
     'G8-03 parallel-line angles',
     'U7-05 pie chart and relative frequency fallback',
-    'U7-06 misleading graph critique fallback'
+    'U7-06 misleading graph critique fallback',
+    'A7-04 equivalent expressions and simplification fallback',
+    'A7-05 expression mistake analysis fallback'
   ]
 };
 console.log(JSON.stringify(report, null, 2));
