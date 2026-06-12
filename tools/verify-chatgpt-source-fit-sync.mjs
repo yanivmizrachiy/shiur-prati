@@ -84,11 +84,15 @@ includesAll('grade 7 algebra smart engine ids', algebraSmartG7, [
   'mistake',
   'mixed'
 ]);
-includesAll('advanced uncertainty active fallback topics', uncertaintyLegacy, [
+includesAll('uncertainty active source-fit topics', uncertaintyLegacy, [
   'U7-05',
   'דיאגרמת עוגה ושכיחות יחסית ✦ מקור',
   'U7-06',
-  'תרשים מטעה — ביקורת ✦ מקור'
+  'תרשים מטעה — ביקורת ✦ מקור',
+  'U7-07',
+  'טבלת שכיחויות ושכיחות יחסית ✦ מקור',
+  'U7-08',
+  'ממוצע חציון וטווח ✦ מקור'
 ]);
 includesAll('grade 7 algebra active fallback topics', algebraLegacy, [
   'A7-04',
@@ -130,6 +134,8 @@ const report = {
     'G8-03 parallel-line angles',
     'U7-05 pie chart and relative frequency fallback',
     'U7-06 misleading graph critique fallback',
+    'U7-07 frequency table and relative frequency fallback',
+    'U7-08 mean median range fallback',
     'A7-04 equivalent expressions smart engine',
     'A7-05 expression mistake analysis smart engine',
     'G7-05 transformations fallback',
