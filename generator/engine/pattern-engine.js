@@ -50,6 +50,63 @@
     if(typeof applyVisualMode==='function') applyVisualMode();
   };
 
+  // Structured access to the 25 existing engine generators (no math logic duplicated).
+  // Used by the exercise-set runtime layer; renderEngineCard above stays for single-card mode.
+  const ENGINE_FN = {
+    'G7-01-ENGINE':['generateG701Engine','מלבן ותיבה'],
+    'G7-02-ENGINE':['generateG702Engine','שטחי צורות'],
+    'G7-03-ENGINE':['generateG703Engine','משפט פיתגורס'],
+    'G7-04-ENGINE':['generateG704Engine','זווית חסרה'],
+    'N7-03-ENGINE':['generateN703Engine','מספרים שליליים'],
+    'N7-04-ENGINE':['generateN704Engine','חיבור וחיסור מכוונים'],
+    'N7-05-ENGINE':['generateN705Engine','כפל וחילוק מכוונים'],
+    'N7-06-ENGINE':['generateN706Engine','חזקות'],
+    'N7-07-ENGINE':['generateN707Engine','שורש ריבועי'],
+    'A7-01-ENGINE':['generateA701Engine','ביטויים אלגבריים'],
+    'A7-02-ENGINE':['generateA702Engine','הצבה בביטוי'],
+    'A7-03-ENGINE':['generateA703Engine','משוואות מדרגה ראשונה'],
+    'U7-01-ENGINE':['generateU701Engine','טבלת תדירות'],
+    'U7-02-ENGINE':['generateU702Engine','הסתברות בסיסית'],
+    'G8-01-ENGINE':['generateG801Engine','עיגול'],
+    'G8-04-ENGINE':['generateG804Engine','דמיון משולשים'],
+    'N8-01-ENGINE':['generateN801Engine','יחס'],
+    'N8-02-ENGINE':['generateN802Engine','פרופורציה'],
+    'N8-03-ENGINE':['generateN803Engine','קנה מידה'],
+    'N8-04-ENGINE':['generateN804Engine','אחוזים סטטיים'],
+    'N8-05-ENGINE':['generateN805Engine','אחוזים דינמיים'],
+    'A8-02-ENGINE':['generateA802Engine','שיפוע ומשוואת ישר'],
+    'A8-03-ENGINE':['generateA803Engine','מערכת משוואות'],
+    'U8-01-ENGINE':['generateU801Engine','ממוצע, חציון, טווח'],
+    'U8-02-ENGINE':['generateU802Engine','הסתברות מטבלה']
+  };
+
+  E.ENGINE_TOPIC_IDS = ENGINE_TOPIC_IDS.slice();
+  E.isEngineTopic = function(id){ return ENGINE_TOPIC_IDS.indexOf(id) >= 0; };
+
+  E.getEngineExercise = function(id, diff, qtype){
+    const meta = ENGINE_FN[id];
+    if(!meta || typeof E[meta[0]] !== 'function') return null;
+    const result = E[meta[0]](diff || 'standard', qtype || 'open');
+    if(!result || !result.questionHTML || !result.answerHTML) return null;
+    const grade = id.charAt(1), dom = id.charAt(0);
+    let correctLabel = null;
+    if(qtype === 'mcq'){
+      const m = result.questionHTML.match(/mcq-choice mcq-correct"><span class="mcq-label">([^<]+)\./);
+      if(m) correctLabel = m[1];
+    }
+    return {
+      id: id,
+      title: meta[1],
+      qtype: qtype || 'open',
+      gradeTag: grade === '8' ? 'כיתה ח׳' : 'כיתה ז׳',
+      domainTag: dom === 'N' ? 'מספרי' : dom === 'A' ? 'אלגברי' : dom === 'U' ? 'אי-ודאות' : 'גאומטריה',
+      cls: dom === 'N' ? 'num' : dom === 'A' ? 'alg' : dom === 'U' ? 'unc' : 'geo',
+      questionHTML: result.questionHTML,
+      answerHTML: result.answerHTML,
+      correctLabel: correctLabel
+    };
+  };
+
   E.updatePanel = function(){
     const st = document.getElementById('st');
     const panel = document.getElementById('enginePanel');

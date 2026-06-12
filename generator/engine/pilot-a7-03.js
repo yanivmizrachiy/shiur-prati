@@ -49,13 +49,13 @@
     return E.shuffle(values).map((v,i)=>({label:['א','ב','ג','ד'][i], text:'$'+v+'$', correct:v===correct}));
   }
 
-  function question(family,x,qtype){
+  function question(family,x,qtype,tfTrue){
     const eq = eqStr(x,family);
     if(family==='verify'){
       if(qtype==='mistake') return `תלמיד בדק אם $x=${x.x}$ פתרון של $${eq}$ והציב רק באגף שמאל בלי להשוות: "$${x.a}\\cdot ${x.x}${x.b>=0?'+'+x.b:'-'+(-x.b)}=${x.a*x.x+x.b}$ — סיימתי".`;
       return `האם $x=${x.x}$ הוא פתרון של המשוואה $${eq}$? בדקו.`;
     }
-    if(qtype==='tf') return `פתרון המשוואה $${eq}$ הוא $x=${x.x+1}$.`;
+    if(qtype==='tf') return `פתרון המשוואה $${eq}$ הוא $x=${tfTrue?x.x:x.x+1}$.`;
     if(qtype==='mistake'){
       if(family==='parens') return `במשוואה $${eq}$ תלמיד פתח סוגריים: "$${x.k}x+${x.b}=${x.c}$" — הכפיל רק את $x$.`;
       return `במשוואה $${eq}$ תלמיד העביר אגף: "$${x.a}x=${x.c}+${Math.abs(x.b)}$" — בלי להפוך סימן.`;
@@ -63,13 +63,13 @@
     return `פתרו את המשוואה ובדקו:\n$$${eq}$$`;
   }
 
-  function answer(family,x,qtype){
+  function answer(family,x,qtype,tfTrue){
     if(family==='verify'){
       const lhs = x.a*x.x + x.b;
       const prefix = qtype==='mistake' ? 'הטעות: בדיקת פתרון דורשת השוואה לאגף ימין, לא רק חישוב.\n' : '';
       return `${prefix}מציבים $x=${x.x}$:\n$$${x.a}\\cdot ${x.x}${x.b>=0?'+'+x.b:'-'+(-x.b)}=${lhs}$$\n${x.ok ? `$${lhs}=${x.c}$ ✓ — אכן פתרון.` : `$${lhs}\\ne ${x.c}$ ✗ — אינו פתרון.`}`;
     }
-    const wrong = qtype==='mistake' || qtype==='tf';
+    const wrong = qtype==='mistake' || (qtype==='tf' && !tfTrue);
     if(family==='parens'){
       const prefix = wrong ? 'שגוי — חוק הפילוג: מכפילים את שני האיברים בסוגריים.\n' : '';
       return `${prefix}$$${x.k}(x+${x.b})=${x.c}$$\n$$${x.k}x+${x.k*x.b}=${x.c}$$\n$$${x.k}x=${x.c-x.k*x.b}$$\n$$x=${x.x}$$\nבדיקה: $${x.k}(${x.x}+${x.b})=${x.k}\\cdot ${x.x+x.b}=${x.c}$ ✓`;
@@ -86,13 +86,16 @@
 
   E.generateA703Engine = function(difficulty, questionType){
     difficulty = difficulty || 'standard'; questionType = questionType || 'open';
-    const family = pickFamily(difficulty);
+    let family = pickFamily(difficulty);
+    // verify asks "is x a solution?" — it does not fit the shared TF statement,
+    // and pairing them mislabeled true/false. Route TF to a solvable family.
+    if(questionType==='tf' && family==='verify') family = 'two_step';
     const x = pickCase(family);
-    const q = question(family,x,questionType), a = answer(family,x,questionType);
+    const tfTrue = questionType==='tf' && Math.random()<0.5;
+    const q = question(family,x,questionType,tfTrue), a = answer(family,x,questionType,tfTrue);
     if(questionType==='mcq') return E.questionTypes.mcq({question:q,answer:a,svg:'',choices:choices(family,x)});
     if(questionType==='tf'){
-      const isTrue = family==='verify' ? x.ok : false;
-      return E.questionTypes.tf({question:q,answer:a,svg:'',isTrue:isTrue});
+      return E.questionTypes.tf({question:q,answer:a,svg:'',isTrue:tfTrue});
     }
     if(questionType==='mistake') return E.questionTypes.mistake({question:q,answer:a,svg:''});
     return E.questionTypes.open({question:q,answer:a,svg:''});

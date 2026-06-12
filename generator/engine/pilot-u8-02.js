@@ -31,33 +31,34 @@
     return E.shuffle(values).map((v,i)=>({label:['א','ב','ג','ד'][i], text:v, correct:v===correct}));
   }
 
-  function question(family,t,qtype){
+  function question(family,t,qtype,tfTrue){
     if(family==='prob_cell'){
-      if(qtype==='tf') return `בוחרים תלמיד אקראי. ההסתברות לבן ש${t.labels[0].slice(0)} היא $${frac(t.b1,t.b1+t.b2)}$.`;
+      if(qtype==='tf') return `בוחרים תלמיד אקראי. ההסתברות לבן ש${t.labels[0].slice(0)} היא $${tfTrue?frac(t.b1,t.total):frac(t.b1,t.b1+t.b2)}$.`;
       if(qtype==='mistake') return `תלמיד חישב P(בן ${t.labels[0]}): "$${frac(t.b1,t.b1+t.b2)}$ — חילקתי בסך הבנים".`;
       return `בוחרים תלמיד אחד באקראי מהטבלה.\nמה ההסתברות לבחור בן ש${t.labels[0]}?`;
     }
     if(family==='prob_row'){
-      if(qtype==='tf') return `ההסתברות לבחור בן (מכל הטבלה) היא $${frac(t.b1,t.total)}$.`;
+      if(qtype==='tf') return `ההסתברות לבחור בן (מכל הטבלה) היא $${tfTrue?frac(t.b1+t.b2,t.total):frac(t.b1,t.total)}$.`;
       if(qtype==='mistake') return `תלמיד חישב P(בן): "$${frac(t.b1,t.total)}$ — לקחתי רק את הבנים ש${t.labels[0]}".`;
       return `בוחרים תלמיד אחד באקראי.\nמה ההסתברות לבחור בן?`;
     }
     if(family==='complement'){
-      if(qtype==='tf') return `ההסתברות לא לבחור בן ש${t.labels[0]} היא $${frac(t.b1,t.total)}$.`;
+      if(qtype==='tf') return `ההסתברות לא לבחור בן ש${t.labels[0]} היא $${tfTrue?frac(t.total-t.b1,t.total):frac(t.b1,t.total)}$.`;
       if(qtype==='mistake') return `תלמיד חישב P(לא בן ${t.labels[0]}): "$1+${frac(t.b1,t.total)}$".`;
       return `בוחרים תלמיד אחד באקראי.\nמה ההסתברות שהוא אינו בן ש${t.labels[0]}?`;
     }
     // compare_groups
     if(qtype==='tf'){
-      const wrongAns = (t.b1/(t.b1+t.b2)) > (t.g1/(t.g1+t.g2)) ? t.rows[1] : t.rows[0];
-      return `שיעור ה${t.labels[0]} גבוה יותר אצל ה${wrongAns} (בהשוואה יחסית).`;
+      const trueAns = (t.b1/(t.b1+t.b2)) > (t.g1/(t.g1+t.g2)) ? t.rows[0] : t.rows[1];
+      const wrongAns = trueAns===t.rows[0] ? t.rows[1] : t.rows[0];
+      return `שיעור ה${t.labels[0]} גבוה יותר אצל ה${tfTrue?trueAns:wrongAns} (בהשוואה יחסית).`;
     }
     if(qtype==='mistake') return `תלמיד השווה: "ל${t.g1>t.b1?t.rows[1]:t.rows[0]} יש יותר ${t.labels[0]} ($${Math.max(t.b1,t.g1)}$ לעומת $${Math.min(t.b1,t.g1)}$), לכן השיעור שלהם גבוה יותר" — בלי לבדוק יחסית.`;
     return `אצל מי שיעור ה${t.labels[0]} גבוה יותר — ${t.rows[0]} או ${t.rows[1]}? השוו יחסית.`;
   }
 
-  function answer(family,t,qtype){
-    const wrong = qtype==='mistake' || qtype==='tf';
+  function answer(family,t,qtype,tfTrue){
+    const wrong = qtype==='mistake' || (qtype==='tf' && !tfTrue);
     if(family==='prob_cell'){
       const prefix = wrong ? 'שגוי — המכנה הוא סך כל התלמידים בטבלה, לא רק הבנים.\n' : '';
       return `${prefix}סך הכל: $${t.total}$. בנים ${t.labels[0]}: $${t.b1}$.\n$$P=${frac(t.b1,t.total)}$$`;
@@ -81,10 +82,10 @@
     const family = pickFamily(difficulty);
     const t = E.pick(TABLES);
     const svg = E.freqTableHtml(['',t.labels[0],t.labels[1]], [[t.rows[0],t.b1,t.b2],[t.rows[1],t.g1,t.g2]]);
-    const q = question(family,t,qtype_safe(questionType)), a = answer(family,t,qtype_safe(questionType));
-    function qtype_safe(qt){ return qt; }
+    const tfTrue = questionType==='tf' && Math.random()<0.5;
+    const q = question(family,t,questionType,tfTrue), a = answer(family,t,questionType,tfTrue);
     if(questionType==='mcq') return E.questionTypes.mcq({question:q,answer:a,svg:svg,choices:choices(family,t)});
-    if(questionType==='tf') return E.questionTypes.tf({question:q,answer:a,svg:svg,isTrue:false});
+    if(questionType==='tf') return E.questionTypes.tf({question:q,answer:a,svg:svg,isTrue:tfTrue});
     if(questionType==='mistake') return E.questionTypes.mistake({question:q,answer:a,svg:svg});
     return E.questionTypes.open({question:q,answer:a,svg:svg});
   };

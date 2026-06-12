@@ -43,30 +43,30 @@
     return E.shuffle(values).map((v,i)=>({label:['א','ב','ג','ד'][i], text:'$'+v+'$', correct:v===correct}));
   }
 
-  function question(family,x,qtype){
+  function question(family,x,qtype,tfTrue){
     if(family === 'tri_area'){
-      if(qtype==='tf') return `שטח משולש שבסיסו $${x.b}$ ס״מ וגובהו $${x.h}$ ס״מ הוא $${x.b*x.h}$ סמ״ר.`;
+      if(qtype==='tf') return `שטח משולש שבסיסו $${x.b}$ ס״מ וגובהו $${x.h}$ ס״מ הוא $${tfTrue?x.A:x.b*x.h}$ סמ״ר.`;
       if(qtype==='mistake') return `תלמיד חישב שטח משולש (בסיס $${x.b}$, גובה $${x.h}$): "$${x.b}\\times ${x.h}=${x.b*x.h}$ סמ״ר".`;
       return `משולש שבסיסו $${x.b}$ ס״מ וגובהו $${x.h}$ ס״מ.\nחשבו את שטח המשולש.`;
     }
     if(family === 'para_area'){
-      if(qtype==='tf') return `שטח מקבילית שבסיסה $${x.b}$ ס״מ וגובהה $${x.h}$ ס״מ הוא $${Math.round(x.b*x.h/2)}$ סמ״ר.`;
+      if(qtype==='tf') return `שטח מקבילית שבסיסה $${x.b}$ ס״מ וגובהה $${x.h}$ ס״מ הוא $${tfTrue?x.A:Math.round(x.b*x.h/2)}$ סמ״ר.`;
       if(qtype==='mistake') return `תלמיד חישב שטח מקבילית (בסיס $${x.b}$, גובה $${x.h}$): "$\\frac{${x.b}\\times ${x.h}}{2}=${Math.round(x.b*x.h/2)}$ סמ״ר".`;
       return `מקבילית שבסיסה $${x.b}$ ס״מ וגובהה $${x.h}$ ס״מ.\nחשבו את שטח המקבילית.`;
     }
     if(family === 'trap_area'){
-      if(qtype==='tf') return `שטח טרפז שבסיסיו $${x.a}$ ו-$${x.b}$ ס״מ וגובהו $${x.h}$ ס״מ הוא $${(x.a+x.b)*x.h}$ סמ״ר.`;
+      if(qtype==='tf') return `שטח טרפז שבסיסיו $${x.a}$ ו-$${x.b}$ ס״מ וגובהו $${x.h}$ ס״מ הוא $${tfTrue?x.A:(x.a+x.b)*x.h}$ סמ״ר.`;
       if(qtype==='mistake') return `תלמיד חישב שטח טרפז (בסיסים $${x.a}$, $${x.b}$, גובה $${x.h}$): "$(${x.a}+${x.b})\\times ${x.h}=${(x.a+x.b)*x.h}$ סמ״ר".`;
       return `טרפז שבסיסיו $${x.a}$ ס״מ ו-$${x.b}$ ס״מ, וגובהו $${x.h}$ ס״מ.\nחשבו את שטח הטרפז.`;
     }
     // tri_missing_height
-    if(qtype==='tf') return `שטח משולש $${x.A}$ סמ״ר ובסיסו $${x.b}$ ס״מ. הגובה הוא $${x.A - x.b}$ ס״מ.`;
+    if(qtype==='tf') return `שטח משולש $${x.A}$ סמ״ר ובסיסו $${x.b}$ ס״מ. הגובה הוא $${tfTrue?x.h:x.A - x.b}$ ס״מ.`;
     if(qtype==='mistake') return `שטח משולש $${x.A}$ סמ״ר, בסיס $${x.b}$ ס״מ. תלמיד מצא גובה: "$${x.A}\\div ${x.b}=${x.A/x.b}$ ס״מ".`;
     return `שטח משולש הוא $${x.A}$ סמ״ר ובסיסו $${x.b}$ ס״מ.\nמה גובה המשולש?`;
   }
 
-  function answer(family,x,qtype){
-    const wrong = qtype==='mistake' || qtype==='tf';
+  function answer(family,x,qtype,tfTrue){
+    const wrong = qtype==='mistake' || (qtype==='tf' && !tfTrue);
     if(family === 'tri_area'){
       const prefix = wrong ? 'שגוי — בשטח משולש מחלקים ב-$2$: המשולש הוא חצי מלבן.\n' : '';
       return `${prefix}$$S=\\frac{${x.b}\\times ${x.h}}{2}=\\frac{${x.b*x.h}}{2}=${x.A}$$\nשטח המשולש: $${x.A}$ סמ״ר.`;
@@ -94,10 +94,11 @@
     else if(family === 'trap_area') svg = E.triangleBaseHeightSvg({a:x.a,b:x.b,h:x.h}, null, 'trap');
     else if(family === 'tri_missing_height') svg = E.triangleBaseHeightSvg({b:x.b,h:null}, 'h', 'tri');
     else svg = E.triangleBaseHeightSvg({b:x.b,h:x.h}, null, 'tri');
-    const q = question(family,x,questionType);
-    const a = answer(family,x,questionType);
+    const tfTrue = questionType==='tf' && Math.random()<0.5;
+    const q = question(family,x,questionType,tfTrue);
+    const a = answer(family,x,questionType,tfTrue);
     if(questionType === 'mcq') return E.questionTypes.mcq({question:q,answer:a,svg:svg,choices:choices(family,x)});
-    if(questionType === 'tf') return E.questionTypes.tf({question:q,answer:a,svg:svg,isTrue:false});
+    if(questionType === 'tf') return E.questionTypes.tf({question:q,answer:a,svg:svg,isTrue:tfTrue});
     if(questionType === 'mistake') return E.questionTypes.mistake({question:q,answer:a,svg:svg});
     return E.questionTypes.open({question:q,answer:a,svg:svg});
   };

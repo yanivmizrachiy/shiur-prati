@@ -41,31 +41,31 @@
     return E.shuffle(values).map((v,i)=>({label:['א','ב','ג','ד'][i], text:'$'+v+'$', correct:v===correct}));
   }
 
-  function question(family,x,qtype){
+  function question(family,x,qtype,tfTrue){
     if(family==='exact'){
-      if(qtype==='tf') return `$\\sqrt{${x.n}} = ${x.r+1}$.`;
+      if(qtype==='tf') return `$\\sqrt{${x.n}} = ${tfTrue?x.r:x.r+1}$.`;
       if(qtype==='mistake') return `תלמיד כתב: "$\\sqrt{${x.n}} = ${Math.round(x.n/2)}$ — שורש זה חצי".`;
       return `חשבו: $$\\sqrt{${x.n}} = ?$$`;
     }
     if(family==='between'){
-      if(qtype==='tf') return `$\\sqrt{${x.n}}$ נמצא בין $${x.rhi}$ ל-$${x.rhi+1}$.`;
+      if(qtype==='tf') return tfTrue ? `$\\sqrt{${x.n}}$ נמצא בין $${x.rlo}$ ל-$${x.rhi}$.` : `$\\sqrt{${x.n}}$ נמצא בין $${x.rhi}$ ל-$${x.rhi+1}$.`;
       if(qtype==='mistake') return `תלמיד אמד: "$\\sqrt{${x.n}} \\approx ${x.rhi+1}$, כי $${x.n}$ קרוב ל-$${(x.rhi+1)*(x.rhi+1)}$".`;
       if(qtype==='mcq') return `בין אילו שני מספרים שלמים נמצא $\\sqrt{${x.n}}$? (בחרו את הקטן מביניהם)`;
       return `בין אילו שני מספרים שלמים נמצא $\\sqrt{${x.n}}$? הסבירו.`;
     }
     if(family==='missing_sq'){
-      if(qtype==='tf') return `אם $x^2=${x.n}$ ו-$x>0$, אז $x=${x.r+1}$.`;
+      if(qtype==='tf') return `אם $x^2=${x.n}$ ו-$x>0$, אז $x=${tfTrue?x.r:x.r+1}$.`;
       if(qtype==='mistake') return `שטח ריבוע $${x.n}$ סמ״ר. תלמיד מצא צלע: "$${x.n}\\div 2=${x.n/2}$ ס״מ".`;
       return `שטח ריבוע הוא $${x.n}$ סמ״ר.\nמה אורך צלע הריבוע?`;
     }
     // sum_trap
-    if(qtype==='tf') return `$\\sqrt{${x.a}+${x.b}} = \\sqrt{${x.a}}+\\sqrt{${x.b}}$.`;
+    if(qtype==='tf') return tfTrue ? `$\\sqrt{${x.a}+${x.b}} = ${Math.sqrt(x.a+x.b)}$.` : `$\\sqrt{${x.a}+${x.b}} = \\sqrt{${x.a}}+\\sqrt{${x.b}}$.`;
     if(qtype==='mistake') return `תלמיד חישב: "$\\sqrt{${x.a}+${x.b}} = \\sqrt{${x.a}}+\\sqrt{${x.b}} = ${x.wrong}$".`;
     return `חשבו: $$\\sqrt{${x.a}+${x.b}} = ?$$\nהאם מותר לפצל את השורש לסכום שורשים? הסבירו.`;
   }
 
-  function answer(family,x,qtype){
-    const wrong = qtype==='mistake' || qtype==='tf';
+  function answer(family,x,qtype,tfTrue){
+    const wrong = qtype==='mistake' || (qtype==='tf' && !tfTrue);
     if(family==='exact'){
       const prefix = wrong ? 'שגוי.\n' : '';
       return `${prefix}$$\\sqrt{${x.n}}=${x.r}$$\nכי $${x.r}^2=${x.n}$.`;
@@ -86,9 +86,10 @@
     difficulty = difficulty || 'standard'; questionType = questionType || 'open';
     const family = pickFamily(difficulty);
     const x = pickCase(family);
-    const q = question(family,x,questionType), a = answer(family,x,questionType);
+    const tfTrue = questionType==='tf' && Math.random()<0.5;
+    const q = question(family,x,questionType,tfTrue), a = answer(family,x,questionType,tfTrue);
     if(questionType==='mcq') return E.questionTypes.mcq({question:q,answer:a,svg:'',choices:choices(family,x)});
-    if(questionType==='tf') return E.questionTypes.tf({question:q,answer:a,svg:'',isTrue:false});
+    if(questionType==='tf') return E.questionTypes.tf({question:q,answer:a,svg:'',isTrue:tfTrue});
     if(questionType==='mistake') return E.questionTypes.mistake({question:q,answer:a,svg:''});
     return E.questionTypes.open({question:q,answer:a,svg:''});
   };

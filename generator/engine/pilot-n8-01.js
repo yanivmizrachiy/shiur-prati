@@ -60,28 +60,38 @@
       wrong = [x.known + x.r2, Math.max(1,x.known - x.r1), x.missing + x.mult];
     }
     const values = [correct].concat(wrong).filter((v,i,a)=>a.indexOf(v)===i).slice(0,4);
-    while(values.length < 4) values.push(family === 'ratio_missing' ? x.missing + values.length : `${x.sa}:${x.sb + values.length}`);
+    let bump = 0;
+    while(values.length < 4){
+      bump++;
+      // family-correct fillers (ratio_share has no sa/sb fields)
+      const f = family === 'ratio_missing' ? x.missing + values.length + bump
+        : family === 'ratio_share' ? `${x.a + values.length + bump},${x.b + values.length + bump}`
+        : `${x.sa}:${x.sb + values.length + bump}`;
+      if(values.indexOf(f) < 0) values.push(f);
+    }
     return E.shuffle(values).map((v,i)=>({label:['א','ב','ג','ד'][i], text:answerText(family,v,x), correct:v===correct}));
   }
 
-  function question(family,x,qt){
+  function question(family,x,qt,tfTrue){
     if(family === 'ratio_simplify'){
       const intro = E.pick([
         `${x.ctx} היחס בין ${x.left} ל${x.right} הוא $${x.a}:${x.b}$.`,
         `${x.ctx} נספרו $${x.a}$ ${x.left} ו-$${x.b}$ ${x.right}.`
       ]);
-      if(qt === 'tf') return `${intro} היחס המצומצם הוא $${x.sa + 1}:${x.sb}$.`;
+      if(qt === 'tf') return `${intro} היחס המצומצם הוא $${tfTrue?x.sa:x.sa+1}:${x.sb}$.`;
       if(qt === 'mistake') return `${intro}\nתלמיד צמצם רק צד אחד וכתב $${x.sa}:${x.b}$.`;
       return `${intro}\nכתבו את היחס המצומצם.`;
     }
     if(family === 'ratio_share'){
-      if(qt === 'tf') return `${x.ctx} ביחס $${x.r1}:${x.r2}$ ובסך הכל $${x.total}$. החלקים הם $${x.r1*x.total}$ ו-$${x.r2*x.total}$.`;
+      if(qt === 'tf') return tfTrue
+        ? `${x.ctx} ביחס $${x.r1}:${x.r2}$ ובסך הכל $${x.total}$. החלקים הם $${x.a}$ ו-$${x.b}$.`
+        : `${x.ctx} ביחס $${x.r1}:${x.r2}$ ובסך הכל $${x.total}$. החלקים הם $${x.r1*x.total}$ ו-$${x.r2*x.total}$.`;
       if(qt === 'mistake') return `${x.ctx} ביחס $${x.r1}:${x.r2}$ ובסך הכל $${x.total}$.\nתלמיד כפל כל חלק ב-$${x.total}$ וקיבל $${x.r1*x.total}$ ו-$${x.r2*x.total}$.`;
       return `${x.ctx} בין ${x.left} ל${x.right} ביחס $${x.r1}:${x.r2}$.\nבסך הכל יש $${x.total}$ יחידות. כמה תקבל כל קבוצה?`;
     }
     const knownLabel = x.knownSide === 'left' ? x.left : x.right;
     const missingLabel = x.knownSide === 'left' ? x.right : x.left;
-    if(qt === 'tf') return `${x.ctx}: היחס בין ${x.left} ל${x.right} הוא $${x.r1}:${x.r2}$. אם יש $${x.known}$ ${knownLabel}, אז יש $${x.missing + x.mult}$ ${missingLabel}.`;
+    if(qt === 'tf') return `${x.ctx}: היחס בין ${x.left} ל${x.right} הוא $${x.r1}:${x.r2}$. אם יש $${x.known}$ ${knownLabel}, אז יש $${tfTrue?x.missing:x.missing+x.mult}$ ${missingLabel}.`;
     if(qt === 'mistake') return `${x.ctx}: היחס בין ${x.left} ל${x.right} הוא $${x.r1}:${x.r2}$ ויש $${x.known}$ ${knownLabel}.\nתלמיד חיבר $${x.r2}$ במקום לכפול לפי אותו גורם.`;
     return `${x.ctx}: היחס בין ${x.left} ל${x.right} הוא $${x.r1}:${x.r2}$.\nידוע שיש $${x.known}$ ${knownLabel}. כמה יש ${missingLabel}?`;
   }
@@ -109,10 +119,11 @@
     const x = pickCase(family);
     const unknown = family === 'ratio_simplify' ? 'ratio' : family === 'ratio_share' ? 'share' : 'missing';
     const svg = E.ratioBarSvg({left:x.left,right:x.right,r1:x.r1 || x.sa,r2:x.r2 || x.sb,a:x.a,b:x.b,knownSide:x.knownSide,known:x.known,missing:x.missing,total:x.total}, unknown);
-    const q = question(family,x,questionType);
+    const tfTrue = questionType==='tf' && Math.random()<0.5;
+    const q = question(family,x,questionType,tfTrue);
     const a = answer(family,x,questionType);
     if(questionType === 'mcq') return E.questionTypes.mcq({question:q,answer:a,svg:svg,choices:choices(family,x)});
-    if(questionType === 'tf') return E.questionTypes.tf({question:q,answer:a,svg:svg,isTrue:false});
+    if(questionType === 'tf') return E.questionTypes.tf({question:q,answer:a,svg:svg,isTrue:tfTrue});
     if(questionType === 'mistake') return E.questionTypes.mistake({question:q,answer:a,svg:svg});
     return E.questionTypes.open({question:q,answer:a,svg:svg});
   };

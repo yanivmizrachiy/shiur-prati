@@ -48,40 +48,40 @@
     return E.shuffle(values).map((v,i)=>({label:['א','ב','ג','ד'][i], text:'$'+v+'$', correct:v===correct}));
   }
 
-  function question(family,x,qtype){
+  function question(family,x,qtype,tfTrue){
     if(family === 'rect_area'){
-      if(qtype==='tf') return `שטח מלבן שאורכו $${x.l}$ ס״מ ורוחבו $${x.w}$ ס״מ הוא $${2*(x.l+x.w)}$ סמ״ר.`;
+      if(qtype==='tf') return `שטח מלבן שאורכו $${x.l}$ ס״מ ורוחבו $${x.w}$ ס״מ הוא $${tfTrue?x.A:(2*(x.l+x.w)===x.A?x.A+x.l:2*(x.l+x.w))}$ סמ״ר.`;
       if(qtype==='mistake') return `תלמיד חישב שטח מלבן $${x.l}\\times ${x.w}$: "$${x.l}+${x.w}=${x.l+x.w}$, ואז כפול $2$: $${2*(x.l+x.w)}$ סמ״ר".`;
       return `מלבן שאורכו $${x.l}$ ס״מ ורוחבו $${x.w}$ ס״מ.\nחשבו את שטח המלבן.`;
     }
     if(family === 'rect_perimeter'){
-      if(qtype==='tf') return `היקף מלבן שאורכו $${x.l}$ ס״מ ורוחבו $${x.w}$ ס״מ הוא $${x.l*x.w}$ ס״מ.`;
+      if(qtype==='tf') return `היקף מלבן שאורכו $${x.l}$ ס״מ ורוחבו $${x.w}$ ס״מ הוא $${tfTrue?x.P:(x.l*x.w===x.P?x.P+x.w:x.l*x.w)}$ ס״מ.`;
       if(qtype==='mistake') return `תלמיד חישב היקף מלבן $${x.l}\\times ${x.w}$: "$${x.l}\\times ${x.w}=${x.l*x.w}$ ס״מ".`;
       return `מלבן שאורכו $${x.l}$ ס״מ ורוחבו $${x.w}$ ס״מ.\nחשבו את היקף המלבן.`;
     }
     if(family === 'rect_missing_side_area'){
-      if(qtype==='tf') return `שטח מלבן הוא $${x.A}$ סמ״ר ואורכו $${x.l}$ ס״מ. הרוחב הוא $${x.A-x.l}$ ס״מ.`;
+      if(qtype==='tf') return `שטח מלבן הוא $${x.A}$ סמ״ר ואורכו $${x.l}$ ס״מ. הרוחב הוא $${tfTrue?x.w:x.A-x.l}$ ס״מ.`;
       if(qtype==='mistake') return `שטח מלבן $${x.A}$ סמ״ר, אורך $${x.l}$ ס״מ. תלמיד מצא רוחב: "$${x.A}-${x.l}=${x.A-x.l}$ ס״מ".`;
       return `שטח מלבן הוא $${x.A}$ סמ״ר ואורכו $${x.l}$ ס״מ.\nמה רוחב המלבן?`;
     }
     if(family === 'rect_missing_side_perimeter'){
-      if(qtype==='tf') return `היקף מלבן הוא $${x.P}$ ס״מ ואורכו $${x.l}$ ס״מ. הרוחב הוא $${x.P-x.l}$ ס״מ.`;
+      if(qtype==='tf') return `היקף מלבן הוא $${x.P}$ ס״מ ואורכו $${x.l}$ ס״מ. הרוחב הוא $${tfTrue?x.w:x.P-x.l}$ ס״מ.`;
       if(qtype==='mistake') return `היקף מלבן $${x.P}$ ס״מ, אורך $${x.l}$ ס״מ. תלמיד מצא רוחב: "$${x.P}-${x.l}=${x.P-x.l}$ ס״מ".`;
       return `היקף מלבן הוא $${x.P}$ ס״מ ואורכו $${x.l}$ ס״מ.\nמה רוחב המלבן?`;
     }
     if(family === 'box_volume'){
-      if(qtype==='tf') return `נפח תיבה שממדיה $${x.l}\\times ${x.w}\\times ${x.h}$ ס״מ הוא $${x.l+x.w+x.h}$ סמ״ק.`;
+      if(qtype==='tf') return `נפח תיבה שממדיה $${x.l}\\times ${x.w}\\times ${x.h}$ ס״מ הוא $${tfTrue?x.V:x.l+x.w+x.h}$ סמ״ק.`;
       if(qtype==='mistake') return `תלמיד חישב נפח תיבה $${x.l}\\times ${x.w}\\times ${x.h}$: "$${x.l}+${x.w}+${x.h}=${x.l+x.w+x.h}$ סמ״ק".`;
       return `תיבה שאורכה $${x.l}$ ס״מ, רוחבה $${x.w}$ ס״מ וגובהה $${x.h}$ ס״מ.\nחשבו את נפח התיבה.`;
     }
     // box_missing_dim
-    if(qtype==='tf') return `נפח תיבה $${x.V}$ סמ״ק, אורכה $${x.l}$ ס״מ ורוחבה $${x.w}$ ס״מ. הגובה הוא $${x.V - x.l*x.w}$ ס״מ.`;
+    if(qtype==='tf') return `נפח תיבה $${x.V}$ סמ״ק, אורכה $${x.l}$ ס״מ ורוחבה $${x.w}$ ס״מ. הגובה הוא $${tfTrue?x.h:x.V - x.l*x.w}$ ס״מ.`;
     if(qtype==='mistake') return `נפח תיבה $${x.V}$ סמ״ק, אורך $${x.l}$, רוחב $${x.w}$. תלמיד מצא גובה: "$${x.V}-${x.l*x.w}=${x.V-x.l*x.w}$ ס״מ".`;
     return `נפח תיבה הוא $${x.V}$ סמ״ק. אורכה $${x.l}$ ס״מ ורוחבה $${x.w}$ ס״מ.\nמה גובה התיבה?`;
   }
 
-  function answer(family,x,qtype){
-    const wrongNote = qtype==='mistake' || qtype==='tf';
+  function answer(family,x,qtype,tfTrue){
+    const wrongNote = qtype==='mistake' || (qtype==='tf' && !tfTrue);
     if(family === 'rect_area'){
       const prefix = wrongNote ? 'שגוי — חיבור הצלעות נותן היקף (חצי ממנו), לא שטח. שטח = אורך × רוחב.\n' : '';
       return `${prefix}$$S=${x.l}\\times ${x.w}=${x.A}$$\nשטח המלבן: $${x.A}$ סמ״ר.`;
@@ -119,10 +119,11 @@
       const hideW = family === 'rect_missing_side_area' || family === 'rect_missing_side_perimeter';
       svg = E.rectangleSvg({l:x.l, w:hideW?null:x.w}, hideW?'w':null);
     }
-    const q = question(family,x,questionType);
-    const a = answer(family,x,questionType);
+    const tfTrue = questionType==='tf' && Math.random()<0.5;
+    const q = question(family,x,questionType,tfTrue);
+    const a = answer(family,x,questionType,tfTrue);
     if(questionType === 'mcq') return E.questionTypes.mcq({question:q,answer:a,svg:svg,choices:choices(family,x)});
-    if(questionType === 'tf') return E.questionTypes.tf({question:q,answer:a,svg:svg,isTrue:false});
+    if(questionType === 'tf') return E.questionTypes.tf({question:q,answer:a,svg:svg,isTrue:tfTrue});
     if(questionType === 'mistake') return E.questionTypes.mistake({question:q,answer:a,svg:svg});
     return E.questionTypes.open({question:q,answer:a,svg:svg});
   };

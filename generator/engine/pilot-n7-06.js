@@ -16,9 +16,12 @@
     if(diff === 'challenge') return E.pick(['compare_both','paren_odd','compare_both']);
     return E.pick(['paren_even','paren_odd','compare_both']);
   }
+  // Learning file 05: base is teacher-changeable (any integer 2..9), exponent
+  // small; the (−a)^n vs −a^n distinction is the fixed pedagogical core.
   function pickCase(f){
-    if(f==='paren_odd') return E.pick(PAREN_ODD);
-    return E.pick(PAREN_EVEN);
+    const a = 2 + Math.floor(Math.random()*8);
+    const n = f==='paren_odd' ? 3 : 2;
+    return {a:a, n:n, p:Math.pow(-a,n), np:-Math.pow(a,n)};
   }
 
   function choices(family,x){
@@ -29,36 +32,40 @@
     return E.shuffle(values).map((v,i)=>({label:['א','ב','ג','ד'][i], text:'$'+v+'$', correct:v===correct}));
   }
 
-  function question(family,x,qtype){
+  function question(family,x,qtype,tfTrue){
     if(family==='compare_both'){
       if(qtype==='tf') return `$(-${x.a})^{${x.n}} = -${x.a}^{${x.n}}$.`;
       if(qtype==='mistake') return `תלמיד כתב: "$(-${x.a})^{${x.n}}$ ו-$-${x.a}^{${x.n}}$ זה אותו דבר, הסוגריים לא משנים".`;
       return `חשבו את שני הביטויים והסבירו את ההבדל:\nא. $(-${x.a})^{${x.n}}$\nב. $-${x.a}^{${x.n}}$`;
     }
-    if(qtype==='tf') return `$(-${x.a})^{${x.n}} = ${x.np === x.p ? -x.p : x.np}$.`;
+    if(qtype==='tf') return `$(-${x.a})^{${x.n}} = ${tfTrue?x.p:(x.np === x.p ? -x.p : x.np)}$.`;
     if(qtype==='mistake') return `תלמיד חישב: "$(-${x.a})^{${x.n}} = ${x.n % 2 === 0 ? -x.p : Math.abs(x.p)}$".`;
     return `חשבו: $$(-${x.a})^{${x.n}} = ?$$`;
   }
 
-  function answer(family,x,qtype){
+  function answer(family,x,qtype,tfTrue){
     const even = x.n % 2 === 0;
     const expand = Array(x.n).fill('(-'+x.a+')').join('\\times ');
     if(family==='compare_both'){
       const prefix = (qtype==='mistake'||qtype==='tf') ? (even ? 'שגוי — עם מעריך זוגי הם שונים!\n' : 'במקרה זה (מעריך אי-זוגי) הערכים שווים, אך הנימוק שגוי — הסוגריים כן קובעים את הבסיס.\n') : '';
       return `${prefix}א. $(-${x.a})^{${x.n}}$: הבסיס הוא $-${x.a}$.\n$$${expand}=${x.p}$$\nב. $-${x.a}^{${x.n}}$: קודם חזקה, אחר כך מינוס.\n$$-(${x.a}^{${x.n}})=${x.np}$$\n${even ? 'התוצאות שונות: $'+x.p+' \\ne '+x.np+'$.' : 'כאן התוצאות שוות במקרה ($'+x.p+'$) — אבל רק כי המעריך אי-זוגי.'}`;
     }
-    const prefix = (qtype==='mistake'||qtype==='tf') ? 'שגוי — הבסיס בסוגריים הוא $-'+x.a+'$, ומעריך '+(even?'זוגי נותן תוצאה חיובית':'אי-זוגי שומר על השלילי')+'.\n' : '';
+    const prefix = (qtype==='mistake'||(qtype==='tf'&&!tfTrue)) ? 'שגוי — הבסיס בסוגריים הוא $-'+x.a+'$, ומעריך '+(even?'זוגי נותן תוצאה חיובית':'אי-זוגי שומר על השלילי')+'.\n' : '';
     return `${prefix}$$(-${x.a})^{${x.n}}=${expand}=${x.p}$$\n${even ? 'מספר זוגי של גורמים שליליים → תוצאה חיובית.' : 'מספר אי-זוגי של גורמים שליליים → תוצאה שלילית.'}`;
   }
 
   E.generateN706Engine = function(difficulty, questionType){
     difficulty = difficulty || 'standard'; questionType = questionType || 'open';
-    const family = pickFamily(difficulty);
+    let family = pickFamily(difficulty);
     const x = pickCase(family);
-    const q = question(family,x,questionType), a = answer(family,x,questionType);
+    // compare_both TF is false for every pool case (even exponents) — half the
+    // time present the direct computation instead, so TF is not predictable.
+    if(questionType==='tf' && family==='compare_both' && Math.random()<0.5) family = 'paren_even';
+    const tfTrue = questionType==='tf' && family!=='compare_both' && Math.random()<0.5;
+    const q = question(family,x,questionType,tfTrue), a = answer(family,x,questionType,tfTrue);
     if(questionType==='mcq') return E.questionTypes.mcq({question:q,answer:a,svg:'',choices:choices(family,x)});
     if(questionType==='tf'){
-      const isTrue = family==='compare_both' ? (x.n % 2 === 1) : false;
+      const isTrue = family==='compare_both' ? (x.n % 2 === 1) : tfTrue;
       return E.questionTypes.tf({question:q,answer:a,svg:'',isTrue:isTrue});
     }
     if(questionType==='mistake') return E.questionTypes.mistake({question:q,answer:a,svg:''});

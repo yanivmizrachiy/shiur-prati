@@ -59,18 +59,20 @@
     return E.shuffle(values).map((v,i)=>({label:['א','ב','ג','ד'][i], text:valueText(family,v,x), correct:v===correct}));
   }
 
-  function question(family,x,qtype){
+  function question(family,x,qtype,tfTrue){
     if(family === 'scale_real_distance'){
-      if(qtype === 'tf') return `${x.ctx} ${x.thing} הוא $${x.map}$ ס״מ. קנה המידה הוא $1:${x.scale}$. המרחק האמיתי הוא ${x.map} ק״מ.`;
+      if(qtype === 'tf') return tfTrue
+        ? `${x.ctx} ${x.thing} הוא $${x.map}$ ס״מ. קנה המידה הוא $1:${x.scale}$. המרחק האמיתי הוא ${x.real}.`
+        : `${x.ctx} ${x.thing} הוא $${x.map}$ ס״מ. קנה המידה הוא $1:${x.scale}$. המרחק האמיתי הוא ${x.map} ק״מ.`;
       if(qtype === 'mistake') return `תלמיד כתב: $${x.map}\\times ${x.scale}=${x.map*x.scale}$, ולכן המרחק האמיתי הוא $${x.map*x.scale}$ ק״מ.`;
       return `${x.ctx} ${x.thing} הוא $${x.map}$ ס״מ. קנה המידה הוא $1:${x.scale}$.\nמה המרחק האמיתי?`;
     }
     if(family === 'scale_map_distance'){
-      if(qtype === 'tf') return `${x.ctx}, ${x.thing} במציאות הוא ${x.real}. בקנה מידה $1:${x.scale}$, המרחק בשרטוט הוא $${x.map+2}$ ס״מ.`;
+      if(qtype === 'tf') return `${x.ctx}, ${x.thing} במציאות הוא ${x.real}. בקנה מידה $1:${x.scale}$, המרחק בשרטוט הוא $${tfTrue?x.map:x.map+2}$ ס״מ.`;
       if(qtype === 'mistake') return `תלמיד כתב: "${x.real} \\times ${x.scale}" כדי למצוא את המרחק בשרטוט.\nמצאו את הטעות.`;
       return `${x.ctx}, ${x.thing} במציאות הוא ${x.real}. קנה המידה הוא $1:${x.scale}$.\nכמה ס״מ יהיה המרחק בשרטוט?`;
     }
-    if(qtype === 'tf') return `${x.ctx}, ${x.thing} הוא $${x.map}$ ס״מ במפה ו-${x.real} במציאות. קנה המידה הוא $1:${Math.round(x.scale/10)}$.`;
+    if(qtype === 'tf') return `${x.ctx}, ${x.thing} הוא $${x.map}$ ס״מ במפה ו-${x.real} במציאות. קנה המידה הוא $1:${tfTrue?x.scale:Math.round(x.scale/10)}$.`;
     if(qtype === 'mistake') return `תלמיד חישב: "$${x.map}\\div ${x.realCm} $" כדי למצוא את קנה המידה.\nמצאו את הטעות.`;
     return `${x.ctx}, ${x.thing} הוא $${x.map}$ ס״מ במפה ו-${x.real} במציאות.\nמהו קנה המידה?`;
   }
@@ -95,10 +97,11 @@
     const x = pickCase(family);
     const unknown = family === 'scale_map_distance' ? 'map' : family === 'scale_factor' ? 'scale' : 'real';
     const svg = E.scaleMapSvg({map:x.map, real:x.real, scale:x.scale, context:x.ctx}, unknown);
-    const q = question(family,x,questionType);
+    const tfTrue = questionType==='tf' && Math.random()<0.5;
+    const q = question(family,x,questionType,tfTrue);
     const a = answer(family,x,questionType);
     if(questionType === 'mcq') return E.questionTypes.mcq({question:q,answer:a,svg:svg,choices:choices(family,x)});
-    if(questionType === 'tf') return E.questionTypes.tf({question:q,answer:a,svg:svg,isTrue:false});
+    if(questionType === 'tf') return E.questionTypes.tf({question:q,answer:a,svg:svg,isTrue:tfTrue});
     if(questionType === 'mistake') return E.questionTypes.mistake({question:q,answer:a,svg:svg});
     return E.questionTypes.open({question:q,answer:a,svg:svg});
   };

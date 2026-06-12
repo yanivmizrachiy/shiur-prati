@@ -37,31 +37,31 @@
     return E.shuffle(values).map((v,i)=>({label:['א','ב','ג','ד'][i], text:'$'+v+'$', correct:v===correct}));
   }
 
-  function question(family,x,qtype){
+  function question(family,x,qtype,tfTrue){
     if(family==='missing_from_mean'){
       const list = x.known.join(', ');
-      if(qtype==='tf') return `ארבעה ציונים: $${list}$. כדי שהממוצע של חמישה ציונים יהיה $${x.mean}$, הציון החמישי צריך להיות $${x.mean}$.`;
+      if(qtype==='tf') return `ארבעה ציונים: $${list}$. כדי שהממוצע של חמישה ציונים יהיה $${x.mean}$, הציון החמישי צריך להיות $${tfTrue?x.missing:x.mean}$.`;
       if(qtype==='mistake') return `ציונים: $${list}$, ממוצע מבוקש לחמישה: $${x.mean}$. תלמיד: "הציון החמישי = הממוצע = $${x.mean}$".`;
       return `לתלמיד ארבעה ציונים: $${list}$.\nמה צריך להיות הציון החמישי כדי שהממוצע של כל חמשת הציונים יהיה $${x.mean}$?`;
     }
     const list = x.d.join(', ');
     if(family==='mean'){
-      if(qtype==='tf') return `ממוצע הנתונים $${list}$ הוא $${x.mean+5}$.`;
+      if(qtype==='tf') return `ממוצע הנתונים $${list}$ הוא $${tfTrue?x.mean:x.mean+5}$.`;
       if(qtype==='mistake') return `לנתונים $${list}$ תלמיד חישב ממוצע: "הערך האמצעי ברשימה הוא $${x.d[2]}$, זה הממוצע".`;
       return `לפניכם ציוני $${x.d.length}$ תלמידים:\n$${list}$\nחשבו את הממוצע.`;
     }
     if(family==='median'){
-      if(qtype==='tf') return `החציון של $${list}$ הוא $${x.d[2]}$.`;
+      if(qtype==='tf') return `החציון של $${list}$ הוא $${tfTrue?x.median:(x.d[2]===x.median?x.median+5:x.d[2])}$.`;
       if(qtype==='mistake') return `לנתונים $${list}$ תלמיד מצא חציון: "האמצעי ברשימה הוא $${x.d[2]}$" — בלי למיין.`;
       return `לפניכם נתונים:\n$${list}$\nמצאו את החציון.`;
     }
-    if(qtype==='tf') return `הטווח של $${list}$ הוא $${Math.max.apply(null,x.d)}$.`;
+    if(qtype==='tf') return `הטווח של $${list}$ הוא $${tfTrue?x.range:Math.max.apply(null,x.d)}$.`;
     if(qtype==='mistake') return `לנתונים $${list}$ תלמיד חישב טווח: "הערך הגבוה ביותר הוא $${Math.max.apply(null,x.d)}$, זה הטווח".`;
     return `לפניכם נתונים:\n$${list}$\nחשבו את הטווח.`;
   }
 
-  function answer(family,x,qtype){
-    const wrong = qtype==='mistake' || qtype==='tf';
+  function answer(family,x,qtype,tfTrue){
+    const wrong = qtype==='mistake' || (qtype==='tf' && !tfTrue);
     if(family==='missing_from_mean'){
       const sum = x.mean*x.n, ks = x.known.reduce((a,b)=>a+b,0);
       const prefix = wrong ? 'שגוי — הציון החמישי אינו בהכרח הממוצע. מחשבים מסכום כולל.\n' : '';
@@ -86,9 +86,10 @@
     difficulty = difficulty || 'standard'; questionType = questionType || 'open';
     const family = pickFamily(difficulty);
     const x = family==='missing_from_mean' ? E.pick(MISSING) : E.pick(SETS);
-    const q = question(family,x,questionType), a = answer(family,x,questionType);
+    const tfTrue = questionType==='tf' && Math.random()<0.5;
+    const q = question(family,x,questionType,tfTrue), a = answer(family,x,questionType,tfTrue);
     if(questionType==='mcq') return E.questionTypes.mcq({question:q,answer:a,svg:'',choices:choices(family,x)});
-    if(questionType==='tf') return E.questionTypes.tf({question:q,answer:a,svg:'',isTrue:false});
+    if(questionType==='tf') return E.questionTypes.tf({question:q,answer:a,svg:'',isTrue:tfTrue});
     if(questionType==='mistake') return E.questionTypes.mistake({question:q,answer:a,svg:''});
     return E.questionTypes.open({question:q,answer:a,svg:''});
   };

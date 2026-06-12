@@ -19,8 +19,8 @@
     return `לפי משפט פיתגורס:\n$$${t.a}^2+b^2=${t.c}^2$$\n$$b^2=${t.c*t.c}-${t.a*t.a}=${t.b*t.b}$$\n$$b=\\sqrt{${t.b*t.b}}=${t.b}$$\nאורך הרגל הוא $${t.b}$ ס״מ.`;
   }
 
-  function questionFindSide(t, unknown, qtype){
-    if(qtype==='tf') return `אם הרגליים הן $${t.a}$ ס״מ ו-$${t.b}$ ס״מ, אז היתר הוא $${t.a+t.b}$ ס״מ.`;
+  function questionFindSide(t, unknown, qtype, tfTrue){
+    if(qtype==='tf') return `אם הרגליים הן $${t.a}$ ס״מ ו-$${t.b}$ ס״מ, אז היתר הוא $${tfTrue?t.c:t.a+t.b}$ ס״מ.`;
     if(qtype==='mistake') return `תלמיד כתב: $${t.a}+${t.b}=${t.a+t.b}$, ולכן היתר הוא $${t.a+t.b}$ ס״מ.`;
     if(unknown==='c') return `במשולש ישר-זווית, הרגליים הן $${t.a}$ ס״מ ו-$${t.b}$ ס״מ.\nחשבו את אורך היתר.`;
     if(unknown==='a') return `במשולש ישר-זווית, היתר הוא $${t.c}$ ס״מ ורגל אחת היא $${t.b}$ ס״מ.\nחשבו את אורך הרגל החסרה.`;
@@ -41,12 +41,13 @@
     const unknown = diff==='basic' ? 'c' : (diff==='challenge' ? E.pick(['a','b']) : E.pick(['a','b','c']));
     const show = {a:t.a,b:t.b,c:t.c}; delete show[unknown];
     const svg = E.rightTriangleSvg(show, unknown);
-    const q = questionFindSide(t, unknown, qtype);
+    const tfTrue = qtype==='tf' && Math.random()<0.5;
+    const q = questionFindSide(t, unknown, qtype, tfTrue);
     let ans = solutionFindSide(t, unknown);
-    if(qtype==='tf') ans = `שגויה. לא מחברים את הרגליים.\n` + solutionFindSide(t,'c');
+    if(qtype==='tf') ans = tfTrue ? solutionFindSide(t,'c') : `שגויה. לא מחברים את הרגליים.\n` + solutionFindSide(t,'c');
     if(qtype==='mistake') ans = `הטעות היא חיבור רגיל של הרגליים במקום שימוש בחזקות.\n` + solutionFindSide(t,'c');
     if(qtype==='mcq') return E.questionTypes.mcq({question:q,answer:ans,svg:svg,choices:choices(t,unknown)});
-    if(qtype==='tf') return E.questionTypes.tf({question:q,answer:ans,svg:svg,isTrue:false});
+    if(qtype==='tf') return E.questionTypes.tf({question:q,answer:ans,svg:svg,isTrue:tfTrue});
     if(qtype==='mistake') return E.questionTypes.mistake({question:q,answer:ans,svg:svg});
     return E.questionTypes.open({question:q,answer:ans,svg:svg});
   }

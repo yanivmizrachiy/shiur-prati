@@ -48,25 +48,27 @@
     return E.shuffle(values).map((v,i)=>({label:['א','ב','ג','ד'][i], text:choiceText(sub,v,x), correct:v===correct}));
   }
 
-  function question(sub,x,qt){
+  function question(sub,x,qt,tfTrue){
     if(sub==='pct_of_n'){
-      if(qt==='tf') return `"$${x.p}\\%$ מתוך $${x.n}$ ${x.ctx} הם $${x.k+10}$ ${x.ctx}."`;
+      if(qt==='tf') return `"$${x.p}\\%$ מתוך $${x.n}$ ${x.ctx} הם $${tfTrue?x.k:x.k+10}$ ${x.ctx}."`;
       if(qt==='mistake') return `תלמיד חישב: "$${x.p}\\%$ מ-$${x.n}$ = $${x.n} \\div ${x.p} = ${Math.round(x.n/x.p)}$".\nמצאו את הטעות.`;
       return `${x.total_ctx || 'בקבוצה'} יש $${x.n}$ ${x.ctx}.\n$${x.p}\\%$ מהם משתתפים בפעילות.\nכמה ${x.ctx} משתתפים?`;
     }
     if(sub==='find_whole'){
-      if(qt==='tf') return `אם $${x.k}$ ${x.ctx} הם $${x.p}\\%$, אז בסך הכל יש $${x.n+10}$ ${x.ctx}.`;
+      if(qt==='tf') return `אם $${x.k}$ ${x.ctx} הם $${x.p}\\%$, אז בסך הכל יש $${tfTrue?x.n:x.n+10}$ ${x.ctx}.`;
       if(qt==='mistake') return `תלמיד חישב: "$${x.k}\\times ${x.p}\\div 100$" כדי למצוא את הכמות הכוללת.\nמצאו את הטעות.`;
       return `$${x.k}$ ${x.ctx} מהווים $${x.p}\\%$ מכלל ה${x.ctx}.\nכמה ${x.ctx} יש בסך הכל?`;
     }
-    if(qt==='tf') return `מתוך $${x.n}$ ${x.ctx}, $${x.k}$ ${x.ctx} הם $${x.p+10}\\%$.`;
+    if(qt==='tf') return `מתוך $${x.n}$ ${x.ctx}, $${x.k}$ ${x.ctx} הם $${tfTrue?x.p:x.p+10}\\%$.`;
     if(qt==='mistake') return `תלמיד חישב: "$${x.n}\\div ${x.k}\\times 100$" כדי למצוא את האחוז.\nמצאו את הטעות.`;
     return `מתוך $${x.n}$ ${x.ctx}, $${x.k}$ ${x.ctx} השלימו משימה.\nכמה אחוזים מה${x.ctx} השלימו?`;
   }
 
-  function answer(sub,x,qt){
+  function answer(sub,x,qt,tfTrue){
     if(sub==='pct_of_n'){
-      if(qt==='tf') return `שגויה.\n$$${x.p}\\% \\text{ מ-} ${x.n}=\\frac{${x.p}}{100}\\times ${x.n}=${x.k}$$\nהתשובה הנכונה היא $${x.k}$, לא $${x.k+10}$.`;
+      if(qt==='tf') return tfTrue
+        ? `$$${x.p}\\% \\text{ מ-} ${x.n}=\\frac{${x.p}}{100}\\times ${x.n}=${x.k}$$`
+        : `שגויה.\n$$${x.p}\\% \\text{ מ-} ${x.n}=\\frac{${x.p}}{100}\\times ${x.n}=${x.k}$$\nהתשובה הנכונה היא $${x.k}$, לא $${x.k+10}$.`;
       if(qt==='mistake') return `הטעות: התלמיד חילק במקום לחשב אחוז מתוך כמות.\nהדרך הנכונה:\n$$\\frac{${x.p}}{100}\\times ${x.n}=${x.k}$$`;
       return `$$${x.p}\\% \\text{ מ-} ${x.n}=\\frac{${x.p}}{100}\\times ${x.n}=${x.k}$$`;
     }
@@ -88,10 +90,11 @@
     const sub = E.pick(subtypes);
     const set = sub==='pct_of_n' ? PCT_OF_N : sub==='find_whole' ? FIND_WHOLE : FIND_PCT;
     const x = E.pick(set);
-    const q = question(sub,x,questionType);
-    const a = answer(sub,x,questionType);
+    const tfTrue = questionType==='tf' && Math.random()<0.5;
+    const q = question(sub,x,questionType,tfTrue);
+    const a = answer(sub,x,questionType,tfTrue);
     if(questionType==='mcq') return E.questionTypes.mcq({question:q,answer:a,svg:'',choices:pctChoices(sub,x)});
-    if(questionType==='tf') return E.questionTypes.tf({question:q,answer:a,svg:'',isTrue:false});
+    if(questionType==='tf') return E.questionTypes.tf({question:q,answer:a,svg:'',isTrue:tfTrue});
     if(questionType==='mistake') return E.questionTypes.mistake({question:q,answer:a,svg:''});
     return E.questionTypes.open({question:q,answer:a,svg:''});
   };

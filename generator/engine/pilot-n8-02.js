@@ -71,14 +71,14 @@
     return `\\frac{${x.a}}{${x.b}}=\\frac{${c}}{${d}}`;
   }
 
-  function question(family,x,qt){
+  function question(family,x,qt,tfTrue){
     if(family === 'proportion_missing'){
-      if(qt === 'tf') return `${x.ctx}: $${equation(x)}$. הערך של $x$ הוא $${missingValue(x)+x.a}$.`;
+      if(qt === 'tf') return `${x.ctx}: $${equation(x)}$. הערך של $x$ הוא $${tfTrue?missingValue(x):missingValue(x)+x.a}$.`;
       if(qt === 'mistake') return `${x.ctx}: $${equation(x)}$.\nתלמיד כתב $x=${x.a}\\cdot ${x.d}$ בלי לחלק בצלע המתאימה.`;
       return `${x.ctx}. השלימו את הפרופורציה:\n$$${equation(x)}$$`;
     }
     if(family === 'proportion_rate'){
-      if(qt === 'tf') return `${x.thing} עובר $${x.a}$ ${x.unitA} ב-$${x.b}$ ${x.unitB}. באותו קצב הוא יעבור $${x.result + x.a/x.b}$ ${x.unitA} ב-$${x.target}$ ${x.unitB}.`;
+      if(qt === 'tf') return `${x.thing} עובר $${x.a}$ ${x.unitA} ב-$${x.b}$ ${x.unitB}. באותו קצב הוא יעבור $${tfTrue?x.result:x.result + x.a/x.b}$ ${x.unitA} ב-$${x.target}$ ${x.unitB}.`;
       if(qt === 'mistake') return `${x.thing} עובר $${x.a}$ ${x.unitA} ב-$${x.b}$ ${x.unitB}.\nתלמיד חיבר $${x.target}$ במקום להשתמש בגורם היחס.`;
       return `${x.thing} עובר $${x.a}$ ${x.unitA} ב-$${x.b}$ ${x.unitB}.\nכמה ${x.unitA} יעבור באותו קצב ב-$${x.target}$ ${x.unitB}?`;
     }
@@ -114,10 +114,11 @@
     const x = pickCase(family);
     const unknown = family === 'proportion_missing' ? x.unknown : family === 'proportion_rate' ? 'result' : 'verify';
     const svg = E.proportionTableSvg({a:x.a,b:x.b,c:x.c,d:x.d,target:x.target,result:x.result,unitA:x.unitA,unitB:x.unitB,thing:x.thing}, unknown);
-    const q = question(family,x,questionType);
+    const tfTrue = questionType==='tf' && family!=='proportion_verify' && Math.random()<0.5;
+    const q = question(family,x,questionType,tfTrue);
     const a = answer(family,x,questionType);
     if(questionType === 'mcq') return E.questionTypes.mcq({question:q,answer:a,svg:svg,choices:choices(family,x)});
-    if(questionType === 'tf') return E.questionTypes.tf({question:q,answer:a,svg:svg,isTrue:family === 'proportion_verify' ? x.isTrue : false});
+    if(questionType === 'tf') return E.questionTypes.tf({question:q,answer:a,svg:svg,isTrue:family === 'proportion_verify' ? x.isTrue : tfTrue});
     if(questionType === 'mistake') return E.questionTypes.mistake({question:q,answer:a,svg:svg});
     return E.questionTypes.open({question:q,answer:a,svg:svg});
   };

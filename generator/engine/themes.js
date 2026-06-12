@@ -2,9 +2,11 @@
 (function(){
   const E = window.TargilimEngine = window.TargilimEngine || {};
   E.themes = {
+    // Professional, print-friendly palette: light slate fill, dark slate strokes,
+    // deep blue for given data, restrained red only for the unknown.
     geometry: {
-      fill:'#fef3c7', stroke:'#92400e', helper:'#94a3b8',
-      unknown:'#dc2626', given:'#166534', label:'#0f172a', bg:'#ffffff'
+      fill:'#f1f5f9', stroke:'#334155', helper:'#94a3b8',
+      unknown:'#dc2626', given:'#1d4ed8', label:'#0f172a', bg:'#ffffff'
     },
     print: {
       fill:'#ffffff', stroke:'#111827', helper:'#64748b',

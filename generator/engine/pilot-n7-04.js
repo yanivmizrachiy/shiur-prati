@@ -4,32 +4,44 @@
 (function(){
   const E = window.TargilimEngine = window.TargilimEngine || {};
 
-  const ADD_SAME = [
-    {a:-8,b:-5,r:-13},{a:-7,b:-3,r:-10},{a:-12,b:-6,r:-18},{a:-4,b:-9,r:-13},{a:-11,b:-2,r:-13}
-  ];
-  const ADD_DIFF = [
-    {a:-7,b:12,r:5},{a:9,b:-4,r:5},{a:-15,b:6,r:-9},{a:8,b:-13,r:-5},{a:-3,b:10,r:7}
-  ];
-  const SUB_NEG = [
-    {a:5,b:-3,r:8},{a:-2,b:-7,r:5},{a:4,b:-6,r:10},{a:-8,b:-3,r:-5},{a:0,b:-9,r:9}
-  ];
-  const MISSING = [
-    {a:-6,r:-2,m:4},{a:7,r:-3,m:-10},{a:-4,r:5,m:9},{a:-9,r:-15,m:-6},{a:3,r:-4,m:-7},
-    {a:5,r:-2,m:-7},{a:-12,r:-7,m:5},{a:6,r:0,m:-6}
-  ];
+  // Source ranges (PATTERN_INDEX N7-04: −20..20; learning file 05: values are
+  // teacher-changeable). Cases are generated dynamically inside those ranges
+  // instead of cycling a 5-item pool — real variety on multi-exercise sheets.
+  function rnd(lo,hi){ return lo + Math.floor(Math.random()*(hi-lo+1)); }
+  function caseAddSame(){ const a=-rnd(2,12), b=-rnd(2,12); return {a:a,b:b,r:a+b}; }
+  function caseAddDiff(){
+    let m=rnd(2,15), n=rnd(2,15);
+    while(n===m) n=rnd(2,15);
+    const a = Math.random()<0.5 ? -m : m;
+    const b = a<0 ? n : -n;
+    return {a:a,b:b,r:a+b};
+  }
+  function caseSubNeg(){ const a=rnd(-9,9), b=-rnd(2,9); return {a:a,b:b,r:a-b}; }
+  function caseMissing(){
+    let a=rnd(-12,12); while(a===0) a=rnd(-12,12);
+    let r=rnd(-15,15), m=r-a;
+    while(m===0){ r=rnd(-15,15); m=r-a; }
+    return {a:a,r:r,m:m};
+  }
   // Estimation family — source pattern N7-04: "בלי לחשב, סמנו תרגילים שתוצאתם קטנה מ-[n]"
   const EST_SETS = [
     {items:[{a:-12,b:5},{a:9,b:-4},{a:-3,b:-8}]},
     {items:[{a:-6,b:11},{a:-14,b:3},{a:7,b:-15}]},
-    {items:[{a:4,b:-9},{a:-2,b:13},{a:-7,b:-1}]}
+    {items:[{a:4,b:-9},{a:-2,b:13},{a:-7,b:-1}]},
+    {items:[{a:-5,b:9},{a:-12,b:4},{a:-6,b:-2}]},
+    {items:[{a:11,b:-3},{a:-9,b:2},{a:5,b:-8}]},
+    {items:[{a:-16,b:7},{a:8,b:-2},{a:-4,b:-5}]}
   ];
   const EST_MCQ = [
     {items:[{a:-9,b:14},{a:8,b:-3},{a:6,b:-13},{a:12,b:-5}]},
     {items:[{a:-4,b:10},{a:-2,b:9},{a:-11,b:6},{a:15,b:-7}]},
-    {items:[{a:7,b:-6},{a:-8,b:12},{a:-5,b:-4},{a:13,b:-9}]}
+    {items:[{a:7,b:-6},{a:-8,b:12},{a:-5,b:-4},{a:13,b:-9}]},
+    {items:[{a:-6,b:13},{a:9,b:-2},{a:-3,b:12},{a:4,b:-11}]},
+    {items:[{a:14,b:-6},{a:-7,b:16},{a:-12,b:5},{a:3,b:-1}]}
   ];
   const EST_TRAP = [
-    {a:-12,b:5},{a:-15,b:6},{a:-9,b:4},{a:-14,b:8}
+    {a:-12,b:5},{a:-15,b:6},{a:-9,b:4},{a:-14,b:8},
+    {a:-11,b:7},{a:-13,b:9},{a:-16,b:8},{a:-10,b:3}
   ];
 
   function pickFamily(diff){
@@ -43,10 +55,10 @@
       if(qtype==='tf'||qtype==='mistake') return E.pick(EST_TRAP);
       return E.pick(EST_SETS);
     }
-    if(f==='add_diff') return E.pick(ADD_DIFF);
-    if(f==='sub_neg') return E.pick(SUB_NEG);
-    if(f==='missing_addend') return E.pick(MISSING);
-    return E.pick(ADD_SAME);
+    if(f==='add_diff') return caseAddDiff();
+    if(f==='sub_neg') return caseSubNeg();
+    if(f==='missing_addend') return caseMissing();
+    return caseAddSame();
   }
   function wrap(n){ return n < 0 ? '(' + n + ')' : '' + n; }
 
@@ -62,21 +74,24 @@
     return E.shuffle(values).map((v,i)=>({label:['א','ב','ג','ד'][i], text:'$'+v+'$', correct:v===correct}));
   }
 
-  function question(family,x,qtype){
+  function question(family,x,qtype,tfTrue){
     if(family==='estimate'){
       if(qtype==='mcq') return 'בלי לחשב במדויק: לאיזה מהתרגילים הבאים תוצאה קטנה מאפס?';
-      if(qtype==='tf') return `בלי לחשב במדויק: התוצאה של $${wrap(x.a)} + ${wrap(x.b)}$ חיובית, כי $${Math.abs(x.a)} > ${Math.abs(x.b)}$.`;
+      if(qtype==='tf') return tfTrue
+        ? `בלי לחשב במדויק: התוצאה של $${wrap(x.a)} + ${wrap(x.b)}$ שלילית, כי המספר הרחוק יותר מאפס הוא $${wrap(x.a)}$.`
+        : `בלי לחשב במדויק: התוצאה של $${wrap(x.a)} + ${wrap(x.b)}$ חיובית, כי $${Math.abs(x.a)} > ${Math.abs(x.b)}$.`;
       if(qtype==='mistake') return `תלמיד טען: "התוצאה של $${wrap(x.a)} + ${wrap(x.b)}$ חיובית, כי $${Math.abs(x.a)}$ גדול מ-$${Math.abs(x.b)}$".`;
       return 'בלי לחשב במדויק, קבעו לאילו מהתרגילים הבאים התוצאה קטנה מאפס, והסבירו:\n' + x.items.map((it,i)=>`${['א','ב','ג'][i]}. $${wrap(it.a)} + ${wrap(it.b)}$`).join('\n');
     }
     if(family==='missing_addend'){
-      if(qtype==='tf') return `$${wrap(x.a)} + \\square = ${x.r}$ — המספר החסר הוא $${-x.m}$.`;
+      if(qtype==='tf') return `$${wrap(x.a)} + \\square = ${x.r}$ — המספר החסר הוא $${tfTrue?x.m:-x.m}$.`;
       if(qtype==='mistake') return `$${wrap(x.a)} + \\square = ${x.r}$. תלמיד כתב: "$\\square = ${x.r}+${wrap(x.a)} = ${x.r + x.a}$".`;
       return `השלימו את המספר החסר:\n$$${wrap(x.a)} + \\square = ${x.r}$$`;
     }
     const op = family==='sub_neg' ? '-' : '+';
     const expr = `${wrap(x.a)} ${op} ${wrap(x.b)}`;
     if(qtype==='tf'){
+      if(tfTrue) return `$${expr} = ${x.r}$.`;
       const wrongR = family==='sub_neg' ? x.a - Math.abs(x.b) : -x.r;
       return `$${expr} = ${wrongR === x.r ? x.r + 1 : wrongR}$.`;
     }
@@ -87,8 +102,11 @@
     return `חשבו: $$${expr} = ?$$`;
   }
 
-  function answer(family,x,qtype){
+  function answer(family,x,qtype,tfTrue){
     if(family==='estimate'){
+      if(qtype==='tf'&&tfTrue){
+        return `הסימן נקבע לפי המספר הרחוק יותר מאפס — כאן $${wrap(x.a)}$ השלילי, ולכן התוצאה שלילית:\n$$${wrap(x.a)}+${wrap(x.b)}=${x.a+x.b}$$`;
+      }
       if(qtype==='tf'||qtype==='mistake'){
         return `שגוי — הסימן נקבע לפי המספר הרחוק יותר מאפס, לא לפי גודל הספרות בלבד. $${Math.abs(x.a)}$ שייך למספר השלילי $${wrap(x.a)}$, ולכן התוצאה שלילית:\n$$${wrap(x.a)}+${wrap(x.b)}=${x.a+x.b}$$`;
       }
@@ -106,7 +124,7 @@
       const negs = x.items.map((it,i)=>({i,r:it.a+it.b})).filter(o=>o.r<0).map(o=>L[o.i]).join(', ');
       return lines.join('\n') + `\nתוצאה קטנה מאפס: ${negs}.`;
     }
-    const wrong = qtype==='mistake' || qtype==='tf';
+    const wrong = qtype==='mistake' || (qtype==='tf' && !tfTrue);
     if(family==='add_same'){
       const prefix = wrong ? 'שגוי — שני שליליים: מחברים מרחקים ושומרים מינוס.\n' : '';
       return `${prefix}שני המספרים שליליים — מחברים את המרחקים מאפס ושומרים על הסימן:\n$$${wrap(x.a)}+${wrap(x.b)}=${x.r}$$`;
@@ -128,9 +146,10 @@
     difficulty = difficulty || 'standard'; questionType = questionType || 'open';
     const family = pickFamily(difficulty);
     const x = pickCase(family,questionType);
-    const q = question(family,x,questionType), a = answer(family,x,questionType);
+    const tfTrue = questionType==='tf' && Math.random()<0.5;
+    const q = question(family,x,questionType,tfTrue), a = answer(family,x,questionType,tfTrue);
     if(questionType==='mcq') return E.questionTypes.mcq({question:q,answer:a,svg:'',choices:choices(family,x)});
-    if(questionType==='tf') return E.questionTypes.tf({question:q,answer:a,svg:'',isTrue:false});
+    if(questionType==='tf') return E.questionTypes.tf({question:q,answer:a,svg:'',isTrue:tfTrue});
     if(questionType==='mistake') return E.questionTypes.mistake({question:q,answer:a,svg:''});
     return E.questionTypes.open({question:q,answer:a,svg:''});
   };

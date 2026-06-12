@@ -74,24 +74,26 @@
     return change === 'decrease' ? 'ירידה' : 'עלייה';
   }
 
-  function question(family,x,qt){
+  function question(family,x,qt,tfTrue){
     if(family === 'percent_increase'){
-      if(qt === 'tf') return `${x.ctx} היה $${x.base}$ ${x.unit} ועלה ב-$${x.p}\\%$. הערך החדש הוא $${x.final + x.p}$ ${x.unit}.`;
+      if(qt === 'tf') return `${x.ctx} היה $${x.base}$ ${x.unit} ועלה ב-$${x.p}\\%$. הערך החדש הוא $${tfTrue?fmt(x.final):x.final+x.p}$ ${x.unit}.`;
       if(qt === 'mistake') return `${x.ctx} היה $${x.base}$ ${x.unit} ועלה ב-$${x.p}\\%$.\nתלמיד חיבר $${x.p}$ במקום לחשב $${x.p}\\%$.`;
       return `${x.ctx} היה $${x.base}$ ${x.unit} ועלה ב-$${x.p}\\%$.\nמה הערך החדש?`;
     }
     if(family === 'percent_decrease'){
-      if(qt === 'tf') return `${x.ctx} היה $${x.base}$ ${x.unit} וירד ב-$${x.p}\\%$. הערך החדש הוא $${x.base-x.p}$ ${x.unit}.`;
+      if(qt === 'tf') return `${x.ctx} היה $${x.base}$ ${x.unit} וירד ב-$${x.p}\\%$. הערך החדש הוא $${tfTrue?fmt(x.final):x.base-x.p}$ ${x.unit}.`;
       if(qt === 'mistake') return `${x.ctx} היה $${x.base}$ ${x.unit} וירד ב-$${x.p}\\%$.\nתלמיד חיסר $${x.p}$ יחידות במקום $${x.p}\\%$ מהכמות.`;
       return `${x.ctx} היה $${x.base}$ ${x.unit} וירד ב-$${x.p}\\%$.\nמה הערך החדש?`;
     }
     if(family === 'percent_original'){
       const direction = changeWord(x.change);
-      if(qt === 'tf') return `${x.ctx} הוא $${fmt(x.final)}$ ${x.unit} אחרי ${direction} של $${x.p}\\%$. הערך המקורי היה $${fmt(x.final)}$ ${x.unit}.`;
+      if(qt === 'tf') return `${x.ctx} הוא $${fmt(x.final)}$ ${x.unit} אחרי ${direction} של $${x.p}\\%$. הערך המקורי היה $${tfTrue?fmt(x.base):fmt(x.final)}$ ${x.unit}.`;
       if(qt === 'mistake') return `${x.ctx} הוא $${fmt(x.final)}$ ${x.unit} אחרי ${direction} של $${x.p}\\%$.\nתלמיד חישב את $${x.p}\\%$ מתוך הערך הסופי ולא מתוך הערך המקורי.`;
       return `${x.ctx} הוא $${fmt(x.final)}$ ${x.unit} אחרי ${direction} של $${x.p}\\%$.\nמה היה הערך המקורי?`;
     }
-    if(qt === 'tf') return `${x.ctx} היה $${x.base}$ ${x.unit}, עלה ב-$${x.p1}\\%$ ואז ירד ב-$${x.p2}\\%$. הערך הסופי חזר ל-$${x.base}$ ${x.unit}.`;
+    if(qt === 'tf') return tfTrue
+      ? `${x.ctx} היה $${x.base}$ ${x.unit}, עלה ב-$${x.p1}\\%$ ואז ירד ב-$${x.p2}\\%$. הערך הסופי הוא $${fmt(x.final)}$ ${x.unit}.`
+      : `${x.ctx} היה $${x.base}$ ${x.unit}, עלה ב-$${x.p1}\\%$ ואז ירד ב-$${x.p2}\\%$. הערך הסופי חזר ל-$${x.base}$ ${x.unit}.`;
     if(qt === 'mistake') return `${x.ctx} היה $${x.base}$ ${x.unit}, עלה ב-$${x.p1}\\%$ ואז ירד ב-$${x.p2}\\%$.\nתלמיד חיסר אחוזים וכתב שינוי כולל של $${x.p1-x.p2}\\%$.`;
     return `${x.ctx} היה $${x.base}$ ${x.unit}, עלה ב-$${x.p1}\\%$ ואז ירד ב-$${x.p2}\\%$.\nמה הערך הסופי?`;
   }
@@ -121,10 +123,11 @@
     const x = pickCase(family);
     const unknown = family === 'percent_original' ? 'base' : 'final';
     const svg = E.percentChangeSvg({base:x.base,mid:x.mid,final:x.final,p:x.p,p1:x.p1,p2:x.p2,change:x.change,unit:x.unit,ctx:x.ctx}, unknown);
-    const q = question(family,x,questionType);
+    const tfTrue = questionType==='tf' && Math.random()<0.5;
+    const q = question(family,x,questionType,tfTrue);
     const a = answer(family,x,questionType);
     if(questionType === 'mcq') return E.questionTypes.mcq({question:q,answer:a,svg:svg,choices:choices(family,x)});
-    if(questionType === 'tf') return E.questionTypes.tf({question:q,answer:a,svg:svg,isTrue:false});
+    if(questionType === 'tf') return E.questionTypes.tf({question:q,answer:a,svg:svg,isTrue:tfTrue});
     if(questionType === 'mistake') return E.questionTypes.mistake({question:q,answer:a,svg:svg});
     return E.questionTypes.open({question:q,answer:a,svg:svg});
   };
