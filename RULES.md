@@ -4,7 +4,7 @@ Repository: `yanivmizrachiy/targilim`
 
 Hebrew project name: `תרגילים`
 
-Last updated: 2026-06-11
+Last updated: 2026-06-12
 
 ---
 
@@ -15,8 +15,10 @@ Every worker, human or AI, must read this file and `PROJECT_STATUS.md` before an
 ### 0.1 Product definition
 
 - The product is a Hebrew smart math exercise generator for Grades 7–8 only.
-- Removed from active scope: Grade 9, worksheet mode, booklet mode, PDF workbook mode, bulk A4 worksheet generation, and answer-key booklet systems.
-- These removed items are not backlog items and must not be treated as pending work.
+- In scope: browser-based multi-exercise generation for the selected topic, including count control, mixed question types, numbered exercise set, browser print, and answer key inside the web app.
+- Removed from active scope: Grade 9, separate booklet mode, PDF workbook mode, bulk A4 workbook generation, and separate answer-key booklet systems.
+- The in-browser exercise-set generator is not considered the removed PDF/booklet scope.
+- These removed items are not backlog items and must not be treated as pending work unless Yaniv explicitly reopens them.
 - No `engine2`. No `new-engine`. There is one engine; improve it in place.
 - No fake controls.
 - No demo-only UI.
@@ -59,14 +61,23 @@ Use only these statuses for work items: `DONE`, `PARTIAL`, `NOT DONE`, `NEEDS RE
 
 The approved product is a **smart Hebrew math exercise generator for Grades 7–8 only**.
 
+Active in-scope browser behavior:
+
+- single-question generation for quick checking;
+- multi-exercise browser set generation;
+- question count selection;
+- mixed question types;
+- numbered exercise set rendering;
+- answer key inside the web app;
+- browser print/export compatibility.
+
 Removed from active project scope:
 
 - Grade 9.
-- Worksheet mode.
-- Booklet mode.
+- Separate booklet mode.
 - PDF workbook mode.
-- Bulk A4 worksheet generation.
-- Answer-key booklet system.
+- Bulk A4 workbook generation.
+- Separate answer-key booklet system.
 
 Do not plan, design, or implement removed scope unless Yaniv explicitly reopens it later.
 
@@ -106,6 +117,7 @@ Completed or present:
 - Premium mobile-first RTL CSS redesign has been applied.
 - 25 code-active legacy slices exist for Grades 7–8.
 - 25 active engine topics exist in code for the approved Grades 7–8 scope.
+- Browser-based exercise-set generation exists in code.
 - Yaniv's generator vision is documented in the repo.
 
 Current limitation:
@@ -296,7 +308,8 @@ The following must remain working:
 
 - copy as image;
 - PNG download fallback;
-- print layout.
+- print layout;
+- browser-based exercise-set print/export.
 
 Do not change `export.js` unless the export pipeline is proven broken.
 
@@ -323,6 +336,8 @@ Required verification assets:
 Before claiming final public release quality, verify:
 
 - all 25 engine topics appear and generate correctly;
+- browser-based exercise-set generation works for count > 1;
+- answer key toggle works;
 - engine panel controls are real and affect output;
 - supported question types work;
 - difficulty levels work;
@@ -359,7 +374,8 @@ The approved core scope is complete in code. Future work should be limited to:
 4. Print output review.
 5. Teacher feedback and small pedagogical refinements.
 6. Larger case pools or new source-backed Grade 7–8 topics only if explicitly approved.
+7. Small browser-based exercise-set UX improvements that preserve the current scope.
 
-Do not start Grade 9, worksheet, booklet, or PDF workbook work.
+Do not start Grade 9, separate booklet mode, PDF workbook mode, bulk A4 workbook generation, or separate answer-key booklet systems.
 
 Report truth only.
