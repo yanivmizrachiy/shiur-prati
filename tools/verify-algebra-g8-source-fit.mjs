@@ -13,6 +13,7 @@ function must(text, label, items) {
 }
 
 const manifest = read('sources/intake/2026-06-09/MANIFEST.md');
+const a802 = read('generator/a8-02.js');
 const a803 = read('generator/a8-03.js');
 const graphs = read('generator/engine/source-fit-graphs.js');
 const a802Smart = read('generator/engine/pilot-a8-02.js');
@@ -45,6 +46,13 @@ must(a803Smart, 'systems smart engine', [
   'mistake'
 ]);
 
+must(a802, 'grade 8 graph interpretation fallback topics', [
+  'A8-07',
+  'קריאת גרף קווי בהקשר ✦ מקור',
+  'A8-08',
+  'התאמת גרף לסיפור ✦ מקור'
+]);
+
 must(a803, 'grade 8 algebra active source-fit topics', [
   'A8-04',
   'אי־שוויונות ומגבלות ✦ מקור',
@@ -64,6 +72,8 @@ console.log(JSON.stringify({
   ],
   checkedFamilies: [
     'applied graphs and functions',
+    'graph interpretation in context',
+    'matching a graph to a story',
     'slope and line equations',
     'systems of equations',
     'inequalities and constraints',
