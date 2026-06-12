@@ -35,3 +35,19 @@ generators['G8-09']=function(){
   const a=`באותו זמן מתקבלים משולשים דומים, ולכן היחס גובה/צל שווה: $\\frac{2}{1.5}=\\frac{גובה}{${treeShadow}}$. לכן גובה העץ הוא $${treeShadow}\\cdot\\frac{2}{1.5}=${h}$ מ׳.`;
   renderCard('G8-09','דמיון וצללים',svg,q,a,'geo');
 };
+
+TOPICS[8].geometry.push(['G8-10','חפיפה — מה חסר להוכחה ✦ מקור',1]);
+generators['G8-10']=function(){
+  const svg='<svg class="engine-svg" viewBox="0 0 300 190" xmlns="http://www.w3.org/2000/svg"><rect x="12" y="10" width="276" height="160" rx="14" fill="#eff6ff" stroke="#2563eb" stroke-width="1.8"/><polygon points="48,135 130,135 88,55" fill="#dbeafe" stroke="#2563eb" stroke-width="2.4"/><polygon points="178,135 260,135 218,55" fill="#dbeafe" stroke="#2563eb" stroke-width="2.4"/><line x1="67" y1="95" x2="75" y2="90" stroke="#dc2626" stroke-width="2"/><line x1="198" y1="95" x2="206" y2="90" stroke="#dc2626" stroke-width="2"/><line x1="105" y1="95" x2="113" y2="90" stroke="#16a34a" stroke-width="2"/><line x1="235" y1="95" x2="243" y2="90" stroke="#16a34a" stroke-width="2"/><text x="150" y="181" text-anchor="middle" font-size="11" font-weight="800" fill="#334155">מסומנות שתי צלעות בלבד — אין מספיק מידע לחפיפה</text></svg>';
+  const q='בשרטוט מסומנות שתי צלעות מתאימות שוות בכל משולש. האם זה מספיק כדי להוכיח חפיפה? אם לא, מה חסר?';
+  const a='לא. שתי צלעות בלבד אינן מספיקות להוכחת חפיפה. צריך נתון נוסף מתאים, למשל זווית כלואה שווה כדי להשתמש בצלע־זווית־צלע, או צלע שלישית שווה כדי להשתמש בצלע־צלע־צלע.';
+  renderCard('G8-10','חפיפה — מה חסר להוכחה',svg,q,a,'geo');
+};
+
+TOPICS[8].geometry.push(['G8-11','דמיון — יחס שטחים והיקפים ✦ מקור',1]);
+generators['G8-11']=function(){
+  const cases=[[2,3,12],[3,5,18],[4,7,20]], c=cases[Math.floor(Math.random()*cases.length)], a=c[0], b=c[1], per=c[2], bigPer=per*b/a, area=36, bigArea=area*b*b/(a*a);
+  const q='שני משולשים דומים ביחס $'+a+':'+b+'$ מהקטן לגדול. היקף הקטן הוא $'+per+'$ ס״מ ושטחו $'+area+'$ סמ״ר. מה היקף הגדול ומה שטחו?';
+  const ans='היקפים משתנים לפי יחס הדמיון: $'+per+'\\cdot\\frac{'+b+'}{'+a+'}='+bigPer+'$. שטחים משתנים לפי ריבוע יחס הדמיון: $'+area+'\\cdot(\\frac{'+b+'}{'+a+'})^2='+bigArea+'$. לכן היקף הגדול $'+bigPer+'$ ס״מ ושטחו $'+bigArea+'$ סמ״ר.';
+  renderCard('G8-11','דמיון — יחס שטחים והיקפים','',q,ans,'geo');
+};
