@@ -44,11 +44,22 @@ neighboring bar; "tallest = first/total" without checking the scale.
 | `applied_graph_read` family — fuel-cost (price/liter, threshold "עבור אילו כמויות העלות > …") and liquid-heating (start + rate×minutes, value-at / reach-threshold); open/mcq/tf/mistake; misconceptions: x-read-as-y, ignoring the start temperature, rate off-by | `pilot-a8-02.js` | File 02 Topic A8-01 fuel graph + A8-03 liquid-heating example, near-verbatim |
 | linearGraphSvg minimal upgrade: quadrant-I applied mode, Hebrew axis captions (ליטרים/עלות בשקלים, דקות/טמפרטורה), nice y-steps, vertical read-guide that does not reveal the y-value | `diagrams.js` | File 02 applied graphs requirement |
 
+## Sprint 3 additions (source-fit-critical-charts-v3, 2026-06-12)
+
+| Addition | Where | Source evidence |
+|---|---|---|
+| `pie_chart_read_or_construct` family — central angle from percent (basic), two angles + construction explanation (standard), missing percent / largest sector (challenge); open/mcq/tf/mistake | `pilot-u7-01.js` | File 06 pattern U-06 verbatim (זווית מרכזית = אחוז × 360°; סכום = 360°) |
+| `E.pieChartSvg` — 3–5 Hebrew categories, sectors from 12 o'clock, percent labels outside the rim along mid-angles (no overlap), legend, hidden-sector "?" mode | `diagrams.js` | File 06 visual type תרשים עוגה |
+| `misleading_graph_critique` family — truncated y-axis critique (basic), impression-vs-data (standard), axis + exaggerated-conclusion combo (challenge); answers name the problem, compute the real change, and state ציר y צריך להתחיל ב-0 | `pilot-u7-01.js` | File 06 pattern U-07 verbatim ("מדוע עלול להטעות? הציעו דרך לייצג בצורה ניטרלית יותר"; "ציר y לא מתחיל ב-0") |
+| `E.misleadingBarChartSvg` — deliberately truncated y-axis with an honest break-mark zigzag, close values that look dramatic | `diagrams.js` | File 06 pattern U-07 |
+
+Misconceptions implemented: percent×100; percent treated as degrees; "sum must be 100" ignored; largest-sector-by-legend-order; "bar looks ×3 so value grew ×3".
+
 ## Remaining source-fit gaps (honest, still open)
 
 - Four-quadrant coordinate work (file 05, Grade-7 round 2) — not yet built.
-- Pie chart, pictogram, misleading-graph critique (file 06, pattern U-06 and
-  the critical-reading strand) — not yet built. (Double-bar now exists.)
+- Pictogram (file 06 visual type) — not built (deliberately skipped; optional C).
+- 3D-effect / category-order misleading variants (U-07 mentions אפקט תלת-ממד) — only the truncated-axis variant is built.
 - Kinneret-style piecewise/empirical graph reading (file 02) — only LINEAR
   applied graphs are covered; non-linear/empirical curves are open.
 - Sequences→expression with drawings (file 01, A7-02 curricular round 1) —

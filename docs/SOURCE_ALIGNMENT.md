@@ -132,4 +132,5 @@ Source file key: 01 grade-7 algebra · 02 grade-8 algebra · 03 grade-7 pre-dedu
 
 - U7-01 += `bar_chart_read` (file 06 U-02/U-03) and `compare_groups_relative_frequency` (file 06 U-05, guaranteed absolute-vs-relative trap, double-bar visual).
 - A8-02 += `applied_graph_read` (file 02 A8-01 fuel graph + A8-03 liquid heating, Hebrew-labeled applied linear graphs).
+- U7-01 += `pie_chart_read_or_construct` (file 06 U-06) and `misleading_graph_critique` (file 06 U-07) — sprint v3.
 - No engine IDs added/renamed in these family-level changes; engine count remains 26 (incl. N7-01 added in sprint v1).

@@ -505,6 +505,75 @@
     return `<svg class="engine-svg" viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">${grid}${bars}${legend}</svg>`;
   };
 
+  // Pie chart (file 06 pattern U-06: 3–5 categories with percentages;
+  // central angle = percent × 3.6°, total 360°). Percent labels sit outside
+  // the rim along each sector's mid-angle (no overlap), Hebrew legend below.
+  E.pieChartSvg = function(opts){
+    const T = E.themes.geometry;
+    const o = opts || {};
+    const cats = o.cats || [], pcts = o.pcts || [];
+    const W=300,H=210,cx=110,cy=92,R=64;
+    const COLS = ['#1d4ed8','#94a3b8','#0ea5e9','#64748b','#93c5fd'];
+    let ang = -90; // start at 12 o'clock, clockwise
+    let sectors='', labels='';
+    pcts.forEach(function(p,i){
+      const a0=ang*Math.PI/180, sweep=p*3.6, a1=(ang+sweep)*Math.PI/180;
+      const x0=cx+R*Math.cos(a0), y0=cy+R*Math.sin(a0);
+      const x1=cx+R*Math.cos(a1), y1=cy+R*Math.sin(a1);
+      const large = sweep>180 ? 1 : 0;
+      const hidden = o.hideIdx===i;
+      sectors += `<path d="M ${cx} ${cy} L ${x0.toFixed(1)} ${y0.toFixed(1)} A ${R} ${R} 0 ${large} 1 ${x1.toFixed(1)} ${y1.toFixed(1)} Z" fill="${hidden?'#ffffff':COLS[i%COLS.length]}" fill-opacity="${hidden?1:0.85}" stroke="#ffffff" stroke-width="2"/>`;
+      const mid=(ang+sweep/2)*Math.PI/180;
+      const lx=cx+(R+15)*Math.cos(mid), ly=cy+(R+15)*Math.sin(mid);
+      labels += `<text x="${lx.toFixed(1)}" y="${ly.toFixed(1)}" fill="${hidden?T.unknown:T.label}" font-size="10.5" font-weight="800" text-anchor="middle" dominant-baseline="middle">${hidden?'?':p+'%'}</text>`;
+      ang += sweep;
+    });
+    let legend='';
+    cats.forEach(function(c,i){
+      const ly = 28 + i*22;
+      legend += `<rect x="${W-12-10}" y="${ly-9}" width="10" height="10" rx="2" fill="${COLS[i%COLS.length]}" fill-opacity="0.85"/>`+
+        `<text x="${W-12-15}" y="${ly}" fill="${T.label}" font-size="10" text-anchor="end">${c}</text>`;
+    });
+    return `<svg class="engine-svg" viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg"><circle cx="${cx}" cy="${cy}" r="${R}" fill="none" stroke="${T.stroke}" stroke-width="1.4"/>${sectors}${labels}${legend}</svg>`;
+  };
+
+  // Deliberately MISLEADING bar chart (file 06 pattern U-07 critical reading):
+  // the y-axis starts above zero (truncated, marked with a break symbol), so a
+  // small difference looks dramatic. Used only by the critique family.
+  E.misleadingBarChartSvg = function(opts){
+    const T = E.themes.geometry;
+    const o = opts || {};
+    const labels = o.labels || [], values = o.values || [];
+    const yStart = o.yStart || 0;
+    const n = Math.max(1, values.length);
+    const W=290,H=205,padL=34,padB=40,padT=18,padR=12;
+    const maxV = Math.max.apply(null, values.concat([yStart+1]));
+    const top = maxV + Math.max(1, Math.round((maxV-yStart)*0.25));
+    const plotW=W-padL-padR, plotH=H-padT-padB;
+    function Yv(v){ return padT + plotH*(1 - (v-yStart)/(top-yStart)); }
+    const step = Math.max(1, Math.round((top-yStart)/4));
+    let grid='';
+    for(let v=yStart; v<=top; v+=step){
+      grid += `<line x1="${padL}" y1="${Yv(v)}" x2="${W-padR}" y2="${Yv(v)}" stroke="${v===yStart?'#334155':'#e2e8f0'}" stroke-width="${v===yStart?1.8:1}"/>`+
+        `<text x="${padL-6}" y="${Yv(v)+3}" fill="#64748b" font-size="9" text-anchor="end">${v}</text>`;
+    }
+    // axis-break zigzag under the truncated baseline — the honest tell
+    const by=Yv(yStart);
+    const axisBreak = yStart>0
+      ? `<polyline points="${padL-3},${by+6} ${padL+3},${by+9} ${padL-3},${by+12} ${padL+3},${by+15}" fill="none" stroke="#334155" stroke-width="1.4"/>`
+      : '';
+    const slot = plotW/n, bw = Math.min(42, slot*0.6);
+    let bars='';
+    values.forEach(function(v,i){
+      const cx = W-padR - slot*i - slot/2; // RTL order
+      bars += `<rect x="${cx-bw/2}" y="${Yv(v)}" width="${bw}" height="${by-Yv(v)}" rx="2" fill="${T.given}" fill-opacity="0.82" stroke="${T.stroke}" stroke-width="1"/>`+
+        `<text x="${cx}" y="${Yv(v)-5}" fill="${T.label}" font-size="10" font-weight="800" text-anchor="middle">${v}</text>`+
+        `<text x="${cx}" y="${H-padB+14}" fill="${T.label}" font-size="9.5" font-weight="700" text-anchor="middle">${labels[i]||''}</text>`;
+    });
+    const title = o.title ? `<text x="${W/2}" y="${H-6}" fill="#64748b" font-size="9.5" font-weight="700" text-anchor="middle">${o.title}</text>` : '';
+    return `<svg class="engine-svg" viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">${grid}${axisBreak}${bars}${title}</svg>`;
+  };
+
   E.freqTableHtml = function(headers, rows){
     let h = '<table class="engine-table" dir="rtl"><thead><tr>';
     headers.forEach(function(x){ h += '<th>'+x+'</th>'; });

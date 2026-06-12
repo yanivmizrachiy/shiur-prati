@@ -22,9 +22,9 @@
   ];
 
   function pickFamily(diff){
-    if(diff === 'basic') return E.pick(['read_freq','most_frequent','rel_freq','bar_chart_read']);
-    if(diff === 'challenge') return E.pick(['missing_freq','total_check','compare_groups_relative_frequency','rel_freq','compare_groups_relative_frequency']);
-    return E.pick(['read_freq','most_frequent','total_check','missing_freq','rel_freq','bar_chart_read','compare_groups_relative_frequency']);
+    if(diff === 'basic') return E.pick(['read_freq','most_frequent','rel_freq','bar_chart_read','pie_chart_read_or_construct']);
+    if(diff === 'challenge') return E.pick(['missing_freq','compare_groups_relative_frequency','pie_chart_read_or_construct','misleading_graph_critique','compare_groups_relative_frequency','misleading_graph_critique']);
+    return E.pick(['read_freq','most_frequent','total_check','missing_freq','rel_freq','bar_chart_read','compare_groups_relative_frequency','pie_chart_read_or_construct','misleading_graph_critique']);
   }
   function gcd(a,b){ return b ? gcd(b,a%b) : a; }
 
@@ -48,7 +48,42 @@
     return {nA:nA,kA:kA,rA:rA,nB:nB,kB:kB,rB:rB,ctx:ctx};
   }
 
-  function setup(family){
+  // Pattern U-06 (file 06): 3–5 categories with percentages → pie chart.
+  // Central angle = percent × 3.6°; percentages are distinct and sum to 100.
+  const PIES = [
+    {cats:['כדורגל','שחייה','ריקוד','אחר'], pcts:[50,25,15,10], thing:'החוג המועדף'},
+    {cats:['אוטובוס','הליכה','אופניים','רכב'], pcts:[40,30,20,10], thing:'דרך ההגעה לבית הספר'},
+    {cats:['מדע בדיוני','עיון','שירה'], pcts:[50,30,20], thing:'סוג הספר המועדף'},
+    {cats:['פיצה','פסטה','סלט','מרק','אחר'], pcts:[35,25,20,15,5], thing:'המנה המועדפת'},
+    {cats:['חתול','כלב','דג','תוכי'], pcts:[45,30,15,10], thing:'חיית המחמד'}
+  ];
+  // Pattern U-07 (file 06): published-looking chart whose y-axis starts above 0.
+  // Values are close; the truncated axis makes the gap look dramatic.
+  const MISLEADING = [
+    {labels:['2023','2024'], values:[50,54], yStart:48, title:'מכירות החנות (אלפי ש"ח)',
+     lookRatio:'פי שלושה', realPct:8},
+    {labels:['כיתה א','כיתה ב'], values:[72,78], yStart:70, title:'ממוצע הציונים',
+     lookRatio:'פי ארבעה', realPct:8},
+    {labels:['ינואר','פברואר'], values:[40,44], yStart:38, title:'מספר המנויים בחדר הכושר',
+     lookRatio:'פי שלושה', realPct:10}
+  ];
+
+  function setup(family, diff){
+    if(family==='pie_chart_read_or_construct'){
+      const p = E.pick(PIES);
+      const idx = Math.floor(Math.random()*p.cats.length);
+      const sub = diff==='basic' ? 'angle'
+        : diff==='challenge' ? E.pick(['missing_pct','compare'])
+        : E.pick(['angle','two_angles']);
+      return {p:p, idx:idx, sub:sub};
+    }
+    if(family==='misleading_graph_critique'){
+      const m = E.pick(MISLEADING);
+      const sub = diff==='basic' ? 'truncated'
+        : diff==='challenge' ? 'both'
+        : E.pick(['truncated','fair_vs']);
+      return {m:m, sub:sub};
+    }
     if(family==='compare_groups_relative_frequency') return caseCompareGroups();
     if(family==='bar_chart_read'){
       const c = E.pick(CHARTS);
@@ -72,7 +107,38 @@
     return E.freqTableHtml([t.label,'תדירות'], rows);
   }
 
+  function pieAngle(pct){ return pct*3.6; }
+
   function choices(family,s){
+    if(family==='pie_chart_read_or_construct'){
+      const p=s.p;
+      if(s.sub==='missing_pct'){
+        const correct=p.pcts[s.idx];
+        const wrongs=[correct+5, correct-5, 100-correct].filter(v=>v!==correct && v>0 && v<100);
+        const values=[correct].concat(wrongs).filter((v,i,a)=>a.indexOf(v)===i).slice(0,4);
+        while(values.length<4){ let f=correct+values.length*3; while(values.indexOf(f)>=0) f++; values.push(f); }
+        return E.shuffle(values).map((v,i)=>({label:['א','ב','ג','ד'][i], text:'$'+v+'\\%$', correct:v===correct}));
+      }
+      if(s.sub==='compare'){
+        const mx=Math.max.apply(null,p.pcts);
+        const correct=p.cats[p.pcts.indexOf(mx)];
+        // label-order misconception: the first category in the legend
+        const values=[correct].concat([p.cats[0]].concat(p.cats.slice(1)).filter(v=>v!==correct)).slice(0,4);
+        const uniq=values.filter((v,i,a)=>a.indexOf(v)===i);
+        return E.shuffle(uniq).map((v,i)=>({label:['א','ב','ג','ד'][i], text:v, correct:v===correct}));
+      }
+      const pct=p.pcts[s.idx], correct=pieAngle(pct);
+      // misconceptions: percent as degrees; percent × 100; complement angle
+      const wrongs=[pct, pct*100, 360-correct].filter(v=>v!==correct && v>0);
+      const values=[correct].concat(wrongs).filter((v,i,a)=>a.indexOf(v)===i).slice(0,4);
+      while(values.length<4){ let f=correct+values.length*9; while(values.indexOf(f)>=0) f++; values.push(f); }
+      return E.shuffle(values).map((v,i)=>({label:['א','ב','ג','ד'][i], text:'$'+v+'^\\circ$', correct:v===correct}));
+    }
+    if(family==='misleading_graph_critique'){
+      const correct='ציר ה-$y$ לא מתחיל ב-$0$, ולכן ההבדל נראה גדול מכפי שהוא';
+      const values=[correct,'העמודות צרות מדי','אין מספיק קטגוריות בתרשים','הצבעים של העמודות כהים מדי'];
+      return E.shuffle(values).map((v,i)=>({label:['א','ב','ג','ד'][i], text:v, correct:v===correct}));
+    }
     if(family==='compare_groups_relative_frequency'){
       // distractors MUST include the larger-absolute-count group (s.ctx.g1)
       const values=[s.ctx.g2, s.ctx.g1, 'השיעור שווה בשתי הקבוצות'];
@@ -131,6 +197,46 @@
   }
 
   function question(family,s,qtype,tfTrue){
+    if(family==='pie_chart_read_or_construct'){
+      const p=s.p, cat=p.cats[s.idx], pct=p.pcts[s.idx], ang=pieAngle(pct);
+      const intro=`התרשים מתאר את התפלגות ${p.thing} בכיתה.`;
+      if(s.sub==='missing_pct'){
+        if(qtype==='tf') return `${intro} האחוז של "${cat}" חסר. האחוז החסר הוא $${tfTrue?pct:pct+5}\\%$.`;
+        if(qtype==='mistake') return `${intro} האחוז של "${cat}" חסר. תלמיד קבע: "אי אפשר לדעת — חסר נתון".`;
+        if(qtype==='mcq') return `${intro} האחוז של "${cat}" אינו רשום.\nמהו האחוז החסר?`;
+        return `${intro} האחוז של "${cat}" אינו רשום בתרשים.\nמצאו את האחוז החסר וחשבו את הזווית המרכזית של הגזרה.`;
+      }
+      if(s.sub==='compare'){
+        const mx=Math.max.apply(null,p.pcts), big=p.cats[p.pcts.indexOf(mx)];
+        const other=p.cats.find(c=>c!==big);
+        if(qtype==='tf') return `${intro} הגזרה הגדולה ביותר בתרשים היא "${tfTrue?big:other}".`;
+        if(qtype==='mistake') return `${intro} תלמיד קבע: "הגזרה הגדולה ביותר היא ׳${p.cats[0]}׳, כי היא ראשונה במקרא".`;
+        if(qtype==='mcq') return `${intro}\nלאיזו קטגוריה הגזרה הגדולה ביותר?`;
+        return `${intro}\nלאיזו קטגוריה הזווית המרכזית הגדולה ביותר? חשבו אותה במעלות.`;
+      }
+      if(s.sub==='two_angles' && qtype==='open'){
+        const j=(s.idx+1)%p.cats.length;
+        return `${intro} לפניכם האחוזים של כל קטגוריה.\nחשבו את הזווית המרכזית של "${cat}" ושל "${p.cats[j]}", והסבירו כיצד בונים את התרשים.`;
+      }
+      if(qtype==='tf') return `${intro} הזווית המרכזית של הגזרה "${cat}" ($${pct}\\%$) היא $${tfTrue?ang:pct}^\\circ$.`;
+      if(qtype==='mistake') return Math.random()<0.5
+        ? `${intro} תלמיד חישב את הזווית המרכזית של "${cat}": "$${pct}\\times 100=${pct*100}$, כלומר $${pct*100}^\\circ$".`
+        : `${intro} תלמיד קבע: "הזווית המרכזית של ׳${cat}׳ היא $${pct}^\\circ$ — בדיוק כמו האחוז".`;
+      if(qtype==='mcq') return `${intro}\nמהי הזווית המרכזית של הגזרה "${cat}" ($${pct}\\%$)?`;
+      return `${intro} הקטגוריה "${cat}" מהווה $${pct}\\%$.\nחשבו את הזווית המרכזית של הגזרה והסבירו.`;
+    }
+    if(family==='misleading_graph_critique'){
+      const m=s.m;
+      const intro=`התרשים שלפניכם פורסם בפרסומת ("${m.title}").`;
+      if(qtype==='tf') return tfTrue
+        ? `${intro} ההפרש האמיתי בין העמודות קטן בהרבה מהרושם שהתרשים יוצר.`
+        : `${intro} התרשים מציג את הנתונים בצורה ניטרלית והוגנת.`;
+      if(qtype==='mistake') return `${intro} תלמיד הסיק: "הערך זינק ${m.lookRatio}! רואים שהעמודה גבוהה ${m.lookRatio}".`;
+      if(qtype==='mcq') return `${intro}\nמדוע התרשים עלול להטעות?`;
+      if(s.sub==='both') return `${intro}\nא. מדוע התרשים עלול להטעות?\nב. האם המסקנה "הערך זינק ${m.lookRatio}" נכונה? חשבו את הגידול האמיתי.`;
+      if(s.sub==='fair_vs') return `${intro}\nמה ההבדל בין הרושם שהתרשים יוצר לבין הנתונים עצמם? הציעו דרך לייצג אותם בצורה ניטרלית יותר.`;
+      return `${intro}\nמדוע התרשים עלול להטעות? הציעו תיקון.`;
+    }
     if(family==='compare_groups_relative_frequency'){
       const c=s.ctx;
       const data=`ב${c.g1} $${s.nA}$ תלמידים, ומתוכם $${s.kA}$ ${c.what}. ב${c.g2} $${s.nB}$ תלמידים, ומתוכם $${s.kB}$ ${c.what}.`;
@@ -193,6 +299,36 @@
 
   function answer(family,s,qtype,tfTrue){
     const wrong = qtype==='mistake' || (qtype==='tf' && !tfTrue);
+    if(family==='pie_chart_read_or_construct'){
+      const p=s.p, cat=p.cats[s.idx], pct=p.pcts[s.idx], ang=pieAngle(pct);
+      const rule='זווית מרכזית = החלק מתוך השלם כפול $360^\\circ$';
+      if(s.sub==='missing_pct'){
+        const others=p.pcts.filter((v,i)=>i!==s.idx);
+        const prefix = wrong ? 'שגוי — סך כל האחוזים בתרשים עוגה הוא תמיד $100\\%$, ולכן אפשר למצוא את החסר.\n' : '';
+        return `${prefix}סכום האחוזים הידועים: $${others.join('+')}=${100-pct}$.\n$$100-${100-pct}=${pct}\\%$$\nהזווית המרכזית: $$\\frac{${pct}}{100}\\times 360=${ang}^\\circ$$`;
+      }
+      if(s.sub==='compare'){
+        const mx=Math.max.apply(null,p.pcts), big=p.cats[p.pcts.indexOf(mx)];
+        const prefix = wrong ? 'שגוי — גודל גזרה נקבע לפי האחוז, לא לפי הסדר במקרא.\n' : '';
+        return `${prefix}האחוז הגבוה ביותר הוא $${mx}\\%$ — הקטגוריה "${big}".\nהזווית המרכזית שלה: $$\\frac{${mx}}{100}\\times 360=${pieAngle(mx)}^\\circ$$`;
+      }
+      if(s.sub==='two_angles' && qtype==='open'){
+        const j=(s.idx+1)%p.cats.length, pct2=p.pcts[j];
+        return `${rule}:\n"${cat}": $$\\frac{${pct}}{100}\\times 360=${ang}^\\circ$$\n"${p.cats[j]}": $$\\frac{${pct2}}{100}\\times 360=${pieAngle(pct2)}^\\circ$$\nבונים כל גזרה לפי הזווית שחושבה; סך כל הזוויות $360^\\circ$.`;
+      }
+      const prefix = wrong ? `שגוי — אחוז אינו מעלות, ולא כופלים ב-$100$. ${rule} (כלומר כפול $3.6$).\n` : '';
+      return `${prefix}$$\\frac{${pct}}{100}\\times 360=${ang}^\\circ$$\nהזווית המרכזית של "${cat}": $${ang}^\\circ$.`;
+    }
+    if(family==='misleading_graph_critique'){
+      const m=s.m;
+      const v1=m.values[0], v2=m.values[m.values.length-1], diff=v2-v1;
+      const core=`ציר ה-$y$ מתחיל ב-$${m.yStart}$ ולא ב-$0$ (שימו לב לסימן השבירה על הציר), ולכן הפרש קטן נראה עצום.`;
+      const fix=`ייצוג הוגן: ציר $y$ צריך להתחיל ב-$0$ (או לציין במפורש את קנה המידה).`;
+      const real=`בפועל הערכים הם $${v1}$ ו-$${v2}$ — גידול של $${diff}$ בלבד (כ-$${m.realPct}\\%$), לא ${m.lookRatio}.`;
+      if(qtype==='mistake') return `שגוי — גובה העמודות בתרשים הזה אינו פרופורציוני לערכים, כי ${core}\n${real}\n${fix}`;
+      if(qtype==='tf' && !tfTrue) return `שגוי — התרשים אינו ניטרלי: ${core}\n${fix}`;
+      return `${core}\n${real}\n${fix}`;
+    }
     if(family==='compare_groups_relative_frequency'){
       const c=s.ctx;
       const prefix = wrong
@@ -247,8 +383,12 @@
   E.generateU701Engine = function(difficulty, questionType){
     difficulty = difficulty || 'standard'; questionType = questionType || 'open';
     const family = pickFamily(difficulty);
-    const s = setup(family);
-    const svg = family==='compare_groups_relative_frequency'
+    const s = setup(family, difficulty);
+    const svg = family==='pie_chart_read_or_construct'
+      ? E.pieChartSvg({cats:s.p.cats, pcts:s.p.pcts, hideIdx:s.sub==='missing_pct'?s.idx:undefined})
+      : family==='misleading_graph_critique'
+      ? E.misleadingBarChartSvg({labels:s.m.labels, values:s.m.values, yStart:s.m.yStart, title:s.m.title})
+      : family==='compare_groups_relative_frequency'
       ? E.doubleBarSvg({groups:[s.ctx.g1,s.ctx.g2], series:['תלמידים בקבוצה',s.ctx.what], values:[[s.nA,s.kA],[s.nB,s.kB]]})
       : family==='bar_chart_read'
       ? E.barChartSvg({labels:s.c.cats, values:s.c.counts, title:s.c.title, showValues:s.sub!=='value'})

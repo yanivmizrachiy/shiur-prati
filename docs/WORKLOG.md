@@ -156,3 +156,10 @@ Statuses: DONE / PARTIAL / NOT DONE / NEEDS REVIEW / BLOCKED.
 - A8-02 gained applied_graph_read (file 02: fuel-cost graph with the source's threshold question "עבור אילו כמויות העלות > …", and the liquid-heating example "נוזל… מתחמם בקצב אחיד… אחרי כמה דקות …°?"): subs value/threshold; misconceptions: reading x as y, ignoring the starting temperature (rate×time only), rate off-by-2 in TF. Visual: linearGraphSvg minimally extended — applied quadrant-I mode, Hebrew axis captions, nice y-steps (5/10/20), vertical dashed read-guide for value questions only (threshold gets a bare graph so the answer isn't revealed).
 - VM smoke: compare family 20/60 challenge draws, trap-answer in 100% of them; applied family 74/300 draws, Hebrew axis labels in 100%, 0 undefined/NaN; A8-02 TF balance 52% after the new family.
 - No new engine (count stays 26); no engine deleted; export.js untouched.
+
+## Source-fit critical charts v3 — branch `claude/source-fit-critical-charts-v3` (2026-06-12) — DONE (scope)
+
+- U7-01 += pie_chart_read_or_construct (file 06 U-06): central-angle from clean percents (all ×3.6 integers), two-angle construction (standard), missing-percent (sum=100) and largest-sector (challenge); misconceptions as MCQ distractors and mistake scripts: percent×100, percent-as-degrees, legend-order-largest. New E.pieChartSvg (sectors from 12 o'clock, percent labels outside rim on mid-angles, Hebrew legend, hidden-sector mode for missing-percent).
+- U7-01 += misleading_graph_critique (file 06 U-07): truncated-y-axis chart with honest break-mark; subs truncated/fair_vs/both; open follows the source phrasing "מדוע עלול להטעות? הציעו תיקון"; tf balanced (true: "ההפרש האמיתי קטן מהרושם", false: "התרשים ניטרלי"); mistake debunks "גדל פי שלושה"; answers always name the axis problem, compute the real change (e.g. 50→54 = ~8%), and state ציר y צריך להתחיל ב-0. New E.misleadingBarChartSvg.
+- Family rates measured in VM: pie ~15%, misleading ~16% of U7-01 draws; TF balance 51%; MCQ exactly-one-correct over 200 draws: 0 failures; 0 undefined/NaN over 800 draws.
+- Pictogram (optional C) deliberately NOT built — kept scope on two complete, tested families.
