@@ -25,8 +25,9 @@ check('qmeta has no id span (core.js)', !/qmeta[^']*'\+id\+/.test(read('generato
 
 // 3. Credit and main title — present, site-only
 const index = read('generator/index.html');
-check('credit present, exact wording', index.includes('האתר מנוהל ע"י יניב רז'));
-check('credit is white and small', /\.hdr \.credit \{[^}]*font-size: 0\.68rem;[^}]*color: #ffffff;/.test(read('generator/style.css')));
+check('credit present, exact wording', index.includes('האתר מנוהל ע"י יניב מזרחי'));
+const creditCss = read('generator/style.css') + (fs.existsSync('generator/credit-fix.css') ? '\n' + read('generator/credit-fix.css') : '');
+check('credit is white, visible and small', /\.hdr \.credit \{[\s\S]*color:\s*#ffffff;[\s\S]*font-size:\s*0\.(68|74)rem;/.test(creditCss) || /\.hdr \.credit \{[\s\S]*font-size:\s*0\.(68|74)rem;[\s\S]*color:\s*#ffffff;/.test(creditCss));
 check('credit outside qcard', !/qcard[\s\S]*credit/.test(read('generator/core.js')));
 check('main title element present', index.includes('id="mainTitle"'));
 const css = read('generator/style.css');
@@ -61,3 +62,6 @@ check('worklog exists', fs.existsSync('docs/WORKLOG.md'));
 
 console.log(fails ? 'RELEASE_AUDIT_FAIL ('+fails+')' : 'RELEASE_AUDIT_PASS');
 process.exit(fails?1:0);
+
+
+

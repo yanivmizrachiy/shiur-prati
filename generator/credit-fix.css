@@ -1,0 +1,46 @@
+/* OWNER CREDIT VISIBILITY FIX — keep owner name visible in header */
+.hdr {
+  min-height: 64px;
+  height: auto;
+  padding-top: 6px;
+  padding-bottom: 6px;
+  overflow: visible;
+}
+
+.hdr > div {
+  min-width: 0;
+  text-align: right;
+}
+
+.hdr .sub {
+  line-height: 1.25;
+}
+
+.hdr .credit {
+  display: block;
+  color: #ffffff;
+  font-size: 0.74rem;
+  font-weight: 700;
+  line-height: 1.25;
+  opacity: 1;
+  white-space: nowrap;
+  text-shadow: 0 1px 1px rgba(0,0,0,0.25);
+}
+
+@media (max-width: 520px) {
+  .hdr {
+    min-height: 58px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+  }
+
+  .hdr .credit {
+    font-size: 0.68rem;
+  }
+}
+
+@media print {
+  .hdr {
+    display: none !important;
+  }
+}

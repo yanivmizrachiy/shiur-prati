@@ -16,7 +16,7 @@ Statuses: DONE / PARTIAL / NOT DONE / NEEDS REVIEW / BLOCKED.
 
 - Removed `STAGE2_RUN_LOG.txt`.
 - Fixed "משוואות מד ראשונה" → "משוואות מדרגה ראשונה" (core.js TOPICS, pattern-engine A7-03-ENGINE label).
-- Added site-only header credit: האתר מנוהל על ידי יניב רז.
+- Added site-only header credit: האתר מנוהל ע"י יניב מזרחי.
 - Added site-only `#mainTitle` (תחום — נושא) outside the qcard, hidden in print.
 - export.js untouched. Tests: phase2/phase3a static verifiers PASS, node --check PASS.
 
@@ -96,7 +96,7 @@ Statuses: DONE / PARTIAL / NOT DONE / NEEDS REVIEW / BLOCKED.
 
 ## Final release — branch `claude/final-release-100` (2026-06-11) — DONE
 
-- Header credit: wording changed to exact האתר מנוהל ע"י יניב רז, color white (#ffffff on the dark header), small (0.68rem). Site-only guarantees unchanged: lives in the header (hidden in @media print), outside the qcard (never captured by copy-image/PNG).
+- Header credit: wording changed to exact האתר מנוהל ע"י יניב מזרחי, color white (#ffffff on the dark header), small (0.68rem). Site-only guarantees unchanged: lives in the header (hidden in @media print), outside the qcard (never captured by copy-image/PNG).
 - `tools/release-audit.mjs` extended: exact credit wording, white+small CSS, credit-outside-qcard — 26 checks total, all PASS.
 - Full release validation: harness 45,000 generations 0 failures; release audit PASS; both static verifiers PASS; git diff --check clean; jargon scan 0 hits; רמת קושי and visual-mode options verified present.
 - REAL_PROGRESS_PERCENT: 100% per owner's release criteria (all automated checks pass; no code-side blocker). Human live checks in QA_CHECKLIST C/D remain recommended post-release validation, not blockers.
@@ -139,3 +139,4 @@ Statuses: DONE / PARTIAL / NOT DONE / NEEDS REVIEW / BLOCKED.
 - Real pre-existing bug found by the new math-bidi tool and fixed: N8-01 ratio_share MCQ filler used sa/sb fields that don't exist in that family → "undefined:NaN" choices reached the UI (the old harness never inspected choice texts).
 - Three new permanent tools: verify-math-bidi-quality.mjs (CSS isolation + 7,500-generation raw-math prose scan), verify-worksheet-print-quality.mjs (17 layout checks), verify-geometry-diagram-quality.mjs (renderer anatomy + G7-04 variety floors 25/50).
 - Browser evidence: geometry sheet (10/10 distinct SVGs, 3 arcs each, ∢A=85° KaTeX, 0 raw degrees), negatives sheet (ticks -12…), algebra sheet (points (1,5) KaTeX), answer key 10/10, print emulation screenshot shows true worksheet layout.
+

@@ -25,7 +25,7 @@
 
 ## D. Export
 
-- [ ] העתק כתמונה: pasted image contains NO export buttons, NO topic title, NO credit (האתר מנוהל ע"י יניב רז), NO technical ids
+- [ ] העתק כתמונה: pasted image contains NO export buttons, NO topic title, NO credit (האתר מנוהל ע"י יניב מזרחי), NO technical ids
 - [ ] Copied image honors the selected visual mode
 - [ ] PNG הורדה: same checks
 - [ ] הדפס: header/settings/buttons hidden; solution box visible; diagram prints correctly
@@ -40,3 +40,4 @@
 ## F. On failure
 
 File each FAIL as a NEEDS REVIEW line in `PROJECT_STATUS.md` and fix in a small targeted batch. Do not rewrite engines.
+
