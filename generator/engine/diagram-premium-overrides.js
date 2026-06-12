@@ -117,7 +117,8 @@
   }
 
   E.triangleAnglesSvg = function(p, unknown, geom){
-    const W = 360, H = 250, PAD = 46;
+    const W = 360, H = 250, PAD = 48;
+
     let gA = finite(geom && geom.A != null ? geom.A : p.A, 60);
     let gB = finite(geom && geom.B != null ? geom.B : p.B, 60);
     let gC = finite(geom && geom.C != null ? geom.C : p.C, 60);
@@ -132,54 +133,136 @@
     gB = Math.max(20, Math.min(130, gB));
     gC = Math.max(20, Math.min(130, gC));
     gA = 180 - gB - gC;
-    if(gA < 20){ const d = (20-gA)/2; gB -= d; gC -= d; gA = 20; }
+
+    if(gA < 20){
+      const d = (20 - gA) / 2;
+      gB -= d;
+      gC -= d;
+      gA = 20;
+    }
 
     const rB = gB * Math.PI / 180;
     const rC = gC * Math.PI / 180;
     const ax = Math.tan(rC) / (Math.tan(rB) + Math.tan(rC));
     const ay = ax * Math.tan(rB);
 
-    let model = [pt(ax, -ay), pt(0,0), pt(1,0)];
-    const stretch = pick([0.88, 0.96, 1.04, 1.13]);
+    let model = [
+      pt(ax, -ay),
+      pt(0, 0),
+      pt(1, 0)
+    ];
+
+    const stretch = pick([0.9, 0.98, 1.06, 1.14]);
     model = model.map(q => pt(q.x * stretch, q.y));
 
-    if(pick([0,1])) model = model.map(q => pt(1.12-q.x, q.y));
-    if(pick([0,0,1])) model = model.map(q => pt(q.x, -q.y));
+    if(pick([0,1])) {
+      model = model.map(q => pt(1.14 - q.x, q.y));
+    }
 
-    const rot = pick([-14,-8,0,6,11,16]) * Math.PI / 180;
-    model = model.map(q => pt(q.x*Math.cos(rot)-q.y*Math.sin(rot), q.x*Math.sin(rot)+q.y*Math.cos(rot)));
+    if(pick([0,0,1])) {
+      model = model.map(q => pt(q.x, -q.y));
+    }
 
-    const V = fitPoints(model,W,H,PAD);
+    const rot = pick([-12, -7, -3, 0, 6, 10, 14]) * Math.PI / 180;
+    model = model.map(q => pt(
+      q.x * Math.cos(rot) - q.y * Math.sin(rot),
+      q.x * Math.sin(rot) + q.y * Math.cos(rot)
+    ));
+
+    const V = fitPoints(model, W, H, PAD);
     const CEN = centroid(V);
-    const names = ['A','B','C'];
-    const display = [p.A,p.B,p.C];
-    const degs = [gA,gB,gC];
 
-    let arcs = '', labels = '', letters = '', dots = '';
+    const names = ['A','B','C'];
+    const display = [p.A, p.B, p.C];
+    const degs = [gA, gB, gC];
+
+    function angleValueText(x, y, text, color, unknownLabel){
+      const size = unknownLabel ? 16 : 14;
+      const weight = unknownLabel ? 900 : 800;
+      return `<text x="${fmt(x)}" y="${fmt(y)}"
+        fill="${color}"
+        font-size="${size}"
+        font-weight="${weight}"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        style="paint-order:stroke;stroke:#ffffff;stroke-width:5px;stroke-linejoin:round">${esc(text)}</text>`;
+    }
+
+    function vertexText(v, text){
+      return `<text x="${fmt(v.x)}" y="${fmt(v.y)}"
+        fill="${P.label}"
+        font-size="16"
+        font-weight="800"
+        font-style="italic"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        style="paint-order:stroke;stroke:#ffffff;stroke-width:4px;stroke-linejoin:round">${esc(text)}</text>`;
+    }
+
+    let arcs = '';
+    let labels = '';
+    let letters = '';
+    let dots = '';
+
     for(let i=0;i<3;i++){
-      const v = V[i], o1 = V[(i+1)%3], o2 = V[(i+2)%3];
-      const u1 = unit(sub(o1,v)), u2 = unit(sub(o2,v));
-      let bis = unit(add(u1,u2));
-      if(!isFinite(bis.x) || !isFinite(bis.y)) bis = unit(pt(-(o1.y-v.y), o1.x-v.x));
+      const v = V[i];
+      const o1 = V[(i+1)%3];
+      const o2 = V[(i+2)%3];
+
+      const u1 = unit(sub(o1, v));
+      const u2 = unit(sub(o2, v));
+
+      let bis = unit(add(u1, u2));
+      if(!isFinite(bis.x) || !isFinite(bis.y)) {
+        bis = unit(pt(-(o1.y-v.y), o1.x-v.x));
+      }
+
       const isUnknown = unknown === names[i];
       const color = isUnknown ? P.unknown : P.given;
 
-      arcs += angleArc(v,o1,o2, isUnknown ? 24 : 20, color);
+      const arcR = isUnknown ? 27 : 23;
+      arcs += angleArc(v, o1, o2, arcR, color);
 
-      const dist = degs[i] < 35 ? 48 : degs[i] < 55 ? 41 : 35;
-      const lp = add(v,mul(bis,dist));
+      /*
+        Textbook placement:
+        - no colored box
+        - number sits INSIDE the angle
+        - unknown is slightly farther from the vertex
+        - small/acute angles are pushed inward enough to avoid the sides
+        - all text gets a white stroke halo instead of a box
+      */
+      const baseDist =
+        degs[i] < 32 ? 54 :
+        degs[i] < 45 ? 48 :
+        degs[i] < 65 ? 41 :
+        degs[i] < 95 ? 35 : 31;
+
+      const dist = isUnknown ? baseDist + 4 : baseDist;
+      const lp = add(v, mul(bis, dist));
       const txt = display[i] == null ? '?' : display[i] + '°';
-      labels += labelBox(lp.x,lp.y,txt,color,{w: display[i] == null ? 28 : 42, bg: isUnknown ? 'rgba(254,242,242,0.96)' : 'rgba(239,246,255,0.96)'});
 
-      const away = unit(sub(v,CEN));
-      const vp = add(v,mul(away,25));
-      letters += plainText(vp.x,vp.y,names[i],P.label,16,800);
-      dots += `<circle cx="${fmt(v.x)}" cy="${fmt(v.y)}" r="2.3" fill="${P.stroke}"/>`;
+      labels += angleValueText(lp.x, lp.y, txt, color, isUnknown);
+
+      /*
+        Vertex letters stay outside the triangle, away from the centroid.
+        This prevents A/B/C from sitting on a side.
+      */
+      const outward = unit(sub(v, CEN));
+      const vp = add(v, mul(outward, 27));
+      letters += vertexText(vp, names[i]);
+
+      dots += `<circle cx="${fmt(v.x)}" cy="${fmt(v.y)}" r="2.2" fill="${P.stroke}"/>`;
     }
 
     const poly = V.map(q => `${fmt(q.x)},${fmt(q.y)}`).join(' ');
-    return svgFrame(W,H,`
-      <polygon points="${poly}" fill="${P.fill}" stroke="${P.stroke}" stroke-width="2.7" stroke-linejoin="round" filter="url(#premiumGeoShadow)"/>
+
+    return svgFrame(W, H, `
+      <polygon points="${poly}"
+        fill="${P.fill}"
+        stroke="${P.stroke}"
+        stroke-width="2.8"
+        stroke-linejoin="round"
+        filter="url(#premiumGeoShadow)"/>
       ${arcs}
       ${dots}
       ${labels}
