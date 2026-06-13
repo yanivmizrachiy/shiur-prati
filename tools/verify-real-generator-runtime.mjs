@@ -122,8 +122,12 @@ if (!loadError) {
   check('legacy topic produces a 5-exercise set', (els.out.innerHTML.match(/ex-card/g)||[]).length === 5);
   check('no undefined/NaN in legacy set', !BAD.test(els.out.innerHTML));
 
-  // count=1 keeps the single-card path (qcard + export bar)
-  els.st.value='N7-03-ENGINE'; els.st.options=[{textContent:'מספרים שליליים — גרסה חכמה ✦'}]; els.sn.value='1';
+  // count=1 keeps the single-card path (qcard + export bar).
+  // Reset qtype explicitly so this test proves the real mixed→specific→mixed restore path.
+  els.st.value='N7-03-ENGINE';
+  els.st.options=[{textContent:'מספרים שליליים — גרסה חכמה ✦'}];
+  els.sn.value='1';
+  els.selQType.value='mixed';
   vm.runInContext('generate()', sandbox);
   html = els.out.innerHTML;
   check('count=1 keeps single qcard with export bar', html.includes('qcard') && html.includes('copyImg') && !html.includes('ex-card'));
