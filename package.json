@@ -1,6 +1,6 @@
 {
   "name": "targilim",
-  "version": "0.74.0",
+  "version": "0.75.0",
   "private": true,
   "type": "module",
   "scripts": {
@@ -27,7 +27,11 @@
     "verify:followups": "node tools/verify-follow-up-generation.mjs",
     "verify:teacher": "node tools/verify-teacher-advanced-mode.mjs",
     "verify:gallery": "node tools/verify-teacher-gallery.mjs",
+    "verify:teacher-controls": "node tools/verify-teacher-controls.mjs",
+    "verify:copy-export": "node tools/verify-copy-export.mjs",
+    "verify:graphics-quality": "node tools/verify-graphics-quality.mjs",
+    "verify:print-layout": "node tools/verify-print-layout.mjs",
     "verify:all": "npm run verify:baseline && npm run verify:brand && npm run verify:links && npm run verify:book && npm run verify:inventory && npm run verify:source-fit && npm run verify:source-lock && npm run verify:source-bible && npm run verify:premium-geometry && npm run verify:coordinate-grid && npm run verify:numeric7 && npm run verify:algebra8 && npm run verify:geometry7 && npm run verify:geometry8 && npm run verify:runtime",
-    "verify:deep": "npm run verify:all && npm run verify:coverage && npm run verify:stress && npm run verify:variety && npm run verify:visual && npm run verify:family && npm run verify:followups && npm run verify:gallery && npm run verify:teacher"
+    "verify:deep": "npm run verify:all && npm run verify:coverage && npm run verify:stress && npm run verify:variety && npm run verify:visual && npm run verify:family && npm run verify:followups && npm run verify:graphics-quality && npm run verify:gallery && npm run verify:teacher && npm run verify:teacher-controls && npm run verify:copy-export && npm run verify:print-layout"
   }
 }

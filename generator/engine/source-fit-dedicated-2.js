@@ -246,7 +246,9 @@
     const tfTrue = qtype === 'tf' && Math.random() < 0.5;
     let x = nz(), y = nz(), expr, res, a, pts;
     if (fam === 'three_terms') {
-      let z = nz(); res = x + y - z; expr = `${wrap(x)} + ${wrap(y)} − ${wrap(z)}`;
+      // keep magnitudes small so x+y−z stays inside the ±24 number line
+      const sm = () => { let v = rnd(-7, 7); while (v === 0) v = rnd(-7, 7); return v; };
+      x = sm(); y = sm(); const z = sm(); res = x + y - z; expr = `${wrap(x)} + ${wrap(y)} − ${wrap(z)}`;
       a = `פותרים משמאל לימין: ${wrap(x)}+${wrap(y)}=${wrap(x + y)}, ואז ${wrap(x + y)}−${wrap(z)}=${res}. בכל שלב הסימן נקבע לפי הכלל.`;
       pts = [x, res];
     } else if (fam === 'subtract') {

@@ -48,7 +48,13 @@ export function loadEngines() {
     if (!fs.existsSync(p)) continue;
     vm.runInContext(fs.readFileSync(p, 'utf8'), sandbox, { filename: f });
   }
+  // teacher-mode lives in generator/ (not generator/engine/); load it so its
+  // pure API (window.Teacher) is available to the teacher/copy-export verifiers.
+  if (fs.existsSync('generator/teacher-mode.js')) {
+    vm.runInContext(fs.readFileSync('generator/teacher-mode.js', 'utf8'), sandbox, { filename: 'teacher-mode.js' });
+  }
   const E = sandbox.window.TargilimEngine;
+  const Teacher = sandbox.window.Teacher;
 
   // pilot ids: derive from E.generateXxxEngine functions
   const pilotIds = [];
@@ -88,5 +94,5 @@ export function loadEngines() {
     return null;
   }
 
-  return { E, pilotIds, sourceFitIds, callEngine };
+  return { E, Teacher, pilotIds, sourceFitIds, callEngine };
 }

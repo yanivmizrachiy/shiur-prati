@@ -1,27 +1,37 @@
-# Teacher Advanced Mode Report — 2026-06-14
+# דוח מצב מורה מתקדם (Teacher Advanced Mode) — 2026-06-14 (מומש)
 
-## Status: NOT IMPLEMENTED this sprint (deliberately deferred)
+> עדכון: בדוח קודם מצב המורה סומן "נדחה — שכבת הנתונים מוכנה". הוא מומש כעת
+> במלואו (Step 5).
 
-The sprint brief explicitly states Teacher Advanced Mode should come **only
-after** the data layer (source bible, variety, fallback engines) and warns not
-to spend the round on UI. The data layer was the priority and is now complete,
-so the UI was deferred to avoid end-of-sprint risk to the working simple mode.
+## מה נבנה
+**`generator/teacher-mode.js`** — שכבה אופציונלית מעל דף התרגילים. כפתור
+"מצב מורה" (`#btnTeacherMode → Teacher.toggle()`) מחליף בין מצב תלמיד פשוט
+למצב מורה מתקדם. במצב מורה כל שאלה מקבלת:
 
-## What is now READY for it (the hard part)
-Every engine output already carries `meta` (via pedagogy-attach.js):
-sourceFile, sourceId, grade, domain, skill, learningGoal, teacherPurpose,
-misconception, questionFamily, qtype, difficulty, requiredVisual, followUpIdeas.
-`E.PEDAGOGY` exposes per-topic skills + families for selectors. So an advanced
-teacher panel can be built purely on existing data with no engine changes.
+### כרטיס מורה (meta מלא)
+מקור (קובץ 01–09) · כיתה/תחום · מיומנות · משפחת שאלה + provenance ·
+מטרת למידה · מטרה למורה · טעות נפוצה · רעיונות להמשך. הכרטיס מסומן
+`teacher-only` + `data-html2canvas-ignore` ולכן **מוסתר בהדפסת התלמיד**
+ובייצוא PNG.
 
-## Next step (small, low-risk)
-Add a "מצב מורה מתקדם" toggle in index.html that:
-- offers skill / question-family / qtype / difficulty / visual / explanations
-  selectors sourced from E.PEDAGOGY + E.getFamilies;
-- shows learningGoal / teacherPurpose / misconception / source / follow-ups on
-  the teacher card (hidden in student print);
-- leaves the simple mode untouched.
-Then add `tools/verify-teacher-advanced-mode.mjs` + `verify:teacher`.
+### כפתורי עריכה לכל שאלה
+↻ רענן · # מספרים חדשים · − קל יותר · + קשה יותר · ⇄ סוג שאלה ·
+➟ שאלת המשך (6 מצבים) · ✓ הצג/הסתר פתרון · ⓘ הצג/הסתר מקור ·
+▣ הצג/הסתר שרטוט. כל הפעולות לא-הרסניות (toggle של class).
 
-## Recommended progress
-Data layer for teacher mode: ready. UI: 0% (next sprint).
+### העתקה/ייצוא בלחיצה אחת
+⧉ העתק שאלה · ⧉ שאלה+פתרון · ⧉ כרטיס מורה · ⤓ HTML · ⤓ PNG (html2canvas) ·
+＋ הוסף לדף עבודה (+ ייצוא דף עבודה מצטבר). שומר עברית, נוסחאות ו-SVG.
+
+## QA בדפדפן (אמיתי, לא רק יחידה)
+נטען דרך שרת סטטי ונבדק חי:
+- אתחול נקי: 50 מנועים, `Teacher` + `generateFollowUpQuestion` קיימים, **0 שגיאות קונסול**.
+- הופק דף של 5 שאלות מ-G8-05; הפעלת מצב מורה → 5 כרטיסי מורה + 5 סרגלי בקרה.
+- רענון מפיק 5/6 תוצאות שונות; "קשה יותר" העביר standard→challenge;
+  "סוג שאלה" עבר על כל 4 הסוגים; שאלת המשך יצרה בלוק עם תווית מצב; פתרון נפתח.
+- כרטיס המורה הציג מקור 04 ומשפחה `part_from_angle` (provenance מדויק).
+
+## בדיקות
+- `verify:teacher` → TEACHER_ADVANCED_PASS (כולל 50 meta מלאים + הסתרת הדפסה).
+- `verify:teacher-controls` → TEACHER_CONTROLS_PASS (כל 13 הפעולות + 6 מצבי המשך).
+- `verify:copy-export` → COPY_EXPORT_PASS (payloads נכונים על כל מנוע×סוג).

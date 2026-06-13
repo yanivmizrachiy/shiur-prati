@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#0f172a">
+<title>גלריית מנועים — תרגילים</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+<link rel="stylesheet" href="style.css">
+<style>
+.gal-head{background:#0f172a;color:#fff;padding:14px 20px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;position:sticky;top:0;z-index:100}
+.gal-head h1{font-size:1.15rem;font-weight:800}.gal-head a{color:#93c5fd;text-decoration:none;font-weight:700;margin-inline-start:auto}
+.gal-filters{display:flex;gap:10px;flex-wrap:wrap;align-items:end;background:#fff;border-radius:14px;padding:14px 16px;margin:16px 0;box-shadow:0 1px 3px rgba(0,0,0,.08)}
+.gal-filters .f{display:flex;flex-direction:column;gap:4px}
+.gal-stat{margin-inline-start:auto;color:#475569;font-weight:700;font-size:.85rem}
+.gal-grid{display:grid;grid-template-columns:1fr;gap:14px}
+@media(min-width:720px){.gal-grid{grid-template-columns:1fr 1fr}}
+.gal-card{background:#fff;border-radius:14px;padding:16px 18px;box-shadow:0 1px 3px rgba(0,0,0,.08);border-top:4px solid #2563eb}
+.gal-card.geo{border-top-color:#d97706}.gal-card.alg{border-top-color:#7c3aed}.gal-card.num{border-top-color:#16a34a}.gal-card.unc{border-top-color:#0284c7}
+.gal-id{font-family:ui-monospace,monospace;font-weight:800;color:#2563eb;font-size:.8rem}
+.gal-title{font-weight:900;font-size:1.02rem;margin:2px 0 6px}
+.gal-tags{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:8px}
+.gal-fams{font-size:.78rem;color:#64748b;margin-bottom:10px}
+.gal-actions{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px}
+.gal-actions button,.gal-actions select{font-size:.78rem;font-weight:700;border-radius:8px;border:1px solid #cbd5e1;padding:5px 9px;cursor:pointer;background:#f1f5f9}
+.gal-sample{margin-top:8px;border-top:1px dashed #e2e8f0;padding-top:10px;min-height:8px}
+.gal-sample .diagram svg,.gal-sample svg{max-width:min(260px,100%);height:auto}
+.gal-empty{color:#94a3b8;text-align:center;padding:30px}
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
+</head>
+<body>
+<div class="gal-head"><h1>גלריית מנועים</h1><span style="color:#94a3b8;font-size:.8rem">כל מנועי התרגילים — ז׳–ח׳</span><a href="index.html">חזרה למחולל ◀</a></div>
+<main>
+<div class="gal-filters">
+  <div class="f"><label for="fGrade">כיתה</label><select id="fGrade"><option value="">הכול</option><option value="7">ז׳</option><option value="8">ח׳</option></select></div>
+  <div class="f"><label for="fDomain">תחום</label><select id="fDomain"><option value="">הכול</option><option value="geometry">גאומטריה</option><option value="algebra">אלגברה</option><option value="numeric">מספרי</option><option value="uncertainty">אי-ודאות</option></select></div>
+  <div class="f"><label for="fProv">Provenance</label><select id="fProv"><option value="">הכול</option><option value="exact">מדויק</option><option value="default">ברירת מחדל</option></select></div>
+  <div class="f"><label for="fSearch">חיפוש</label><input id="fSearch" type="text" placeholder="מזהה / נושא" style="height:38px;border:1.5px solid #e2e8f0;border-radius:10px;padding:0 10px"></div>
+  <span class="gal-stat" id="galStat"></span>
+</div>
+<div class="gal-grid" id="galGrid"></div>
+<div class="gal-empty" id="galEmpty" style="display:none">אין מנועים התואמים את הסינון.</div>
+</main>
+
+<script src="core.js"></script>
+<script src="export.js"></script>
+<script src="geo.js"></script>
+<script src="algebra.js"></script>
+<script src="numeric.js"></script>
+<script src="stats.js"></script>
+<script src="engine/schema.js"></script>
+<script src="engine/source-schema.js"></script>
+<script src="engine/source-registry.js"></script>
+<script src="engine/pedagogy-registry.js"></script>
+<script src="engine/random.js"></script>
+<script src="engine/validators.js"></script>
+<script src="engine/themes.js"></script>
+<script src="engine/diagrams.js"></script>
+<script src="engine/diagram-premium-overrides.js"></script>
+<script src="engine/diagram-ultra-autopilot.js"></script>
+<script src="engine/question-types.js"></script>
+<script src="engine/pilot-g7-03.js"></script>
+<script src="engine/pilot-n8-01.js"></script>
+<script src="engine/pilot-n8-02.js"></script>
+<script src="engine/pilot-n8-03.js"></script>
+<script src="engine/pilot-n8-04.js"></script>
+<script src="engine/pilot-n8-05.js"></script>
+<script src="engine/pilot-g7-01.js"></script>
+<script src="engine/pilot-g7-02.js"></script>
+<script src="engine/pilot-g7-04.js"></script>
+<script src="engine/pilot-g8-01.js"></script>
+<script src="engine/pilot-g8-04.js"></script>
+<script src="engine/pilot-n7-03.js"></script>
+<script src="engine/pilot-n7-04.js"></script>
+<script src="engine/pilot-n7-05.js"></script>
+<script src="engine/pilot-n7-06.js"></script>
+<script src="engine/pilot-n7-07.js"></script>
+<script src="engine/pilot-a7-01.js"></script>
+<script src="engine/pilot-a7-02.js"></script>
+<script src="engine/pilot-a7-03.js"></script>
+<script src="engine/pilot-u7-01.js"></script>
+<script src="engine/pilot-u7-02.js"></script>
+<script src="engine/pilot-a8-02.js"></script>
+<script src="engine/pilot-a8-03.js"></script>
+<script src="engine/pilot-u8-01.js"></script>
+<script src="engine/pilot-u8-02.js"></script>
+<script src="engine/pattern-engine.js"></script>
+<script src="engine/source-fit-extensions.js"></script>
+<script src="engine/source-fit-graphs.js"></script>
+<script src="engine/source-fit-geometry.js"></script>
+<script src="engine/source-fit-algebra-g7.js"></script>
+<script src="engine/source-fit-dedicated.js"></script>
+<script src="engine/source-fit-dedicated-2.js"></script>
+<script src="engine/pedagogy-attach.js"></script>
+<script src="engine/follow-up.js"></script>
+<script src="teacher-mode.js"></script>
+<script>
+// Build one card per registered engine. Samples are generated lazily (on click),
+// so the gallery never renders 50 heavy SVGs at once — fast first paint.
+(function(){
+  var E=window.TargilimEngine||{};
+  var DOMAIN_HE={geometry:'גאומטריה',algebra:'אלגברה',numeric:'מספרי',uncertainty:'אי-ודאות'};
+  var CLS={geometry:'geo',algebra:'alg',numeric:'num',uncertainty:'unc'};
+  var ids=Object.keys(E.SOURCE_REGISTRY||{}).filter(function(k){return /-ENGINE$/.test(k);}).sort();
+  var meta={};
+  ids.forEach(function(id){var s=E.getSource(id)||{},p=E.getPedagogy(id)||{};meta[id]={s:s,p:p,prov:(window.__exactSet&&window.__exactSet[id])?'exact':null};});
+  // engines with exact provenance (the 17 dedicated)
+  var EXACT={'U7-05-ENGINE':1,'U7-06-ENGINE':1,'U7-07-ENGINE':1,'U7-08-ENGINE':1,'G8-06-ENGINE':1,'G8-08-ENGINE':1,'N7-08-ENGINE':1,'N7-09-ENGINE':1,'G8-05-ENGINE':1,'G8-07-ENGINE':1,'G8-09-ENGINE':1,'G7-06-ENGINE':1,'G7-05-ENGINE':1,'N7-10-ENGINE':1,'N7-11-ENGINE':1,'N7-12-ENGINE':1,'N7-13-ENGINE':1};
+
+  function card(id){
+    var m=meta[id],s=m.s,p=m.p,cls=CLS[s.domain]||'num';
+    var prov=EXACT[id]?'exact':'default';
+    var fams=(p.families||[]).map(function(f){return f.questionFamily;}).join(' · ');
+    var el=document.createElement('div');
+    el.className='gal-card '+cls; el.setAttribute('data-id',id);
+    el.setAttribute('data-grade',s.grade||''); el.setAttribute('data-domain',s.domain||''); el.setAttribute('data-prov',prov);
+    el.setAttribute('data-search',(id+' '+(p.topicName||'')+' '+(s.skill||'')).toLowerCase());
+    el.innerHTML='<div class="gal-id">'+id+'</div>'
+      +'<div class="gal-title">'+(p.topicName||s.skill||id)+'</div>'
+      +'<div class="gal-tags"><span class="tag '+cls+'">כיתה '+(s.grade||'')+'</span><span class="tag '+cls+'">'+(DOMAIN_HE[s.domain]||'')+'</span><span class="tag '+cls+'">מקור '+((s.sourceFile||'').slice(0,2))+'</span><span class="tag '+cls+'">provenance: '+prov+'</span></div>'
+      +'<div class="gal-fams">משפחות: '+(fams||'—')+'</div>'
+      +'<div class="gal-actions"><select class="galDiff"><option value="basic">בסיסית</option><option value="standard" selected>סטנדרטית</option><option value="challenge">מאתגרת</option></select>'
+      +'<select class="galType"><option value="open">פתוחה</option><option value="mcq">רב-ברירה</option><option value="tf">נכון/שגוי</option><option value="mistake">טעות</option></select>'
+      +'<button class="galGen">צור דוגמה</button><button class="galTeach">כרטיס מורה</button></div>'
+      +'<div class="gal-sample"></div>';
+    var sample=el.querySelector('.gal-sample');
+    el.querySelector('.galGen').addEventListener('click',function(){
+      var d=el.querySelector('.galDiff').value,t=el.querySelector('.galType').value;
+      var r=E.generateOne?E.generateOne(id,d,t):(E.getEngineExercise&&E.getEngineExercise(id,d,t));
+      if(!r){sample.innerHTML='<span style="color:#dc2626">לא ניתן להפיק כעת</span>';return;}
+      sample.innerHTML='<div class="ex-body">'+(r.questionHTML||'')+'</div><details style="margin-top:8px"><summary style="cursor:pointer;font-weight:700;color:#2563eb">פתרון</summary>'+(r.answerHTML||'')+'</details>';
+      if(window.renderMathInElement)renderMathInElement(sample,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false});
+    });
+    el.querySelector('.galTeach').addEventListener('click',function(){
+      var d=el.querySelector('.galDiff').value,t=el.querySelector('.galType').value;
+      var r=E.generateOne?E.generateOne(id,d,t):null;
+      var mt=r&&r.meta?r.meta:(E.buildMeta?E.buildMeta(id,t,d):{});
+      sample.innerHTML=(window.Teacher?Teacher.buildTeacherCardHTML(mt).replace('teacher-only',''):'')||'';
+      var tc=sample.querySelector('.teacher-card');if(tc)tc.style.display='block';
+    });
+    return el;
+  }
+
+  var grid=document.getElementById('galGrid');
+  ids.forEach(function(id){grid.appendChild(card(id));});
+
+  function applyFilter(){
+    var g=document.getElementById('fGrade').value,d=document.getElementById('fDomain').value,
+        pv=document.getElementById('fProv').value,q=document.getElementById('fSearch').value.trim().toLowerCase();
+    var shown=0;
+    Array.prototype.forEach.call(grid.children,function(el){
+      var ok=(!g||el.getAttribute('data-grade')===g)&&(!d||el.getAttribute('data-domain')===d)
+        &&(!pv||el.getAttribute('data-prov')===pv)&&(!q||el.getAttribute('data-search').indexOf(q)>=0);
+      el.style.display=ok?'':'none'; if(ok)shown++;
+    });
+    document.getElementById('galStat').textContent=shown+' / '+ids.length+' מנועים';
+    document.getElementById('galEmpty').style.display=shown?'none':'block';
+  }
+  ['fGrade','fDomain','fProv'].forEach(function(idf){document.getElementById(idf).addEventListener('change',applyFilter);});
+  document.getElementById('fSearch').addEventListener('input',applyFilter);
+  applyFilter();
+})();
+</script>
+</body>
+</html>
