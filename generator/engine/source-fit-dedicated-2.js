@@ -84,11 +84,14 @@
       `<text x="${ox + n * g / 2}" y="${oy + n * g + 18}" fill="${T.label}" font-size="10.5" font-weight="700" text-anchor="middle">${kname} ברשת — מקור קובץ 03</text>`);
   }
 
-  function render(qtype, q, a, svg, cs, isTrue) {
-    if (qtype === 'mcq') return E.questionTypes.mcq({ question: q, answer: a, svg: svg, choices: cs });
-    if (qtype === 'tf') return E.questionTypes.tf({ question: q, answer: a, svg: svg, isTrue: isTrue });
-    if (qtype === 'mistake') return E.questionTypes.mistake({ question: q, answer: a, svg: svg });
-    return E.questionTypes.open({ question: q, answer: a, svg: svg });
+  function render(qtype, q, a, svg, cs, isTrue, family) {
+    let r;
+    if (qtype === 'mcq') r = E.questionTypes.mcq({ question: q, answer: a, svg: svg, choices: cs });
+    else if (qtype === 'tf') r = E.questionTypes.tf({ question: q, answer: a, svg: svg, isTrue: isTrue });
+    else if (qtype === 'mistake') r = E.questionTypes.mistake({ question: q, answer: a, svg: svg });
+    else r = E.questionTypes.open({ question: q, answer: a, svg: svg });
+    if (r && family) r.questionFamily = family; // per-generation provenance
+    return r;
   }
 
   // ── G8-05 central angle & sector ──
@@ -119,7 +122,7 @@
       else if (qtype === 'mcq') { cs = ch([{ text: ang + '°', correct: true }, { text: pct + '°', correct: false }, { text: (pct * 100) + '°', correct: false }, { text: (360 - ang) + '°', correct: false }]); }
       else if (qtype === 'mistake') { q = `תלמיד חישב זווית מרכזית של גזרת ${pct}%: "${pct}°".`; a = `הטעות: הזווית = אחוז×360°, לא האחוז עצמו. ${pct}%×360°=${ang}°.`; }
     }
-    return render(qtype, q, a, svg, cs, isTrue);
+    return render(qtype, q, a, svg, cs, isTrue, fam);
   }
 
   // ── G8-07 triangle congruence markings ──
@@ -149,7 +152,7 @@
       else if (qtype === 'mcq') { cs = ch([{ text: thm[0], correct: true }, { text: 'ז.ז.ז', correct: false }, { text: 'צ.צ.ז (אינו תמיד)', correct: false }, { text: 'אין מספיק נתונים', correct: false }]); }
       else if (qtype === 'mistake') { q = `תלמיד בחר במשפט "ז.ז.ז" כדי להוכיח חפיפה.`; a = `הטעות: ז.ז.ז מבטיח דמיון, לא חפיפה. כאן מתאים ${thm[0]}.`; }
     }
-    return render(qtype, q, a, svg, cs, isTrue);
+    return render(qtype, q, a, svg, cs, isTrue, fam);
   }
 
   // ── G8-09 similarity & shadows ──
@@ -182,7 +185,7 @@
       else if (qtype === 'mcq') { cs = ch([{ text: ans + ' מ׳', correct: true }, { text: s1 + ' מ׳', correct: false }, { text: (h2) + ' מ׳', correct: false }, { text: (Math.round(h2 * s2 / s1 * 10) / 10) + ' מ׳', correct: false }]); }
       else if (qtype === 'mistake') { q = `תלמיד קבע שגובה המוט שווה לאורך צילו, ${s1} מ׳.`; a = `הטעות: משתמשים בדמיון — ${h2}/${s2}=h/${s1}, לכן h=${ans} מ׳.`; }
     }
-    return render(qtype, q, a, svg, cs, isTrue);
+    return render(qtype, q, a, svg, cs, isTrue, fam);
   }
 
   // ── G7-06 composite area ──
@@ -215,7 +218,7 @@
       else if (qtype === 'mcq') { cs = ch([{ text: area + ' סמ״ר', correct: true }, { text: (a * b) + ' סמ״ר', correct: false }, { text: (a * b - c - d) + ' סמ״ר', correct: false }, { text: (a + b) + ' סמ״ר', correct: false }]); }
       else if (qtype === 'mistake') { q = `תלמיד חישב ${a}×${b}=${a * b} ושכח את הפינה החסרה.`; ans = `הטעות: יש לחסר את המלבן החסר ${c}×${d}=${c * d}. השטח: ${area} סמ״ר.`; }
     }
-    return render(qtype, q, ans, svg, cs, isTrue);
+    return render(qtype, q, ans, svg, cs, isTrue, fam);
   }
 
   // ── G7-05 transformations ──
@@ -232,7 +235,7 @@
     if (qtype === 'tf') { q = `${kindName} משנה את גודל הצורה.`; a = 'שגוי. ' + a; isTrue = false; if (tfTrue) { q = `${kindName} שומרת על גודל הצורה.`; a = 'נכון. ' + a; isTrue = true; } }
     else if (qtype === 'mcq') { q = `איזו טרנספורמציה בוצעה ומה נשמר?`; cs = ch([{ text: kindName + ' — הגודל נשמר', correct: true }, { text: kindName + ' — הגודל גדל', correct: false }, { text: 'הקטנה — הגודל קטן', correct: false }, { text: 'אין שינוי כלל', correct: false }]); }
     else if (qtype === 'mistake') { q = `תלמיד טען שאחרי ${kindName} הצורה גדלה.`; a = `הטעות: ${kindName} היא איזומטריה — ` + a; }
-    return render(qtype, q, a, svg, cs, isTrue);
+    return render(qtype, q, a, svg, cs, isTrue, kind);
   }
 
   // ── N7-10 directed add/sub mistake analysis (families: add / subtract / three_terms) ──
@@ -262,7 +265,7 @@
     if (qtype === 'tf') { q = `${expr} = ${tfTrue ? res : wrong}.`; a = (tfTrue ? 'נכון. ' : 'שגוי. ') + a; }
     else if (qtype === 'mcq') { cs = ch([{ text: '' + res, correct: true }, { text: '' + wrong, correct: false }, { text: '' + (res + 2), correct: false }, { text: '' + (res - 3), correct: false }]); }
     else if (qtype === 'mistake') { q = `תלמיד כתב: "${expr}=${wrong}".`; a = `הטעות: טעות בכלל הסימנים. הדרך הנכונה: ` + a; }
-    return render(qtype, q, a, svg, cs, isTrue);
+    return render(qtype, q, a, svg, cs, isTrue, fam);
   }
 
   // ── N7-11 directed add/sub in context (families: find_result / find_change / find_start) ──
@@ -304,7 +307,7 @@
       else if (qtype === 'mcq') { cs = ch([{ text: res + ctx.u, correct: true }, { text: (res + 3) + ctx.u, correct: false }, { text: wrong + ctx.u, correct: false }, { text: ctx.start + ctx.u, correct: false }]); }
       else if (qtype === 'mistake') { q = `תלמיד התעלם מהכיוון וכתב ${ctx.w} = ${wrong}${ctx.u}.`; a = `הטעות: כיוון השינוי קובע את הסימן. ` + a; }
     }
-    return render(qtype, q, a, svg, cs, isTrue);
+    return render(qtype, q, a, svg, cs, isTrue, fam);
   }
 
   // ── N7-12 directed mul/div mistake analysis (families: multiply / divide / three_factors) ──
@@ -335,7 +338,7 @@
     if (qtype === 'tf') { q = `${expr} = ${tfTrue ? res : -res}.`; a = (tfTrue ? 'נכון. ' : 'שגוי בסימן. ') + a; }
     else if (qtype === 'mcq') { cs = ch([{ text: '' + res, correct: true }, { text: '' + (-res), correct: false }, { text: '' + (res + 1), correct: false }, { text: '' + (Math.abs(res) + 2), correct: false }]); }
     else if (qtype === 'mistake') { q = `תלמיד כתב "${expr}=${-res}".`; a = `הטעות: טעות בכלל הסימנים. ` + a; }
-    return render(qtype, q, a, '', cs, isTrue);
+    return render(qtype, q, a, '', cs, isTrue, fam);
   }
 
   // ── N7-13 sign rules (families: product_sign / quotient_sign / three_factor_sign) ──
@@ -365,7 +368,7 @@
     if (qtype === 'tf') { q = q.replace('מהו סימן', 'הסימן').replace('?', '') + ` הוא ${tfTrue ? correct : opp}.`; a = (tfTrue ? 'נכון. ' : 'שגוי. ') + a; }
     else if (qtype === 'mcq') { cs = ch([{ text: correct, correct: true }, { text: opp, correct: false }, { text: 'אפס', correct: false }, { text: 'תלוי בגודל', correct: false }]); }
     else if (qtype === 'mistake') { q = q.replace('?', '') + ` תלמיד ענה "${opp}".`; a = `הטעות: ` + a; }
-    return render(qtype, q, a, '', cs, isTrue);
+    return render(qtype, q, a, '', cs, isTrue, fam);
   }
 
   const MAP = {
@@ -386,7 +389,7 @@
   if (typeof E.defineSource === 'function') {
     IDS.forEach(id => { const m = MAP[id], base = id.replace(/-ENGINE$/, ''); E.defineSource(id, { sourceFile: GFILE[id] || FILE[m.d], sourceId: base, patternId: base + '-' + SKILL[id], grade: m.g, domain: m.d, skill: SKILL[id], curriculumArea: m.d + ' / grade ' + m.g, cognitiveDemand: 'standard' }); });
   }
-  function asExercise(id, diff, qtype) { const m = MAP[id]; if (!m) return null; const r = m.fn(diff || 'standard', qtype || 'open'); const cl = r.questionHTML && r.questionHTML.match(/mcq-choice mcq-correct"><span class="mcq-label">([^<]+)\./); return { id: id, title: m.title, qtype: qtype || 'open', gradeTag: m.g === 8 ? 'כיתה ח׳' : 'כיתה ז׳', domainTag: m.cls === 'geo' ? 'גאומטריה' : 'מספרי', cls: m.cls, questionHTML: r.questionHTML, answerHTML: r.answerHTML, correctLabel: cl ? cl[1] : null }; }
+  function asExercise(id, diff, qtype) { const m = MAP[id]; if (!m) return null; const r = m.fn(diff || 'standard', qtype || 'open'); const cl = r.questionHTML && r.questionHTML.match(/mcq-choice mcq-correct"><span class="mcq-label">([^<]+)\./); return { id: id, title: m.title, qtype: qtype || 'open', gradeTag: m.g === 8 ? 'כיתה ח׳' : 'כיתה ז׳', domainTag: m.cls === 'geo' ? 'גאומטריה' : 'מספרי', cls: m.cls, questionHTML: r.questionHTML, answerHTML: r.answerHTML, correctLabel: cl ? cl[1] : null, questionFamily: r.questionFamily || null }; }
   IDS.forEach(id => { const m = MAP[id]; topicReg(m.g, m.d, id, m.title + ' ✦ מנוע מקור'); });
   if (Array.isArray(E.ENGINE_TOPIC_IDS)) IDS.forEach(id => { if (E.ENGINE_TOPIC_IDS.indexOf(id) < 0) E.ENGINE_TOPIC_IDS.push(id); });
   const oldIs = E.isEngineTopic; E.isEngineTopic = function (id) { return IDS.indexOf(id) >= 0 || (typeof oldIs === 'function' && oldIs(id)); };

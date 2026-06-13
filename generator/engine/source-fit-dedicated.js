@@ -62,11 +62,14 @@
     return `<svg class="engine-svg" viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg"><polygon points="${Ax},${Ay} ${Bx},${By} ${Cx},${Cy}" fill="${T.fill}" stroke="${T.stroke}" stroke-width="2.2" stroke-linejoin="round"/><path d="M ${Bx + 16},${By - 4} A 18 18 0 0 1 ${Bx + 22},${By - 14}" fill="none" stroke="${T.given}" stroke-width="1.6"/><path d="M ${Cx - 16},${By - 4} A 18 18 0 0 0 ${Cx - 22},${By - 14}" fill="none" stroke="${T.given}" stroke-width="1.6"/>${apex != null ? lab(Ax, Ay + 24, apex + '°', T.unknown) : ''}${base != null ? lab(Bx + 32, By - 9, base + '°', T.given) + lab(Cx - 32, By - 9, base + '°', T.given) : ''}</svg>`;
   }
 
-  function render(qtype, q, a, svg, cs, isTrue) {
-    if (qtype === 'mcq') return E.questionTypes.mcq({ question: q, answer: a, svg: svg, choices: cs });
-    if (qtype === 'tf') return E.questionTypes.tf({ question: q, answer: a, svg: svg, isTrue: isTrue });
-    if (qtype === 'mistake') return E.questionTypes.mistake({ question: q, answer: a, svg: svg });
-    return E.questionTypes.open({ question: q, answer: a, svg: svg });
+  function render(qtype, q, a, svg, cs, isTrue, family) {
+    let r;
+    if (qtype === 'mcq') r = E.questionTypes.mcq({ question: q, answer: a, svg: svg, choices: cs });
+    else if (qtype === 'tf') r = E.questionTypes.tf({ question: q, answer: a, svg: svg, isTrue: isTrue });
+    else if (qtype === 'mistake') r = E.questionTypes.mistake({ question: q, answer: a, svg: svg });
+    else r = E.questionTypes.open({ question: q, answer: a, svg: svg });
+    if (r && family) r.questionFamily = family; // per-generation provenance (short code; canonicalized in asExercise)
+    return r;
   }
 
   // ── engines (canonical answer set first; qtypes override q/cs/isTrue, and a for tf/mistake) ──
@@ -104,7 +107,7 @@
       else if (qtype === 'mcq') { q = `מהי הזווית המרכזית של הגזרה "${s.cats[idx]}" (${pct}%)?`; cs = ch([{ text: ang + '°', correct: true }, { text: pct + '°', correct: false }, { text: (pct * 100) + '°', correct: false }, { text: (360 - ang) + '°', correct: false }]); }
       else if (qtype === 'mistake') { q = `תלמיד חישב זווית מרכזית של "${s.cats[idx]}": "${pct}×100=${pct * 100}°".`; a = 'הטעות: כופלים ב-360 ולא ב-100. ' + a; }
     }
-    return render(qtype, q, a, svg, cs, isTrue);
+    return render(qtype, q, a, svg, cs, isTrue, sub);
   }
 
   const MIS_SETS = [
@@ -115,17 +118,33 @@
   function genU706(diff, qtype) {
     qtype = qt(qtype);
     const m = pick(MIS_SETS), v1 = m.values[0], v2 = m.values[1], diffv = v2 - v1;
+    const sub = diff === 'basic' ? 'identify' : diff === 'challenge' ? pick(['fix', 'real']) : pick(['identify', 'real']);
     const tfTrue = qtype === 'tf' && Math.random() < 0.5;
     const svg = misleadingBarSvg(m.labels, m.values, m.yStart, m.title);
     const core = `ציר ה-y מתחיל ב-${m.yStart} ולא ב-0 (שימו לב לסימן השבירה), ולכן הפרש קטן נראה עצום.`;
     const real = `בפועל הערכים ${v1} ו-${v2} — גידול של ${diffv} בלבד (כ-${m.pct}%), לא ${m.look}.`;
     const fix = `ייצוג הוגן: ציר y צריך להתחיל ב-0.`;
-    let q = `התרשים "${m.title}" פורסם בפרסומת. מדוע הוא עלול להטעות? הציעו תיקון.`;
-    let a = `${core} ${real} ${fix}`, cs, isTrue = tfTrue;
-    if (qtype === 'tf') { q = tfTrue ? `התרשים "${m.title}" עלול להטעות כי ציר ה-y אינו מתחיל ב-0.` : `התרשים "${m.title}" מציג את הנתונים בצורה ניטרלית.`; a = (tfTrue ? 'נכון. ' : 'שגוי. ') + core + ' ' + fix; }
-    else if (qtype === 'mcq') { q = `מדוע התרשים "${m.title}" עלול להטעות?`; cs = ch([{ text: 'ציר ה-y לא מתחיל ב-0, וכך ההבדל נראה גדול מהאמת', correct: true }, { text: 'העמודות צרות מדי', correct: false }, { text: 'יש מעט מדי קטגוריות', correct: false }, { text: 'הצבעים כהים מדי', correct: false }]); }
-    else if (qtype === 'mistake') { q = `תלמיד הסיק מהתרשים: "הערך זינק ${m.look}!"`; a = `שגוי — גובה העמודה אינו פרופורציוני לערך כי ${core} ${real}`; }
-    return render(qtype, q, a, svg, cs, isTrue);
+    let q, a, cs, isTrue = tfTrue;
+    if (sub === 'fix') {
+      a = `כדי לתקן את ההטעיה ${fix} כך גובה כל עמודה יהיה פרופורציוני לערכה. ${real}`;
+      q = `התרשים "${m.title}" מטעה. כיצד היו מתקנים אותו כך שיציג את הנתונים בהגינות?`;
+      if (qtype === 'tf') { q = tfTrue ? `כדי לתקן את התרשים "${m.title}" יש להתחיל את ציר ה-y ב-0.` : `כדי לתקן את התרשים "${m.title}" יש להגדיל את רוחב העמודות.`; a = (tfTrue ? 'נכון. ' : 'שגוי — הבעיה היא נקודת ההתחלה של הציר, לא רוחב העמודות. ') + fix; }
+      else if (qtype === 'mcq') { q = `כיצד מתקנים את התרשים "${m.title}" כך שלא יטעה?`; cs = ch([{ text: 'מתחילים את ציר ה-y מ-0', correct: true }, { text: 'מצרים את העמודות', correct: false }, { text: 'משנים את צבע העמודות', correct: false }, { text: 'מוחקים קטגוריה', correct: false }]); }
+      else if (qtype === 'mistake') { q = `תלמיד הציע "לתקן" את התרשים ע"י הרחבת העמודות.`; a = `הטעות: רוחב אינו הבעיה. ${fix}`; }
+    } else if (sub === 'real') {
+      a = `${real} ${core}`;
+      q = `לפי התרשים "${m.title}" נראה כאילו הערך גדל ${m.look}. מהו הגידול האמיתי (בקירוב באחוזים)?`;
+      if (qtype === 'tf') { q = `הגידול האמיתי בתרשים "${m.title}" הוא ${tfTrue ? 'כ-' + m.pct + '%' : m.look}.`; a = (tfTrue ? 'נכון. ' : 'שגוי — המראה מטעה. ') + real; }
+      else if (qtype === 'mcq') { q = `מהו הגידול האמיתי בתרשים "${m.title}"?`; cs = ch([{ text: 'כ-' + m.pct + '%', correct: true }, { text: m.look, correct: false }, { text: diffv * 10 + '%', correct: false }, { text: '100%', correct: false }]); }
+      else if (qtype === 'mistake') { q = `תלמיד הסיק מהתרשים: "הערך זינק ${m.look}!"`; a = `שגוי — גובה העמודה אינו פרופורציוני לערך. ${real} ${core}`; }
+    } else {
+      a = `${core} ${real} ${fix}`;
+      q = `התרשים "${m.title}" פורסם בפרסומת. מדוע הוא עלול להטעות?`;
+      if (qtype === 'tf') { q = tfTrue ? `התרשים "${m.title}" עלול להטעות כי ציר ה-y אינו מתחיל ב-0.` : `התרשים "${m.title}" מציג את הנתונים בצורה ניטרלית.`; a = (tfTrue ? 'נכון. ' : 'שגוי. ') + core + ' ' + fix; }
+      else if (qtype === 'mcq') { q = `מדוע התרשים "${m.title}" עלול להטעות?`; cs = ch([{ text: 'ציר ה-y לא מתחיל ב-0, וכך ההבדל נראה גדול מהאמת', correct: true }, { text: 'העמודות צרות מדי', correct: false }, { text: 'יש מעט מדי קטגוריות', correct: false }, { text: 'הצבעים כהים מדי', correct: false }]); }
+      else if (qtype === 'mistake') { q = `תלמיד הסיק מהתרשים: "הערך זינק ${m.look}!"`; a = `שגוי — גובה העמודה אינו פרופורציוני לערך כי ${core} ${real}`; }
+    }
+    return render(qtype, q, a, svg, cs, isTrue, sub);
   }
 
   const FREQ_TABLES = [
@@ -159,7 +178,7 @@
       else if (qtype === 'mcq') { cs = ch([{ text: '' + c, correct: true }, { text: '' + t.vals[idx], correct: false }, { text: '' + (c + 1), correct: false }, { text: '' + t.total, correct: false }]); }
       else if (qtype === 'mistake') { q = `תלמיד קרא שהתדירות של ${t.vals[idx]} היא ${t.vals[idx]} (הערך עצמו).`; a = `הטעות: התדירות היא המספר בעמודת התדירות (${c}), לא הערך.`; }
     }
-    return render(qtype, q, a, svg, cs, isTrue);
+    return render(qtype, q, a, svg, cs, isTrue, sub);
   }
 
   function genU708(diff, qtype) {
@@ -179,7 +198,7 @@
     if (qtype === 'tf') { q = `${name} של הנתונים ${list} הוא ${tfTrue ? val : wrong}.`; a = (tfTrue ? 'נכון. ' : 'שגוי. ') + rule + '.'; }
     else if (qtype === 'mcq') { q = `מהו ${name} של הנתונים ${list}?`; cs = ch([{ text: '' + val, correct: true }, { text: '' + wrong, correct: false }, { text: '' + (val + 2), correct: false }, { text: '' + sorted[0], correct: false }]); }
     else if (qtype === 'mistake') { q = `תלמיד טען ש${name} של ${list} הוא ${wrong}.`; a = `הטעות: ${name} מחושב כך — ${rule}. כלומר ${val}.`; }
-    return render(qtype, q, a, '', cs, isTrue);
+    return render(qtype, q, a, '', cs, isTrue, fam);
   }
 
   function genG806(diff, qtype) {
@@ -208,7 +227,7 @@
       else if (qtype === 'mcq') { q = `איך נקרא קטע המחבר את מרכז העיגול לנקודה על המעגל?`; cs = ch([{ text: 'רדיוס', correct: true }, { text: 'מיתר', correct: false }, { text: 'קוטר', correct: false }, { text: 'קשת', correct: false }]); }
       else if (qtype === 'mistake') { q = `תלמיד קרא לקטע ממרכז העיגול אל המעגל "מיתר".`; a = `הטעות: מיתר מחבר שתי נקודות על המעגל. ` + a; }
     }
-    return render(qtype, q, a, svg, cs, isTrue);
+    return render(qtype, q, a, svg, cs, isTrue, fam);
   }
 
   function genG808(diff, qtype) {
@@ -240,7 +259,7 @@
       else if (qtype === 'mcq') { q = `זווית הראש ${apex}° — מהי כל אחת מזוויות הבסיס?`; cs = ch([{ text: base + '°', correct: true }, { text: (180 - apex) + '°', correct: false }, { text: apex + '°', correct: false }, { text: (base + 5) + '°', correct: false }]); }
       else if (qtype === 'mistake') { q = `זווית ראש ${apex}°. תלמיד אמר שזוויות הבסיס ${180 - apex}° כל אחת.`; a = `הטעות: צריך לחלק ב-2 בין שתי זוויות הבסיס. ` + a; }
     }
-    return render(qtype, q, a, svg, cs, isTrue);
+    return render(qtype, q, a, svg, cs, isTrue, fam);
   }
 
   function genN708(diff, qtype) {
@@ -276,7 +295,7 @@
       else if (qtype === 'mcq') { q = `איזה מספר גדול יותר: ${a1} או ${b1}?`; cs = ch([{ text: '' + big, correct: true }, { text: '' + small, correct: false }, { text: 'שווים', correct: false }, { text: 'אי אפשר לדעת', correct: false }]); }
       else if (qtype === 'mistake') { q = `תלמיד טען ש-${small} > ${big} כי ספרתו גדולה.`; a = `הטעות: במספרים שליליים, ככל שרחוקים יותר מאפס שמאלה — קטנים יותר. ` + a; }
     }
-    return render(qtype, q, a, svg, cs, isTrue);
+    return render(qtype, q, a, svg, cs, isTrue, fam);
   }
 
   function genN709(diff, qtype) {
@@ -306,7 +325,7 @@
       else if (qtype === 'mcq') { q = `מהו הנגדי של ${n}?`; cs = ch([{ text: '' + (-n), correct: true }, { text: '' + Math.abs(n), correct: false }, { text: '' + n, correct: false }, { text: '0', correct: false }]); }
       else if (qtype === 'mistake') { q = `תלמיד אמר שהנגדי של ${n} הוא הערך המוחלט שלו, ${Math.abs(n)}.`; a = `הטעות: הנגדי של ${n} הוא ${-n}. ערך מוחלט הוא מרחק מאפס.`; }
     }
-    return render(qtype, q, a, svg, cs, isTrue);
+    return render(qtype, q, a, svg, cs, isTrue, fam);
   }
 
   const MAP = {
@@ -326,7 +345,20 @@
     IDS.forEach(id => { const m = MAP[id], base = id.replace(/-ENGINE$/, ''); E.defineSource(id, { sourceFile: FILE[m.d], sourceId: base, patternId: base + '-' + SKILL[id], grade: m.g, domain: m.d, skill: SKILL[id], curriculumArea: m.d + ' / grade ' + m.g, cognitiveDemand: 'standard' }); });
   }
 
-  function asExercise(id, diff, qtype) { const m = MAP[id]; if (!m) return null; const r = m.fn(diff || 'standard', qtype || 'open'); const cl = r.questionHTML && r.questionHTML.match(/mcq-choice mcq-correct"><span class="mcq-label">([^<]+)\./); return { id: id, title: m.title, qtype: qtype || 'open', gradeTag: m.g === 8 ? 'כיתה ח׳' : 'כיתה ז׳', domainTag: m.cls === 'unc' ? 'אי-ודאות' : m.cls === 'geo' ? 'גאומטריה' : 'מספרי', cls: m.cls, questionHTML: r.questionHTML, answerHTML: r.answerHTML, correctLabel: cl ? cl[1] : null }; }
+  // map each engine's short family code → the canonical questionFamily in the
+  // pedagogy registry, so emitted provenance matches a registered family exactly.
+  const FAM_CANON = {
+    'U7-05-ENGINE': { angle: 'pie_central_angle', missing: 'pie_missing_percent', largest: 'pie_largest_sector' },
+    'U7-06-ENGINE': { identify: 'identify_misleading', fix: 'propose_fair_representation', real: 'real_change' },
+    'U7-07-ENGINE': { read: 'read_frequency', relative: 'relative_frequency', total: 'total_count' },
+    'U7-08-ENGINE': { mean: 'mean', median: 'median', range: 'range' },
+    'G8-06-ENGINE': { identify: 'identify_part', relation: 'radius_diameter_relation', longest: 'longest_chord' },
+    'G8-08-ENGINE': { apex: 'find_apex', baseangles: 'find_base_angles', classify: 'classify_isosceles' },
+    'N7-08-ENGINE': { order: 'order_negatives', compare: 'compare_negatives', between: 'integer_between' },
+    'N7-09-ENGINE': { opposite: 'opposite_number', absolute: 'absolute_value', context: 'opposite_in_context' }
+  };
+  function canonFamily(id, code) { return (FAM_CANON[id] && FAM_CANON[id][code]) || code || null; }
+  function asExercise(id, diff, qtype) { const m = MAP[id]; if (!m) return null; const r = m.fn(diff || 'standard', qtype || 'open'); const cl = r.questionHTML && r.questionHTML.match(/mcq-choice mcq-correct"><span class="mcq-label">([^<]+)\./); return { id: id, title: m.title, qtype: qtype || 'open', gradeTag: m.g === 8 ? 'כיתה ח׳' : 'כיתה ז׳', domainTag: m.cls === 'unc' ? 'אי-ודאות' : m.cls === 'geo' ? 'גאומטריה' : 'מספרי', cls: m.cls, questionHTML: r.questionHTML, answerHTML: r.answerHTML, correctLabel: cl ? cl[1] : null, questionFamily: canonFamily(id, r.questionFamily) }; }
 
   IDS.forEach(id => { const m = MAP[id]; topicReg(m.g, m.d, id, m.title + ' ✦ מנוע מקור'); });
   if (Array.isArray(E.ENGINE_TOPIC_IDS)) IDS.forEach(id => { if (E.ENGINE_TOPIC_IDS.indexOf(id) < 0) E.ENGINE_TOPIC_IDS.push(id); });
