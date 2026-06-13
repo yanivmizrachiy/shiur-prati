@@ -13,6 +13,7 @@ function must(text, label, items) {
 }
 
 const requiredFiles = [
+  'package.json',
   'docs/EXTREME_COMPLETION_PLAN_20260612.md',
   'docs/SOURCE_COVERAGE_MATRIX_20260612.md',
   'docs/SOURCE_FIT_ALGEBRA_G8_EXPANSION_20260612.md',
@@ -27,11 +28,13 @@ const requiredFiles = [
   'tools/verify-geometry-g7-source-fit.mjs',
   'tools/verify-geometry-g8-source-fit.mjs',
   'tools/verify-real-generator-runtime.mjs',
-  'tools/verify-index-script-links.mjs'
+  'tools/verify-index-script-links.mjs',
+  'tools/verify-all-termux.sh'
 ];
 
 for (const file of requiredFiles) read(file);
 
+const pkg = read('package.json');
 const plan = read('docs/EXTREME_COMPLETION_PLAN_20260612.md');
 const matrix = read('docs/SOURCE_COVERAGE_MATRIX_20260612.md');
 const a8 = read('docs/SOURCE_FIT_ALGEBRA_G8_EXPANSION_20260612.md');
@@ -41,6 +44,7 @@ const g7a = read('docs/SOURCE_FIT_GEOMETRY_G7_EXPANSION_20260612_B.md');
 const g7b = read('docs/SOURCE_FIT_GEOMETRY_G7_PYTHAGORAS_ANGLES_20260612.md');
 const g8 = read('docs/SOURCE_FIT_GEOMETRY_G8_EXPANSION_20260612.md');
 
+must(pkg, 'package scripts', ['verify:all', 'verify:runtime', 'verify:links', 'verify:inventory']);
 must(plan, 'extreme plan', ['50%', '60%', '70%', '82%', '92%', '100%']);
 must(matrix, 'source coverage matrix', [
   'File 01', 'File 02', 'File 03', 'File 04', 'File 05',
@@ -66,6 +70,8 @@ console.log(JSON.stringify({
     'grade 7 geometry',
     'grade 8 geometry',
     'runtime verifier',
-    'index script link verifier'
+    'index script link verifier',
+    'npm verify scripts',
+    'termux verify runner'
   ]
 }, null, 2));
