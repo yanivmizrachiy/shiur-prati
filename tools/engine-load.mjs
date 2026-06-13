@@ -40,7 +40,8 @@ export function loadEngines() {
     'source-fit-geometry.js', 'source-fit-algebra-g7.js',
     'source-fit-dedicated.js',
     'source-fit-dedicated-2.js',
-    'pedagogy-attach.js'
+    'pedagogy-attach.js',
+    'follow-up.js'
   ];
   for (const f of base.concat(pilots).concat(sourceFit)) {
     const p = 'generator/engine/' + f;
