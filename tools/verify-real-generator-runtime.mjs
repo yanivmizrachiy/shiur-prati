@@ -18,7 +18,7 @@ for (const v of ['1','5','10','15','20']) {
 }
 check('index has מעורב option (default)', /<option value="mixed" selected>מעורב<\/option>/.test(index));
 check('index button is צור דף תרגילים', index.includes('צור דף תרגילים ◀'));
-check('index loads exercise-set.js', index.includes('<script src="exercise-set.js"></script>'));
+check('index loads exercise-set.js', /<script src="exercise-set\.js(?:\?[^"<>]*)?"><\/script>/.test(index));
 check('question type label is סוג שאלות', index.includes('סוג שאלות'));
 
 // ── 2. Runtime layer functions ──
