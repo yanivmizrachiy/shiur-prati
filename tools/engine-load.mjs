@@ -29,15 +29,16 @@ export function loadEngines() {
   vm.createContext(sandbox);
 
   const base = [
-    'schema.js', 'source-schema.js', 'source-registry.js', 'random.js',
-    'validators.js', 'themes.js', 'diagrams.js',
+    'schema.js', 'source-schema.js', 'source-registry.js', 'pedagogy-registry.js',
+    'random.js', 'validators.js', 'themes.js', 'diagrams.js',
     'diagram-premium-overrides.js', 'diagram-ultra-autopilot.js',
     'question-types.js'
   ];
   const pilots = fs.readdirSync('generator/engine').filter(f => f.startsWith('pilot-')).sort();
   const sourceFit = [
     'source-fit-extensions.js', 'source-fit-graphs.js',
-    'source-fit-geometry.js', 'source-fit-algebra-g7.js'
+    'source-fit-geometry.js', 'source-fit-algebra-g7.js',
+    'pedagogy-attach.js'
   ];
   for (const f of base.concat(pilots).concat(sourceFit)) {
     const p = 'generator/engine/' + f;
@@ -68,13 +69,14 @@ export function loadEngines() {
     if (typeof E[fn] === 'function') {
       const r = E[fn](diff, qtype);
       if (r && (r.questionHTML || r.question)) {
-        return { questionHTML: r.questionHTML || r.question, answerHTML: r.answerHTML || r.answer };
+        const meta = (r.meta) || (typeof E.buildMeta === 'function' ? E.buildMeta(id, qtype, diff) : null);
+        return { questionHTML: r.questionHTML || r.question, answerHTML: r.answerHTML || r.answer, meta: meta };
       }
       return null;
     }
     if (typeof E.getEngineExercise === 'function') {
       const r = E.getEngineExercise(id, diff, qtype);
-      if (r) return { questionHTML: r.questionHTML, answerHTML: r.answerHTML };
+      if (r) return { questionHTML: r.questionHTML, answerHTML: r.answerHTML, meta: r.meta || (typeof E.buildMeta === 'function' ? E.buildMeta(id, qtype, diff) : null) };
     }
     return null;
   }

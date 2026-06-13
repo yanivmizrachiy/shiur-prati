@@ -79,7 +79,15 @@ for (const id of ids) {
   if (distinctTypes.size < 3) fail(id + ' supports <3 question types (' + distinctTypes.size + ')');
 
   // real variety: a topic must produce several distinct questions over 50 draws
-  if (allQuestions.size < 4) fail(id + ' too few distinct questions (' + allQuestions.size + '/50)');
+  if (allQuestions.size < 6) fail(id + ' too few distinct questions (' + allQuestions.size + '/50)');
+
+  // pedagogic metadata must travel with the output
+  const probe = callEngine(id, 'standard', 'open');
+  const m = (probe && probe.meta) || {};
+  if (!m.sourceFile) fail(id + ' output meta missing sourceFile');
+  if (!m.learningGoal) fail(id + ' output meta missing learningGoal');
+  if (!m.teacherPurpose) fail(id + ' output meta missing teacherPurpose');
+  if (!(m.followUpIdeas || []).length) fail(id + ' output meta missing followUpIdeas');
 
   tfReport.push({ id, tf: [...tfVerdicts].sort().join('') || 'none' });
 }
