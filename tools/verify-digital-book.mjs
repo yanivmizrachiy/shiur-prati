@@ -2,15 +2,19 @@
 // Verifies the static digital PDF source book extracted from PR #2.
 // Run from repo root: node tools/verify-digital-book.mjs
 import fs from 'node:fs';
+import path from 'node:path';
 
 let fails = 0;
 function check(name, ok, detail='') {
   console.log((ok ? 'PASS' : 'FAIL') + ' — ' + name + (detail ? ' — ' + detail : ''));
   if (!ok) fails++;
 }
-function read(path) {
-  if (!fs.existsSync(path)) throw new Error(`Missing file: ${path}`);
-  return fs.readFileSync(path, 'utf8');
+function read(filePath) {
+  if (!fs.existsSync(filePath)) throw new Error(`Missing file: ${filePath}`);
+  return fs.readFileSync(filePath, 'utf8');
+}
+function escapeRegExp(value) {
+  return String(value).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
 
 const index = read('generator/index.html');
@@ -31,24 +35,30 @@ const expectedPdfs = [
   '10_grade-8_teaching_sequence_2026-2027.pdf'
 ];
 
+const sourcePdfPaths = [...js.matchAll(/'((?:\.\.\/sources\/intake\/2026-06-09\/)[^']+\.pdf)'/g)].map(m => m[1]);
+const fileNames = [...js.matchAll(/'([^']+\.pdf)'/g)].map(m => m[1]).filter(v => !v.includes('/'));
+const missingPdfPaths = sourcePdfPaths.filter(pdfPath => !fs.existsSync(path.normalize(path.join('generator', pdfPath))));
+
 check('book files exist', ['generator/book.html','generator/book.css','generator/book.js'].every(p => fs.existsSync(p)));
 check('index links to digital source book', index.includes('book.html') && index.includes('ספר מקורות דיגיטלי'));
 check('book has RTL Hebrew document', html.includes('<html lang="he" dir="rtl">'));
 check('book loads local CSS and JS', html.includes('href="book.css"') && html.includes('src="book.js"'));
 check('book has table of contents and reader controls', ['tocList','openToc','focusReader','pdfFrame','nextBtn','prevBtn'].every(id => html.includes(id)));
 check('book CSS contains responsive reader layout', css.includes('.book-card') && css.includes('@media(max-width:900px)') && css.includes('.is-focus'));
-check('book JS declares exactly 10 source entries', (js.match(/\.pdf'/g) || []).length === 10);
+check('book JS declares exactly 10 source path entries', sourcePdfPaths.length === 10, `found ${sourcePdfPaths.length}`);
+check('book JS declares exactly 10 display file names', fileNames.length === 10, `found ${fileNames.length}`);
 check('book JS references all expected source PDFs', expectedPdfs.every(pdf => js.includes(pdf)));
 check('book JS only references source intake PDFs', !js.includes('http://') && !js.includes('https://') && js.includes('../sources/intake/2026-06-09/'));
-check('all referenced PDF files exist', expectedPdfs.every(pdf => {
-  const match = js.match(new RegExp("'([^']*" + pdf.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + ")'"));
-  return match && fs.existsSync('generator/' + match[1]);
-}));
+check('all referenced source PDF files exist', missingPdfPaths.length === 0, missingPdfPaths.join(', '));
+check('expected PDFs appear as source paths', expectedPdfs.every(pdf => sourcePdfPaths.some(p => p.endsWith('/' + pdf))), expectedPdfs.filter(pdf => !sourcePdfPaths.some(p => p.endsWith('/' + pdf))).join(', '));
+check('expected PDFs appear as display filenames', expectedPdfs.every(pdf => fileNames.includes(pdf)), expectedPdfs.filter(pdf => !fileNames.includes(pdf)).join(', '));
 
 console.log(JSON.stringify({
   ok: fails === 0,
   checkedAt: new Date().toISOString(),
   sourcePdfCount: expectedPdfs.length,
+  sourcePathCount: sourcePdfPaths.length,
+  displayFileNameCount: fileNames.length,
   files: ['generator/book.html','generator/book.css','generator/book.js']
 }, null, 2));
 
