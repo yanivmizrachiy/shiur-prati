@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#0f172a">
+<title>QA חזותי — תרגילים</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+<link rel="stylesheet" href="style.css">
+<style>
+.qa-head{background:#0f172a;color:#fff;padding:14px 20px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;position:sticky;top:0;z-index:100}
+.qa-head h1{font-size:1.15rem;font-weight:900}.qa-head a{color:#93c5fd;text-decoration:none;font-weight:800}.qa-head .spacer{margin-inline-start:auto}.qa-sub{color:#94a3b8;font-size:.82rem}
+.qa-panel{background:#fff;border-radius:14px;padding:14px 16px;margin:16px 0;box-shadow:0 1px 3px rgba(0,0,0,.08);display:flex;flex-wrap:wrap;gap:10px;align-items:end}
+.qa-panel .f{display:flex;flex-direction:column;gap:4px;min-width:120px}.qa-panel input{height:38px;border:1.5px solid #e2e8f0;border-radius:10px;padding:0 10px;font-family:inherit}.qa-stat{margin-inline-start:auto;font-weight:800;color:#475569}.qa-btn{border:none;border-radius:9px;padding:8px 12px;font-weight:900;cursor:pointer;background:#f1f5f9;color:#0f172a}.qa-btn.primary{background:#2563eb;color:#fff}.qa-btn.danger{background:#fee2e2;color:#991b1b}.qa-grid{display:grid;grid-template-columns:1fr;gap:14px}@media(min-width:860px){.qa-grid{grid-template-columns:1fr 1fr}}
+.qa-card{background:#fff;border-radius:14px;padding:16px 18px;box-shadow:0 1px 3px rgba(0,0,0,.08);border-top:4px solid #2563eb}.qa-card.geo{border-top-color:#d97706}.qa-card.alg{border-top-color:#7c3aed}.qa-card.num{border-top-color:#16a34a}.qa-card.unc{border-top-color:#0284c7}.qa-id{font-family:ui-monospace,monospace;font-weight:900;color:#2563eb;font-size:.8rem}.qa-title{font-weight:900;font-size:1.02rem;margin:2px 0 6px}.qa-meta{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:8px}.qa-actions{display:flex;gap:6px;flex-wrap:wrap;margin:10px 0}.qa-actions button,.qa-actions select{font-size:.78rem;font-weight:800;border-radius:8px;border:1px solid #cbd5e1;padding:5px 9px;cursor:pointer;background:#f8fafc}.qa-review{display:flex;gap:6px;flex-wrap:wrap;margin:10px 0}.qa-review button{border:1px solid #cbd5e1;border-radius:999px;padding:6px 10px;background:#fff;cursor:pointer;font-weight:800;font-size:.78rem}.qa-review button.active{background:#0f172a;color:#fff;border-color:#0f172a}.qa-note{width:100%;min-height:42px;border:1px solid #e2e8f0;border-radius:10px;padding:8px 10px;font-family:inherit;resize:vertical}.qa-sample{border-top:1px dashed #e2e8f0;margin-top:10px;padding-top:10px;min-height:10px}.qa-sample .diagram svg,.qa-sample svg{max-width:min(290px,100%);height:auto}.qa-empty{text-align:center;color:#94a3b8;padding:30px}.qa-foot{color:#64748b;font-size:.82rem;margin:16px 0 60px}
+@media print{.qa-head,.qa-panel,.qa-review,.qa-actions,.qa-note,.qa-foot{display:none!important}.qa-grid{display:block}.qa-card{break-inside:avoid;box-shadow:none;border:1px solid #cbd5e1;margin-bottom:10px}}
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
+</head>
+<body>
+<div class="qa-head"><h1>QA חזותי</h1><span class="qa-sub">בדיקת מורה ידנית לכל 50 מנועי התרגילים</span><span class="spacer"></span><a href="gallery.html">גלריית מנועים</a><a href="index.html">חזרה למחולל ◀</a></div>
+<main>
+  <div class="qa-panel">
+    <div class="f"><label for="qaGrade">כיתה</label><select id="qaGrade"><option value="">הכול</option><option value="7">ז׳</option><option value="8">ח׳</option></select></div>
+    <div class="f"><label for="qaDomain">תחום</label><select id="qaDomain"><option value="">הכול</option><option value="geometry">גאומטריה</option><option value="algebra">אלגברה</option><option value="numeric">מספרי</option><option value="uncertainty">אי־ודאות</option></select></div>
+    <div class="f"><label for="qaDiff">רמה</label><select id="qaDiff"><option value="basic">בסיסית</option><option value="standard" selected>סטנדרטית</option><option value="challenge">מאתגרת</option></select></div>
+    <div class="f"><label for="qaType">סוג שאלה</label><select id="qaType"><option value="open">פתוחה</option><option value="mcq">רב־ברירה</option><option value="tf">נכון / שגוי</option><option value="mistake">מצא את הטעות</option></select></div>
+    <div class="f"><label for="qaStatus">סטטוס</label><select id="qaStatus"><option value="">הכול</option><option value="beautiful">יפה</option><option value="fix">צריך תיקון</option><option value="diagram">בעיה בשרטוט</option><option value="print">בעיה בהדפסה</option><option value="text">בעיה בטקסט</option><option value="unreviewed">לא נבדק</option></select></div>
+    <div class="f"><label for="qaSearch">חיפוש</label><input id="qaSearch" type="text" placeholder="מזהה / נושא"></div>
+    <button class="qa-btn primary" id="qaGenerateVisible" type="button">צור דוגמאות למסומנים</button>
+    <button class="qa-btn qa-export" id="qaExport" type="button">ייצא QA</button>
+    <button class="qa-btn danger" id="qaClear" type="button">נקה QA</button>
+    <span class="qa-stat" id="qaStat"></span>
+  </div>
+  <div class="qa-grid" id="qaGrid"></div>
+  <div class="qa-empty" id="qaEmpty" style="display:none">אין מנועים התואמים את הסינון.</div>
+  <div class="qa-foot">הסטטוסים נשמרים מקומית בדפדפן בלבד. הם מיועדים לבדיקה פדגוגית/אסתטית בעין, אחרי שהבדיקות האוטומטיות עברו.</div>
+</main>
+
+<script src="core.js"></script>
+<script src="export.js"></script>
+<script src="geo.js"></script>
+<script src="algebra.js"></script>
+<script src="numeric.js"></script>
+<script src="stats.js"></script>
+<script src="engine/schema.js"></script>
+<script src="engine/source-schema.js"></script>
+<script src="engine/source-registry.js"></script>
+<script src="engine/pedagogy-registry.js"></script>
+<script src="engine/random.js"></script>
+<script src="engine/validators.js"></script>
+<script src="engine/themes.js"></script>
+<script src="engine/diagrams.js"></script>
+<script src="engine/diagram-premium-overrides.js"></script>
+<script src="engine/diagram-ultra-autopilot.js"></script>
+<script src="engine/question-types.js"></script>
+<script src="engine/pilot-g7-03.js"></script>
+<script src="engine/pilot-n8-01.js"></script>
+<script src="engine/pilot-n8-02.js"></script>
+<script src="engine/pilot-n8-03.js"></script>
+<script src="engine/pilot-n8-04.js"></script>
+<script src="engine/pilot-n8-05.js"></script>
+<script src="engine/pilot-g7-01.js"></script>
+<script src="engine/pilot-g7-02.js"></script>
+<script src="engine/pilot-g7-04.js"></script>
+<script src="engine/pilot-g8-01.js"></script>
+<script src="engine/pilot-g8-04.js"></script>
+<script src="engine/pilot-n7-03.js"></script>
+<script src="engine/pilot-n7-04.js"></script>
+<script src="engine/pilot-n7-05.js"></script>
+<script src="engine/pilot-n7-06.js"></script>
+<script src="engine/pilot-n7-07.js"></script>
+<script src="engine/pilot-a7-01.js"></script>
+<script src="engine/pilot-a7-02.js"></script>
+<script src="engine/pilot-a7-03.js"></script>
+<script src="engine/pilot-u7-01.js"></script>
+<script src="engine/pilot-u7-02.js"></script>
+<script src="engine/pilot-a8-02.js"></script>
+<script src="engine/pilot-a8-03.js"></script>
+<script src="engine/pilot-u8-01.js"></script>
+<script src="engine/pilot-u8-02.js"></script>
+<script src="engine/pattern-engine.js"></script>
+<script src="engine/source-fit-extensions.js"></script>
+<script src="engine/source-fit-graphs.js"></script>
+<script src="engine/source-fit-geometry.js"></script>
+<script src="engine/source-fit-algebra-g7.js"></script>
+<script src="engine/source-fit-dedicated.js"></script>
+<script src="engine/source-fit-dedicated-2.js"></script>
+<script src="engine/pedagogy-attach.js"></script>
+<script src="engine/follow-up.js"></script>
+<script src="teacher-mode.js"></script>
+<script>
+(function(){
+  var E=window.TargilimEngine||{};
+  var KEY='targilim.visualQa.v1';
+  var DOMAIN_HE={geometry:'גאומטריה',algebra:'אלגברה',numeric:'מספרי',uncertainty:'אי־ודאות'};
+  var CLS={geometry:'geo',algebra:'alg',numeric:'num',uncertainty:'unc'};
+  var STATUS_HE={beautiful:'יפה',fix:'צריך תיקון',diagram:'בעיה בשרטוט',print:'בעיה בהדפסה',text:'בעיה בטקסט'};
+  var store={};
+  try{store=JSON.parse(localStorage.getItem(KEY)||'{}')||{};}catch(e){store={};}
+  var ids=Object.keys(E.SOURCE_REGISTRY||{}).filter(function(k){return /-ENGINE$/.test(k);}).sort();
+  var grid=document.getElementById('qaGrid');
+  function save(){localStorage.setItem(KEY,JSON.stringify(store));}
+  function getStatus(id){return (store[id]&&store[id].status)||'';}
+  function setStatus(id,status){store[id]=store[id]||{};store[id].status=status;store[id].updatedAt=new Date().toISOString();save();refreshCard(id);applyFilter();}
+  function setNote(id,note){store[id]=store[id]||{};store[id].note=note;store[id].updatedAt=new Date().toISOString();save();}
+  function sample(card,id){
+    var d=document.getElementById('qaDiff').value,t=document.getElementById('qaType').value,host=card.querySelector('.qa-sample');
+    var r=E.generateOne?E.generateOne(id,d,t):(E.getEngineExercise&&E.getEngineExercise(id,d,t));
+    if(!r){host.innerHTML='<span style="color:#dc2626">לא ניתן להפיק דוגמה</span>';return;}
+    host.innerHTML='<div class="ex-body">'+(r.questionHTML||'')+'</div><details style="margin-top:8px"><summary style="cursor:pointer;font-weight:800;color:#2563eb">פתרון</summary>'+(r.answerHTML||'')+'</details>';
+    if(window.renderMathInElement)renderMathInElement(host,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false});
+  }
+  function card(id){
+    var s=E.getSource(id)||{},p=E.getPedagogy(id)||{},cls=CLS[s.domain]||'num',fams=(p.families||[]).map(function(f){return f.questionFamily;}).join(' · ');
+    var el=document.createElement('div');el.className='qa-card '+cls;el.setAttribute('data-id',id);el.setAttribute('data-grade',s.grade||'');el.setAttribute('data-domain',s.domain||'');el.setAttribute('data-search',(id+' '+(p.topicName||'')+' '+(s.skill||'')+' '+fams).toLowerCase());
+    el.innerHTML='<div class="qa-id">'+id+'</div><div class="qa-title">'+(p.topicName||s.skill||id)+'</div>'
+      +'<div class="qa-meta"><span class="tag '+cls+'">כיתה '+(s.grade||'')+'</span><span class="tag '+cls+'">'+(DOMAIN_HE[s.domain]||'')+'</span><span class="tag '+cls+'">מקור '+((s.sourceFile||'').slice(0,2))+'</span></div>'
+      +'<div style="font-size:.78rem;color:#64748b;margin-bottom:8px">משפחות: '+(fams||'—')+'</div>'
+      +'<div class="qa-actions"><button class="qaMake" type="button">צור דוגמה</button><button class="qaMake4" type="button">4 דוגמאות</button><button class="qaPrint" type="button">הדפסה</button></div>'
+      +'<div class="qa-review"><button data-status="beautiful">יפה</button><button data-status="fix">צריך תיקון</button><button data-status="diagram">בעיה בשרטוט</button><button data-status="print">בעיה בהדפסה</button><button data-status="text">בעיה בטקסט</button></div>'
+      +'<textarea class="qa-note" placeholder="הערת QA למורה"></textarea><div class="qa-sample"></div>';
+    el.querySelector('.qaMake').addEventListener('click',function(){sample(el,id);});
+    el.querySelector('.qaMake4').addEventListener('click',function(){var host=el.querySelector('.qa-sample');host.innerHTML='';['open','mcq','tf','mistake'].forEach(function(t){var r=E.generateOne?E.generateOne(id,document.getElementById('qaDiff').value,t):null;var box=document.createElement('div');box.style.borderTop='1px dashed #e2e8f0';box.style.paddingTop='8px';box.style.marginTop='8px';box.innerHTML='<b>'+t+'</b><div class="ex-body">'+((r&&r.questionHTML)||'לא נוצר')+'</div>';host.appendChild(box);});if(window.renderMathInElement)renderMathInElement(host,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false});});
+    el.querySelector('.qaPrint').addEventListener('click',function(){sample(el,id);setTimeout(function(){window.print();},60);});
+    Array.prototype.forEach.call(el.querySelectorAll('.qa-review button'),function(btn){btn.addEventListener('click',function(){setStatus(id,btn.getAttribute('data-status'));});});
+    el.querySelector('.qa-note').addEventListener('input',function(){setNote(id,this.value);});
+    return el;
+  }
+  function refreshCard(id){
+    var el=grid.querySelector('[data-id="'+id+'"]');if(!el)return;var st=getStatus(id);el.setAttribute('data-status',st||'unreviewed');Array.prototype.forEach.call(el.querySelectorAll('.qa-review button'),function(b){b.classList.toggle('active',b.getAttribute('data-status')===st);});var note=el.querySelector('.qa-note');if(note&&store[id])note.value=store[id].note||'';
+  }
+  ids.forEach(function(id){var el=card(id);grid.appendChild(el);refreshCard(id);});
+  function applyFilter(){
+    var g=document.getElementById('qaGrade').value,d=document.getElementById('qaDomain').value,st=document.getElementById('qaStatus').value,q=document.getElementById('qaSearch').value.trim().toLowerCase();var shown=0,reviewed=0;
+    ids.forEach(function(id){var el=grid.querySelector('[data-id="'+id+'"]'),cur=getStatus(id)||'unreviewed';if(cur!=='unreviewed')reviewed++;var ok=(!g||el.getAttribute('data-grade')===g)&&(!d||el.getAttribute('data-domain')===d)&&(!st||cur===st)&&(!q||el.getAttribute('data-search').indexOf(q)>=0);el.style.display=ok?'':'none';if(ok)shown++;});
+    document.getElementById('qaStat').textContent=shown+' / '+ids.length+' מוצגים · '+reviewed+' נבדקו';document.getElementById('qaEmpty').style.display=shown?'none':'block';
+  }
+  ['qaGrade','qaDomain','qaStatus','qaDiff','qaType'].forEach(function(id){document.getElementById(id).addEventListener('change',applyFilter);});document.getElementById('qaSearch').addEventListener('input',applyFilter);
+  document.getElementById('qaGenerateVisible').addEventListener('click',function(){Array.prototype.forEach.call(grid.children,function(el){if(el.style.display!=='none')sample(el,el.getAttribute('data-id'));});});
+  document.getElementById('qaExport').addEventListener('click',function(){var blob=new Blob([JSON.stringify({exportedAt:new Date().toISOString(),items:store},null,2)],{type:'application/json;charset=utf-8'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='targilim-visual-qa.json';document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(url);},1000);});
+  document.getElementById('qaClear').addEventListener('click',function(){if(!confirm('לנקות את כל סימוני ה-QA המקומיים?'))return;store={};save();ids.forEach(refreshCard);applyFilter();});
+  applyFilter();
+})();
+</script>
+</body>
+</html>
