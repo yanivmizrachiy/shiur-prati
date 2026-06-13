@@ -59,23 +59,25 @@
 
     // ── logical fallback topics (registered in legacy files, generic handler).
     //    Each carries real source metadata + fallback flag + reason. ──
-    ['N7-08', F.n7, 7, 'numeric', 'number_line_comparison', 'basic', 'served by legacy n7-03.js topic + generic renderer'],
-    ['N7-09', F.n7, 7, 'numeric', 'opposite_and_absolute_value_context', 'standard', 'served by legacy n7-03.js topic + generic renderer'],
     ['N7-10', F.n7, 7, 'numeric', 'directed_add_sub_mistake_analysis', 'standard', 'served by legacy n7-04.js topic + generic renderer'],
     ['N7-11', F.n7, 7, 'numeric', 'directed_add_sub_context', 'standard', 'served by legacy n7-04.js topic + generic renderer'],
     ['N7-12', F.n7, 7, 'numeric', 'directed_mul_div_mistake_analysis', 'standard', 'served by legacy n7-05.js topic + generic renderer'],
     ['N7-13', F.n7, 7, 'numeric', 'directed_mul_div_sign_rules', 'standard', 'served by legacy n7-05.js topic + generic renderer'],
-    ['U7-05', F.unc, 7, 'uncertainty', 'pie_chart_and_relative_frequency', 'standard', 'served by legacy u7-02.js topic + generic renderer'],
-    ['U7-06', F.unc, 7, 'uncertainty', 'misleading_graph_critique', 'challenge', 'served by legacy u7-02.js topic + generic renderer'],
-    ['U7-07', F.unc, 7, 'uncertainty', 'frequency_table_and_relative_frequency', 'standard', 'served by legacy u7-02.js topic + generic renderer'],
-    ['U7-08', F.unc, 7, 'uncertainty', 'mean_median_range', 'standard', 'served by legacy u7-02.js topic + generic renderer'],
     ['G7-05', F.g7, 7, 'geometry', 'transformations', 'standard', 'served by legacy g7-02.js topic + generic renderer'],
     ['G7-06', F.g7, 7, 'geometry', 'composite_area', 'challenge', 'served by legacy g7-02.js topic + generic renderer'],
     ['G8-05', F.g8, 8, 'geometry', 'central_angle_and_sector', 'standard', 'served by legacy g8-01.js topic + generic renderer'],
-    ['G8-06', F.g8, 8, 'geometry', 'diameter_radius_chord', 'standard', 'served by legacy g8-01.js topic + generic renderer'],
     ['G8-07', F.g8, 8, 'geometry', 'triangle_congruence_markings', 'challenge', 'served by legacy g8-04.js topic + generic renderer'],
-    ['G8-08', F.g8, 8, 'geometry', 'isosceles_triangle', 'standard', 'served by legacy g8-04.js topic + generic renderer'],
-    ['G8-09', F.g8, 8, 'geometry', 'similarity_and_shadows', 'challenge', 'served by legacy g8-04.js topic + generic renderer']
+    ['G8-09', F.g8, 8, 'geometry', 'similarity_and_shadows', 'challenge', 'served by legacy g8-04.js topic + generic renderer'],
+
+    // ── converted: 8 former fallbacks now dedicated source-backed engines ──
+    ['U7-05-ENGINE', F.unc, 7, 'uncertainty', 'pie_chart_and_relative_frequency', 'standard'],
+    ['U7-06-ENGINE', F.unc, 7, 'uncertainty', 'misleading_graph_critique', 'challenge'],
+    ['U7-07-ENGINE', F.unc, 7, 'uncertainty', 'frequency_table_and_relative_frequency', 'standard'],
+    ['U7-08-ENGINE', F.unc, 7, 'uncertainty', 'mean_median_range', 'standard'],
+    ['G8-06-ENGINE', F.g8, 8, 'geometry', 'diameter_radius_chord', 'standard'],
+    ['G8-08-ENGINE', F.g8, 8, 'geometry', 'isosceles_triangle', 'standard'],
+    ['N7-08-ENGINE', F.n7, 7, 'numeric', 'number_line_comparison', 'basic'],
+    ['N7-09-ENGINE', F.n7, 7, 'numeric', 'opposite_and_absolute_value', 'standard']
   ];
 
   ROWS.forEach(function (r) {

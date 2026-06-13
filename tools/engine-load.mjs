@@ -38,6 +38,7 @@ export function loadEngines() {
   const sourceFit = [
     'source-fit-extensions.js', 'source-fit-graphs.js',
     'source-fit-geometry.js', 'source-fit-algebra-g7.js',
+    'source-fit-dedicated.js',
     'pedagogy-attach.js'
   ];
   for (const f of base.concat(pilots).concat(sourceFit)) {
@@ -57,7 +58,9 @@ export function loadEngines() {
 
   // source-fit ids: those resolvable through getEngineExercise but not pilots
   const sourceFitIds = ['N7-01-ENGINE', 'U7-03-ENGINE', 'A8-01-ENGINE', 'U7-04-ENGINE',
-    'G8-02-ENGINE', 'G8-03-ENGINE', 'A7-04-ENGINE', 'A7-05-ENGINE'];
+    'G8-02-ENGINE', 'G8-03-ENGINE', 'A7-04-ENGINE', 'A7-05-ENGINE',
+    'U7-05-ENGINE', 'U7-06-ENGINE', 'U7-07-ENGINE', 'U7-08-ENGINE',
+    'G8-06-ENGINE', 'G8-08-ENGINE', 'N7-08-ENGINE', 'N7-09-ENGINE'];
 
   function fnName(id) {
     const b = id.replace(/-ENGINE$/, '').replace('-', '');

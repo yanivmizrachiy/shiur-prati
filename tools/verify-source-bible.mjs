@@ -24,8 +24,8 @@ check('pedagogy registry present', !!E.PEDAGOGY && typeof E.getPedagogy === 'fun
 // expected coverage: 33 active engine ids + 17 fallback topics
 const ENGINE_IDS = Object.keys(E.SOURCE_REGISTRY).filter(id => /-ENGINE$/.test(id));
 const FALLBACK_IDS = Object.keys(E.SOURCE_REGISTRY).filter(id => !/-ENGINE$/.test(id));
-check('33 engine ids in source registry', ENGINE_IDS.length === 33, ENGINE_IDS.length + '');
-check('17 fallback ids in source registry', FALLBACK_IDS.length === 17, FALLBACK_IDS.length + '');
+check('41 engine ids in source registry (33 + 8 converted)', ENGINE_IDS.length === 41, ENGINE_IDS.length + '');
+check('9 fallback ids in source registry (17 − 8 converted)', FALLBACK_IDS.length === 9, FALLBACK_IDS.length + '');
 
 const missingPed = [...ENGINE_IDS, ...FALLBACK_IDS].filter(id => !E.getPedagogy(id));
 check('every engine + fallback topic has pedagogy', missingPed.length === 0, 'missing: ' + missingPed.join(', '));

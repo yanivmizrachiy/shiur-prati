@@ -6,7 +6,7 @@ _Do not edit by hand; edit the registry and regenerate._
 Sources 01–06 = direct question/example sources. 07–09 = principles, skills, misconceptions, visual requirements. **File 10 is never a question source.**
 
 - Topics: 50 (33 active engines + 17 fallback)
-- Question families: 139
+- Question families: 155
 
 ## Numeric
 
@@ -117,35 +117,39 @@ Sources 01–06 = direct question/example sources. 07–09 = principles, skills,
   | `side_from_area` | open/mcq/tf/mistake | שטח ריבוע 64 — מהי הצלע? | חלוקת השטח ב-2 | שטח ריבוע |
   | `sum_under_root_trap` | open/mcq/tf/mistake | √(9+16) | פיצול שורש של סכום | סכום מתחת לשורש |
 
-### N7-08 — ציר מספרים והשוואת שליליים _(fallback)_
+### N7-08-ENGINE — ציר מספרים והשוואת שליליים
 
 - **Source PDF:** 05_grade-7_numeric_domain_curriculum.pdf · grade 7
-- **Skill:** השוואה וסדר על הציר
-- **Learning goal:** התלמיד ישווה שליליים על הציר
+- **Skill:** סדר והשוואה על הציר
+- **Learning goal:** התלמיד ישווה ויסדר שליליים על הציר
 - **Teacher purpose:** ביסוס סדר על ציר המספרים
-- **Common misconceptions:** מספר שלילי גדול כי ספרתו גדולה
-- **Follow-up ideas:** סדרו רשימה; מצאו בין שניים
-- **Visual required:** no
-- **Engine status:** fallback
+- **Common misconceptions:** מספר שלילי גדול כי ספרתו גדולה; סידור לפי מרחק מאפס
+- **Follow-up ideas:** סדרו רשימה; השוו שניים; מצאו בין שניים
+- **Visual required:** yes
+- **Engine status:** dedicated
 
   | family | qtypes | source pattern | misconception | variations |
   |---|---|---|---|---|
-  | `number_line_comparison` | open/mcq/tf/mistake | סדרו/השוו שליליים על הציר | ספרה גדולה=מספר גדול | השוואה |
+  | `order_negatives` | open/mcq/tf/mistake | סדרו מהקטן לגדול | סידור לפי מרחק מאפס | סדר |
+  | `compare_negatives` | open/mcq/tf/mistake | איזה גדול יותר? | ספרה גדולה=מספר גדול | השוואה |
+  | `integer_between` | open/mcq/tf/mistake | איזה שלם בין שניים? | בחירת מספר מחוץ לתחום | בין שניים |
 
-### N7-09 — מספר נגדי וערך מוחלט בהקשר _(fallback)_
+### N7-09-ENGINE — מספר נגדי וערך מוחלט
 
 - **Source PDF:** 05_grade-7_numeric_domain_curriculum.pdf · grade 7
 - **Skill:** נגדי וערך מוחלט
-- **Learning goal:** התלמיד יבין נגדי וערך מוחלט בהקשר
+- **Learning goal:** התלמיד יבין מספר נגדי וערך מוחלט
 - **Teacher purpose:** ביסוס מושג הנגדי והערך המוחלט
-- **Common misconceptions:** ערך מוחלט שלילי
-- **Follow-up ideas:** מצאו נגדי; חשבו ערך מוחלט
-- **Visual required:** no
-- **Engine status:** fallback
+- **Common misconceptions:** ערך מוחלט שלילי; נגדי=המספר עצמו; נגדי=ערך מוחלט
+- **Follow-up ideas:** מצאו נגדי; חשבו ערך מוחלט; נגדי בהקשר
+- **Visual required:** yes
+- **Engine status:** dedicated
 
   | family | qtypes | source pattern | misconception | variations |
   |---|---|---|---|---|
-  | `opposite_absolute_context` | open/mcq/tf/mistake | נגדי/ערך מוחלט בהקשר מציאותי | ערך מוחלט שלילי | הקשר |
+  | `opposite_number` | open/mcq/tf/mistake | מהו המספר הנגדי? | נגדי=המספר עצמו | נגדי |
+  | `absolute_value` | open/mcq/tf/mistake | חשבו ערך מוחלט | ערך מוחלט שלילי | ערך מוחלט |
+  | `opposite_in_context` | open/mcq/tf/mistake | נגדי/ערך מוחלט בהקשר | בלבול נגדי וערך מוחלט | טמפרטורה/גובה |
 
 ### N7-10 — טעויות בחיבור וחיסור מכוונים _(fallback)_
 
@@ -627,20 +631,22 @@ Sources 01–06 = direct question/example sources. 07–09 = principles, skills,
   |---|---|---|---|---|
   | `central_angle_sector` | open/mcq/tf/mistake | זווית מרכזית/גזרה מתוך עיגול | מרכזית כהיקפית | גזרה |
 
-### G8-06 — קוטר רדיוס ומיתר _(fallback)_
+### G8-06-ENGINE — קוטר, רדיוס ומיתר
 
 - **Source PDF:** 04_grade-8_geometry_curriculum.pdf · grade 8
-- **Skill:** יסודות העיגול
-- **Learning goal:** התלמיד יבחין בין קוטר, רדיוס ומיתר
+- **Skill:** יסודות העיגול והקשרים ביניהם
+- **Learning goal:** התלמיד יבחין בין קוטר, רדיוס ומיתר ויקשר ביניהם
 - **Teacher purpose:** ביסוס מושגי העיגול
-- **Common misconceptions:** בלבול מיתר עם קוטר
-- **Follow-up ideas:** זהו קוטר/רדיוס; מיתר ארוך ביותר
-- **Visual required:** no
-- **Engine status:** fallback
+- **Common misconceptions:** מיתר=קוטר; רדיוס כמיתר; קוטר=רדיוס
+- **Follow-up ideas:** זהו חלק בעיגול; קוטר מרדיוס; מיתר ארוך ביותר
+- **Visual required:** yes
+- **Engine status:** dedicated
 
   | family | qtypes | source pattern | misconception | variations |
   |---|---|---|---|---|
-  | `diameter_radius_chord` | open/mcq/tf/mistake | זיהוי קוטר/רדיוס/מיתר | מיתר=קוטר | חלקי עיגול |
+  | `identify_part` | open/mcq/tf/mistake | זהו רדיוס/מיתר/קוטר | בלבול בין החלקים | חלקי עיגול |
+  | `radius_diameter_relation` | open/mcq/tf/mistake | קוטר מרדיוס | קוטר=רדיוס | יחס קוטר-רדיוס |
+  | `longest_chord` | open/mcq/tf/mistake | המיתר הארוך ביותר | רדיוס כמיתר ארוך | מיתר ארוך |
 
 ### G8-07 — חפיפת משולשים לפי סימונים _(fallback)_
 
@@ -657,20 +663,22 @@ Sources 01–06 = direct question/example sources. 07–09 = principles, skills,
   |---|---|---|---|---|
   | `triangle_congruence_markings` | open/mcq/tf/mistake | זיהוי חפיפה לפי סימונים | חפיפה מנתון חלקי | צ.צ.צ/צ.ז.צ/ז.צ.ז |
 
-### G8-08 — משולש שווה שוקיים _(fallback)_
+### G8-08-ENGINE — משולש שווה-שוקיים
 
 - **Source PDF:** 04_grade-8_geometry_curriculum.pdf · grade 8
-- **Skill:** תכונות שווה-שוקיים
-- **Learning goal:** התלמיד יישם תכונות משולש שווה-שוקיים
+- **Skill:** זוויות בסיס וראש, סיווג
+- **Learning goal:** התלמיד ייישם תכונות משולש שווה-שוקיים
 - **Teacher purpose:** ביסוס תכונות שווה-שוקיים
-- **Common misconceptions:** הנחת שוויון זוויות בסיס בלי נימוק
-- **Follow-up ideas:** זוויות בסיס; שוק/בסיס
-- **Visual required:** no
-- **Engine status:** fallback
+- **Common misconceptions:** זוויות בסיס שונות; אי-חלוקה ב-2 בזוויות הבסיס; סיווג לפי הזווית הקטנה
+- **Follow-up ideas:** מצאו זווית ראש; מצאו זוויות בסיס; סווגו משולש
+- **Visual required:** yes
+- **Engine status:** dedicated
 
   | family | qtypes | source pattern | misconception | variations |
   |---|---|---|---|---|
-  | `isosceles_triangle` | open/mcq/tf/mistake | תכונות שווה-שוקיים | זוויות בסיס שונות | שוקיים, זוויות בסיס |
+  | `find_apex` | open/mcq/tf/mistake | זוויות בסיס נתונות — זווית הראש? | זווית ראש=זווית בסיס | זווית ראש |
+  | `find_base_angles` | open/mcq/tf/mistake | זווית ראש נתונה — זוויות הבסיס? | אי-חלוקה ב-2 | זוויות בסיס |
+  | `classify_isosceles` | open/mcq/tf/mistake | סווגו לפי הזוויות | סיווג לפי הקטנה | חד/ישר/קהה |
 
 ### G8-09 — דמיון וצללים _(fallback)_
 
@@ -759,65 +767,73 @@ Sources 01–06 = direct question/example sources. 07–09 = principles, skills,
   | `highest_lowest` | open/mcq/tf/mistake | איזו קטגוריה גבוהה/נמוכה? | בחירה לפי מיקום | קיצון |
   | `total_from_bars` | open/mcq/tf/mistake | מה הסך הכל? | הקיצון כסך | סך |
 
-### U7-05 — דיאגרמת עוגה ושכיחות יחסית _(fallback)_
+### U7-05-ENGINE — דיאגרמת עוגה ושכיחות יחסית
 
 - **Source PDF:** 06_uncertainty_domain_curriculum_examples.pdf · grade 7
-- **Skill:** זווית מרכזית מאחוז
-- **Learning goal:** התלמיד יחשב זווית מרכזית ויקרא דיאגרמת עוגה
-- **Teacher purpose:** חיבור אחוז לזווית מרכזית
-- **Common misconceptions:** אחוז כמעלות / כפל ב-100
-- **Follow-up ideas:** חשבו זווית מרכזית; מצאו אחוז חסר
-- **Visual required:** no
-- **Engine status:** fallback
+- **Skill:** זווית מרכזית מאחוז, אחוז חסר, גזרה גדולה
+- **Learning goal:** התלמיד יחשב זווית מרכזית מאחוז ויקרא דיאגרמת עוגה
+- **Teacher purpose:** חיבור אחוז לזווית מרכזית (×360°)
+- **Common misconceptions:** אחוז כמעלות; כפל ב-100 במקום ב-360; גזרה גדולה לפי סדר במקרא
+- **Follow-up ideas:** חשבו זווית מרכזית; מצאו אחוז חסר; זהו את הגזרה הגדולה
+- **Visual required:** yes
+- **Engine status:** dedicated
 
   | family | qtypes | source pattern | misconception | variations |
   |---|---|---|---|---|
-  | `pie_chart_central_angle` | open/mcq/tf/mistake | זווית מרכזית מאחוז (×3.6°) | אחוז=מעלות | גזרה, אחוז חסר |
+  | `pie_central_angle` | open/mcq/tf/mistake | זווית מרכזית מאחוז (×3.6°) | אחוז=מעלות | גזרה |
+  | `pie_missing_percent` | open/mcq/tf/mistake | מצאו את האחוז החסר (סכום 100%) | התעלמות מסכום 100% | אחוז חסר |
+  | `pie_largest_sector` | open/mcq/tf/mistake | איזו גזרה הגדולה ביותר? | בחירה לפי סדר במקרא | גזרה גדולה |
 
-### U7-06 — תרשים מטעה — ביקורת _(fallback)_
+### U7-06-ENGINE — תרשים מטעה — ביקורת
 
 - **Source PDF:** 06_uncertainty_domain_curriculum_examples.pdf · grade 7
-- **Skill:** ביקורת ייצוג גרפי
-- **Learning goal:** התלמיד יזהה מדוע תרשים מטעה ויציע תיקון
+- **Skill:** זיהוי ציר קטוע וייצוג מטעה
+- **Learning goal:** התלמיד יזהה מדוע תרשים מטעה ויציע ייצוג ניטרלי
 - **Teacher purpose:** פיתוח קריאה ביקורתית של גרפים
-- **Common misconceptions:** הסקה לפי גובה עמודה בלי לבדוק ציר
-- **Follow-up ideas:** מדוע מטעה?; הציעו תיקון
-- **Visual required:** no
-- **Engine status:** fallback
+- **Common misconceptions:** הסקה לפי גובה עמודה בלי לבדוק את הציר; גידול נראה=גידול אמיתי
+- **Follow-up ideas:** מדוע מטעה?; הציעו תיקון; חשבו את הגידול האמיתי
+- **Visual required:** yes
+- **Engine status:** dedicated
 
   | family | qtypes | source pattern | misconception | variations |
   |---|---|---|---|---|
-  | `misleading_graph_critique` | open/mcq/tf/mistake | מדוע התרשים מטעה? הציעו תיקון | התעלמות מציר y קטוע | ציר קטוע |
+  | `identify_misleading` | open/mcq/tf/mistake | מדוע התרשים מטעה? | התעלמות מציר y קטוע | ציר קטוע |
+  | `propose_fair_representation` | open/mcq/tf/mistake | הציעו ייצוג ניטרלי | הנחה שהתרשים הוגן | תיקון |
+  | `real_change` | open/mcq/tf/mistake | חשבו את הגידול האמיתי | גידול נראה=אמיתי | גידול % |
 
-### U7-07 — טבלת שכיחויות ושכיחות יחסית _(fallback)_
+### U7-07-ENGINE — טבלת שכיחויות ושכיחות יחסית
 
 - **Source PDF:** 06_uncertainty_domain_curriculum_examples.pdf · grade 7
-- **Skill:** ארגון נתונים
-- **Learning goal:** התלמיד יארגן נתונים בטבלה ויחשב שכיחות יחסית
-- **Teacher purpose:** ביסוס טבלת תדירות
-- **Common misconceptions:** תדירות יחסית כספירה
-- **Follow-up ideas:** ארגנו טבלה; חשבו תדירות יחסית
-- **Visual required:** no
-- **Engine status:** fallback
+- **Skill:** קריאת תדירות, תדירות יחסית, סך
+- **Learning goal:** התלמיד יקרא טבלת תדירות ויחשב שכיחות יחסית
+- **Teacher purpose:** ביסוס ארגון נתונים וקריאתם
+- **Common misconceptions:** תדירות יחסית כספירה; קריאת ערך כתדירות; סך כסכום ערכים
+- **Follow-up ideas:** קראו תדירות; חשבו תדירות יחסית; חשבו סך
+- **Visual required:** yes
+- **Engine status:** dedicated
 
   | family | qtypes | source pattern | misconception | variations |
   |---|---|---|---|---|
-  | `frequency_table_relative` | open/mcq/tf/mistake | בנו טבלה וחשבו שכיחות יחסית | תדירות יחסית=ספירה | טבלה |
+  | `read_frequency` | open/mcq/tf/mistake | מהי התדירות של ערך? | קריאת הערך כתדירות | קריאה |
+  | `relative_frequency` | open/mcq/tf/mistake | חשבו תדירות יחסית | תדירות יחסית כספירה | שבר/אחוז |
+  | `total_count` | open/mcq/tf/mistake | כמה נבדקים בסך הכול? | סכום ערכים במקום תדירויות | סך |
 
-### U7-08 — ממוצע חציון וטווח _(fallback)_
+### U7-08-ENGINE — ממוצע, חציון וטווח
 
 - **Source PDF:** 06_uncertainty_domain_curriculum_examples.pdf · grade 7
 - **Skill:** מדדי מרכז ופיזור
 - **Learning goal:** התלמיד יחשב ממוצע, חציון וטווח
 - **Teacher purpose:** ביסוס מדדים סטטיסטיים
-- **Common misconceptions:** חציון בלי מיון
-- **Follow-up ideas:** חשבו ממוצע; מצאו חציון
+- **Common misconceptions:** ממוצע כערך אמצעי; חציון בלי מיון; טווח כערך גדול
+- **Follow-up ideas:** חשבו ממוצע; מצאו חציון; חשבו טווח
 - **Visual required:** no
-- **Engine status:** fallback
+- **Engine status:** dedicated
 
   | family | qtypes | source pattern | misconception | variations |
   |---|---|---|---|---|
-  | `mean_median_range` | open/mcq/tf/mistake | חשבו ממוצע/חציון/טווח | חציון בלי מיון | מדדים |
+  | `mean` | open/mcq/tf/mistake | חשבו ממוצע סדרה | ממוצע כאמצעי | ממוצע |
+  | `median` | open/mcq/tf/mistake | מצאו חציון | חציון בלי מיון | חציון |
+  | `range` | open/mcq/tf/mistake | חשבו טווח | טווח כערך גדול | טווח |
 
 ### U8-01-ENGINE — ממוצע, חציון, טווח
 
