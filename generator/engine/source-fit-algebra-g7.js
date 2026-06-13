@@ -101,7 +101,7 @@
     let q=base+' מצאו את הטעות ותקנו.';
     if(qtype==='open') return E.questionTypes.open({question:q,answer:ans,svg:svg});
     if(qtype==='mcq') return E.questionTypes.mcq({question:base+' מה סוג הטעות העיקרי?',answer:ans,svg:svg,choices:cs});
-    if(qtype==='tf') return E.questionTypes.tf({question:'הפתרון '+tex(c.wrong)+' הוא פתרון נכון.',answer:ans,svg:svg,isTrue:false});
+    if(qtype==='tf'){ const tfTrue=Math.random()<0.5; return E.questionTypes.tf({question:'הפישוט '+tex(tfTrue?c.correct:c.wrong)+' הוא נכון.',answer:tfTrue?('נכון. '+tex(c.correct)+' הוא הפישוט הנכון.'):ans,svg:svg,isTrue:tfTrue}); }
     return E.questionTypes.mistake({question:base,answer:ans,svg:svg});
   }
 

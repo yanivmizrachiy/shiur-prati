@@ -6,7 +6,15 @@
   const L = ['א','ב','ג','ד'];
   function pick(a){ return E.pick ? E.pick(a) : a[Math.floor(Math.random()*a.length)]; }
   function shuf(a){ return E.shuffle ? E.shuffle(a) : a.slice().sort(()=>Math.random()-0.5); }
-  function ch(a){ return shuf(a).map((x,i)=>({label:L[i],text:x.text,correct:!!x.correct})); }
+  function ch(a){
+    // Dedupe by text, keep at least one correct option, cap at 4 BEFORE labeling
+    // so a label is never undefined and MCQ keeps exactly one correct answer.
+    const seen={}, uniq=[];
+    for(const x of a){ if(!seen[x.text]){ seen[x.text]=1; uniq.push(x); } }
+    const correct=uniq.filter(x=>x.correct), wrong=uniq.filter(x=>!x.correct);
+    let set=(correct.length?[correct[0]]:[]).concat(wrong).slice(0,4);
+    return shuf(set).map((x,i)=>({label:L[i],text:x.text,correct:!!x.correct}));
+  }
   function topic(g,d,id,label){ if(typeof TOPICS==='undefined'||!TOPICS[g]||!TOPICS[g][d]) return; if(!TOPICS[g][d].some(t=>t[0]===id)) TOPICS[g][d].push([id,label,1]); }
 
   function cylinderSvg(p,net){
@@ -27,24 +35,24 @@
     qtype=qtype==='mixed'?pick(['open','mcq','tf','mistake']):(qtype||'open');
     const r=pick([2,3,4,5]), h=pick([6,8,10,12]);
     const family=diff==='challenge'?pick(['surface','net']):pick(['volume','surface','net']);
-    const p={r,h}; let q='',a='',svg=cylinderSvg(p,family==='net'), cs=null, isTrue=true;
+    const p={r,h}; const tfTrue=qtype==='tf'&&Math.random()<0.5; let q='',a='',svg=cylinderSvg(p,family==='net'), cs=null, isTrue=true;
     if(family==='volume'){
       const val=r*r*h; q=`גליל שרדיוס בסיסו ${r} ס״מ וגובהו ${h} ס״מ. חשבו את נפח הגליל.`;
       a=`נפח גליל הוא שטח בסיס כפול גובה: V=πr²h. לכן V=π·${r}²·${h}=${val}π סמ״ק.`;
       cs=ch([{text:`${val}π סמ״ק`,correct:true},{text:`${2*r*h}π סמ״ק`,correct:false},{text:`${r*h}π סמ״ק`,correct:false},{text:`${r*r}π סמ״ק`,correct:false}]);
-      if(qtype==='tf'){q=`נפח הגליל הוא ${2*r*h}π סמ״ק.`; a='שגוי. זו אינה נוסחת נפח. צריך V=πr²h.'; isTrue=false;}
+      if(qtype==='tf'){ isTrue=tfTrue; q=tfTrue?`נפח הגליל הוא ${val}π סמ״ק.`:`נפח הגליל הוא ${2*r*h}π סמ״ק.`; a=tfTrue?`נכון. V=πr²h=π·${r}²·${h}=${val}π סמ״ק.`:'שגוי. זו אינה נוסחת נפח. צריך V=πr²h.'; }
       if(qtype==='mistake'){q=`תלמיד חישב 2πrh וקבע שזה נפח הגליל.`; a='הטעות: 2πrh הוא חלק משטח הפנים הצדדי, לא נפח. נפח הוא πr²h.';}
     } else if(family==='surface'){
       const val=2*r*(r+h); q=`גליל שרדיוסו ${r} ס״מ וגובהו ${h} ס״מ. חשבו שטח פנים כולל.`;
       a=`שטח פנים כולל: שני בסיסים ועוד מעטפת. S=2πr²+2πrh=2πr(r+h)=${val}π סמ״ר.`;
       cs=ch([{text:`${val}π סמ״ר`,correct:true},{text:`${r*r*h}π סמ״ר`,correct:false},{text:`${2*r*h}π סמ״ר`,correct:false},{text:`${2*r*r}π סמ״ר`,correct:false}]);
-      if(qtype==='tf'){q=`שטח הפנים הכולל הוא רק ${2*r*h}π סמ״ר.`; a='שגוי. זהו רק שטח המעטפת. בשטח פנים כולל מוסיפים גם שני בסיסים.'; isTrue=false;}
+      if(qtype==='tf'){ isTrue=tfTrue; q=tfTrue?`שטח הפנים הכולל הוא ${val}π סמ״ר.`:`שטח הפנים הכולל הוא רק ${2*r*h}π סמ״ר.`; a=tfTrue?`נכון. S=2πr(r+h)=2π·${r}·${r+h}=${val}π סמ״ר.`:'שגוי. זהו רק שטח המעטפת. בשטח פנים כולל מוסיפים גם שני בסיסים.'; }
       if(qtype==='mistake'){q='תלמיד חישב רק את שטח המעטפת ושכח את שני העיגולים.'; a='הטעות: פריסה של גליל כוללת מלבן ושני עיגולים, לכן צריך להוסיף שני בסיסים.';}
     } else {
       q='איזו פריסה מתאימה לגליל? נמקו לפי הציור.';
       a='פריסה של גליל מורכבת ממלבן אחד, שהוא המעטפת, ומשני עיגולים חופפים שהם הבסיסים.';
       cs=ch([{text:'מלבן ושני עיגולים חופפים',correct:true},{text:'שלושה מלבנים',correct:false},{text:'משולש ושני עיגולים',correct:false},{text:'שני מלבנים בלבד',correct:false}]);
-      if(qtype==='tf'){q='פריסה של גליל מורכבת משלושה מלבנים.'; a='שגוי. זו יכולה להתאים לתיבה, לא לגליל. לגליל יש מלבן ושני עיגולים.'; isTrue=false;}
+      if(qtype==='tf'){ isTrue=tfTrue; q=tfTrue?'פריסה של גליל מורכבת ממלבן ושני עיגולים חופפים.':'פריסה של גליל מורכבת משלושה מלבנים.'; a=tfTrue?'נכון. המעטפת היא מלבן ושני הבסיסים הם עיגולים חופפים.':'שגוי. זו יכולה להתאים לתיבה, לא לגליל. לגליל יש מלבן ושני עיגולים.'; }
       if(qtype==='mistake'){q='תלמיד בחר פריסה של תיבה וטען שהיא פריסה של גליל.'; a='הטעות: לגליל יש בסיסים עגולים, ולכן חייבים להופיע שני עיגולים בפריסה.';}
     }
     if(qtype==='mcq') return E.questionTypes.mcq({question:q,answer:a,svg,choices:cs});
@@ -61,7 +69,7 @@
     const svg=parallelSvg(p);
     let q=rel==='equal'?`בישרים מקבילים שנחתכים על ידי חותך, זווית אחת היא ${a}°. הזווית המסומנת נמצאת כזווית מתחלפת/מתאימה. מה גודלה?`:`בישרים מקבילים שנחתכים על ידי חותך, זווית אחת היא ${a}°. הזווית המסומנת נמצאת יחד איתה על אותו צד של החותך. מה גודלה?`;
     let ahtml=rel==='equal'?`בישרים מקבילים זוויות מתאימות או מתחלפות שוות, לכן הזווית החסרה היא ${ans}°.`:`זוויות פנימיות באותו צד של החותך משלימות ל-180°. לכן 180-${a}=${ans}°.`;
-    const cs=ch([{text:`${ans}°`,correct:true},{text:`${a}°`,correct:rel==='equal'},{text:`${180-a}°`,correct:rel==='supp'},{text:`${90}°`,correct:false},{text:`${Math.abs(a-20)}°`,correct:false}]).filter((v,i,arr)=>arr.findIndex(x=>x.text===v.text)===i).slice(0,4);
+    const cs=ch([{text:`${ans}°`,correct:true},{text:`${rel==='equal'?180-a:a}°`,correct:false},{text:`${90}°`,correct:false},{text:`${Math.abs(a-20)}°`,correct:false}]);
     let isTrue=true;
     if(qtype==='tf'){
       q=`הזווית החסרה היא תמיד ${a}°, כי הישרים מקבילים.`;
