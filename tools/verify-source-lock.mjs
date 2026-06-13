@@ -52,11 +52,8 @@ check('every *-ENGINE id has source metadata (' + engineUniverse.size + ' engine
   missingEngine.length === 0, 'missing: ' + missingEngine.join(', '));
 
 // ── documented logical-fallback topics must each have an entry (engine or fallback) ──
-// remaining logical fallbacks (8 others were converted to dedicated engines)
-const FALLBACK_TOPICS = [
-  'N7-10', 'N7-11', 'N7-12', 'N7-13',
-  'G7-05', 'G7-06', 'G8-05', 'G8-07', 'G8-09'
-];
+// all 17 former fallbacks are now dedicated *-ENGINE engines — none remain.
+const FALLBACK_TOPICS = [];
 const missingFallback = FALLBACK_TOPICS.filter(id => !reg[id]);
 check('every documented fallback topic has source metadata', missingFallback.length === 0, 'missing: ' + missingFallback.join(', '));
 const fallbackNoReason = FALLBACK_TOPICS.filter(id => reg[id] && reg[id].fallback && !reg[id].fallbackReason);

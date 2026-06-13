@@ -21,11 +21,11 @@ const E = sandbox.window.TargilimEngine;
 check('SOURCE_BIBLE.md exists', fs.existsSync('docs/SOURCE_BIBLE.md'));
 check('pedagogy registry present', !!E.PEDAGOGY && typeof E.getPedagogy === 'function');
 
-// expected coverage: 33 active engine ids + 17 fallback topics
+// expected coverage: 50 active engine ids, 0 fallback topics (all converted)
 const ENGINE_IDS = Object.keys(E.SOURCE_REGISTRY).filter(id => /-ENGINE$/.test(id));
 const FALLBACK_IDS = Object.keys(E.SOURCE_REGISTRY).filter(id => !/-ENGINE$/.test(id));
-check('41 engine ids in source registry (33 + 8 converted)', ENGINE_IDS.length === 41, ENGINE_IDS.length + '');
-check('9 fallback ids in source registry (17 − 8 converted)', FALLBACK_IDS.length === 9, FALLBACK_IDS.length + '');
+check('50 engine ids in source registry (all dedicated)', ENGINE_IDS.length === 50, ENGINE_IDS.length + '');
+check('0 fallback ids in source registry (all 17 converted)', FALLBACK_IDS.length === 0, FALLBACK_IDS.length + '');
 
 const missingPed = [...ENGINE_IDS, ...FALLBACK_IDS].filter(id => !E.getPedagogy(id));
 check('every engine + fallback topic has pedagogy', missingPed.length === 0, 'missing: ' + missingPed.join(', '));

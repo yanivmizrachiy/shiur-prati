@@ -6,7 +6,7 @@ _Do not edit by hand; edit the registry and regenerate._
 Sources 01–06 = direct question/example sources. 07–09 = principles, skills, misconceptions, visual requirements. **File 10 is never a question source.**
 
 - Topics: 50 (33 active engines + 17 fallback)
-- Question families: 155
+- Question families: 173
 
 ## Numeric
 
@@ -151,65 +151,73 @@ Sources 01–06 = direct question/example sources. 07–09 = principles, skills,
   | `absolute_value` | open/mcq/tf/mistake | חשבו ערך מוחלט | ערך מוחלט שלילי | ערך מוחלט |
   | `opposite_in_context` | open/mcq/tf/mistake | נגדי/ערך מוחלט בהקשר | בלבול נגדי וערך מוחלט | טמפרטורה/גובה |
 
-### N7-10 — טעויות בחיבור וחיסור מכוונים _(fallback)_
+### N7-10-ENGINE — טעויות בחיבור וחיסור מכוונים
 
 - **Source PDF:** 05_grade-7_numeric_domain_curriculum.pdf · grade 7
-- **Skill:** ניתוח טעות סימן
-- **Learning goal:** התלמיד יאתר טעות בחיבור/חיסור מכוונים
-- **Teacher purpose:** חידוד טעויות סימן
-- **Common misconceptions:** סימן לפי ספרה גדולה
-- **Follow-up ideas:** מצאו טעות; תקנו פתרון
-- **Visual required:** no
-- **Engine status:** fallback
+- **Skill:** ניתוח טעות סימן בחיבור/חיסור מכוונים
+- **Learning goal:** התלמיד יאתר ויתקן טעות סימן בחיבור/חיסור מספרים מכוונים
+- **Teacher purpose:** חידוד כלל הסימנים בחיבור וחיסור על ציר המספרים
+- **Common misconceptions:** סימן לפי הספרה הגדולה; התעלמות מכלל החיסור (חיבור הנגדי)
+- **Follow-up ideas:** מצאו את התוצאה הנכונה; אתרו טעות; תקנו פתרון
+- **Visual required:** yes
+- **Engine status:** dedicated
 
   | family | qtypes | source pattern | misconception | variations |
   |---|---|---|---|---|
-  | `directed_add_sub_mistake` | open/mcq/tf/mistake | מצאו טעות בחיבור/חיסור מכוון | סימן שגוי | ניתוח טעות |
+  | `add` | open/mcq/tf/mistake | נתחו חיבור מכוון ומצאו/תקנו טעות סימן | סימן לפי הספרה הגדולה | חיבור |
+  | `subtract` | open/mcq/tf/mistake | נתחו חיסור מכוון (חיבור הנגדי) ומצאו/תקנו טעות | חיסור בלי הפיכת הנגדי | חיסור |
+  | `three_terms` | open/mcq/tf/mistake | נתחו ביטוי תלת-איברי משמאל לימין | טעות סימן בשלב ביניים | שלושה איברים |
 
-### N7-11 — חיבור וחיסור מכוונים בהקשר _(fallback)_
+### N7-11-ENGINE — חיבור וחיסור מכוונים בהקשר
 
 - **Source PDF:** 05_grade-7_numeric_domain_curriculum.pdf · grade 7
-- **Skill:** יישום בהקשר
-- **Learning goal:** התלמיד ייישם חיבור/חיסור מכוונים בהקשר
-- **Teacher purpose:** חיבור מכוונים למצב מציאותי
-- **Common misconceptions:** התעלמות מכיוון
-- **Follow-up ideas:** טמפרטורה; גובה/עומק
-- **Visual required:** no
-- **Engine status:** fallback
+- **Skill:** יישום מכוונים בהקשר מציאותי
+- **Learning goal:** התלמיד ייישם חיבור/חיסור מכוונים במצב מציאותי (טמפרטורה/מפלס/יתרה)
+- **Teacher purpose:** חיבור כלל הסימנים לכיוון השינוי בעולם האמיתי
+- **Common misconceptions:** התעלמות מכיוון השינוי; חיבור גודל בלי סימן
+- **Follow-up ideas:** טמפרטורה; מפלס מים; יתרת חשבון
+- **Visual required:** yes
+- **Engine status:** dedicated
 
   | family | qtypes | source pattern | misconception | variations |
   |---|---|---|---|---|
-  | `directed_add_sub_context` | open/mcq/tf/mistake | בעיית הקשר בחיבור/חיסור מכוון | התעלמות מכיוון | הקשר |
+  | `find_result` | open/mcq/tf/mistake | נתון מצב התחלתי ושינוי — מהו המצב הסופי? | התעלמות מכיוון השינוי | מצב סופי |
+  | `find_change` | open/mcq/tf/mistake | נתון מצב התחלתי וסופי — מהו השינוי? | חיסור בכיוון ההפוך | גודל השינוי |
+  | `find_start` | open/mcq/tf/mistake | נתון שינוי ומצב סופי — מהו המצב ההתחלתי? | פעולה במקום הפעולה ההפוכה | מצב התחלתי |
 
-### N7-12 — טעויות בכפל וחילוק מכוונים _(fallback)_
+### N7-12-ENGINE — טעויות בכפל וחילוק מכוונים
 
 - **Source PDF:** 05_grade-7_numeric_domain_curriculum.pdf · grade 7
-- **Skill:** ניתוח טעות סימן
-- **Learning goal:** התלמיד יאתר טעות בכפל/חילוק מכוונים
-- **Teacher purpose:** חידוד כללי הסימנים
-- **Common misconceptions:** החלת כלל החיבור על כפל
-- **Follow-up ideas:** מצאו טעות; תקנו
+- **Skill:** ניתוח טעות סימן בכפל/חילוק מכוונים
+- **Learning goal:** התלמיד יאתר ויתקן טעות סימן בכפל/חילוק מספרים מכוונים
+- **Teacher purpose:** חידוד כלל הסימנים בכפל וחילוק (זהים→חיובי, שונים→שלילי)
+- **Common misconceptions:** החלת כלל החיבור על כפל; טעות בסימן התוצאה
+- **Follow-up ideas:** מצאו תוצאה נכונה; אתרו טעות; תקנו
 - **Visual required:** no
-- **Engine status:** fallback
+- **Engine status:** dedicated
 
   | family | qtypes | source pattern | misconception | variations |
   |---|---|---|---|---|
-  | `directed_mul_div_mistake` | open/mcq/tf/mistake | מצאו טעות בכפל/חילוק מכוון | כלל סימן שגוי | ניתוח טעות |
+  | `multiply` | open/mcq/tf/mistake | נתחו כפל מכוון ומצאו/תקנו טעות סימן | כלל החיבור מוחל על כפל | כפל |
+  | `divide` | open/mcq/tf/mistake | נתחו חילוק מכוון ומצאו/תקנו טעות סימן | טעות סימן במנה | חילוק |
+  | `three_factors` | open/mcq/tf/mistake | מכפלת שלושה גורמים מכוונים | התעלמות ממספר הגורמים השליליים | שלושה גורמים |
 
-### N7-13 — כללי סימנים בכפל וחילוק _(fallback)_
+### N7-13-ENGINE — כללי סימנים בכפל וחילוק
 
 - **Source PDF:** 05_grade-7_numeric_domain_curriculum.pdf · grade 7
-- **Skill:** כללי סימנים
-- **Learning goal:** התלמיד ייישם כללי סימנים בכפל וחילוק
-- **Teacher purpose:** ביסוס כללי הסימנים
-- **Common misconceptions:** בלבול עם כללי החיבור
-- **Follow-up ideas:** כפל; חילוק
+- **Skill:** יישום כלל הסימנים בכפל וחילוק
+- **Learning goal:** התלמיד ייישם את כלל הסימנים לקביעת סימן תוצאת כפל/חילוק
+- **Teacher purpose:** ביסוס כלל הסימנים והבחנה מכללי החיבור
+- **Common misconceptions:** בלבול עם כללי החיבור; קביעת סימן שגויה
+- **Follow-up ideas:** סימן בכפל; סימן בחילוק; השוואה לכללי חיבור
 - **Visual required:** no
-- **Engine status:** fallback
+- **Engine status:** dedicated
 
   | family | qtypes | source pattern | misconception | variations |
   |---|---|---|---|---|
-  | `directed_mul_div_rules` | open/mcq/tf/mistake | יישום כללי סימנים | בלבול כללים | כפל/חילוק |
+  | `product_sign` | open/mcq/tf/mistake | קבעו את סימן המכפלה של שני מספרים | בלבול עם כללי החיבור | כפל |
+  | `quotient_sign` | open/mcq/tf/mistake | קבעו את סימן המנה של שני מספרים | בלבול עם כללי החיבור | חילוק |
+  | `three_factor_sign` | open/mcq/tf/mistake | קבעו את סימן מכפלת שלושה מספרים | התעלמות ממספר השליליים | שלושה גורמים |
 
 ### N8-01-ENGINE — יחס
 
@@ -515,35 +523,39 @@ Sources 01–06 = direct question/example sources. 07–09 = principles, skills,
   | `possible_triangle` | open/mcq/tf/mistake | האם הזוויות אפשריות? | בדיקה שכל זווית<180° | אפשרות משולש |
   | `classify_triangle` | open/mcq/tf/mistake | סווגו לפי הזוויות | סיווג לפי הקטנה | חד/ישר/קהה |
 
-### G7-05 — הזזות שיקופים וסיבובים _(fallback)_
+### G7-05-ENGINE — הזזות ושיקופים
 
 - **Source PDF:** 03_grade-7_pre_deductive_geometry_curriculum.pdf · grade 7
-- **Skill:** טרנספורמציות במישור
-- **Learning goal:** התלמיד יזהה תוצאת הזזה/שיקוף/סיבוב
-- **Teacher purpose:** ביסוס טרנספורמציות בסיסיות
-- **Common misconceptions:** בלבול בין סוגי הטרנספורמציה
-- **Follow-up ideas:** הזזה; שיקוף
-- **Visual required:** no
-- **Engine status:** fallback
+- **Skill:** טרנספורמציות איזומטריות במישור
+- **Learning goal:** התלמיד יזהה הזזה/שיקוף ויבין ששמירת הגודל היא תכונה איזומטרית
+- **Teacher purpose:** ביסוס משמעות איזומטריה — שמירת מרחקים וצורה
+- **Common misconceptions:** טרנספורמציה משנה גודל; בלבול בין סוגי הטרנספורמציה
+- **Follow-up ideas:** זיהוי הזזה; זיהוי שיקוף; מה נשמר בטרנספורמציה
+- **Visual required:** yes
+- **Engine status:** dedicated
 
   | family | qtypes | source pattern | misconception | variations |
   |---|---|---|---|---|
-  | `transformations` | open/mcq/tf/mistake | מצאו תמונת נקודה/צורה לאחר טרנספורמציה | בלבול סוג טרנספורמציה | הזזה/שיקוף/סיבוב |
+  | `translate` | open/mcq/tf/mistake | זיהוי הזזה ומה נשמר | הזזה משנה גודל | הזזה |
+  | `reflect` | open/mcq/tf/mistake | זיהוי שיקוף ומה נשמר | שיקוף משנה גודל | שיקוף |
+  | `rotate` | open/mcq/tf/mistake | זיהוי סיבוב ומה נשמר | סיבוב משנה גודל | סיבוב |
 
-### G7-06 — שטח צורה מורכבת _(fallback)_
+### G7-06-ENGINE — שטח צורה מורכבת
 
 - **Source PDF:** 03_grade-7_pre_deductive_geometry_curriculum.pdf · grade 7
-- **Skill:** פירוק לצורות
-- **Learning goal:** התלמיד יחשב שטח צורה מורכבת בפירוק
-- **Teacher purpose:** ביסוס פירוק שטחים
-- **Common misconceptions:** שכחת חלק/כפל שגוי
-- **Follow-up ideas:** פרקו לצורות; חברו שטחים
-- **Visual required:** no
-- **Engine status:** fallback
+- **Skill:** שטח בפירוק וחיסור (צורת L)
+- **Learning goal:** התלמיד יחשב שטח צורה מורכבת בפירוק לשני מלבנים או בחיסור
+- **Teacher purpose:** ביסוס פירוק שטחים וחיסור פינה חסרה
+- **Common misconceptions:** שכחת הפינה החסרה; חיבור צלעות במקום שטחים; כפל ממדים שגוי
+- **Follow-up ideas:** חישוב בחיסור; חישוב בפירוק; איתור טעות בשטח
+- **Visual required:** yes
+- **Engine status:** dedicated
 
   | family | qtypes | source pattern | misconception | variations |
   |---|---|---|---|---|
-  | `composite_area` | open/mcq/tf/mistake | שטח צורה מורכבת בפירוק | שכחת תת-צורה | פירוק |
+  | `subtract` | open/mcq/tf/mistake | שטח בחיסור: מלבן שלם פחות פינה חסרה | שכחת חיסור הפינה | חיסור |
+  | `decompose` | open/mcq/tf/mistake | שטח בפירוק לשני מלבנים | שכחת תת-מלבן | פירוק |
+  | `perimeter` | open/mcq/tf/mistake | היקף צורת ה-L | הנחה שחיתוך פינה מקטין את ההיקף | היקף |
 
 ### G8-01-ENGINE — עיגול — היקף ושטח
 
@@ -616,20 +628,22 @@ Sources 01–06 = direct question/example sources. 07–09 = principles, skills,
   | `area_ratio` | open/mcq/tf/mistake | יחס שטחים ביחס k | יחס שטחים=יחס צלעות | יחס שטחים |
   | `is_similar` | open/mcq/tf/mistake | האם המשולשים דומים? | בדיקה לפי הפרש | זיהוי דמיון |
 
-### G8-05 — זווית מרכזית וחלק מעיגול _(fallback)_
+### G8-05-ENGINE — זווית מרכזית וחלק מעיגול
 
 - **Source PDF:** 04_grade-8_geometry_curriculum.pdf · grade 8
-- **Skill:** זווית מרכזית וגזרה
-- **Learning goal:** התלמיד יחשב זווית מרכזית וחלק מעיגול
-- **Teacher purpose:** חיבור זווית מרכזית לחלק מהעיגול
-- **Common misconceptions:** בלבול זווית מרכזית עם היקפית
-- **Follow-up ideas:** זווית מרכזית; שטח גזרה
-- **Visual required:** no
-- **Engine status:** fallback
+- **Skill:** זווית מרכזית, חלק מהעיגול וגזרה
+- **Learning goal:** התלמיד יקשר בין אחוז מהעיגול לזווית מרכזית (×360°) וישווה גזרות
+- **Teacher purpose:** ביסוס הקשר חלק↔זווית מרכזית והבחנה ממעלות
+- **Common misconceptions:** אחוז כמעלות; כפל ב-100 במקום ב-360; בלבול זווית מרכזית עם היקפית
+- **Follow-up ideas:** זווית מרכזית מאחוז; אחוז מזווית; איזו גזרה גדולה יותר
+- **Visual required:** yes
+- **Engine status:** dedicated
 
   | family | qtypes | source pattern | misconception | variations |
   |---|---|---|---|---|
-  | `central_angle_sector` | open/mcq/tf/mistake | זווית מרכזית/גזרה מתוך עיגול | מרכזית כהיקפית | גזרה |
+  | `angle_from_part` | open/mcq/tf/mistake | זווית מרכזית מאחוז (אחוז×360°) | אחוז=מעלות | אחוז→זווית |
+  | `part_from_angle` | open/mcq/tf/mistake | חלק מהעיגול מזווית מרכזית (זווית/360°) | הזווית כאחוז | זווית→אחוז |
+  | `compare` | open/mcq/tf/mistake | איזו גזרה גדולה יותר? | בחירה לפי מספר "עגול" | השוואת גזרות |
 
 ### G8-06-ENGINE — קוטר, רדיוס ומיתר
 
@@ -648,20 +662,22 @@ Sources 01–06 = direct question/example sources. 07–09 = principles, skills,
   | `radius_diameter_relation` | open/mcq/tf/mistake | קוטר מרדיוס | קוטר=רדיוס | יחס קוטר-רדיוס |
   | `longest_chord` | open/mcq/tf/mistake | המיתר הארוך ביותר | רדיוס כמיתר ארוך | מיתר ארוך |
 
-### G8-07 — חפיפת משולשים לפי סימונים _(fallback)_
+### G8-07-ENGINE — חפיפת משולשים לפי סימונים
 
 - **Source PDF:** 04_grade-8_geometry_curriculum.pdf · grade 8
-- **Skill:** משפטי חפיפה
-- **Learning goal:** התלמיד יזהה חפיפה לפי סימונים
-- **Teacher purpose:** ביסוס משפטי חפיפה
-- **Common misconceptions:** הנחת חפיפה מסימון חלקי
-- **Follow-up ideas:** זהו משפט חפיפה; השלימו נתון
-- **Visual required:** no
-- **Engine status:** fallback
+- **Skill:** משפטי חפיפה צ.צ.צ / צ.ז.צ / ז.צ.ז
+- **Learning goal:** התלמיד יזהה את משפט החפיפה המתאים לסימונים ויבחין מנתון חלקי
+- **Teacher purpose:** ביסוס משפטי חפיפה והנמקה לפי סימונים ולא לפי מראה
+- **Common misconceptions:** חפיפה מנתון חלקי; הנמקה לפי מראה; ז.ז.ז כמשפט חפיפה
+- **Follow-up ideas:** זהו משפט חפיפה; השלימו נתון חסר; נמקו מדוע חופפים
+- **Visual required:** yes
+- **Engine status:** dedicated
 
   | family | qtypes | source pattern | misconception | variations |
   |---|---|---|---|---|
-  | `triangle_congruence_markings` | open/mcq/tf/mistake | זיהוי חפיפה לפי סימונים | חפיפה מנתון חלקי | צ.צ.צ/צ.ז.צ/ז.צ.ז |
+  | `name_theorem` | open/mcq/tf/mistake | לפי איזה משפט חפיפה? | בחירת ז.ז.ז | זיהוי משפט |
+  | `missing_datum` | open/mcq/tf/mistake | אילו נתונים דרושים לחפיפה? | חפיפה מסימון חלקי | השלמת נתון |
+  | `why` | open/mcq/tf/mistake | מדוע המשולשים חופפים? | הנמקה לפי מראה | הנמקה |
 
 ### G8-08-ENGINE — משולש שווה-שוקיים
 
@@ -680,20 +696,22 @@ Sources 01–06 = direct question/example sources. 07–09 = principles, skills,
   | `find_base_angles` | open/mcq/tf/mistake | זווית ראש נתונה — זוויות הבסיס? | אי-חלוקה ב-2 | זוויות בסיס |
   | `classify_isosceles` | open/mcq/tf/mistake | סווגו לפי הזוויות | סיווג לפי הקטנה | חד/ישר/קהה |
 
-### G8-09 — דמיון וצללים _(fallback)_
+### G8-09-ENGINE — דמיון וצללים
 
 - **Source PDF:** 04_grade-8_geometry_curriculum.pdf · grade 8
-- **Skill:** דמיון ביישום צללים
-- **Learning goal:** התלמיד ייישם דמיון בבעיות צל
-- **Teacher purpose:** יישום דמיון משולשים בהקשר
-- **Common misconceptions:** התעלמות מיחס הדמיון
-- **Follow-up ideas:** גובה מצל; יחס דמיון
-- **Visual required:** no
-- **Engine status:** fallback
+- **Skill:** דמיון משולשים ביישום גובה-וצל
+- **Learning goal:** התלמיד ייישם דמיון משולשים למציאת גובה עצם לפי צילו
+- **Teacher purpose:** יישום יחס דמיון בהקשר מציאותי והבחנה בין דמיון לחפיפה
+- **Common misconceptions:** יחס דמיון כהפרש; דמיון כחפיפה; גובה=אורך הצל
+- **Follow-up ideas:** גובה מצל; יחס הדמיון; מדוע מותר להשתמש בדמיון
+- **Visual required:** yes
+- **Engine status:** dedicated
 
   | family | qtypes | source pattern | misconception | variations |
   |---|---|---|---|---|
-  | `similarity_and_shadows` | open/mcq/tf/mistake | גובה עצם מצל לפי דמיון | התעלמות מיחס | צללים |
+  | `find_height` | open/mcq/tf/mistake | גובה עצם מצל לפי דמיון | גובה=אורך הצל | גובה לא ידוע |
+  | `find_ratio` | open/mcq/tf/mistake | מהו יחס הדמיון? | יחס כהפרש צללים | יחס דמיון |
+  | `why` | open/mcq/tf/mistake | מדוע מותר להשתמש בדמיון? | דמיון=חפיפה | הנמקה |
 
 ## Uncertainty
 
