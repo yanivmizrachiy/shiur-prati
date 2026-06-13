@@ -18,9 +18,16 @@ const requiredFiles = [
   'docs/SOURCE_FIT_ALGEBRA_G8_EXPANSION_20260612.md',
   'docs/SOURCE_FIT_NUMERIC_G7_EXPANSION_20260612.md',
   'docs/SOURCE_FIT_UNCERTAINTY_EXPANSION_20260612.md',
+  'docs/SOURCE_FIT_GEOMETRY_G7_EXPANSION_20260612_B.md',
+  'docs/SOURCE_FIT_GEOMETRY_G7_PYTHAGORAS_ANGLES_20260612.md',
+  'docs/SOURCE_FIT_GEOMETRY_G8_EXPANSION_20260612.md',
   'tools/verify-chatgpt-source-fit-sync.mjs',
   'tools/verify-numeric-g7-source-fit.mjs',
-  'tools/verify-algebra-g8-source-fit.mjs'
+  'tools/verify-algebra-g8-source-fit.mjs',
+  'tools/verify-geometry-g7-source-fit.mjs',
+  'tools/verify-geometry-g8-source-fit.mjs',
+  'tools/verify-real-generator-runtime.mjs',
+  'tools/verify-index-script-links.mjs'
 ];
 
 for (const file of requiredFiles) read(file);
@@ -30,6 +37,9 @@ const matrix = read('docs/SOURCE_COVERAGE_MATRIX_20260612.md');
 const a8 = read('docs/SOURCE_FIT_ALGEBRA_G8_EXPANSION_20260612.md');
 const n7 = read('docs/SOURCE_FIT_NUMERIC_G7_EXPANSION_20260612.md');
 const u7 = read('docs/SOURCE_FIT_UNCERTAINTY_EXPANSION_20260612.md');
+const g7a = read('docs/SOURCE_FIT_GEOMETRY_G7_EXPANSION_20260612_B.md');
+const g7b = read('docs/SOURCE_FIT_GEOMETRY_G7_PYTHAGORAS_ANGLES_20260612.md');
+const g8 = read('docs/SOURCE_FIT_GEOMETRY_G8_EXPANSION_20260612.md');
 
 must(plan, 'extreme plan', ['50%', '60%', '70%', '82%', '92%', '100%']);
 must(matrix, 'source coverage matrix', [
@@ -39,6 +49,9 @@ must(matrix, 'source coverage matrix', [
 must(a8, 'grade 8 algebra doc', ['A8-04', 'A8-05', 'A8-06']);
 must(n7, 'grade 7 numeric doc', ['N7-08', 'N7-09']);
 must(u7, 'uncertainty doc', ['U7-05', 'U7-06', 'U7-07', 'U7-08']);
+must(g7a, 'grade 7 geometry nets doc', ['G7-07', 'G7-08']);
+must(g7b, 'grade 7 geometry pythagoras angles doc', ['G7-09', 'G7-10']);
+must(g8, 'grade 8 geometry doc', ['G8-10', 'G8-11']);
 
 console.log(JSON.stringify({
   ok: true,
@@ -46,5 +59,13 @@ console.log(JSON.stringify({
   requiredFiles: requiredFiles.length,
   gates: ['50%', '60%', '70%', '82%', '92%', '100%'],
   sourceFilesCoveredInMatrix: 10,
-  focusedAreas: ['grade 7 numeric', 'grade 8 algebra', 'uncertainty']
+  focusedAreas: [
+    'grade 7 numeric',
+    'grade 8 algebra',
+    'uncertainty',
+    'grade 7 geometry',
+    'grade 8 geometry',
+    'runtime verifier',
+    'index script link verifier'
+  ]
 }, null, 2));
