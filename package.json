@@ -1,10 +1,11 @@
 {
   "name": "targilim",
-  "version": "0.73.0",
+  "version": "0.74.0",
   "private": true,
   "type": "module",
   "scripts": {
     "verify:baseline": "node tools/verify-baseline-protection.mjs",
+    "verify:brand": "node tools/verify-branding.mjs",
     "verify:runtime": "node tools/verify-real-generator-runtime.mjs",
     "verify:links": "node tools/verify-index-script-links.mjs",
     "verify:book": "node tools/verify-digital-book.mjs",
@@ -22,7 +23,11 @@
     "verify:stress": "node tools/verify-all-engines-stress.mjs",
     "verify:variety": "node tools/verify-topic-question-variety.mjs",
     "verify:visual": "node tools/verify-visual-quality-deep.mjs",
-    "verify:all": "npm run verify:baseline && npm run verify:links && npm run verify:book && npm run verify:inventory && npm run verify:source-fit && npm run verify:source-lock && npm run verify:source-bible && npm run verify:premium-geometry && npm run verify:coordinate-grid && npm run verify:numeric7 && npm run verify:algebra8 && npm run verify:geometry7 && npm run verify:geometry8 && npm run verify:runtime",
-    "verify:deep": "npm run verify:all && npm run verify:coverage && npm run verify:stress && npm run verify:variety && npm run verify:visual"
+    "verify:family": "node tools/verify-question-family-provenance.mjs",
+    "verify:followups": "node tools/verify-follow-up-generation.mjs",
+    "verify:teacher": "node tools/verify-teacher-advanced-mode.mjs",
+    "verify:gallery": "node tools/verify-teacher-gallery.mjs",
+    "verify:all": "npm run verify:baseline && npm run verify:brand && npm run verify:links && npm run verify:book && npm run verify:inventory && npm run verify:source-fit && npm run verify:source-lock && npm run verify:source-bible && npm run verify:premium-geometry && npm run verify:coordinate-grid && npm run verify:numeric7 && npm run verify:algebra8 && npm run verify:geometry7 && npm run verify:geometry8 && npm run verify:runtime",
+    "verify:deep": "npm run verify:all && npm run verify:coverage && npm run verify:stress && npm run verify:variety && npm run verify:visual && npm run verify:family && npm run verify:followups && npm run verify:gallery && npm run verify:teacher"
   }
 }
