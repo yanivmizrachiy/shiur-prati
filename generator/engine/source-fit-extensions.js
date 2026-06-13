@@ -126,7 +126,10 @@ $$S=${c.w}\cdot ${c.h}=${c.area}$$`;
       q = `שלוש נקודות של מלבן הן ${pointText(c.points[0])}, ${pointText(c.points[1])}, ${pointText(c.points[2])}. מהי הנקודה D שמשלימה את המלבן?`;
       a = `במלבן המקביל לצירים, ל-D יש אותו x כמו A ואותו y כמו C. לכן:
 $$D=(${c.missing.x},${c.missing.y})$$`;
-      choices = choiceList([{text:pointText(c.missing),correct:true},{text:pointText({x:c.points[2].x,y:c.points[0].y}),correct:false},{text:pointText({x:c.points[0].x,y:c.points[0].y}),correct:false},{text:pointText({x:c.points[1].x,y:c.points[2].y}),correct:false}]);
+      // distractors include the x/y-swapped point (the classic coordinate
+      // misconception), guarded so it never collides with the correct answer.
+      const swap = c.missing.x !== c.missing.y ? {x:c.missing.y,y:c.missing.x} : {x:c.points[0].x,y:c.points[0].y};
+      choices = choiceList([{text:pointText(c.missing),correct:true},{text:pointText(swap),correct:false},{text:pointText({x:c.points[2].x,y:c.points[0].y}),correct:false},{text:pointText({x:c.points[1].x,y:c.points[2].y}),correct:false}]);
       if(qtype==='tf'){ isTrue=tfTrue; q = tfTrue ? `הנקודה ${pointText(c.missing)} משלימה את המלבן.` : `הנקודה ${pointText({x:c.points[2].x,y:c.points[0].y})} משלימה את המלבן.`; a = tfTrue ? `נכון. הנקודה החסרה לוקחת x מ-A ו-y מ-C: ${pointText(c.missing)}.` : `שגוי. זו כבר נקודה B. הנקודה החסרה צריכה לקחת x מ-A ו-y מ-C: ${pointText(c.missing)}.`; }
       if(qtype==='mistake'){ q = `תלמיד השלים את הנקודה הרביעית כ-${pointText({x:c.points[1].x,y:c.points[2].y})}, כי "לוקחים את x ו-y מהנקודה האחרונה".`; a = `הטעות: צריך לשמור צלעות מקבילות לצירים. הנקודה החסרה היא ${pointText(c.missing)}.`; }
     }

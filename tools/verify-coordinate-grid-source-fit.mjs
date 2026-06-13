@@ -19,8 +19,8 @@ check('N7-01 skill is coordinate system Q1', meta && /coordinate_system_quadrant
 // sample across qtypes/difficulties and collect evidence
 let svgWithAxes = false, ticks = false, readPoint = false, plotPoint = false,
     swapDistractor = false, hasAnswer = true, bad = false, mcqOneCorrect = true;
-for (let i = 0; i < 80; i++) {
-  const t = ['open', 'mcq', 'tf', 'mistake'][i % 4];
+for (let i = 0; i < 240; i++) {
+  const t = i % 2 === 0 ? 'mcq' : ['open', 'tf', 'mistake'][i % 3];
   const d = ['basic', 'standard', 'challenge'][i % 3];
   const r = callEngine(ID, d, t);
   if (!r || !r.questionHTML || !r.answerHTML) { bad = true; continue; }
