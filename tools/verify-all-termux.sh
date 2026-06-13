@@ -17,6 +17,7 @@ run() {
 }
 
 run tools/verify-index-script-links.mjs
+run tools/verify-digital-book.mjs
 run tools/verify-source-fit-inventory.mjs
 run tools/verify-chatgpt-source-fit-sync.mjs
 run tools/verify-numeric-g7-source-fit.mjs
