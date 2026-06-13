@@ -30,7 +30,9 @@ export function loadEngines() {
 
   const base = [
     'schema.js', 'source-schema.js', 'source-registry.js', 'random.js',
-    'validators.js', 'themes.js', 'diagrams.js', 'question-types.js'
+    'validators.js', 'themes.js', 'diagrams.js',
+    'diagram-premium-overrides.js', 'diagram-ultra-autopilot.js',
+    'question-types.js'
   ];
   const pilots = fs.readdirSync('generator/engine').filter(f => f.startsWith('pilot-')).sort();
   const sourceFit = [
