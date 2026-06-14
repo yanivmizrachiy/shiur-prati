@@ -53,5 +53,11 @@ const src = read('generator/teacher-mode.js');
 check('PNG export uses html2canvas', /html2canvas\(/.test(src));
 check('downloads use Blob + object URL', /new Blob\(/.test(src) && /createObjectURL/.test(src));
 
+// copy-as-image: the whole question + drawing to the clipboard (paste into Canva/Word)
+check('copyImage implemented', /Teacher\.copyImage\s*=\s*function/.test(src));
+check('copyImage captures the card with html2canvas', /copyImage[\s\S]*?html2canvas\(/.test(src));
+check('copyImage writes an image to the clipboard (ClipboardItem)', /ClipboardItem\(\{\s*'image\/png'|ClipboardItem\(\{ 'image\/png'/.test(src) && /clipboard\.write\(/.test(src));
+check('copyImage falls back to a PNG download when blocked', /copyImage[\s\S]*?download\(/.test(src));
+
 console.log(fails ? 'COPY_EXPORT_FAIL (' + fails + ')' : 'COPY_EXPORT_PASS');
 process.exit(fails ? 1 : 0);

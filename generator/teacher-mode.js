@@ -120,6 +120,7 @@
       + b('copy(' + i + ",'question')", '⧉ העתק שאלה')
       + b('copy(' + i + ",'question_solution')", '⧉ שאלה+פתרון')
       + b('copy(' + i + ",'teacher_card')", '⧉ כרטיס מורה')
+      + b('copyImage(' + i + ')', '🖼 העתק כתמונה', 'tc-copyimg')
       + b('exportHTML(' + i + ')', '⤓ HTML')
       + b('exportPNG(' + i + ')', '⤓ PNG')
       + b('addToWorksheet(' + i + ')', '＋ לדף עבודה')
@@ -204,6 +205,25 @@
   Teacher.exportPNG = function (i) {
     const card = document.getElementById('exCard' + i); if (!card || typeof html2canvas !== 'function') { flash('PNG לא זמין'); return; }
     html2canvas(card, { backgroundColor: '#ffffff', scale: 2 }).then(function (canvas) { canvas.toBlob(function (blob) { if (blob) download('targil-' + (i + 1) + '.png', blob, 'image/png'); flash('יוצא PNG'); }); });
+  };
+  // Copy the WHOLE question (text + diagram/graph) as an image to the clipboard,
+  // so a teacher can paste it straight into Canva / Word / Docs. Teacher controls
+  // are excluded (data-html2canvas-ignore). Falls back to a PNG download where
+  // image clipboard is unsupported.
+  Teacher.copyImage = function (i) {
+    const card = document.getElementById('exCard' + i);
+    if (!card || typeof html2canvas !== 'function') { flash('העתקת תמונה לא זמינה'); return; }
+    flash('מכין תמונה…');
+    html2canvas(card, { backgroundColor: '#ffffff', scale: 2 }).then(function (canvas) {
+      canvas.toBlob(function (blob) {
+        if (!blob) { flash('העתקה נכשלה'); return; }
+        if (navigator.clipboard && typeof navigator.clipboard.write === 'function' && typeof window.ClipboardItem === 'function') {
+          navigator.clipboard.write([new window.ClipboardItem({ 'image/png': blob })])
+            .then(function () { flash('התמונה הועתקה — הדביקו ב-Canva / Word'); },
+                  function () { download('targil-' + (i + 1) + '.png', blob, 'image/png'); flash('הדפדפן חסם העתקת תמונה — הורד PNG במקום'); });
+        } else { download('targil-' + (i + 1) + '.png', blob, 'image/png'); flash('הורד PNG (העתקת תמונה אינה נתמכת בדפדפן)'); }
+      }, 'image/png');
+    });
   };
   Teacher.addToWorksheet = function (i) { const c = ctx(); if (!c) return; Teacher.worksheet.push(c.exercises[i]); flash('נוסף לדף עבודה (' + Teacher.worksheet.length + ')'); };
   Teacher.exportWorksheet = function () {
