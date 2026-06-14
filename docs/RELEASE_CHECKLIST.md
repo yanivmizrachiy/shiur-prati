@@ -71,6 +71,10 @@ Automated checks are necessary but not enough. Before marking the PR ready or me
 - Do not merge old PR branches directly.
 - Do not commit `_audit/`, `.claude/`, `TARGILIM_*_AUDIT*.txt`, `TARGILIM_*_INTEL*.txt`, or `node_modules/`.
 
+## Human QA
+
+Human QA means a teacher checks the actual generated examples in the browser, not only the automated test output.
+
 ## Merge decision
 
 Merge only after all three are true:
