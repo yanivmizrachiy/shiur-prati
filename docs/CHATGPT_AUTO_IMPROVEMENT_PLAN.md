@@ -1,5 +1,10 @@
 # ChatGPT Auto Improvement Plan — Targilim
 
+> **HISTORICAL — not current source of truth (2026-06-14).** תוכנית תכנון מוקדמת.
+> פרטים מיושנים (למשל בורר תרגילים 1/5/10/15/20 — היום הממשק הוא **1–10**, וכן
+> "25 engines" — היום **50 engine topics / 0 fallback**). למצב עדכני: `PROJECT_STATUS.md`,
+> `REQUIREMENTS_STATUS.md`, `RULES.md`.
+
 Date: 2026-06-12
 
 ## Current repository reality

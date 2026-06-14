@@ -1,4 +1,9 @@
-# Source Alignment Map — 25 Active Engines
+# Source Alignment Map — (historically "25 Active Engines")
+
+> **הערת מצב 2026-06-14:** המסמך התחיל כמפת **25 engines** היסטורית והכותרת/ספירה
+> שלהלן מיושנות. **המצב הנוכחי: 50 engine topics / 0 fallback.** המסמך **נשמר**
+> כי הוא מכיל מיפויי REMAP חשובים. לשימוש עדכני הצליבו עם `docs/SOURCE_BIBLE.md`,
+> `generator/engine/source-registry.js`, ו-`PROJECT_STATUS.md`. אל תמחקו.
 
 **Date:** 2026-06-11 | **Batch:** 3 (mapping/audit only — no engine code changed)
 

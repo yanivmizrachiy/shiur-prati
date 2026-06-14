@@ -27,9 +27,21 @@
     שאלות שאינם במקורות. אין לזייף חיבור למקור.
 12. **קובץ מקור 10** (רצף הוראה) משמש לתכנון בלבד — **לעולם לא כמקור ישיר לשאלה.**
 
+## טווח וארכיטקטורה
+13. **טווח: כיתות ז׳–ח׳ בלבד.** כיתה ט׳ מחוץ לתחום (locked) עד שיהיו מקורות ודוגמאות אמיתיים.
+14. **מצב המנועים: 50 engine topics / 0 fallback** (ספירה ב-`source-registry.js`, מאומת ב-`verify:source-lock`). **לא 25.**
+15. מערכת **דו-שכבתית**: topics מסוג legacy/source-fit (למשל ב-`generator/a8-03.js`) לצד מנועים ייעודיים `*-ENGINE`.
+16. **A8-04 = אי-שוויונות** קיים כ-**topic legacy** ב-`a8-03.js`; **אין `A8-04-ENGINE`**. אסור ליצור כפילות A8-04.
+17. אסור להוסיף **engine 51** (מנוע חדש) ללא תכנון מלא: עדכון registry + pedagogy + docs + verifiers + ספירת engines.
+18. אסור להוסיף engine חדש לפני בדיקה אם topic/engine כבר קיים.
+
+## איכות פלט
+19. copy/export שומר שאלה **מלאה**: טקסט + KaTeX + SVG + גרפים + טבלאות.
+20. גרפיקה מתמטית מדויקת; צורות מתמטיות אינן כרטיסי UI מעוגלים.
+
 ## בטיחות ריפו
-13. אסור merge ל-main בלי אישור מפורש · אסור force push · אסור reset --hard / git clean -fd.
-14. אסור למחוק: package.json, generator/book.*, tools/verify*, source-learning, sources.
-15. אסור להכניס _audit/, .claude/, TARGILIM_*_AUDIT*.txt, TARGILIM_*_INTEL*.txt (חסומים ב-.gitignore).
-16. אסור להחליש verifier כדי לעבור. מותר לתקן verifier כך שיבדוק את הדרישה הנכונה.
-17. `npm run verify:deep` הוא שער האיכות; חייב להישאר ירוק אחרי כל שינוי.
+21. אסור merge ל-main בלי אישור מפורש · אסור force push · אסור reset --hard / git clean -fd.
+22. אסור למחוק: package.json, generator/book.*, tools/verify*, source-learning, sources. אין מחיקה ללא הוכחת אי-תלות + אישור.
+23. אסור להכניס _audit/, .claude/, TARGILIM_*_AUDIT*.txt, TARGILIM_*_INTEL*.txt (חסומים ב-.gitignore).
+24. אסור להחליש verifier כדי לעבור. מותר לתקן verifier כך שיבדוק את הדרישה הנכונה.
+25. `npm run verify:deep` הוא שער האיכות; חייב להישאר ירוק אחרי כל שינוי. PR קטן וממוקד.

@@ -1,5 +1,9 @@
 # FINAL PR #7 Release Status — 2026-06-14
 
+> **Historical report — not current repository status.** For current status see
+> `PROJECT_STATUS.md` and `REQUIREMENTS_STATUS.md`. (PR #7 was already merged into
+> `main` via `c9af4aa`; Phase 1 then continued on the feature/integration branches.)
+
 Repository: `yanivmizrachiy/targilim`  
 Branch: `feat/source-bible-variety-dedicated-engines`  
 Target: `main`  
