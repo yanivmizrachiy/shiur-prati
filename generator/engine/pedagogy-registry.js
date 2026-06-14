@@ -62,6 +62,45 @@
   };
   E.getFamilies = function (id) { const p = E.getPedagogy(id); return p ? p.families : []; };
 
+  // ── Visual expectation per topic (the missing layer) ──
+  // essential    — a diagram/table is pedagogically required on (almost) every
+  //                question; verify:visual-coverage demands >= 95% visual.
+  // recommended  — a visual genuinely helps and must appear in a meaningful
+  //                share; demands >= 30% visual.
+  // optional     — the topic is naturally textual (pure algebra, abstract sign
+  //                rules); no visual is required.
+  E.VISUAL_EXPECTATION = {
+    // essential — geometry figures
+    'G7-01-ENGINE': 'essential', 'G7-02-ENGINE': 'essential', 'G7-03-ENGINE': 'essential',
+    'G7-04-ENGINE': 'essential', 'G7-05-ENGINE': 'essential', 'G7-06-ENGINE': 'essential',
+    'G8-01-ENGINE': 'essential', 'G8-02-ENGINE': 'essential', 'G8-03-ENGINE': 'essential',
+    'G8-04-ENGINE': 'essential', 'G8-05-ENGINE': 'essential', 'G8-06-ENGINE': 'essential',
+    'G8-07-ENGINE': 'essential', 'G8-08-ENGINE': 'essential', 'G8-09-ENGINE': 'essential',
+    // essential — coordinate / number-line
+    'N7-01-ENGINE': 'essential', 'N7-03-ENGINE': 'essential', 'N7-08-ENGINE': 'essential', 'N7-09-ENGINE': 'essential',
+    // essential — scale
+    'N8-03-ENGINE': 'essential',
+    // essential — charts / probability / graphs
+    'U7-01-ENGINE': 'essential', 'U7-02-ENGINE': 'essential', 'U7-03-ENGINE': 'essential',
+    'U7-04-ENGINE': 'essential', 'U7-05-ENGINE': 'essential', 'U7-06-ENGINE': 'essential',
+    'U7-07-ENGINE': 'essential', 'U8-02-ENGINE': 'essential',
+    'A8-01-ENGINE': 'essential', 'A8-02-ENGINE': 'essential',
+    // recommended — visual strongly helps, present in a meaningful share
+    'N7-04-ENGINE': 'recommended', 'N7-07-ENGINE': 'recommended', 'N7-10-ENGINE': 'recommended',
+    'N7-11-ENGINE': 'recommended', 'N8-01-ENGINE': 'recommended', 'N8-02-ENGINE': 'recommended',
+    'N8-04-ENGINE': 'recommended', 'N8-05-ENGINE': 'recommended',
+    'U7-08-ENGINE': 'recommended', 'U8-01-ENGINE': 'recommended',
+    // optional — naturally textual
+    'A7-01-ENGINE': 'optional', 'A7-02-ENGINE': 'optional', 'A7-03-ENGINE': 'optional',
+    'A7-04-ENGINE': 'optional', 'A7-05-ENGINE': 'optional', 'A8-03-ENGINE': 'optional',
+    'N7-05-ENGINE': 'optional', 'N7-06-ENGINE': 'optional', 'N7-12-ENGINE': 'optional', 'N7-13-ENGINE': 'optional'
+  };
+  E.getVisualExpectation = function (id) {
+    if (!id) return 'optional';
+    const k = String(id).replace(/-ENGINE$/, '') + '-ENGINE';
+    return E.VISUAL_EXPECTATION[k] || E.VISUAL_EXPECTATION[String(id)] || 'optional';
+  };
+
   // ───────────────────────── NUMERIC (files 05, 07) ─────────────────────────
   topic('N7-01-ENGINE', {
     topicName: 'מערכת צירים — רביע ראשון', skill: 'מיקום וקריאת נקודות, אורך קטע, שטח על הרשת',

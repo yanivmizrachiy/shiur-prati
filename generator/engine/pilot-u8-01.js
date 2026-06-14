@@ -82,15 +82,37 @@
     return `${prefix}$$${mx}-${mn}=${x.range}$$\nהטווח: $${x.range}$.`;
   }
 
+  // dot plot of the data on a number line — shows spread (range) and median
+  // position. Source 06 pattern U-08. Tick step adapts to the data range.
+  function dotPlotSvg(data){
+    if(!data||!data.length) return '';
+    const T=(E.themes&&E.themes.geometry)||{stroke:'#334155',unknown:'#dc2626',label:'#0f172a'};
+    const mn=Math.min.apply(null,data), mx=Math.max.apply(null,data), span=Math.max(1,mx-mn);
+    const step = span<=12?2:span<=30?5:10;
+    const lo=Math.floor(mn/step)*step, hi=Math.ceil(mx/step)*step;
+    const x0=30,x1=282,baseY=74,W=300,H=92;
+    function X(v){ return x0+(v-lo)*(x1-x0)/Math.max(1,hi-lo); }
+    let ticks='';
+    for(let v=lo; v<=hi; v+=step){ ticks+=`<line x1="${X(v)}" y1="${baseY-4}" x2="${X(v)}" y2="${baseY+4}" stroke="#64748b" stroke-width="1.2"/><text x="${X(v)}" y="${baseY+18}" fill="#334155" font-size="9.5" text-anchor="middle">${v}</text>`; }
+    const counts={}; let dots='';
+    data.slice().sort((a,b)=>a-b).forEach(function(v){ counts[v]=(counts[v]||0)+1; const k=counts[v];
+      dots+=`<circle cx="${X(v)}" cy="${baseY-9-(k-1)*11}" r="5" fill="${T.unknown}" stroke="#fff" stroke-width="1"/>`; });
+    return `<svg class="engine-svg" viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">`+
+      `<line x1="${x0-6}" y1="${baseY}" x2="${x1+6}" y2="${baseY}" stroke="${T.stroke}" stroke-width="2"/>`+
+      ticks+dots+
+      `<text x="${W/2}" y="13" fill="${T.label}" font-size="10.5" font-weight="700" text-anchor="middle">פיזור הנתונים על ציר — מקור קובץ 06</text></svg>`;
+  }
+
   E.generateU801Engine = function(difficulty, questionType){
     difficulty = difficulty || 'standard'; questionType = questionType || 'open';
     const family = pickFamily(difficulty);
     const x = family==='missing_from_mean' ? E.pick(MISSING) : E.pick(SETS);
     const tfTrue = questionType==='tf' && Math.random()<0.5;
     const q = question(family,x,questionType,tfTrue), a = answer(family,x,questionType,tfTrue);
-    if(questionType==='mcq') return E.questionTypes.mcq({question:q,answer:a,svg:'',choices:choices(family,x)});
-    if(questionType==='tf') return E.questionTypes.tf({question:q,answer:a,svg:'',isTrue:tfTrue});
-    if(questionType==='mistake') return E.questionTypes.mistake({question:q,answer:a,svg:''});
-    return E.questionTypes.open({question:q,answer:a,svg:''});
+    const svg = dotPlotSvg(x.d || x.known);
+    if(questionType==='mcq') return E.questionTypes.mcq({question:q,answer:a,svg:svg,choices:choices(family,x)});
+    if(questionType==='tf') return E.questionTypes.tf({question:q,answer:a,svg:svg,isTrue:tfTrue});
+    if(questionType==='mistake') return E.questionTypes.mistake({question:q,answer:a,svg:svg});
+    return E.questionTypes.open({question:q,answer:a,svg:svg});
   };
 })();

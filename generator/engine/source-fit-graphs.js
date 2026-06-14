@@ -29,6 +29,24 @@
     return `<svg class="engine-svg" viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg"><rect x="12" y="10" width="268" height="186" rx="14" fill="${T.fill}" stroke="${T.stroke}" stroke-width="1.8"/><text x="146" y="31" fill="${T.label}" font-size="12" font-weight="800" text-anchor="middle">${title}</text><line x1="${l}" y1="${H-b}" x2="${W-r}" y2="${H-b}" stroke="${T.stroke}" stroke-width="2"/><line x1="${l}" y1="${H-b}" x2="${l}" y2="${t}" stroke="${T.stroke}" stroke-width="2"/>${bars}<text x="146" y="205" font-size="10.5" font-weight="800" text-anchor="middle" fill="${T.label}">מקור קובץ 06 — תרשים עמודות</text></svg>`;
   }
 
+  // mapping diagram (קלט→פלט). violating=true draws one input with TWO arrows
+  // (not a function); otherwise a clean one-to-one mapping (a function).
+  function mappingSvg(violating){
+    const T={fill:'#eff6ff',stroke:'#334155',given:'#1d4ed8',bad:'#dc2626',label:'#334155'};
+    const lx=70, rx=210, ys=[55,100,145];
+    function dot(x,y,c){return `<circle cx="${x}" cy="${y}" r="7" fill="${c}" stroke="${T.stroke}" stroke-width="1.2"/>`;}
+    function arr(x1,y1,x2,y2,c){return `<line x1="${x1+9}" y1="${y1}" x2="${x2-9}" y2="${y2}" stroke="${c}" stroke-width="2.4" marker-end="url(#mh)"/>`;}
+    let body=`<defs><marker id="mh" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><path d="M0,0 L9,4.5 L0,9 z" fill="${violating?T.bad:T.given}"/></marker></defs>`;
+    body+=`<ellipse cx="${lx}" cy="100" rx="40" ry="78" fill="#fff" stroke="${T.stroke}" stroke-width="1.6"/><ellipse cx="${rx}" cy="100" rx="40" ry="78" fill="#fff" stroke="${T.stroke}" stroke-width="1.6"/>`;
+    body+=`<text x="${lx}" y="32" font-size="11.5" font-weight="800" text-anchor="middle" fill="${T.label}">קלט</text><text x="${rx}" y="32" font-size="11.5" font-weight="800" text-anchor="middle" fill="${T.label}">פלט</text>`;
+    for(const y of ys){ body+=dot(lx,y,'#dbeafe'); body+=dot(rx,y,'#dbeafe'); }
+    if(violating){ body+=arr(lx,ys[0],rx,ys[0],T.bad)+arr(lx,ys[0],rx,ys[1],T.bad)+arr(lx,ys[1],rx,ys[2],T.given)+arr(lx,ys[2],rx,ys[2],T.given);
+      body+=`<text x="140" y="190" font-size="10.5" font-weight="800" text-anchor="middle" fill="${T.bad}">קלט אחד → שני פלטים (אינה פונקציה) — מקור קובץ 02</text>`; }
+    else { body+=arr(lx,ys[0],rx,ys[0],T.given)+arr(lx,ys[1],rx,ys[1],T.given)+arr(lx,ys[2],rx,ys[2],T.given);
+      body+=`<text x="140" y="190" font-size="10.5" font-weight="800" text-anchor="middle" fill="${T.given}">לכל קלט פלט אחד (פונקציה) — מקור קובץ 02</text>`; }
+    return `<svg class="engine-svg" viewBox="0 0 280 205" xmlns="http://www.w3.org/2000/svg" style="paint-order:stroke">${body}</svg>`;
+  }
+
   function genA801(diff,qtype){
     qtype=qtype==='mixed'?pick(['open','mcq','tf','mistake']):(qtype||'open');
     const family=diff==='challenge'?pick(['heating','table','fuel']):pick(['fuel','heating','function','table']);
@@ -56,11 +74,14 @@
       if(qtype==='tf'){ isTrue=tfTrue; q='כאשר '+tex('x=2')+', הערך הוא '+tex(tfTrue?'y=10':'y=6')+'.'; a=(tfTrue?'נכון. ':'שגוי. ')+'מציבים בכלל המלא: '+tex('3\\cdot2+4=10')+'.'; }
       if(qtype==='mistake'){q='תלמיד הציב רק '+tex('3\\cdot2')+' וקיבל 6.'; a='הטעות: הוא שכח את האיבר החופשי +4.';}
     } else {
+      // function-identification (source 02): always shows a mapping diagram
+      let violating=true;
       q='האם ההתאמה "לכל תלמיד — שני הציונים האחרונים שלו במתמטיקה" היא פונקציה? נמקו.';
       a='לא. בפונקציה לכל קלט מתאים פלט אחד בלבד. כאן לכל תלמיד מתאימים שני ציונים, ולכן זו אינה פונקציה לפי ההגדרה.';
       cs=choices([{text:'לא, כי לכל תלמיד יש שני פלטים',correct:true},{text:'כן, כי לכל תלמיד יש שם אחד',correct:false},{text:'כן, כי יש ציונים',correct:false},{text:'אי אפשר לדעת',correct:false}]);
-      if(qtype==='tf'){ isTrue=tfTrue; q=tfTrue?'ההתאמה "לכל תלמיד — תאריך הלידה שלו" היא פונקציה.':'ההתאמה "לכל תלמיד — שני הציונים האחרונים" היא פונקציה.'; a=tfTrue?'נכון. לכל תלמיד יש תאריך לידה אחד בלבד, ולכן זו פונקציה.':'שגוי. שני פלטים לאותו קלט מפרים את הגדרת הפונקציה.'; }
+      if(qtype==='tf'){ isTrue=tfTrue; violating=!tfTrue; q=tfTrue?'ההתאמה "לכל תלמיד — תאריך הלידה שלו" היא פונקציה.':'ההתאמה "לכל תלמיד — שני הציונים האחרונים" היא פונקציה.'; a=tfTrue?'נכון. לכל תלמיד יש תאריך לידה אחד בלבד, ולכן זו פונקציה.':'שגוי. שני פלטים לאותו קלט מפרים את הגדרת הפונקציה.'; }
       if(qtype==='mistake'){q='תלמיד כתב: "זו פונקציה כי לכל תלמיד יש ציונים".'; a='הטעות: השאלה אינה אם יש ערכים, אלא האם לכל קלט יש ערך יחיד.';}
+      svg=mappingSvg(violating);
     }
     if(qtype==='mcq') return E.questionTypes.mcq({question:q,answer:a,svg:svg,choices:cs});
     if(qtype==='tf') return E.questionTypes.tf({question:q,answer:a,svg:svg,isTrue:isTrue});

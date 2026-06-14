@@ -80,6 +80,20 @@
     return `${prefix}$$\\frac{${x.k}}{${x.n}}\\times 100=${x.p}\\%$$`;
   }
 
+  // 10×10 percent grid: p of 100 cells shaded — the canonical area model for "%".
+  function pctGridSvg(p){
+    const T=(E.themes&&E.themes.geometry)||{stroke:'#334155',given:'#2563eb',label:'#0f172a'};
+    const x0=30,y0=20,c=13,fill='#2563eb';
+    let cells='';
+    for(let i=0;i<100;i++){ const row=(i/10)|0, col=i%10; const on=i<p;
+      cells+=`<rect x="${x0+col*c}" y="${y0+row*c}" width="${c-1.2}" height="${c-1.2}" fill="${on?fill:'#f1f5f9'}" fill-opacity="${on?0.85:1}" stroke="#cbd5e1" stroke-width="0.7"/>`; }
+    const W=x0*2+10*c, H=y0+10*c+30;
+    return `<svg class="engine-svg" viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">`+
+      cells+
+      `<text x="${W/2}" y="${y0+10*c+18}" fill="${T.given}" font-size="12.5" font-weight="800" text-anchor="middle">${p}% מתוך 100</text>`+
+      `<text x="${W/2}" y="${y0+10*c+30}" fill="${T.label}" font-size="9.5" font-weight="700" text-anchor="middle">מודל אחוז — מקור קובץ 07</text></svg>`;
+  }
+
   E.generateN804Engine = function(difficulty, questionType){
     difficulty = difficulty || 'standard';
     questionType = questionType || 'open';
@@ -93,9 +107,10 @@
     const tfTrue = questionType==='tf' && Math.random()<0.5;
     const q = question(sub,x,questionType,tfTrue);
     const a = answer(sub,x,questionType,tfTrue);
-    if(questionType==='mcq') return E.questionTypes.mcq({question:q,answer:a,svg:'',choices:pctChoices(sub,x)});
-    if(questionType==='tf') return E.questionTypes.tf({question:q,answer:a,svg:'',isTrue:tfTrue});
-    if(questionType==='mistake') return E.questionTypes.mistake({question:q,answer:a,svg:''});
-    return E.questionTypes.open({question:q,answer:a,svg:''});
+    const svg = pctGridSvg(x.p);
+    if(questionType==='mcq') return E.questionTypes.mcq({question:q,answer:a,svg:svg,choices:pctChoices(sub,x)});
+    if(questionType==='tf') return E.questionTypes.tf({question:q,answer:a,svg:svg,isTrue:tfTrue});
+    if(questionType==='mistake') return E.questionTypes.mistake({question:q,answer:a,svg:svg});
+    return E.questionTypes.open({question:q,answer:a,svg:svg});
   };
 })();

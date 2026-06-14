@@ -142,15 +142,23 @@
     return `${prefix}$$\\square = ${x.r}-${wrap(x.a)}=${x.m}$$\nבדיקה: $${wrap(x.a)}+${wrap(x.m)}=${x.r}$ ✓`;
   }
 
+  // number line showing the move from the start value to the result (source 05
+  // models directed add/sub on the number line). Estimation sets stay textual.
+  function lineSvg(family,x){
+    if(family==='estimate' || x.a===undefined || x.r===undefined || !E.numberLineSvg) return '';
+    return E.numberLineSvg({ points:[x.a, x.r], min:-25, max:25, step:5 });
+  }
+
   E.generateN704Engine = function(difficulty, questionType){
     difficulty = difficulty || 'standard'; questionType = questionType || 'open';
     const family = pickFamily(difficulty);
     const x = pickCase(family,questionType);
     const tfTrue = questionType==='tf' && Math.random()<0.5;
     const q = question(family,x,questionType,tfTrue), a = answer(family,x,questionType,tfTrue);
-    if(questionType==='mcq') return E.questionTypes.mcq({question:q,answer:a,svg:'',choices:choices(family,x)});
-    if(questionType==='tf') return E.questionTypes.tf({question:q,answer:a,svg:'',isTrue:tfTrue});
-    if(questionType==='mistake') return E.questionTypes.mistake({question:q,answer:a,svg:''});
-    return E.questionTypes.open({question:q,answer:a,svg:''});
+    const svg = lineSvg(family,x);
+    if(questionType==='mcq') return E.questionTypes.mcq({question:q,answer:a,svg:svg,choices:choices(family,x)});
+    if(questionType==='tf') return E.questionTypes.tf({question:q,answer:a,svg:svg,isTrue:tfTrue});
+    if(questionType==='mistake') return E.questionTypes.mistake({question:q,answer:a,svg:svg});
+    return E.questionTypes.open({question:q,answer:a,svg:svg});
   };
 })();

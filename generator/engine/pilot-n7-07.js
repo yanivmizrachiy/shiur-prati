@@ -82,15 +82,34 @@
     return `${prefix}קודם מחברים בתוך השורש:\n$$\\sqrt{${x.a}+${x.b}}=${x.right}$$\nלעומת זאת $\\sqrt{${x.a}}+\\sqrt{${x.b}}=${x.wrong}$ — תוצאה שונה. הכלל: $\\sqrt{a+b}\\ne\\sqrt{a}+\\sqrt{b}$.`;
   }
 
+  // square-area model (source 05 links √ to a square's side): area in the centre,
+  // side labelled on the edge. Used where the question is about a square.
+  function squareSvg(area, sideLabel){
+    const T=(E.themes&&E.themes.geometry)||{fill:'#eff6ff',stroke:'#334155',given:'#1d4ed8',unknown:'#dc2626',label:'#0f172a'};
+    const x=46,y=24,s=110;
+    return `<svg class="engine-svg" viewBox="0 0 200 180" xmlns="http://www.w3.org/2000/svg" style="paint-order:stroke">`+
+      `<rect x="${x}" y="${y}" width="${s}" height="${s}" fill="${T.fill}" stroke="${T.stroke}" stroke-width="2"/>`+
+      `<text x="${x+s/2}" y="${y+s/2+5}" fill="${T.label}" font-size="14" font-weight="800" text-anchor="middle">שטח = ${area}</text>`+
+      `<text x="${x+s/2}" y="${y+s+20}" fill="${T.unknown}" font-size="13" font-weight="800" text-anchor="middle">צלע = ${sideLabel}</text>`+
+      `<text x="${x-10}" y="${y+s/2}" fill="${T.unknown}" font-size="13" font-weight="800" text-anchor="end">${sideLabel}</text>`+
+      `<text x="100" y="172" fill="${T.label}" font-size="10" font-weight="700" text-anchor="middle">ריבוע: צלע = שורש השטח — מקור קובץ 05</text></svg>`;
+  }
+  function visual(family,x){
+    if(family==='missing_sq') return squareSvg(x.n+' סמ״ר','?');
+    if(family==='exact') return squareSvg(x.n, '√'+x.n);
+    return '';
+  }
+
   E.generateN707Engine = function(difficulty, questionType){
     difficulty = difficulty || 'standard'; questionType = questionType || 'open';
     const family = pickFamily(difficulty);
     const x = pickCase(family);
     const tfTrue = questionType==='tf' && Math.random()<0.5;
     const q = question(family,x,questionType,tfTrue), a = answer(family,x,questionType,tfTrue);
-    if(questionType==='mcq') return E.questionTypes.mcq({question:q,answer:a,svg:'',choices:choices(family,x)});
-    if(questionType==='tf') return E.questionTypes.tf({question:q,answer:a,svg:'',isTrue:tfTrue});
-    if(questionType==='mistake') return E.questionTypes.mistake({question:q,answer:a,svg:''});
-    return E.questionTypes.open({question:q,answer:a,svg:''});
+    const svg = visual(family,x);
+    if(questionType==='mcq') return E.questionTypes.mcq({question:q,answer:a,svg:svg,choices:choices(family,x)});
+    if(questionType==='tf') return E.questionTypes.tf({question:q,answer:a,svg:svg,isTrue:tfTrue});
+    if(questionType==='mistake') return E.questionTypes.mistake({question:q,answer:a,svg:svg});
+    return E.questionTypes.open({question:q,answer:a,svg:svg});
   };
 })();

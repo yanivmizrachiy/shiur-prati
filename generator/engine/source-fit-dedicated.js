@@ -181,6 +181,19 @@
     return render(qtype, q, a, svg, cs, isTrue, sub);
   }
 
+  // dot plot of a data list on a number line (range/median visible). Source 06.
+  function dotPlot(d) {
+    const T = (E.themes && E.themes.geometry) || { stroke: '#334155', unknown: '#dc2626', label: '#0f172a' };
+    const mn = Math.min.apply(null, d), mx = Math.max.apply(null, d), step = 2;
+    const lo = Math.floor(mn / step) * step, hi = Math.ceil(mx / step) * step;
+    const x0 = 28, x1 = 282, baseY = 74, W = 300, H = 92;
+    const X = v => x0 + (v - lo) * (x1 - x0) / Math.max(1, hi - lo);
+    let ticks = '';
+    for (let v = lo; v <= hi; v += step) ticks += `<line x1="${X(v)}" y1="${baseY - 4}" x2="${X(v)}" y2="${baseY + 4}" stroke="#64748b" stroke-width="1.2"/><text x="${X(v)}" y="${baseY + 18}" fill="#334155" font-size="9.5" text-anchor="middle">${v}</text>`;
+    const counts = {}; let dots = '';
+    d.slice().sort((a, b) => a - b).forEach(v => { counts[v] = (counts[v] || 0) + 1; dots += `<circle cx="${X(v)}" cy="${baseY - 9 - (counts[v] - 1) * 11}" r="5" fill="${T.unknown}" stroke="#fff" stroke-width="1"/>`; });
+    return `<svg class="engine-svg" viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg"><line x1="${x0 - 6}" y1="${baseY}" x2="${x1 + 6}" y2="${baseY}" stroke="${T.stroke}" stroke-width="2"/>${ticks}${dots}<text x="${W / 2}" y="13" fill="${T.label}" font-size="10.5" font-weight="700" text-anchor="middle">פיזור הנתונים על ציר — מקור קובץ 06</text></svg>`;
+  }
   function genU708(diff, qtype) {
     qtype = qt(qtype);
     const n = diff === 'challenge' ? 7 : 5, d = [];
@@ -198,7 +211,7 @@
     if (qtype === 'tf') { q = `${name} של הנתונים ${list} הוא ${tfTrue ? val : wrong}.`; a = (tfTrue ? 'נכון. ' : 'שגוי. ') + rule + '.'; }
     else if (qtype === 'mcq') { q = `מהו ${name} של הנתונים ${list}?`; cs = ch([{ text: '' + val, correct: true }, { text: '' + wrong, correct: false }, { text: '' + (val + 2), correct: false }, { text: '' + sorted[0], correct: false }]); }
     else if (qtype === 'mistake') { q = `תלמיד טען ש${name} של ${list} הוא ${wrong}.`; a = `הטעות: ${name} מחושב כך — ${rule}. כלומר ${val}.`; }
-    return render(qtype, q, a, '', cs, isTrue, fam);
+    return render(qtype, q, a, dotPlot(d), cs, isTrue, fam);
   }
 
   function genG806(diff, qtype) {
