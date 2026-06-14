@@ -23,6 +23,21 @@ Repository: `yanivmizrachiy/targilim`
 - מקור אמת תוכני: `docs/SOURCE_BIBLE.md`
 - צ׳ק־ליסט שחרור: `docs/RELEASE_CHECKLIST.md`
 
+## מבנה הריפו
+
+| תיקייה | תפקיד |
+|---|---|
+| `generator/` | האפליקציה הסטטית (ללא build): `index.html`, `gallery.html`, `visual-qa.html`, `book.html`, `engine/*.js`, `teacher-mode.js`, `style.css` |
+| `generator/engine/` | שכבת המנועים: schema, source/pedagogy registry, 25 pilots, source-fit, follow-up |
+| `tools/` | מנועי בדיקה `verify-*.mjs` + מחוללי תיעוד `gen-*.mjs` (כולם נטענים דרך `engine-load.mjs`) |
+| `docs/` | תיעוד — ראו [docs/README.md](docs/README.md) לאינדקס מלא |
+| `sources/`, `source-learning/`, `source-materials/` | 10 קובצי המקור (PDF) + תמלולי הלמידה שמהם נגזרות השאלות |
+| `knowledge-base/`, `curriculum-map/`, `question-patterns/` | רקע תכני לפי כיתה/נושא |
+| `archive/` | חומרים היסטוריים שהוקפאו |
+| `.github/workflows/` | CI שמריץ `verify:deep` על PR ו-push |
+
+מפת תיעוד מלאה: **[docs/README.md](docs/README.md)**.
+
 ## הרצת בדיקות
 
 ```bash
