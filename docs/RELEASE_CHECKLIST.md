@@ -87,6 +87,10 @@ These are not hidden; keep them explicit:
 3. Future enhancement: inequalities / A8-05 source-question coverage gap — do not begin before release-readiness approval.
 4. Final live site URL — verify after deployment/merge before presenting it as active.
 
+## Safety rule
+
+- Do not merge to `main` without explicit approval from Yaniv.
+
 ## Merge decision
 
 Merge only after all are true:
