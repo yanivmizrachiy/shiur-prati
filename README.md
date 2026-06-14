@@ -6,8 +6,8 @@ Hebrew RTL math exercise generator for Grades 7-8.
 
 Current status:
 
-- 50 active engines.
-- 0 fallback topics.
+- 50 מנועי ENGINE פעילים.
+- 0 נושאי fallback.
 - Main quality gate: npm run verify:deep.
 - Final status report: docs/reports/FINAL_PR7_RELEASE_STATUS_20260614.md.
 
