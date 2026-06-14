@@ -97,6 +97,11 @@
   var DOMAIN_HE={geometry:'גאומטריה',algebra:'אלגברה',numeric:'מספרי',uncertainty:'אי־ודאות'};
   var CLS={geometry:'geo',algebra:'alg',numeric:'num',uncertainty:'unc'};
   var STATUS_HE={beautiful:'יפה',fix:'צריך תיקון',diagram:'בעיה בשרטוט',print:'בעיה בהדפסה',text:'בעיה בטקסט'};
+  var EXP_HE={essential:'ציור חובה',recommended:'ציור מומלץ',optional:'ציור לא הכרחי'};
+  var EXP_BG={essential:'background:#fee2e2;color:#991b1b',recommended:'background:#ffedd5;color:#9a3412',optional:'background:#dcfce7;color:#166534'};
+  function expOf(id){return (E.getVisualExpectation&&E.getVisualExpectation(id))||'optional';}
+  function hasVis(h){return /<(svg|table)\b/.test(h||'');}
+  function visWarn(id,html){return (expOf(id)==='essential'&&!hasVis(html))?'<div class="qa-missing" style="background:#fef2f2;border:1.5px solid #fca5a5;color:#991b1b;font-weight:800;border-radius:8px;padding:6px 10px;margin-top:6px;font-size:.82rem">⚠ נושא "ציור חובה" — אך בדוגמה זו אין שרטוט</div>':'';}
   var store={};
   try{store=JSON.parse(localStorage.getItem(KEY)||'{}')||{};}catch(e){store={};}
   var ids=Object.keys(E.SOURCE_REGISTRY||{}).filter(function(k){return /-ENGINE$/.test(k);}).sort();
@@ -109,20 +114,21 @@
     var d=document.getElementById('qaDiff').value,t=document.getElementById('qaType').value,host=card.querySelector('.qa-sample');
     var r=E.generateOne?E.generateOne(id,d,t):(E.getEngineExercise&&E.getEngineExercise(id,d,t));
     if(!r){host.innerHTML='<span style="color:#dc2626">לא ניתן להפיק דוגמה</span>';return;}
-    host.innerHTML='<div class="ex-body">'+(r.questionHTML||'')+'</div><details style="margin-top:8px"><summary style="cursor:pointer;font-weight:800;color:#2563eb">פתרון</summary>'+(r.answerHTML||'')+'</details>';
+    host.innerHTML='<div class="ex-body">'+(r.questionHTML||'')+'</div>'+visWarn(id,r.questionHTML)+'<details style="margin-top:8px"><summary style="cursor:pointer;font-weight:800;color:#2563eb">פתרון</summary>'+(r.answerHTML||'')+'</details>';
     if(window.renderMathInElement)renderMathInElement(host,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false});
   }
   function card(id){
     var s=E.getSource(id)||{},p=E.getPedagogy(id)||{},cls=CLS[s.domain]||'num',fams=(p.families||[]).map(function(f){return f.questionFamily;}).join(' · ');
-    var el=document.createElement('div');el.className='qa-card '+cls;el.setAttribute('data-id',id);el.setAttribute('data-grade',s.grade||'');el.setAttribute('data-domain',s.domain||'');el.setAttribute('data-search',(id+' '+(p.topicName||'')+' '+(s.skill||'')+' '+fams).toLowerCase());
+    var exp=expOf(id);
+    var el=document.createElement('div');el.className='qa-card '+cls;el.setAttribute('data-id',id);el.setAttribute('data-grade',s.grade||'');el.setAttribute('data-domain',s.domain||'');el.setAttribute('data-exp',exp);el.setAttribute('data-search',(id+' '+(p.topicName||'')+' '+(s.skill||'')+' '+fams).toLowerCase());
     el.innerHTML='<div class="qa-id">'+id+'</div><div class="qa-title">'+(p.topicName||s.skill||id)+'</div>'
-      +'<div class="qa-meta"><span class="tag '+cls+'">כיתה '+(s.grade||'')+'</span><span class="tag '+cls+'">'+(DOMAIN_HE[s.domain]||'')+'</span><span class="tag '+cls+'">מקור '+((s.sourceFile||'').slice(0,2))+'</span></div>'
+      +'<div class="qa-meta"><span class="tag '+cls+'">כיתה '+(s.grade||'')+'</span><span class="tag '+cls+'">'+(DOMAIN_HE[s.domain]||'')+'</span><span class="tag '+cls+'">מקור '+((s.sourceFile||'').slice(0,2))+'</span><span class="tag" style="'+EXP_BG[exp]+'">'+EXP_HE[exp]+'</span></div>'
       +'<div style="font-size:.78rem;color:#64748b;margin-bottom:8px">משפחות: '+(fams||'—')+'</div>'
       +'<div class="qa-actions"><button class="qaMake" type="button">צור דוגמה</button><button class="qaMake4" type="button">4 דוגמאות</button><button class="qaPrint" type="button">הדפסה</button></div>'
       +'<div class="qa-review"><button data-status="beautiful">יפה</button><button data-status="fix">צריך תיקון</button><button data-status="diagram">בעיה בשרטוט</button><button data-status="print">בעיה בהדפסה</button><button data-status="text">בעיה בטקסט</button></div>'
       +'<textarea class="qa-note" placeholder="הערת QA למורה"></textarea><div class="qa-sample"></div>';
     el.querySelector('.qaMake').addEventListener('click',function(){sample(el,id);});
-    el.querySelector('.qaMake4').addEventListener('click',function(){var host=el.querySelector('.qa-sample');host.innerHTML='';['open','mcq','tf','mistake'].forEach(function(t){var r=E.generateOne?E.generateOne(id,document.getElementById('qaDiff').value,t):null;var box=document.createElement('div');box.style.borderTop='1px dashed #e2e8f0';box.style.paddingTop='8px';box.style.marginTop='8px';box.innerHTML='<b>'+t+'</b><div class="ex-body">'+((r&&r.questionHTML)||'לא נוצר')+'</div>';host.appendChild(box);});if(window.renderMathInElement)renderMathInElement(host,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false});});
+    el.querySelector('.qaMake4').addEventListener('click',function(){var host=el.querySelector('.qa-sample');host.innerHTML='';['open','mcq','tf','mistake'].forEach(function(t){var r=E.generateOne?E.generateOne(id,document.getElementById('qaDiff').value,t):null;var box=document.createElement('div');box.style.borderTop='1px dashed #e2e8f0';box.style.paddingTop='8px';box.style.marginTop='8px';box.innerHTML='<b>'+t+'</b><div class="ex-body">'+((r&&r.questionHTML)||'לא נוצר')+'</div>'+visWarn(id,r&&r.questionHTML);host.appendChild(box);});if(window.renderMathInElement)renderMathInElement(host,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false});});
     el.querySelector('.qaPrint').addEventListener('click',function(){sample(el,id);setTimeout(function(){window.print();},60);});
     Array.prototype.forEach.call(el.querySelectorAll('.qa-review button'),function(btn){btn.addEventListener('click',function(){setStatus(id,btn.getAttribute('data-status'));});});
     el.querySelector('.qa-note').addEventListener('input',function(){setNote(id,this.value);});
