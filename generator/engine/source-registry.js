@@ -44,6 +44,7 @@
     ['N8-05-ENGINE', F.n8, 8, 'numeric', 'percent_dynamic', 'challenge'],
     ['A8-02-ENGINE', F.a8, 8, 'algebra', 'slope_and_linear_equation', 'standard'],
     ['A8-03-ENGINE', F.a8, 8, 'algebra', 'systems_of_equations', 'challenge'],
+    ['A8-04-ENGINE', F.a8, 8, 'algebra', 'linear_inequalities', 'standard'],
     ['U8-01-ENGINE', F.unc, 8, 'uncertainty', 'mean_median_range', 'standard'],
     ['U8-02-ENGINE', F.unc, 8, 'uncertainty', 'probability_from_table', 'standard'],
 
