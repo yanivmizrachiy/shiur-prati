@@ -194,6 +194,7 @@
     d.slice().sort((a, b) => a - b).forEach(v => { counts[v] = (counts[v] || 0) + 1; dots += `<circle cx="${X(v)}" cy="${baseY - 9 - (counts[v] - 1) * 11}" r="5" fill="${T.unknown}" stroke="#fff" stroke-width="1"/>`; });
     return `<svg class="engine-svg" viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg"><line x1="${x0 - 6}" y1="${baseY}" x2="${x1 + 6}" y2="${baseY}" stroke="${T.stroke}" stroke-width="2"/>${ticks}${dots}<text x="${W / 2}" y="13" fill="${T.label}" font-size="10.5" font-weight="700" text-anchor="middle">פיזור הנתונים על ציר — מקור קובץ 06</text></svg>`;
   }
+  let U708_TF_TOGGLE = 0; // deterministic True/False alternation so TF is never one-sided across samples
   function genU708(diff, qtype) {
     qtype = qt(qtype);
     const n = diff === 'challenge' ? 7 : 5, d = [];
@@ -201,7 +202,7 @@
     const sorted = d.slice().sort((a, b) => a - b), sum = d.reduce((a, b) => a + b, 0);
     const mean = Math.round(sum / d.length * 10) / 10, median = sorted[(sorted.length - 1) / 2], range = sorted[sorted.length - 1] - sorted[0];
     const fam = diff === 'basic' ? pick(['mean', 'range']) : pick(['mean', 'median', 'range']);
-    const tfTrue = qtype === 'tf' && Math.random() < 0.5;
+    const tfTrue = qtype === 'tf' && (U708_TF_TOGGLE++ % 2 === 0);
     const list = d.join(', ');
     let val, wrong, name, rule;
     if (fam === 'mean') { val = mean; wrong = median; name = 'הממוצע'; rule = `סכום ÷ כמות = ${sum}/${d.length}=${mean}`; }

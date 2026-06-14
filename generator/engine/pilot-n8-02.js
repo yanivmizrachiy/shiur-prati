@@ -2,6 +2,7 @@
 // N8-02 Proportion — Engine Pilot
 (function(){
   const E = window.TargilimEngine = window.TargilimEngine || {};
+  let N802_TF_TOGGLE = 0;
 
   const PROPORTION_MISSING = [
     {a:3,b:2,c:9,d:6,unknown:'d',ctx:'יחס בין חולצות למכנסיים'},
@@ -114,7 +115,7 @@
     const x = pickCase(family);
     const unknown = family === 'proportion_missing' ? x.unknown : family === 'proportion_rate' ? 'result' : 'verify';
     const svg = E.proportionTableSvg({a:x.a,b:x.b,c:x.c,d:x.d,target:x.target,result:x.result,unitA:x.unitA,unitB:x.unitB,thing:x.thing}, unknown);
-    const tfTrue = questionType==='tf' && family!=='proportion_verify' && Math.random()<0.5;
+    const tfTrue = questionType==='tf' && family!=='proportion_verify' && (++N802_TF_TOGGLE % 2 === 0);
     const q = question(family,x,questionType,tfTrue);
     const a = answer(family,x,questionType);
     if(questionType === 'mcq') return E.questionTypes.mcq({question:q,answer:a,svg:svg,choices:choices(family,x)});
