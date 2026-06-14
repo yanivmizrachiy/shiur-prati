@@ -27,6 +27,16 @@ const FALLBACK_IDS = Object.keys(E.SOURCE_REGISTRY).filter(id => !/-ENGINE$/.tes
 check('50 engine ids in source registry (all dedicated)', ENGINE_IDS.length === 50, ENGINE_IDS.length + '');
 check('0 fallback ids in source registry (all 17 converted)', FALLBACK_IDS.length === 0, FALLBACK_IDS.length + '');
 
+// A8-04 is intentionally implemented as a legacy/source-fit topic in generator/a8-03.js.
+// It must not be added as a dedicated registry engine without a separately approved redesign.
+const forbiddenEngineIds = ['A8-04-ENGINE'].filter(id => ENGINE_IDS.includes(id));
+check('A8-04 remains legacy/source-fit only (no A8-04-ENGINE)', forbiddenEngineIds.length === 0, forbiddenEngineIds.join(', '));
+
+const forbiddenLinearInequalityRegistryEntries = Object.entries(E.SOURCE_REGISTRY)
+  .filter(([, meta]) => meta && meta.skill === 'linear_inequalities')
+  .map(([id]) => id);
+check('no linear_inequalities registry entry without approved A8-04 redesign', forbiddenLinearInequalityRegistryEntries.length === 0, forbiddenLinearInequalityRegistryEntries.join(', '));
+
 const missingPed = [...ENGINE_IDS, ...FALLBACK_IDS].filter(id => !E.getPedagogy(id));
 check('every engine + fallback topic has pedagogy', missingPed.length === 0, 'missing: ' + missingPed.join(', '));
 
