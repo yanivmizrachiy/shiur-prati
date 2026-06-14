@@ -150,3 +150,11 @@ Repository paths:
 6. Decide whether to consolidate overlapping fallback reports.
 7. Optional future feature after approval only: source-question coverage gap for inequalities / A8-05.
 8. Optional future feature after approval only: real multi-correct MCQ content.
+
+## Release / CI gate
+
+Before any merge to `main`, GitHub Actions must pass.
+
+The required GitHub Actions gate is `npm run verify:deep`.
+
+Do not merge unless `verify:deep` passes in GitHub Actions and Yaniv gives explicit approval.

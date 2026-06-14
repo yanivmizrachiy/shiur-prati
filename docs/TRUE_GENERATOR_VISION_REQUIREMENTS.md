@@ -1,5 +1,11 @@
 # TRUE GENERATOR VISION REQUIREMENTS — Targilim
 
+> **הערת מצב 2026-06-14:** חזון האיכות כאן **תקף ונשמר**, אך פרטי-מצב מסוימים
+> מיושנים: המצב הנוכחי הוא **50 engine topics / 0 fallback** (לא 25 slices);
+> **Phase 3A הוא היסטורי**, לא המצב הנוכחי; **כיתה ט׳ נעולה / מחוץ לתחום**;
+> אסור ליצור שאלות ממקור חיצוני שאינו אחד מ-10 קבצי המקור. מקור-אמת עדכני:
+> `PROJECT_STATUS.md`, `REQUIREMENTS_STATUS.md`, `docs/SOURCE_BIBLE.md`.
+
 Date: 2026-06-10
 Owner: Yaniv
 Project: `yanivmizrachiy/targilim`

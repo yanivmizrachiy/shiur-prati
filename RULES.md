@@ -4,7 +4,38 @@ Repository: `yanivmizrachiy/targilim`
 
 Hebrew project name: `תרגילים`
 
-Last updated: 2026-06-12
+Last updated: 2026-06-14
+
+---
+
+## CURRENT STATE — AUTHORITATIVE (2026-06-14)
+
+This banner overrides any older claims further down (e.g. "25 engines").
+Cross-check with `docs/SOURCE_BIBLE.md`, `generator/engine/source-registry.js`,
+`PROJECT_STATUS.md`, and `REQUIREMENTS_STATUS.md`.
+
+- **Scope: Grades 7–8 only.** Grade 9 is **out of scope / locked** until real Grade-9
+  sources and examples exist. Do not add Grade 9.
+- **Engine inventory: 50 engine topics (`*-ENGINE`) / 0 fallback** (counted in
+  `source-registry.js`, enforced by `verify:source-lock`). The "25 engines"
+  statements below are **historical**, not current.
+- Every question must be grounded in the **10 source files**
+  (`sources/intake/2026-06-09/originals/` + `source-learning/2026-06-09/*.learning.md`).
+  No external/official curriculum is a question source unless it is one of those 10.
+- **Source file 10 (teaching sequence) is planning only — never a direct question source.**
+- **Two-layer architecture:** legacy/source-fit topics (e.g. in `generator/a8-03.js`)
+  alongside dedicated `*-ENGINE` engines.
+- **A8-04 = inequalities** exists as a **legacy/source-fit topic** in `a8-03.js`;
+  there is **no `A8-04-ENGINE`**. Do **not** create a duplicate A8-04.
+  (A8-05 = percent equations, also legacy in `a8-03.js`.)
+- **No "engine 51"** (new dedicated engine) without full planning: registry +
+  pedagogy + docs + verifiers + engine count update. Check first whether the
+  topic/engine already exists.
+- **copy/export must preserve the full question**: text + KaTeX + SVG + graphs + tables.
+  Mathematical graphics must be accurate; math shapes are not rounded UI cards.
+- **No demo / mock / placeholder.** All output real and source-grounded.
+- **`npm run verify:deep` is the mandatory quality gate** and must stay green.
+  Keep PRs small and focused; update the chosen source-of-truth logs on every change.
 
 ---
 

@@ -116,3 +116,12 @@ Yaniv explicitly approves the merge
 ```
 
 For cleanup-only PRs, the PR body must prove that product code, engines, sources and verifier logic were not touched.
+
+## Merge safety rules
+
+- Do not merge to `main` without explicit approval from Yaniv.
+- GitHub Actions must be green before merge.
+- `npm run verify:deep` must pass before merge.
+- Do not push directly to `main`.
+- Do not force-push.
+- Do not weaken verifiers to make CI pass.
