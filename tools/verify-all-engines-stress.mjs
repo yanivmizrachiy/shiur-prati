@@ -11,7 +11,7 @@ import { loadEngines } from './engine-load.mjs';
 const { E, pilotIds, sourceFitIds, callEngine } = loadEngines();
 const QTYPES = ['open', 'mcq', 'tf', 'mistake'];
 const DIFFS = ['basic', 'standard', 'challenge'];
-const PER = 50;
+const PER = 100;
 const BAD = /undefined|NaN/;
 const ENGINE_ID = /\b[A-Z]\d-\d{2}-ENGINE\b/;
 
