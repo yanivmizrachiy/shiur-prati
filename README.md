@@ -1,73 +1,41 @@
-# תרגילים
+# Targilim
 
 Repository: `yanivmizrachiy/targilim`
 
-מחולל תרגילי מתמטיקה בעברית לכיתות ז׳–ח׳, מבוסס חומרי מקור אמיתיים, עם מנועים ייעודיים, גרפיקה, מצב מורה, גלריית מנועים, ודף QA חזותי.
+Hebrew RTL math exercise generator for Grades 7-8.
 
-## מצב נוכחי
+## Current status
 
-- 50 מנועי `*-ENGINE` פעילים.
-- 0 נושאי fallback.
-- כל מנוע ממופה למקור, כיתה, תחום, מיומנות ומשפחות שאלה.
-- כל מנוע נבדק דרך verifiers ולא דרך דמו.
-- `verify:deep` הוא שער האיכות הראשי.
-- GitHub Actions מריץ את `verify:deep` אוטומטית.
-- PR #7 מחזיק את שכבת השיפור הנוכחית לפני מיזוג ל־`main`.
+- 50 active engines.
+- 0 fallback topics.
+- Main quality gate: `npm run verify:deep`.
+- PR #7 is the active review branch before merge to `main`.
+- Final PR status report: `docs/reports/FINAL_PR7_RELEASE_STATUS_20260614.md`.
 
-## כניסה מהירה
+## Quick entry points
 
-- מחולל: `generator/index.html`
-- גלריית מנועים: `generator/gallery.html`
-- QA חזותי: `generator/visual-qa.html`
-- ספר מקורות דיגיטלי: `generator/book.html`
-- מקור אמת תוכני: `docs/SOURCE_BIBLE.md`
-- צ׳ק־ליסט שחרור: `docs/RELEASE_CHECKLIST.md`
+- Generator: `generator/index.html`
+- Engine gallery: `generator/gallery.html`
+- Visual QA: `generator/visual-qa.html`
+- Digital source book: `generator/book.html`
+- Source Bible: `docs/SOURCE_BIBLE.md`
+- Release checklist: `docs/RELEASE_CHECKLIST.md`
+- Documentation index: `docs/README.md`
+- Tools index: `tools/README.md`
 
-## מבנה הריפו
-
-| תיקייה | תפקיד |
-|---|---|
-| `generator/` | האפליקציה הסטטית (ללא build): `index.html`, `gallery.html`, `visual-qa.html`, `book.html`, `engine/*.js`, `teacher-mode.js`, `style.css` |
-| `generator/engine/` | שכבת המנועים: schema, source/pedagogy registry, 25 pilots, source-fit, follow-up |
-| `tools/` | מנועי בדיקה `verify-*.mjs` + מחוללי תיעוד `gen-*.mjs` (כולם נטענים דרך `engine-load.mjs`) |
-| `docs/` | תיעוד — ראו [docs/README.md](docs/README.md) לאינדקס מלא |
-| `sources/`, `source-learning/`, `source-materials/` | 10 קובצי המקור (PDF) + תמלולי הלמידה שמהם נגזרות השאלות |
-| `knowledge-base/`, `curriculum-map/`, `question-patterns/` | רקע תכני לפי כיתה/נושא |
-| `archive/` | חומרים היסטוריים שהוקפאו |
-| `.github/workflows/` | CI שמריץ `verify:deep` על PR ו-push |
-
-מפת תיעוד מלאה: **[docs/README.md](docs/README.md)**.
-
-## הרצת בדיקות
+## Verification
 
 ```bash
 npm install
 npm run verify:deep
 ```
 
-בדיקות מרכזיות:
+## Safety
 
-- `verify:source-lock` — כל מנוע נעול למקור תקף.
-- `verify:source-bible` — מיפוי נושאים ומשפחות שאלות.
-- `verify:variety` — גיוון סוגי שאלות ומשפחות.
-- `verify:visual` — תקינות SVG/גרפיקה.
-- `verify:family` — provenance מדויק של משפחת שאלה.
-- `verify:followups` — שאלות המשך.
-- `verify:teacher` — מצב מורה מתקדם.
-- `verify:gallery` — גלריית 50 מנועים.
-- `verify:visual-qa` — דף QA חזותי לכל המנועים.
-- `verify:hygiene` — מניעת הכנסת קבצי audit/editor מקומיים.
-- `verify:release-docs` — מניעת סטייה בין מצב המוצר למסמכי השחרור.
+- Do not merge to `main` without explicit approval.
+- Do not weaken verifiers to pass.
+- Student-facing UI and output remain Hebrew and RTL.
 
-## כללי בטיחות
+## Product status
 
-- לא ממזגים ל־`main` בלי אישור מפורש.
-- לא מחלישים verifier כדי לעבור בדיקה.
-- לא מכניסים `_audit/`, `.claude/`, `TARGILIM_*_AUDIT*.txt`, `TARGILIM_*_INTEL*.txt` או `node_modules/`.
-- לא משתמשים בקובץ מקור 10 כמקור ישיר לשאלה; הוא משמש לתכנון רצף/הוראה בלבד.
-- כל ממשק המשתמש והפלט לתלמיד בעברית ו־RTL.
-- הקרדיט הגלוי נשאר: `יניב רז`.
-
-## סטטוס מוצר
-
-המנועים עצמם חזקים ומכוסים. השלב הבא הוא איכות מוצר: QA חזותי אנושי, בדיקת הדפסה A4 בפועל, ודיוק חוויית מורה לפני החלטת merge.
+Before merge, complete human visual QA, A4 print QA, manual copy/export QA, and explicit approval from Yaniv.
