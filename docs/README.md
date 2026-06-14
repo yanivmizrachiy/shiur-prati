@@ -17,6 +17,12 @@
 | `docs/verification/` | תצוגות HTML לבדיקה ידנית (גלריה, דיאגרמות premium) |
 | `docs/prompts/` | פרומפטים שמורים |
 
+## מקור אמת עדכני ל־PR #7
+
+- [reports/FINAL_PR7_RELEASE_STATUS_20260614.md](reports/FINAL_PR7_RELEASE_STATUS_20260614.md) — דוח מצב סופי/חי ל־PR #7: מה בוצע, מה אומת, מה נשאר פתוח, ומה אסור למזג לפני אישור.
+- [../PROJECT_STATUS.md](../PROJECT_STATUS.md) — סטטוס מוצר עדכני.
+- [RELEASE_CHECKLIST.md](RELEASE_CHECKLIST.md) — תנאי שחרור ומיזוג.
+
 ## ליבה — מקור האמת (source of truth)
 - [SOURCE_BIBLE.md](SOURCE_BIBLE.md) — מקור→מנוע→משפחות שאלה (נוצר מ-`gen-source-bible.mjs`).
 - [SOURCE_ALIGNMENT.md](SOURCE_ALIGNMENT.md) — התאמת 10 קובצי המקור לתחומים/מנועים.
@@ -39,6 +45,8 @@
 דוחות נקודתיים מתוארכים (BRANDING, FALLBACK, FOLLOW_UP, TEACHER, VISUAL_COVERAGE,
 COPY_TO_CANVA_WORD, VISUAL_QA_ZERO_CARDS_FIX ועוד). שני קבצים נוצרים אוטומטית:
 `VISUAL_COVERAGE_MATRIX.json` ו-`QUESTION_COVERAGE_CENSUS_LATEST.md`.
+
+דוח מצב קובע ל־PR #7: [reports/FINAL_PR7_RELEASE_STATUS_20260614.md](reports/FINAL_PR7_RELEASE_STATUS_20260614.md).
 
 ## אודיטים (docs/audits/)
 [VISUAL_QUALITY_AUDIT.md](VISUAL_QUALITY_AUDIT.md) (שורש) ·
