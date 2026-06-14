@@ -123,7 +123,7 @@ Do not do any of the following without explicit approval:
 - delete protected source PDFs;
 - delete historical reports without an index/superseded decision;
 - begin new feature work during cleanup-only work;
-- commit `_audit/`, `.claude/`, `TARGILIM_*_AUDIT*.txt`, `TARGILIM_*_INTEL*.txt`, `node_modules/`, secrets, tokens or temp logs.
+- commit `_audit/`, `.claude/`, `TARGILIM_*_AUDIT*.txt`, `TARGILIM_*_INTEL*.txt`, `node_modules/`, sensitive credentials or temp logs.
 
 ## Live / static entry points
 
@@ -150,3 +150,14 @@ Repository paths:
 6. Decide whether to consolidate overlapping fallback reports.
 7. Optional future feature after approval only: source-question coverage gap for inequalities / A8-05.
 8. Optional future feature after approval only: real multi-correct MCQ content.
+
+## Release / CI gate (merge safety)
+
+The deep verification gate protects `main`:
+
+1. GitHub Actions runs `npm run verify:deep` on every pull request and via manual `workflow_dispatch`.
+2. A PR is merge-ready only when `verify:deep` passes in GitHub Actions (a green local run is necessary but not sufficient).
+3. No direct commits to `main` — all changes arrive through a pull request from a dedicated branch.
+4. No force-push to `main`.
+5. Merge to `main` requires explicit approval from Yaniv.
+6. The full merge safety rules live in `docs/RELEASE_CHECKLIST.md`.
