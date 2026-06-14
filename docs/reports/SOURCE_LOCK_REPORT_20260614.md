@@ -1,5 +1,12 @@
 # Source Lock Report — 2026-06-14
 
+> **עדכון מצב (סוף 2026-06-14):** הדוח מתעד מצב היסטורי. מאז, **כל 17 נושאי
+> ה-fallback הומרו למנועים ייעודיים** (`*-ENGINE`) בשלב F2. המצב הנוכחי הקובע:
+> `verify:source-lock` → registryEntries=**50**, **fallbackEntries=0**,
+> `FALLBACK_TOPICS = []`, sourceFiles=10, SOURCE_LOCK_PASS. כלומר אין יותר נושאים
+> המוגשים ע"י ה-renderer הגנרי — הסעיפים "17 fallback" ו-"fallbackEntries=17"
+> למטה משקפים את העבר בלבד. ראו `FALLBACK_CONVERSION_REPORT_20260614.md`.
+
 Branch: `chore/max-source-smart-generator` (from `origin/main@fe27bef`).
 
 ## Before

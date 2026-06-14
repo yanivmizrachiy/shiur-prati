@@ -63,6 +63,16 @@ function generateSet(){
     document.getElementById('out').innerHTML='<div class="qcard wip">לא ניתן היה להפיק תרגילים בנושא זה כעת. בחרו נושא אחר ונסו שוב.</div>';
     return;
   }
+  // Multiple-choice instruction (printed, student-facing). Wording matches the
+  // teacher's selected mode; the correct answer stays in the answer key only.
+  const mcqMode=document.getElementById('selMcqMode')?.value||'single';
+  const mcqInstr=mcqMode==='multi'
+    ? '<div class="mcq-instruction">ייתכן שיותר מתשובה אחת נכונה — סמנו את כל התשובות הנכונות:</div>'
+    : '<div class="mcq-instruction">סמנו את התשובה הנכונה (אחת בלבד):</div>';
+  exercises.forEach(function(ex){
+    if(/class="mcq-choices"/.test(ex.questionHTML)&&!/mcq-instruction/.test(ex.questionHTML))
+      ex.questionHTML=ex.questionHTML.replace('<div class="mcq-choices">',mcqInstr+'<div class="mcq-choices">');
+  });
   const sel=document.getElementById('st');
   const topicLabel=(sel.options[sel.selectedIndex]?.textContent||'').replace(/\s*—\s*(מנוע (מלא|חדש)|גרסה חכמה)\s*✦?\s*$/,'');
   const domainKey=typeof domain==='function'?domain():'numeric';
@@ -74,7 +84,7 @@ function generateSet(){
     diffLabel:{standard:'סטנדרטית',basic:'בסיסית',challenge:'מאתגרת'}[diff]||diff
   };
   // publish set context so Teacher Advanced Mode can regenerate single items
-  window.__exsetCtx={id:id,isEngine:isEngine,diff:diff,topicLabel:topicLabel,cls:meta.cls,exercises:exercises};
+  window.__exsetCtx={id:id,isEngine:isEngine,diff:diff,topicLabel:topicLabel,cls:meta.cls,mcqMode:mcqMode,exercises:exercises};
   renderExerciseSet(meta,exercises);
 }
 
@@ -106,7 +116,11 @@ function renderExerciseSet(meta,exercises){
       +'</div>';
   }).join('');
   const keyItems=exercises.map(function(ex,i){
-    const correct=ex.correctLabel?'<div class="ak-correct">התשובה הנכונה: '+ex.correctLabel+'</div>':'';
+    // list ALL correct MCQ labels (supports one or more correct answers)
+    const labels=(ex.questionHTML.match(/mcq-choice mcq-correct"><span class="mcq-label">([^<]+)\./g)||[])
+      .map(function(s){return s.replace(/.*mcq-label">([^<]+)\..*/,'$1');});
+    const all=labels.length?labels:(ex.correctLabel?[ex.correctLabel]:[]);
+    const correct=all.length?'<div class="ak-correct">'+(all.length>1?'התשובות הנכונות: ':'התשובה הנכונה: ')+all.join(', ')+'</div>':'';
     return '<div class="ak-item"><div class="ak-num">תרגיל '+(i+1)+'</div>'+correct+'<div class="ak-body">'+ex.answerHTML+'</div></div>';
   }).join('');
   const countLabel=exercises.length===1?'תרגיל אחד':exercises.length+' תרגילים';
