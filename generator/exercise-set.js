@@ -110,7 +110,7 @@ function renderExerciseSet(meta,exercises){
   if(typeof setMainTitle==='function')setMainTitle(meta.cls,meta.topicLabel);
   const cards=exercises.map(function(ex,i){
     return '<div class="qcard engine-card ex-card" id="exCard'+i+'" data-idx="'+i+'">'
-      +'<div class="qmeta"><span class="ex-num">תרגיל '+(i+1)+'</span><span class="tag '+meta.cls+'">'+(TYPE_LABELS[ex.qtype]||TYPE_LABELS.open)+'</span></div>'
+      +'<div class="qmeta" data-html2canvas-ignore="true"><span class="ex-num">תרגיל '+(i+1)+'</span><span class="tag '+meta.cls+'">'+(TYPE_LABELS[ex.qtype]||TYPE_LABELS.open)+'</span></div>'
       +'<div class="ex-body">'+ex.questionHTML+'</div>'
       +workAreaHTML(ex.qtype)
       +'</div>';
@@ -128,7 +128,7 @@ function renderExerciseSet(meta,exercises){
     +'<div class="exset-head">'
     +'<div class="exset-title">דף תרגילים — '+meta.topicLabel+'</div>'
     +'<div class="exset-nameline">שם: ______________________&nbsp;&nbsp;&nbsp; תאריך: ______________&nbsp;&nbsp;&nbsp; כיתה: ________</div>'
-    +'<div class="qmeta"><span class="tag '+meta.cls+'">'+meta.gradeLabel+'</span><span class="tag '+meta.cls+'">'+meta.domainLabel+'</span><span class="tag '+meta.cls+'">רמה: '+meta.diffLabel+'</span><span class="tag '+meta.cls+'">'+countLabel+'</span></div>'
+    +'<div class="qmeta" data-html2canvas-ignore="true"><span class="tag '+meta.cls+'">'+meta.gradeLabel+'</span><span class="tag '+meta.cls+'">'+meta.domainLabel+'</span><span class="tag '+meta.cls+'">רמה: '+meta.diffLabel+'</span><span class="tag '+meta.cls+'">'+countLabel+'</span></div>'
     +'<div class="exset-actions" data-html2canvas-ignore="true">'
     +'<button class="btn-key" id="btnAnswerKey" onclick="toggleAnswerKey()">הצג תשובות</button>'
     +'<button class="btn-printset" onclick="printExerciseSet()">הדפס דף תרגילים</button>'
