@@ -8,20 +8,23 @@
 | תיקייה | תוכן |
 |---|---|
 | `docs/` (שורש) | מסמכי-ליבה שהקוד/הבדיקות מסתמכים עליהם + מסמכי דרישות/אודיט מקושרים |
-| `docs/reports/` | דוחות אימות נקודתיים (לפי תאריך) + מטריצות שנוצרות אוטומטית |
+| `docs/reports/` | דוחות אימות נקודתיים (לפי תאריך), דוחות שחרור וניקוי, ומטריצות שנוצרות אוטומטית |
 | `docs/source-fit/` | הערות יישום source-fit היסטוריות לפי תחום (12.06) |
 | `docs/audits/` | אודיטים (ויזואלי, ריצת מחולל, PRs, ארגון ריפו) |
 | `docs/planning/` | דרישות מוצר, התקדמות, בקרות מורה |
 | `docs/process/` | לוגי אוטומציה, ledgers, workflow, AI handoff |
 | `docs/reference/` | מודל נתונים, פריסה ל-GitHub Pages, UI מובייל, פרטיות, סטטוס PDF |
-| `docs/verification/` | תצוגות HTML לבדיקה ידנית (גלריה, דיאגרמות premium) |
+| `docs/verification/` | תצוגות HTML ו-artifacts לבדיקה ידנית/אוטומטית; ראו `docs/verification/README.md` |
 | `docs/prompts/` | פרומפטים שמורים |
 
-## מקור אמת עדכני ל־PR #7
+## מקור אמת עדכני אחרי Phase 1
 
-- [reports/FINAL_PR7_RELEASE_STATUS_20260614.md](reports/FINAL_PR7_RELEASE_STATUS_20260614.md) — דוח מצב סופי/חי ל־PR #7: מה בוצע, מה אומת, מה נשאר פתוח, ומה אסור למזג לפני אישור.
-- [../PROJECT_STATUS.md](../PROJECT_STATUS.md) — סטטוס מוצר עדכני.
-- [RELEASE_CHECKLIST.md](RELEASE_CHECKLIST.md) — תנאי שחרור ומיזוג.
+- [../PROJECT_STATUS.md](../PROJECT_STATUS.md) — סטטוס מוצר וריפו עדכני אחרי מיזוגי Phase 1.
+- [../REQUIREMENTS_STATUS.md](../REQUIREMENTS_STATUS.md) — מצב דרישות Phase 1, כולל מה הושלם ומה עדיין לא הושלם.
+- [../NEXT_STEPS.md](../NEXT_STEPS.md) — הצעדים הבאים המאושרים/הפתוחים.
+- [RELEASE_CHECKLIST.md](RELEASE_CHECKLIST.md) — תנאי שחרור, בדיקות וסעיפי בטיחות להמשך.
+- [reports/FINAL_PR7_RELEASE_STATUS_20260614.md](reports/FINAL_PR7_RELEASE_STATUS_20260614.md) — דוח היסטורי חשוב של PR #7; לא מקור אמת יחיד אחרי המיזוג.
+- [reports/REPO_CLEANUP_EXECUTION_20260614.md](reports/REPO_CLEANUP_EXECUTION_20260614.md) — דוח ניקוי ריפו אחרון.
 
 ## ליבה — מקור האמת (source of truth)
 - [SOURCE_BIBLE.md](SOURCE_BIBLE.md) — מקור→מנוע→משפחות שאלה (נוצר מ-`gen-source-bible.mjs`).
@@ -46,7 +49,10 @@
 COPY_TO_CANVA_WORD, VISUAL_QA_ZERO_CARDS_FIX ועוד). שני קבצים נוצרים אוטומטית:
 `VISUAL_COVERAGE_MATRIX.json` ו-`QUESTION_COVERAGE_CENSUS_LATEST.md`.
 
-דוח מצב קובע ל־PR #7: [reports/FINAL_PR7_RELEASE_STATUS_20260614.md](reports/FINAL_PR7_RELEASE_STATUS_20260614.md).
+דוחות חשובים:
+- [reports/FINAL_PR7_RELEASE_STATUS_20260614.md](reports/FINAL_PR7_RELEASE_STATUS_20260614.md) — היסטורי/שחרור PR #7.
+- [reports/REPO_CLEANUP_PLAN_20260614.md](reports/REPO_CLEANUP_PLAN_20260614.md) — תוכנית ניקוי.
+- [reports/REPO_CLEANUP_EXECUTION_20260614.md](reports/REPO_CLEANUP_EXECUTION_20260614.md) — מה נוקה בפועל.
 
 ## אודיטים (docs/audits/)
 [VISUAL_QUALITY_AUDIT.md](VISUAL_QUALITY_AUDIT.md) (שורש) ·
