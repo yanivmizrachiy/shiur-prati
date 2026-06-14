@@ -41,15 +41,26 @@
     return {given:`${a}${v}+${c}-${b}${v}+${d}`, correct:expr(cx,k,v), answer:`מחברים רק איברים דומים: ${tex(a+v+'-'+b+v+'='+(a-b)+v)} וגם ${tex(c+'+'+d+'='+(c+d))}. לכן מקבלים ${tex(expr(cx,k,v))}.`, wrong:[expr(a+b,k,v), expr(cx,c-d,v), expr(a,k,v)]};
   }
 
-  function genA704(diff,qtype){
+  function buildA704Choices(c,mcqMode){
+    const correctItems=[{text:tex(c.correct),correct:true}];
+    if(mcqMode==='multi') correctItems.push({text:tex(c.given),correct:true});
+    return choices(uniqChoices(correctItems.concat(c.wrong.map(w=>({text:tex(w),correct:false})))));
+  }
+
+  function genA704(diff,qtype,mcqMode){
     qtype=qtype==='mixed'?pick(['open','mcq','tf','mistake']):(qtype||'open');
     const c=makeSimplifyCase(diff||'standard');
     const svg=smallSvg('ביטויים שקולים ופישוט');
     let q=`פשטו את הביטוי ${tex(c.given)}.`;
     let a=c.answer;
-    const cs=choices(uniqChoices([{text:tex(c.correct),correct:true}].concat(c.wrong.map(w=>({text:tex(w),correct:false})))));
+    const cs=buildA704Choices(c,mcqMode);
     let isTrue=true;
-    if(qtype==='mcq') q=`איזה ביטוי שקול לביטוי ${tex(c.given)}?`;
+    if(qtype==='mcq'){
+      q=mcqMode==='multi'
+        ? `אילו ביטויים שקולים לביטוי ${tex(c.given)}? סמנו את כל התשובות הנכונות.`
+        : `איזה ביטוי שקול לביטוי ${tex(c.given)}?`;
+      if(mcqMode==='multi') a += ` במצב ריבוי תשובות גם הביטוי המקורי ${tex(c.given)} שקול לעצמו, ולכן גם הוא תשובה נכונה.`;
+    }
     if(qtype==='tf'){
       const falseExpr=pick(c.wrong);
       isTrue=Math.random()<0.35;
@@ -109,15 +120,15 @@
     'A7-04-ENGINE':{fn:genA704,title:'ביטויים שקולים ופישוט',gradeTag:'כיתה ז׳',domainTag:'אלגברה',cls:'alg'},
     'A7-05-ENGINE':{fn:genA705,title:'מציאת טעות בביטויים',gradeTag:'כיתה ז׳',domainTag:'אלגברה',cls:'alg'}
   };
-  function asExercise(id,diff,qtype){ const m=MAP[id]; if(!m) return null; const r=m.fn(diff||'standard',qtype||'mixed'); return {id:id,title:m.title,qtype:qtype||'mixed',gradeTag:m.gradeTag,domainTag:m.domainTag,cls:m.cls,questionHTML:r.questionHTML,answerHTML:r.answerHTML,correctLabel:null}; }
+  function asExercise(id,diff,qtype,opts){ const m=MAP[id]; if(!m) return null; const r=m.fn(diff||'standard',qtype||'mixed',opts&&opts.mcqMode); return {id:id,title:m.title,qtype:qtype||'mixed',gradeTag:m.gradeTag,domainTag:m.domainTag,cls:m.cls,questionHTML:r.questionHTML,answerHTML:r.answerHTML,correctLabel:null}; }
 
   topic(7,'algebra','A7-04-ENGINE','ביטויים שקולים ופישוט ✦ מנוע מקור');
   topic(7,'algebra','A7-05-ENGINE','מציאת טעות בביטויים ✦ מנוע מקור');
   if(Array.isArray(E.ENGINE_TOPIC_IDS)) IDS.forEach(id=>{ if(E.ENGINE_TOPIC_IDS.indexOf(id)<0) E.ENGINE_TOPIC_IDS.push(id); });
   const oldIs=E.isEngineTopic; E.isEngineTopic=function(id){ return IDS.indexOf(id)>=0 || (typeof oldIs==='function' && oldIs(id)); };
-  const oldGet=E.getEngineExercise; E.getEngineExercise=function(id,diff,qtype){ return asExercise(id,diff,qtype) || (typeof oldGet==='function'?oldGet(id,diff,qtype):null); };
+  const oldGet=E.getEngineExercise; E.getEngineExercise=function(id,diff,qtype,opts){ return asExercise(id,diff,qtype,opts) || (typeof oldGet==='function'?oldGet(id,diff,qtype,opts):null); };
   if(typeof generators!=='undefined'){
-    generators['A7-04-ENGINE']=function(){ const d=document.getElementById('selDiff')?.value||'standard', q=document.getElementById('selQType')?.value||'mixed'; E.renderEngineCard('A7-04-ENGINE','ביטויים שקולים ופישוט',genA704(d,q)); };
+    generators['A7-04-ENGINE']=function(){ const d=document.getElementById('selDiff')?.value||'standard', q=document.getElementById('selQType')?.value||'mixed', m=document.getElementById('selMcqMode')?.value||'single'; E.renderEngineCard('A7-04-ENGINE','ביטויים שקולים ופישוט',genA704(d,q,m)); };
     generators['A7-05-ENGINE']=function(){ const d=document.getElementById('selDiff')?.value||'standard', q=document.getElementById('selQType')?.value||'mixed'; E.renderEngineCard('A7-05-ENGINE','מציאת טעות בביטויים',genA705(d,q)); };
   }
   window.addEventListener('DOMContentLoaded',function(){ if(typeof onDomain==='function') onDomain(); });

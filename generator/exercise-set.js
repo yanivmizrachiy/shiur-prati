@@ -12,14 +12,14 @@ function buildTypePlan(qtype,count){
   return plan;
 }
 
-function tryEngineExercise(E,id,diff,qtype){
-  try{return E.getEngineExercise(id,diff,qtype)}catch(e){console.error('engine exercise failed',id,qtype,e);return null}
+function tryEngineExercise(E,id,diff,qtype,mcqMode){
+  try{return E.getEngineExercise(id,diff,qtype,{mcqMode:mcqMode})}catch(e){console.error('engine exercise failed',id,qtype,e);return null}
 }
 
-function makeExercise(id,diff,qtype,isEngine,E){
+function makeExercise(id,diff,qtype,isEngine,E,mcqMode){
   if(isEngine){
-    let ex=tryEngineExercise(E,id,diff,qtype);
-    if(!ex&&qtype!=='open')ex=tryEngineExercise(E,id,diff,'open'); // safe fallback per item
+    let ex=tryEngineExercise(E,id,diff,qtype,mcqMode);
+    if(!ex&&qtype!=='open')ex=tryEngineExercise(E,id,diff,'open',mcqMode); // safe fallback per item
     // ensure pedagogy meta is present for Teacher Advanced Mode
     if(ex&&!ex.meta&&typeof E.buildMeta==='function'){try{ex.meta=E.buildMeta(id,ex.qtype||qtype,diff,ex.questionFamily);}catch(e){}}
     return ex;
@@ -43,6 +43,7 @@ function generateSet(){
   const isEngine=typeof E.isEngineTopic==='function'&&E.isEngineTopic(id)&&typeof E.getEngineExercise==='function';
   const diff=isEngine?(document.getElementById('selDiff')?.value||'standard'):(document.getElementById('sl')?.value||'standard');
   const qtype=isEngine?(document.getElementById('selQType')?.value||'mixed'):'open';
+  const mcqMode=document.getElementById('selMcqMode')?.value||'single';
   const plan=buildTypePlan(qtype,count);
   const exercises=[],seen=new Set();
   let attempts=0;const maxAttempts=count*8;
@@ -50,7 +51,7 @@ function generateSet(){
     let ex=null,last=null;
     for(let tries=0;tries<8&&attempts<maxAttempts;tries++){
       attempts++;
-      const cand=makeExercise(id,diff,plan[i],isEngine,E);
+      const cand=makeExercise(id,diff,plan[i],isEngine,E,mcqMode);
       if(!cand)break;
       last=cand;
       const key=cand.questionHTML.replace(/\s+/g,' ').trim();
@@ -65,7 +66,6 @@ function generateSet(){
   }
   // Multiple-choice instruction (printed, student-facing). Wording matches the
   // teacher's selected mode; the correct answer stays in the answer key only.
-  const mcqMode=document.getElementById('selMcqMode')?.value||'single';
   const mcqInstr=mcqMode==='multi'
     ? '<div class="mcq-instruction">ייתכן שיותר מתשובה אחת נכונה — סמנו את כל התשובות הנכונות:</div>'
     : '<div class="mcq-instruction">סמנו את התשובה הנכונה (אחת בלבד):</div>';
