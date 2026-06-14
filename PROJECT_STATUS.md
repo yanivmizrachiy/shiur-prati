@@ -1,9 +1,9 @@
 # Project Status — Targilim תרגילים
 
 **Last updated:** 2026-06-14  
-**Active PR:** #7 — `feat/source-bible-variety-dedicated-engines` → `main`  
-**Current release branch version:** `0.78.0`  
-**Current status:** Draft PR / release-readiness review branch. Do not merge without explicit approval from יניב.
+**Default branch:** `main`  
+**Current repo state:** Phase 1 merged and active on `main`  
+**Package version:** `0.78.0`
 
 ## Executive snapshot
 
@@ -17,9 +17,14 @@
 - Human visual QA dashboard is implemented at `generator/visual-qa.html`.
 - Visual coverage is enforced by `verify:visual-coverage` inside `verify:deep`.
 - Copy/export includes copy-as-image for whole question cards, including drawings.
-- Documentation has been reorganized with `docs/README.md` and `tools/README.md`.
-- GitHub Actions runs `npm run verify:deep` automatically.
-- Do not merge to `main` until יניב explicitly approves.
+- Documentation is indexed with `docs/README.md` and `tools/README.md`.
+- GitHub Pages publishes the `generator/` directory from `main`.
+
+## Recently merged work
+
+- PR #7 merged the 50-engine source-backed generator, teacher mode, visual QA, copy/export, documentation organization, and verification gates.
+- PR #8 merged the final Phase 1 integration into `main`, including the 1–10 exercise selector, MCQ single/multi UI support, mobile Hebrew fixes, and deterministic stress fixes for true/false sampling.
+- Cleanup pass removed stale generated live-verification FAIL artifacts and added documentation policy. It did not change product behavior.
 
 ## Current verification gates
 
@@ -48,17 +53,12 @@ npm run verify:deep
 - print-layout checks;
 - release documentation freshness check.
 
-## Latest automated status
-
-- Latest verified GitHub Actions before the final documentation status pass: `Verify Targilim Deep` completed with `success` on PR branch HEAD `de256635f0dbf969630a3bd85d74085f2b81589e`.
-- This status file is part of the final documentation/readiness pass and should be followed by a fresh GitHub Actions check on the new HEAD.
-
 ## Current product capabilities
 
 ### Student / worksheet layer
 
 - Generate one exercise or a numbered exercise set.
-- Support 1 / 5 / 10 / 15 / 20 exercises.
+- Support **1–10** exercises in the main selector.
 - Support mixed question types.
 - Support answer key toggle.
 - Support browser print.
@@ -75,6 +75,12 @@ npm run verify:deep
 - Per-question source/family provenance.
 - Follow-up generation support.
 
+### MCQ layer
+
+- Single-answer mode exists and prints a single-answer instruction.
+- Multi-answer wording exists and the answer key supports 1..N correct answers.
+- Current engine content still emits exactly one correct answer per MCQ; real multi-correct content remains a future item and must not be claimed as completed until engines actually emit more than one correct answer.
+
 ### Teacher layer
 
 - Teacher Advanced Mode toggle.
@@ -89,8 +95,8 @@ npm run verify:deep
 
 ### Visual and QA layer
 
-- `generator/gallery.html` displays all 50 engines from the live registry.
-- `generator/visual-qa.html` lets a teacher perform human visual QA on all 50 engines.
+- `generator/gallery.html` displays engines from the live registry.
+- `generator/visual-qa.html` lets a teacher perform human visual QA on engines.
 - Visual QA statuses: יפה, צריך תיקון, בעיה בשרטוט, בעיה בהדפסה, בעיה בטקסט.
 - Visual QA notes are stored locally in the browser and can be exported as JSON.
 - Visual expectation badges identify topics where drawings are essential/recommended/optional.
@@ -102,35 +108,21 @@ npm run verify:deep
 - `README.md` documents the high-level repository structure.
 - `docs/README.md` indexes documentation folders and source-of-truth files.
 - `tools/README.md` maps verifiers, generators, harnesses and standalone tools.
-- Historical unreferenced docs were moved with `git mv` into purpose folders.
-- Protected source PDFs and GitHub Pages marker files were not deleted.
+- Historical unreferenced docs are organized under purpose folders.
+- Protected source PDFs and GitHub Pages marker files are not deleted.
+- Cleanup-only work must not touch product code, engines, sources or verifier logic.
 
-## Release readiness decision
-
-This branch is technically strong, but merge readiness requires all confirmations below:
-
-```text
-GitHub Actions verify:deep = success
-Local or Termux verify:deep = success
-Human visual QA = acceptable
-Human print QA = acceptable
-Manual copy-as-image test into Word/Canva/Docs = acceptable
-Yaniv explicitly approves merge
-```
-
-## Merge safety
+## Release and cleanup safety
 
 Do not do any of the following without explicit approval:
 
-- merge to `main`;
-- mark PR #7 ready for review;
+- merge feature PRs to `main`;
 - force push;
-- reset or clean the branch destructively;
+- reset or clean destructively;
 - weaken a verifier;
-- merge old PR branches directly;
 - delete protected source PDFs;
 - delete historical reports without an index/superseded decision;
-- begin new feature work before PR readiness is accepted;
+- begin new feature work during cleanup-only work;
 - commit `_audit/`, `.claude/`, `TARGILIM_*_AUDIT*.txt`, `TARGILIM_*_INTEL*.txt`, `node_modules/`, secrets, tokens or temp logs.
 
 ## Live / static entry points
@@ -145,17 +137,24 @@ Repository paths:
 - Release checklist: `docs/RELEASE_CHECKLIST.md`
 - Documentation index: `docs/README.md`
 - Tools index: `tools/README.md`
-- Final PR status report: `docs/reports/FINAL_PR7_RELEASE_STATUS_20260614.md`
-
-Do not publish a URL as the final live site until GitHub Pages/deployment is verified after merge/deploy.
+- Phase 1 requirements status: `REQUIREMENTS_STATUS.md`
+- Cleanup execution log: `docs/reports/REPO_CLEANUP_EXECUTION_20260614.md`
 
 ## Remaining high-value work
 
-1. Human visual QA across all 50 engines using `generator/visual-qa.html`.
+1. Human visual QA across engines using `generator/visual-qa.html`.
 2. Real A4 print review, with and without answer key.
 3. Confirm teacher-only content never appears in student print/export.
 4. Manual copy-as-image paste test into Word/Canva/Docs.
 5. Decide whether to keep duplicate source PDFs in `originals/`.
 6. Decide whether to consolidate overlapping fallback reports.
 7. Optional future feature after approval only: source-question coverage gap for inequalities / A8-05.
-8. Only after approval: mark PR ready and merge to `main`.
+8. Optional future feature after approval only: real multi-correct MCQ content.
+
+## Release / CI gate
+
+Before any merge to `main`, GitHub Actions must pass.
+
+The required GitHub Actions gate is `npm run verify:deep`.
+
+Do not merge unless `verify:deep` passes in GitHub Actions and Yaniv gives explicit approval.
