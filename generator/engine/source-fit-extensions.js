@@ -96,6 +96,7 @@
   function buildN701(diff, qtype){
     qtype = qtype === 'mixed' ? pick(['open','mcq','tf','mistake']) : (qtype || 'open');
     const c = coordinateCase(diff || 'standard');
+    const tfTrue = qtype === 'tf' && Math.random() < 0.5;
     let svg = coordinateSystemSvg({points:c.family==='missing'?c.points:c.points, connect:c.connect||[]});
     let q='', a='', choices=null, isTrue=true;
     if(c.family === 'plot'){
@@ -103,21 +104,21 @@
       q = `שרטטו במערכת הצירים את הנקודות ${list}, וחברו לפי הסדר. איזו צורה התקבלה?`;
       a = `הנקודות יוצרות ${c.shape}. האלכסונים מאונכים ונפגשים במרכז, ולכן מתקבלת צורת מעוין.`;
       choices = choiceList([{text:'מעוין',correct:true},{text:'מלבן',correct:false},{text:'משולש',correct:false},{text:'טרפז',correct:false}]);
-      if(qtype==='tf'){ q = `הנקודות ${list} יוצרות מלבן.`; a = `שגוי. לפי מיקום הנקודות האלכסונים מאונכים ושווים סביב המרכז — הצורה היא מעוין, לא מלבן רגיל.`; isTrue=false; }
+      if(qtype==='tf'){ isTrue=tfTrue; q = tfTrue ? `הנקודות ${list} יוצרות מעוין.` : `הנקודות ${list} יוצרות מלבן.`; a = tfTrue ? `נכון. האלכסונים מאונכים ונפגשים במרכז וכל הצלעות שוות — הצורה היא מעוין.` : `שגוי. לפי מיקום הנקודות האלכסונים מאונכים ושווים סביב המרכז — הצורה היא מעוין, לא מלבן רגיל.`; }
       if(qtype==='mistake'){ q = `תלמיד חיבר את הנקודות לפי סדר אקראי וטען שכל חיבור של אותן נקודות יוצר אותה צורה.`; a = `הטעות: סדר החיבור קובע את הצלעות. לפי המקור צריך לשרטט, לחבר לפי הסדר, ואז לזהות את הצורה.`; }
     } else if(c.family === 'segment'){
       q = `במערכת הצירים נתונות הנקודות ${pointText(c.points[0])} ו-${pointText(c.points[1])}. חשבו את אורך הקטע AB.`;
       a = `הקטע מקביל לציר x, לכן האורך הוא הפרש שיעורי ה-x:
 $$|${c.points[1].x}-${c.points[0].x}|=${c.len}$$`;
       choices = choiceList([{text:inline(String(c.len)),correct:true},{text:inline(String(Math.abs(c.points[0].y-c.points[1].y))),correct:false},{text:inline(String(c.len+1)),correct:false},{text:inline(String(c.points[1].x+c.points[0].x)),correct:false}]);
-      if(qtype==='tf'){ const wrong=c.len+1; q = `אורך הקטע AB הוא ${inline(String(wrong))}.`; a = `שגוי. מכיוון שה-y זהה, מודדים רק את הפרש ה-x: ${inline('|'+c.points[1].x+'-'+c.points[0].x+'|='+c.len)}.`; isTrue=false; }
+      if(qtype==='tf'){ isTrue=tfTrue; const shown=tfTrue?c.len:c.len+1; q = `אורך הקטע AB הוא ${inline(String(shown))}.`; a = (tfTrue?`נכון. `:`שגוי. `)+`מכיוון שה-y זהה, מודדים רק את הפרש ה-x: ${inline('|'+c.points[1].x+'-'+c.points[0].x+'|='+c.len)}.`; }
       if(qtype==='mistake'){ q = `תלמיד כתב: "האורך הוא ${c.points[0].y}, כי זה הגובה של הנקודות".`; a = `הטעות: כששתי נקודות על אותו קו אופקי, האורך תלוי בהפרש שיעורי ה-x, לא בערך ה-y.`; }
     } else if(c.family === 'area'){
       q = `במערכת הצירים מסומן מלבן PQRS. חשבו את שטחו.`;
       a = `רוחב המלבן הוא ${inline(String(c.w))}, והגובה הוא ${inline(String(c.h))}. לכן:
 $$S=${c.w}\cdot ${c.h}=${c.area}$$`;
       choices = choiceList([{text:inline(c.area+' יח״ר'),correct:true},{text:inline((2*(c.w+c.h))+' יח״ר'),correct:false},{text:inline((c.w+c.h)+' יח״ר'),correct:false},{text:inline((c.area+2)+' יח״ר'),correct:false}]);
-      if(qtype==='tf'){ q = `שטח המלבן הוא ${inline(String(2*(c.w+c.h)))} יחידות ריבועיות.`; a = `שגוי. זהו היקף, לא שטח. שטח הוא רוחב כפול גובה: ${inline(c.w+'\\cdot '+c.h+'='+c.area)}.`; isTrue=false; }
+      if(qtype==='tf'){ isTrue=tfTrue; const shown=tfTrue?c.area:2*(c.w+c.h); q = `שטח המלבן הוא ${inline(String(shown))} יחידות ריבועיות.`; a = tfTrue ? `נכון. שטח הוא רוחב כפול גובה: ${inline(c.w+'\\cdot '+c.h+'='+c.area)}.` : `שגוי. זהו היקף, לא שטח. שטח הוא רוחב כפול גובה: ${inline(c.w+'\\cdot '+c.h+'='+c.area)}.`; }
       if(qtype==='mistake'){ q = `תלמיד חישב ${inline('2('+c.w+'+'+c.h+')')} וקבע שזה שטח המלבן.`; a = `הטעות: ${inline('2(a+b)')} מחשב היקף. שטח מלבן במערכת הצירים הוא ${inline('a\\cdot b')}.`; }
     } else {
       const all = c.points.concat([Object.assign({unknown:true},c.missing)]);
@@ -125,8 +126,11 @@ $$S=${c.w}\cdot ${c.h}=${c.area}$$`;
       q = `שלוש נקודות של מלבן הן ${pointText(c.points[0])}, ${pointText(c.points[1])}, ${pointText(c.points[2])}. מהי הנקודה D שמשלימה את המלבן?`;
       a = `במלבן המקביל לצירים, ל-D יש אותו x כמו A ואותו y כמו C. לכן:
 $$D=(${c.missing.x},${c.missing.y})$$`;
-      choices = choiceList([{text:pointText(c.missing),correct:true},{text:pointText({x:c.points[2].x,y:c.points[0].y}),correct:false},{text:pointText({x:c.points[0].x,y:c.points[0].y}),correct:false},{text:pointText({x:c.points[1].x,y:c.points[2].y}),correct:false}]);
-      if(qtype==='tf'){ q = `הנקודה ${pointText({x:c.points[2].x,y:c.points[0].y})} משלימה את המלבן.`; a = `שגוי. זו כבר נקודה B. הנקודה החסרה צריכה לקחת x מ-A ו-y מ-C: ${pointText(c.missing)}.`; isTrue=false; }
+      // distractors include the x/y-swapped point (the classic coordinate
+      // misconception), guarded so it never collides with the correct answer.
+      const swap = c.missing.x !== c.missing.y ? {x:c.missing.y,y:c.missing.x} : {x:c.points[0].x,y:c.points[0].y};
+      choices = choiceList([{text:pointText(c.missing),correct:true},{text:pointText(swap),correct:false},{text:pointText({x:c.points[2].x,y:c.points[0].y}),correct:false},{text:pointText({x:c.points[1].x,y:c.points[2].y}),correct:false}]);
+      if(qtype==='tf'){ isTrue=tfTrue; q = tfTrue ? `הנקודה ${pointText(c.missing)} משלימה את המלבן.` : `הנקודה ${pointText({x:c.points[2].x,y:c.points[0].y})} משלימה את המלבן.`; a = tfTrue ? `נכון. הנקודה החסרה לוקחת x מ-A ו-y מ-C: ${pointText(c.missing)}.` : `שגוי. זו כבר נקודה B. הנקודה החסרה צריכה לקחת x מ-A ו-y מ-C: ${pointText(c.missing)}.`; }
       if(qtype==='mistake'){ q = `תלמיד השלים את הנקודה הרביעית כ-${pointText({x:c.points[1].x,y:c.points[2].y})}, כי "לוקחים את x ו-y מהנקודה האחרונה".`; a = `הטעות: צריך לשמור צלעות מקבילות לצירים. הנקודה החסרה היא ${pointText(c.missing)}.`; }
     }
     if(qtype==='mcq') return E.questionTypes.mcq({question:q,answer:a,svg,choices});
@@ -135,19 +139,27 @@ $$D=(${c.missing.x},${c.missing.y})$$`;
     return E.questionTypes.open({question:q,answer:a,svg});
   }
 
-  function compareCase(){
-    const cases=[
+  function compareCase(diff){
+    const easy=[
       {n1:30,k1:12,n2:20,k2:10},
-      {n1:36,k1:15,n2:24,k2:12},
       {n1:40,k1:18,n2:25,k2:13},
-      {n1:28,k1:11,n2:18,k2:9}
+      {n1:20,k1:8,n2:10,k2:5}
     ];
-    return pick(cases);
+    const hard=[
+      {n1:36,k1:15,n2:24,k2:12},
+      {n1:28,k1:11,n2:18,k2:9},
+      {n1:45,k1:18,n2:30,k2:14},
+      {n1:50,k1:22,n2:35,k2:17}
+    ];
+    if(diff==='basic') return pick(easy);
+    if(diff==='challenge') return pick(hard);
+    return pick(easy.concat(hard));
   }
 
   function buildU703(diff, qtype){
     qtype = qtype === 'mixed' ? pick(['open','mcq','tf','mistake']) : (qtype || 'open');
-    const c = compareCase();
+    const c = compareCase(diff || 'standard');
+    const tfTrue = qtype === 'tf' && Math.random() < 0.5;
     const r1 = c.k1/c.n1, r2 = c.k2/c.n2;
     const pct1 = Math.round(r1*1000)/10, pct2 = Math.round(r2*1000)/10;
     const svg = compareGroupsSvg(c);
@@ -159,8 +171,13 @@ $$\\frac{${c.k2}}{${c.n2}}=${pct2}\\%$$
     const choices = choiceList([{text:'כיתה א׳, כי יש בה יותר מתעמלים',correct:false},{text:'כיתה ב׳, כי השיעור היחסי גבוה יותר',correct:true},{text:'שתיהן שוות',correct:false},{text:'אי אפשר לדעת בלי לדעת שמות תלמידים',correct:false}]);
     let isTrue=false;
     if(qtype==='tf'){
-      q = `כיתה א׳ ספורטיבית יותר, כי ${c.k1} מתעמלים גדול מ-${c.k2} מתעמלים.`;
-      a = `שגוי. זה בדיוק המלכוד מהמקור: משווים ${inline('k/n')} ולא רק ${inline('k')}. בכיתה ב׳ השיעור היחסי גבוה יותר (${pct2}% לעומת ${pct1}%).`;
+      isTrue=tfTrue;
+      q = tfTrue
+        ? `כיתה ב׳ ספורטיבית יותר באופן יחסי, אף שבכיתה א׳ יש יותר מתעמלים במספר.`
+        : `כיתה א׳ ספורטיבית יותר, כי ${c.k1} מתעמלים גדול מ-${c.k2} מתעמלים.`;
+      a = tfTrue
+        ? `נכון. משווים שיעור: ${inline('\\frac{'+c.k2+'}{'+c.n2+'}')}=${pct2}% גדול מ-${inline('\\frac{'+c.k1+'}{'+c.n1+'}')}=${pct1}%.`
+        : `שגוי. זה בדיוק המלכוד מהמקור: משווים ${inline('k/n')} ולא רק ${inline('k')}. בכיתה ב׳ השיעור היחסי גבוה יותר (${pct2}% לעומת ${pct1}%).`;
     }
     if(qtype==='mistake'){
       q = `תלמיד כתב: "כיתה א׳ ספורטיבית יותר כי ${c.k1}>${c.k2}".`;

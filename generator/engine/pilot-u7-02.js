@@ -12,10 +12,10 @@
     {r:6,b:9,total:15,pr:'\\frac{2}{5}',prc:'\\frac{3}{5}'}
   ];
   const DIE = [
-    {ev:'מספר זוגי',fav:3,p:'\\frac{1}{2}'},
-    {ev:'מספר גדול מ-4',fav:2,p:'\\frac{1}{3}'},
-    {ev:'מספר קטן מ-3',fav:2,p:'\\frac{1}{3}'},
-    {ev:'המספר 6',fav:1,p:'\\frac{1}{6}'}
+    {ev:'מספר זוגי',fav:3,p:'\\frac{1}{2}',faces:[2,4,6]},
+    {ev:'מספר גדול מ-4',fav:2,p:'\\frac{1}{3}',faces:[5,6]},
+    {ev:'מספר קטן מ-3',fav:2,p:'\\frac{1}{3}',faces:[1,2]},
+    {ev:'המספר 6',fav:1,p:'\\frac{1}{6}',faces:[6]}
   ];
 
   function pickFamily(diff){
@@ -27,6 +27,44 @@
     if(f==='die') return E.pick(DIE);
     return E.pick(BAGS);
   }
+
+  function esc(v){ return String(v).replace(/[&<>]/g, s => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[s])); }
+  function ball(x,y,fill,label){
+    return '<g><circle cx="'+x+'" cy="'+y+'" r="12" fill="'+fill+'" stroke="#1f2937" stroke-width="1.4"/>'+
+      '<text x="'+x+'" y="'+(y+4)+'" text-anchor="middle" font-size="10" font-weight="800" fill="#111827">'+label+'</text></g>';
+  }
+  function bagSvg(x,family){
+    const red = '#fecaca', blue = '#bfdbfe';
+    const balls = [];
+    const shownRed = Math.min(x.r, 8), shownBlue = Math.min(x.b, 9);
+    let i = 0;
+    for(let k=0;k<shownRed;k++,i++) balls.push(ball(75+(i%6)*27, 92+Math.floor(i/6)*28, red, 'א'));
+    for(let k=0;k<shownBlue;k++,i++) balls.push(ball(75+(i%6)*27, 92+Math.floor(i/6)*28, blue, 'כ'));
+    const title = family === 'complement' ? 'מודל שקית: לא אדום = כחול' : 'מודל שקית: הסתברות לאדום';
+    return '<svg class="engine-svg" viewBox="0 0 300 190" role="img" aria-label="'+esc(title)+'">'
+      +'<rect x="40" y="42" width="220" height="126" rx="24" fill="#fff7ed" stroke="#92400e" stroke-width="2.2"/>'
+      +'<path d="M82 44 Q150 20 218 44" fill="none" stroke="#92400e" stroke-width="3"/>'
+      +'<text x="150" y="26" text-anchor="middle" font-size="15" font-weight="900" fill="#0f172a">'+title+'</text>'
+      +balls.join('')
+      +'<text x="150" y="178" text-anchor="middle" font-size="13" font-weight="800" fill="#334155">אדומים: '+x.r+' · כחולים: '+x.b+' · סך הכול: '+x.total+'</text>'
+      +'</svg>';
+  }
+  function pip(cx,cy){ return '<circle cx="'+cx+'" cy="'+cy+'" r="3.8" fill="#0f172a"/>'; }
+  function dieFace(n,x,y,marked){
+    const p = [];
+    const spots = {1:[[0,0]],2:[[-10,-10],[10,10]],3:[[-10,-10],[0,0],[10,10]],4:[[-10,-10],[10,-10],[-10,10],[10,10]],5:[[-10,-10],[10,-10],[0,0],[-10,10],[10,10]],6:[[-10,-12],[10,-12],[-10,0],[10,0],[-10,12],[10,12]]}[n];
+    spots.forEach(s=>p.push(pip(x+s[0],y+s[1])));
+    return '<g><rect x="'+(x-22)+'" y="'+(y-22)+'" width="44" height="44" rx="8" fill="'+(marked?'#dcfce7':'#ffffff')+'" stroke="'+(marked?'#16a34a':'#cbd5e1')+'" stroke-width="2"/>'+p.join('')+'</g>';
+  }
+  function dieSvg(x){
+    const marked = new Set(x.faces || []);
+    return '<svg class="engine-svg" viewBox="0 0 320 170" role="img" aria-label="מודל קובייה להסתברות">'
+      +'<text x="160" y="24" text-anchor="middle" font-size="15" font-weight="900" fill="#0f172a">מודל קובייה: תוצאות מתאימות מסומנות</text>'
+      +[1,2,3,4,5,6].map((n,i)=>dieFace(n,55+(i%3)*105,62+Math.floor(i/3)*62,marked.has(n))).join('')
+      +'<text x="160" y="158" text-anchor="middle" font-size="13" font-weight="800" fill="#334155">תוצאות מתאימות: '+x.fav+' מתוך 6</text>'
+      +'</svg>';
+  }
+  function modelSvg(family,x){ return family==='die' ? dieSvg(x) : bagSvg(x,family); }
 
   function choices(family,x){
     let correct, wrongs;
@@ -78,10 +116,10 @@
     const family = pickFamily(difficulty);
     const x = pickCase(family);
     const tfTrue = questionType==='tf' && Math.random()<0.5;
-    const q = question(family,x,questionType,tfTrue), a = answer(family,x,questionType,tfTrue);
-    if(questionType==='mcq') return E.questionTypes.mcq({question:q,answer:a,svg:'',choices:choices(family,x)});
-    if(questionType==='tf') return E.questionTypes.tf({question:q,answer:a,svg:'',isTrue:tfTrue});
-    if(questionType==='mistake') return E.questionTypes.mistake({question:q,answer:a,svg:''});
-    return E.questionTypes.open({question:q,answer:a,svg:''});
+    const q = question(family,x,questionType,tfTrue), a = answer(family,x,questionType,tfTrue), svg = modelSvg(family,x);
+    if(questionType==='mcq') return E.questionTypes.mcq({question:q,answer:a,svg:svg,choices:choices(family,x)});
+    if(questionType==='tf') return E.questionTypes.tf({question:q,answer:a,svg:svg,isTrue:tfTrue});
+    if(questionType==='mistake') return E.questionTypes.mistake({question:q,answer:a,svg:svg});
+    return E.questionTypes.open({question:q,answer:a,svg:svg});
   };
 })();

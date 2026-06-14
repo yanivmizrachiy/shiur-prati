@@ -20,6 +20,8 @@ function makeExercise(id,diff,qtype,isEngine,E){
   if(isEngine){
     let ex=tryEngineExercise(E,id,diff,qtype);
     if(!ex&&qtype!=='open')ex=tryEngineExercise(E,id,diff,'open'); // safe fallback per item
+    // ensure pedagogy meta is present for Teacher Advanced Mode
+    if(ex&&!ex.meta&&typeof E.buildMeta==='function'){try{ex.meta=E.buildMeta(id,ex.qtype||qtype,diff,ex.questionFamily);}catch(e){}}
     return ex;
   }
   if(typeof generators==='undefined'||!generators[id])return null;
@@ -30,7 +32,8 @@ function makeExercise(id,diff,qtype,isEngine,E){
   const c=buf[0];
   return {id:c.id,title:c.title,qtype:'open',cls:c.cls,
     questionHTML:(c.svg?'<div class="diagram">'+c.svg+'</div>':'')+'<div class="qtext">'+c.q+'</div>',
-    answerHTML:c.a,correctLabel:null};
+    answerHTML:c.a,correctLabel:null,
+    meta:(typeof E.buildMeta==='function'?(function(){try{return E.buildMeta(id,'open',diff);}catch(e){return null}})():null)};
 }
 
 function generateSet(){
@@ -70,6 +73,8 @@ function generateSet(){
     cls:{geometry:'geo',algebra:'alg',numeric:'num',uncertainty:'unc'}[domainKey]||'num',
     diffLabel:{standard:'סטנדרטית',basic:'בסיסית',challenge:'מאתגרת'}[diff]||diff
   };
+  // publish set context so Teacher Advanced Mode can regenerate single items
+  window.__exsetCtx={id:id,isEngine:isEngine,diff:diff,topicLabel:topicLabel,cls:meta.cls,exercises:exercises};
   renderExerciseSet(meta,exercises);
 }
 
@@ -94,9 +99,9 @@ function renderExerciseSet(meta,exercises){
   const TYPE_LABELS={open:'שאלה פתוחה',mcq:'רב־ברירה',tf:'נכון / שגוי',mistake:'מצא את הטעות'};
   if(typeof setMainTitle==='function')setMainTitle(meta.cls,meta.topicLabel);
   const cards=exercises.map(function(ex,i){
-    return '<div class="qcard engine-card ex-card">'
+    return '<div class="qcard engine-card ex-card" id="exCard'+i+'" data-idx="'+i+'">'
       +'<div class="qmeta"><span class="ex-num">תרגיל '+(i+1)+'</span><span class="tag '+meta.cls+'">'+(TYPE_LABELS[ex.qtype]||TYPE_LABELS.open)+'</span></div>'
-      +ex.questionHTML
+      +'<div class="ex-body">'+ex.questionHTML+'</div>'
       +workAreaHTML(ex.qtype)
       +'</div>';
   }).join('');
@@ -121,6 +126,8 @@ function renderExerciseSet(meta,exercises){
   out.innerHTML=html;
   renderMathInElement(out,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false});
   if(typeof applyVisualMode==='function')applyVisualMode();
+  // Teacher Advanced Mode decoration (teacher cards + per-question controls)
+  if(window.Teacher&&typeof window.Teacher.decorateSet==='function')window.Teacher.decorateSet();
 }
 
 function toggleAnswerKey(){
