@@ -116,3 +116,14 @@ Yaniv explicitly approves the merge
 ```
 
 For cleanup-only PRs, the PR body must prove that product code, engines, sources and verifier logic were not touched.
+
+## Merge safety rules
+
+These rules gate every merge to `main` and back the deep verification baseline:
+
+- **Do not merge to `main`** without explicit approval from Yaniv.
+- GitHub Actions runs `npm run verify:deep`; a PR is merge-ready only when `verify:deep` passes in GitHub Actions.
+- No direct commits to `main` — every change lands through a pull request from a dedicated branch.
+- No force-push to `main`.
+- Merge to `main` requires explicit approval from Yaniv.
+- These merge safety rules live in `docs/RELEASE_CHECKLIST.md`.
