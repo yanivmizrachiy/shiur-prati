@@ -13,9 +13,12 @@ function read(p){ return fs.readFileSync(p,'utf8'); }
 // ── 1. index.html controls ──
 const index = read('generator/index.html');
 check('index has מספר תרגילים control', index.includes('מספר תרגילים') && index.includes('id="sn"'));
-for (const v of ['1','5','10','15','20']) {
-  check('count option '+v, new RegExp('<option value="'+v+'"[^>]*>'+v+'</option>').test(index));
+// Phase 1: the teacher must be able to choose exactly 1..10 questions, no more.
+const snBlock = (index.match(/<select id="sn"[\s\S]*?<\/select>/) || [''])[0];
+for (const v of ['1','2','3','4','5','6','7','8','9','10']) {
+  check('count option '+v, new RegExp('<option value="'+v+'"[^>]*>'+v+'</option>').test(snBlock));
 }
+check('count selector offers no option above 10', !/<option value="(1[1-9]|[2-9]\d+)"/.test(snBlock));
 check('index has מעורב option (default)', /<option value="mixed" selected>מעורב<\/option>/.test(index));
 check('index button is צור דף תרגילים', index.includes('צור דף תרגילים ◀'));
 check('index loads exercise-set.js', /<script src="exercise-set\.js(?:\?[^"<>]*)?"><\/script>/.test(index));
@@ -112,9 +115,9 @@ if (!loadError) {
   check('no undefined/NaN in set output', !BAD.test(html));
   check('no engine ids in set output', !html.includes('-ENGINE'));
 
-  // duplicate avoidance: 20 from one engine still renders 20
-  els.sn.value='20'; vm.runInContext('generate()', sandbox);
-  check('20-exercise set renders fully', (els.out.innerHTML.match(/ex-card/g)||[]).length === 20);
+  // duplicate avoidance: the max (10) from one engine still renders 10 distinct
+  els.sn.value='10'; vm.runInContext('generate()', sandbox);
+  check('10-exercise set renders fully', (els.out.innerHTML.match(/ex-card/g)||[]).length === 10);
 
   // legacy (non-engine) topic set via renderCard capture
   els.st.value='N7-06'; els.st.options=[{textContent:'חזקות: (−a)ⁿ לעומת −aⁿ'}]; els.sn.value='5';
