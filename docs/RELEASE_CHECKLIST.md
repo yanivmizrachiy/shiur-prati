@@ -1,15 +1,18 @@
-# Release Readiness Checklist — PR #7
+# Release Readiness Checklist
 
-## Current branch
+מסמך בדיקות ושחרור כללי לפרויקט `targilim` אחרי מיזוג Phase 1 ל-`main`.
 
-- Branch: `feat/source-bible-variety-dedicated-engines`
-- Target: `main`
-- Status: keep as draft PR review branch until explicit approval from יניב.
-- Canonical status report: `docs/reports/FINAL_PR7_RELEASE_STATUS_20260614.md`.
+## Current baseline
+
+- Default branch: `main`.
+- Product version: `0.78.0`.
+- Current product state: 50 source-backed engines, 0 fallback topics, Hebrew RTL worksheet generator for Grades 7–8.
+- Phase 1 has been merged through PR #7 and PR #8.
+- Cleanup-only changes should still go through PR and must not touch product code unless explicitly approved.
 
 ## Automated gates required before merge
 
-Run locally and in GitHub Actions:
+Run locally and in GitHub Actions for feature/product PRs:
 
 ```bash
 npm install
@@ -51,17 +54,19 @@ Required gates inside `verify:deep`:
 - Copy-as-image remains available for the teacher workflow and has a PNG fallback when browser clipboard image writing is blocked.
 - UI and student-facing output remain Hebrew RTL.
 - Visible owner credit remains `יניב רז`.
-- Documentation indexes remain present: `docs/README.md`, `tools/README.md`, and `docs/reports/FINAL_PR7_RELEASE_STATUS_20260614.md`.
+- Documentation indexes remain present: `docs/README.md`, `tools/README.md`, `PROJECT_STATUS.md`, and `REQUIREMENTS_STATUS.md`.
+- Main exercise count selector remains 1–10 unless a future requirement explicitly changes it.
+- MCQ multi-answer UI wording exists, but real multi-correct content is still a Phase 2 item and must not be claimed as complete until implemented and verified.
 
-## Human QA required before merge
+## Human QA required before product release
 
-Automated checks are necessary but not enough. Before marking the PR ready or merging:
+Automated checks are necessary but not enough. Before releasing product behavior changes:
 
 1. Open `generator/visual-qa.html`.
 2. Confirm the dashboard shows all 50 engines after a hard reload.
 3. Generate at least one sample for every visible engine.
 4. Mark each engine as: יפה / צריך תיקון / בעיה בשרטוט / בעיה בהדפסה / בעיה בטקסט.
-5. Export the QA JSON from the dashboard.
+5. Export the QA JSON from the dashboard when doing a formal visual QA pass.
 6. Print at least one A4 worksheet with diagrams.
 7. Print at least one A4 worksheet with answer key open.
 8. Confirm teacher-only controls/cards do not appear in student print.
@@ -72,11 +77,12 @@ Automated checks are necessary but not enough. Before marking the PR ready or me
 
 - `docs/` root contains only load-bearing/cross-linked docs.
 - Historical docs remain organized under purpose folders.
-- `docs/README.md` links to the current source-of-truth reports.
+- `docs/README.md` links to current source-of-truth reports.
 - `tools/README.md` maps wired verifiers, standalone verifiers, generators and harnesses.
 - Protected source material was not removed without explicit approval.
 - `generator/.nojekyll` remains present.
 - No stale audit/temp/editor files are committed.
+- Generated FAIL reports are not treated as source of truth if they are known stale or caused by a verifier bug.
 
 ## Known open decisions
 
@@ -84,22 +90,29 @@ These are not hidden; keep them explicit:
 
 1. Duplicate PDF originals under `sources/intake/2026-06-09/originals/` — keep unless יניב explicitly approves a cleanup.
 2. Overlapping fallback reports — keep as history unless יניב approves consolidation.
-3. Future enhancement: inequalities / A8-05 source-question coverage gap — do not begin before release-readiness approval.
-4. Final live site URL — verify after deployment/merge before presenting it as active.
+3. Future enhancement: inequalities / A8-05 source-question coverage gap — do not begin without approval.
+4. Future enhancement: real multi-correct MCQ content — do not claim as complete until engines actually emit more than one correct answer and verifiers distinguish single from multi mode.
+5. Final live site URL/status — verify after deployment before presenting it as active.
 
 ## Safety rule
 
 - Do not merge to `main` without explicit approval from Yaniv.
+- Do not force-push.
+- Do not weaken verifiers.
+- Do not delete protected source PDFs.
+- Do not mix product feature work into cleanup-only PRs.
 
 ## Merge decision
 
-Merge only after all are true:
+For product/feature PRs, merge only after all are true:
 
 ```text
 GitHub Actions verify:deep = success
 Local or Termux verify:deep = success
-Human visual QA = acceptable
-Human print QA = acceptable
-Manual copy-as-image paste test = acceptable
+Human visual QA = acceptable when visuals are affected
+Human print QA = acceptable when print/layout is affected
+Manual copy-as-image paste test = acceptable when copy/export is affected
 Yaniv explicitly approves the merge
 ```
+
+For cleanup-only PRs, the PR body must prove that product code, engines, sources and verifier logic were not touched.
