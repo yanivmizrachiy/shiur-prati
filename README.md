@@ -11,6 +11,7 @@ Repository: `yanivmizrachiy/targilim`
 - כל מנוע ממופה למקור, כיתה, תחום, מיומנות ומשפחות שאלה.
 - כל מנוע נבדק דרך verifiers ולא דרך דמו.
 - `verify:deep` הוא שער האיכות הראשי.
+- GitHub Actions מריץ את `verify:deep` אוטומטית.
 - PR #7 מחזיק את שכבת השיפור הנוכחית לפני מיזוג ל־`main`.
 
 ## כניסה מהירה
@@ -20,6 +21,7 @@ Repository: `yanivmizrachiy/targilim`
 - QA חזותי: `generator/visual-qa.html`
 - ספר מקורות דיגיטלי: `generator/book.html`
 - מקור אמת תוכני: `docs/SOURCE_BIBLE.md`
+- צ׳ק־ליסט שחרור: `docs/RELEASE_CHECKLIST.md`
 
 ## הרצת בדיקות
 
@@ -40,6 +42,7 @@ npm run verify:deep
 - `verify:gallery` — גלריית 50 מנועים.
 - `verify:visual-qa` — דף QA חזותי לכל המנועים.
 - `verify:hygiene` — מניעת הכנסת קבצי audit/editor מקומיים.
+- `verify:release-docs` — מניעת סטייה בין מצב המוצר למסמכי השחרור.
 
 ## כללי בטיחות
 
@@ -48,7 +51,8 @@ npm run verify:deep
 - לא מכניסים `_audit/`, `.claude/`, `TARGILIM_*_AUDIT*.txt`, `TARGILIM_*_INTEL*.txt` או `node_modules/`.
 - לא משתמשים בקובץ מקור 10 כמקור ישיר לשאלה; הוא משמש לתכנון רצף/הוראה בלבד.
 - כל ממשק המשתמש והפלט לתלמיד בעברית ו־RTL.
+- הקרדיט הגלוי נשאר: `יניב רז`.
 
 ## סטטוס מוצר
 
-המנועים עצמם חזקים ומכוסים. השלב הבא הוא איכות מוצר: CI, QA חזותי אנושי, בדיקת הדפסה A4 בפועל, ודיוק חוויית מורה.
+המנועים עצמם חזקים ומכוסים. השלב הבא הוא איכות מוצר: QA חזותי אנושי, בדיקת הדפסה A4 בפועל, ודיוק חוויית מורה לפני החלטת merge.
