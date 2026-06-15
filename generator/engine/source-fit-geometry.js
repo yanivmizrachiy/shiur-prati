@@ -95,7 +95,7 @@
   topic(8,'geometry','G8-03-ENGINE','זוויות בין מקבילים ✦ מקור');
   if(Array.isArray(E.ENGINE_TOPIC_IDS)) IDS.forEach(id=>{ if(E.ENGINE_TOPIC_IDS.indexOf(id)<0) E.ENGINE_TOPIC_IDS.push(id); });
   const oldIs=E.isEngineTopic; E.isEngineTopic=function(id){ return IDS.indexOf(id)>=0 || (typeof oldIs==='function' && oldIs(id)); };
-  const oldGet=E.getEngineExercise; E.getEngineExercise=function(id,d,q){ return asEx(id,d,q) || (typeof oldGet==='function'?oldGet(id,d,q):null); };
+  const oldGet=E.getEngineExercise; E.getEngineExercise=function(id,d,q,opts){ return asEx(id,d,q,opts) || (typeof oldGet==='function'?oldGet(id,d,q,opts):null); };
   if(typeof generators!=='undefined'){
     generators['G8-02-ENGINE']=function(){ const d=document.getElementById('selDiff')?.value||'standard', q=document.getElementById('selQType')?.value||'open'; E.renderEngineCard('G8-02-ENGINE','גליל ופריסה',genG802(d,q)); };
     generators['G8-03-ENGINE']=function(){ const d=document.getElementById('selDiff')?.value||'standard', q=document.getElementById('selQType')?.value||'open'; E.renderEngineCard('G8-03-ENGINE','זוויות בין מקבילים',genG803(d,q)); };
