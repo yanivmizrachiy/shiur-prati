@@ -204,7 +204,7 @@
   Teacher.exportHTML = function (i) { const c = ctx(); if (!c) return; download('targil-' + (i + 1) + '.html', buildCopyPayload(c.exercises[i], 'html_full'), 'text/html;charset=utf-8'); flash('יוצא HTML'); };
   Teacher.exportPNG = function (i) {
     const card = document.getElementById('exCard' + i); if (!card || typeof html2canvas !== 'function') { flash('PNG לא זמין'); return; }
-    html2canvas(card, { backgroundColor: '#ffffff', scale: 2 }).then(function (canvas) { canvas.toBlob(function (blob) { if (blob) download('targil-' + (i + 1) + '.png', blob, 'image/png'); flash('יוצא PNG'); }); });
+    html2canvas(card, { backgroundColor: '#ffffff', scale: Math.max(2, window.devicePixelRatio || 1) }).then(function (canvas) { canvas.toBlob(function (blob) { if (blob) download('targil-matematika-' + (i + 1) + '.png', blob, 'image/png'); flash('יוצא PNG'); }); });
   };
   // Copy the WHOLE question (text + diagram/graph) as an image to the clipboard,
   // so a teacher can paste it straight into Canva / Word / Docs. Teacher controls
@@ -214,14 +214,14 @@
     const card = document.getElementById('exCard' + i);
     if (!card || typeof html2canvas !== 'function') { flash('העתקת תמונה לא זמינה'); return; }
     flash('מכין תמונה…');
-    html2canvas(card, { backgroundColor: '#ffffff', scale: 2 }).then(function (canvas) {
+    html2canvas(card, { backgroundColor: '#ffffff', scale: Math.max(2, window.devicePixelRatio || 1) }).then(function (canvas) {
       canvas.toBlob(function (blob) {
         if (!blob) { flash('העתקה נכשלה'); return; }
         if (navigator.clipboard && typeof navigator.clipboard.write === 'function' && typeof window.ClipboardItem === 'function') {
           navigator.clipboard.write([new window.ClipboardItem({ 'image/png': blob })])
             .then(function () { flash('התמונה הועתקה — הדביקו ב-Canva / Word'); },
-                  function () { download('targil-' + (i + 1) + '.png', blob, 'image/png'); flash('הדפדפן חסם העתקת תמונה — הורד PNG במקום'); });
-        } else { download('targil-' + (i + 1) + '.png', blob, 'image/png'); flash('הורד PNG (העתקת תמונה אינה נתמכת בדפדפן)'); }
+                  function () { download('targil-matematika-' + (i + 1) + '.png', blob, 'image/png'); flash('הדפדפן חסם העתקת תמונה — הורד PNG במקום'); });
+        } else { download('targil-matematika-' + (i + 1) + '.png', blob, 'image/png'); flash('הורד PNG (העתקת תמונה אינה נתמכת בדפדפן)'); }
       }, 'image/png');
     });
   };
