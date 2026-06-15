@@ -85,7 +85,7 @@ At https://yanivmizrachiy.github.io/targilim/ :
 - site loads (HTTP 200), no 404, no critical console errors;
 - view selector shows **only** `צבע` / `שחור־לבן` (no `גווני אפור`);
 - each card shows **העתק כתמונה** / **הורד כתמונה**;
-- single **תשובת התלמיד** box (no split `דרך:`/`תשובה:`);
+- single clean **untitled** answer box (no title/label, no split `דרך:`/`תשובה:`);
 - copied/downloaded image includes the drawing;
 - only then say the site reflects the new UI.
 

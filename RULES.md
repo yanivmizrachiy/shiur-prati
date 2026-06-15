@@ -87,7 +87,7 @@ Five branches were pushed (not yet merged). **Merge order: PR1 → PR2 → PR3 �
 | Order | Branch | Purpose | Status | Note |
 |---|---|---|---|---|
 | PR1 | `design/professional-exercise-card-v1` | Professional card + Assistant typography + larger diagrams | pushed, not merged | base of the round |
-| PR2 | `design/student-answer-box` | One "תשובת התלמיד" box replaces split דרך:/תשובה: | pushed, not merged | |
+| PR2 | `design/student-answer-box` | One clean untitled answer box replaces split דרך:/תשובה: (title removed in #24) | pushed, not merged | |
 | PR3 | `feature/premium-image-export-and-bw-mode` | Color/שחור־לבן only; central "העתק/הורד כתמונה"; unified `captureExerciseCardAsPng` | pushed, not merged | |
 | PR4 | `test/premium-ui-guards` | `verify:premium-ui` guard wired into `verify:deep` | pushed, not merged | **stacked on PR1–PR3** |
 | PR5 | `docs/refresh-status-after-ui-and-pages` | PROJECT_STATUS refresh for the round | pushed, not merged | docs |
@@ -175,7 +175,7 @@ feat: add a second source-backed multi-correct MCQ path
 - View options are **`צבע` / `שחור־לבן` only** — never the words "גווני אפור".
 - Every exercise card carries central primary buttons **`העתק כתמונה`** and **`הורד כתמונה`**.
 - The copied/downloaded image must include **the full question and all drawings**.
-- Students see **one** answer box ("תשובת התלמיד") — never split "דרך"/"תשובה".
+- Students see **one** clean, untitled answer box — no title/label, never split "דרך"/"תשובה". A stable `data-student-answer-box="true"` hook identifies it.
 - Diagrams must be **sharp, readable, not clipped**.
 - Mobile must look professional; print must be clean.
 - Teacher-only content must never appear in the student print/export.
