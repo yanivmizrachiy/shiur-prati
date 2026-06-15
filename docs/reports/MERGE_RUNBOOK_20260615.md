@@ -1,10 +1,13 @@
 # Merge Runbook — 2026-06-15
 
+> **STATUS (historical): the round is MERGED.** #21–#24 (UI), #27 (worksheet polish) and
+> #28 (A7-04 multi-correct) are on `main`; #25 was closed/superseded by #28; #20 (docs)
+> merges last. Kept as the record of how the queue was landed.
+
 One short, actionable document to merge the open queue safely without guessing.
 Detailed queue/dependency graph: `docs/reports/OPEN_PR_RELEASE_QUEUE_20260615.md`.
 Operating rules: `RULES.md`. Status: `PROJECT_STATUS.md`.
 
-> Nothing is merged yet. Do not merge without Yaniv's explicit approval.
 > No force push. No remote branch deletion.
 
 ## 1. Current `main`

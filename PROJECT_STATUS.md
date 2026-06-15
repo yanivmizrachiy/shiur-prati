@@ -2,9 +2,9 @@
 
 **Last updated:** 2026-06-15 · baseline 2026-06-14  
 **Central rules:** see `RULES.md` (authoritative operating guide; this file is the status snapshot).  
-**Default branch:** `main` (HEAD `ba1a0ee`)  
-**Live site:** GitHub Pages serves `generator/` from `main` — https://yanivmizrachiy.github.io/targilim/ . **The live site reflects `main` only**; open branches (incl. the UI/UX round) do not appear until merged + redeployed.  
-**Current repo state:** Phase 1 merged and active on `main`; UI/UX premium round in review on branches (PR1–PR4 + docs).  
+**Default branch:** `main` (UI/UX round + A7-04 multi-correct merged)  
+**Live site:** GitHub Pages serves `generator/` from `main` — https://yanivmizrachiy.github.io/targilim/ . The live site reflects `main` only.  
+**Current repo state:** Phase 1 + UI/UX premium round (#21–#24), worksheet polish (#27) and real A7-04 multi-correct (#28) are merged and live.  
 **Package version:** `0.78.0`
 
 ## Executive snapshot
@@ -29,9 +29,9 @@
 - Cleanup pass removed stale generated live-verification FAIL artifacts and added documentation policy. It did not change product behavior.
 - PRs #15–#18 merged: A7-04 work, stress PER raised to 100 (#16), a standalone A7-04 multi-correct guard (#17, see caveat in the MCQ layer), and a PDF duplicate audit with no deletion (#18). PDF inventory is 20 files (10 working + 10 originals; no accidental duplicates).
 
-## UI/UX premium round — in review (not merged)
+## UI/UX premium round — MERGED + live
 
-A focused design round is pushed across five branches but **not yet merged** to `main`, so it is **not live**. Branch list, purpose and the required merge order (PR1 → PR2 → PR3 → PR4 → PR5; do not merge PR4 before PR1–PR3) are documented in `RULES.md` §5.
+Merged to `main` (2026-06-15): professional card + typography (#21), single untitled student answer box (#22), premium image export + color/BW-only (#23), `verify:premium-ui` guard (#24), worksheet polish — sharp math rectangles + no question-type badge (#27), and real A7-04 multi-correct (#28). The book/learning-material viewer is served from the site (no GitHub Pages 404). `verify:deep` now includes `verify:premium-ui`, `verify:worksheet-polish` and `verify:multi-correct`.
 
 ## Current verification gates
 
@@ -86,8 +86,7 @@ npm run verify:deep
 
 - Single-answer mode exists and prints a single-answer instruction.
 - Multi-answer wording exists and the answer key supports 1..N correct answers.
-- On `main`, engine content still emits exactly one correct answer per MCQ; do not claim multi-correct on the live site until PR #25 is merged and Pages redeploys.
-- **Root cause found + fixed (PR #25):** despite PR #15/#17 titles, `A7-04-ENGINE` emitted exactly **one** correct choice in both single and multi mode (verified 2026-06-15, 40 samples) because the `getEngineExercise` wrapper chain dropped the `mcqMode` argument. PR #25 (`fix/forward-mcqmode-multi-correct`) forwards `opts` through every wrapper and wires `tools/verify-multi-correct-coverage.mjs` into `verify:deep`. After the fix: multi → 2 correct, single → 1 correct (40/40), `verify:deep` PASS. Real multi-correct MCQ is `DONE` once PR #25 is merged.
+- **Real multi-correct MCQ is `DONE` and merged (PR #28).** Root cause: the `getEngineExercise` wrapper chain dropped the `mcqMode` argument, so the already-implemented A7-04 multi-correct path was unreachable (emitted one correct even in multi mode). PR #28 (`fix/a704-multi-correct-clean-v2`, the clean path — the earlier #25 was closed/superseded) forwards `opts` through every wrapper and wires `tools/verify-multi-correct-coverage.mjs` into `verify:deep`. Verified: A7-04 multi → 2 correct, single → 1 correct.
 
 ### Teacher layer
 
@@ -150,10 +149,9 @@ Repository paths:
 
 ## Remaining high-value work
 
-1. Merge the UI/UX premium round in order (PR1 → PR2 → PR3 → PR4 → PR5) and confirm Pages redeploys; then run the live UI checklist in `RULES.md` §9.
-2. Next content feature (after the UI round): **U7-03 single-answer MCQ** from source 06 (U7-03-ENGINE currently has only open + TF).
-3. Merge PR #25 to make real multi-correct MCQ live (A7-04 multi → 2 correct; guard wired into `verify:deep`).
-4. Human visual QA across engines using `generator/visual-qa.html`.
+1. **U7-03 single-answer MCQ already exists** in `source-fit-extensions.js` (verified: U7-03-ENGINE emits MCQ with choices). Do **not** duplicate it. Select next content work only after checking existing engine coverage.
+2. Merge this docs PR (#20) last so docs match `main`; then run the live UI checklist in `RULES.md` §9.
+3. Human visual QA across engines using `generator/visual-qa.html`.
 5. Real A4 print review, with and without answer key.
 6. Confirm teacher-only content never appears in student print/export.
 7. Manual copy-as-image paste test into Word/Canva/Docs.

@@ -128,41 +128,29 @@ PR #25 is merged and Pages redeploys.
 
 ---
 
-## 7. Open PR queue & merge order
+## 7. Merge status (the UI/UX round is DONE)
 
-> **Merge runbook (follow this to merge):** `docs/reports/MERGE_RUNBOOK_20260615.md`.
-> Detailed queue + dependency graph + preflight: `docs/reports/OPEN_PR_RELEASE_QUEUE_20260615.md`.
-
-All open PRs were created 2026-06-15; each passes `verify:deep`. Recommended order:
+The 2026-06-15 round is **merged to `main`** and live. Historical detail:
+`docs/reports/OPEN_PR_RELEASE_QUEUE_20260615.md`, `docs/reports/MERGE_RUNBOOK_20260615.md`.
 
 ```text
-1. #21  design/professional-exercise-card-v1        (UI PR1)
-2. #22  design/student-answer-box                   (UI PR2)
-3. #23  feature/premium-image-export-and-bw-mode    (UI PR3)
-4. #24  test/premium-ui-guards                      (UI guard, STACKED on #21–#23)
-5. #25  fix/forward-mcqmode-multi-correct           (real A7-04 multi-correct + guard in verify:deep)
-6. #20  docs/update-central-ai-rules                (this central rules + status PR)
+MERGED: #21 professional card + typography
+MERGED: #22 single untitled student answer box
+MERGED: #23 premium image export + color/BW only
+MERGED: #24 verify:premium-ui guard
+MERGED: #27 worksheet polish (sharp math rects + no question-type badge)
+MERGED: #28 real A7-04 multi-correct (forward mcqMode; verify:multi-correct in verify:deep)
+LAST:   #20 this central rules + status PR
+CLOSED: #25 (superseded by #28) · docs/refresh-status-after-ui-and-pages (superseded by #20)
+HOLD:   #19 luxury landing page (draft; rebase on main, then review)
 ```
 
-- Do not merge #24 before #21–#23. `#24` and `#25` both touch the `package.json`
-  `verify:deep` line — trivial conflict, keep both `verify:premium-ui` and `verify:multi-correct`.
-- `docs/refresh-status-after-ui-and-pages` (old "PR5") is **superseded by #20** — do not merge it.
-- After each merge, confirm GitHub Actions `verify:deep` is green; after the last
-  merge, confirm Pages redeploys and run the §9 live checklist.
+`verify:deep` now includes `verify:premium-ui` + `verify:worksheet-polish` + `verify:multi-correct`.
 
-### Next content PR (after the above)
-```text
-feat: add source-backed MCQ single to U7-03-ENGINE
-```
-- Source **06** only (relative frequency has MCQ examples). MCQ single only. Additive.
-- U7-03-ENGINE currently has only open + TF (verified) — this fills the gap.
-
-### After that
-```text
-feat: add a second source-backed multi-correct MCQ path
-```
-- Candidate: numeric fraction-equivalence (source **05** or **07**), now that the
-  multi-correct dispatch works (PR #25).
+### Next content work — choose only after checking existing coverage
+- **U7-03 single-answer MCQ already exists** in `source-fit-extensions.js` (verified: U7-03-ENGINE emits MCQ with choices). **Do not duplicate it.**
+- Real multi-correct dispatch works (PR #28). A future option (approval only): a second source-backed multi-correct path (e.g. numeric fraction-equivalence, source 05/07).
+- Always check existing engine coverage before starting new content.
 
 ### Do NOT
 - Add Grade-8 numeric or uncertainty engines without **new** source intake.
