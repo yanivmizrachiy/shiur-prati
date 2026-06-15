@@ -211,10 +211,10 @@ $$\\frac{${c.k2}}{${c.n2}}=${pct2}\\%$$
   E.isEngineTopic = function(id){ return NEW_ENGINE_IDS.indexOf(id) >= 0 || (typeof oldIsEngineTopic === 'function' && oldIsEngineTopic(id)); };
 
   const oldGetEngineExercise = E.getEngineExercise;
-  E.getEngineExercise = function(id, diff, qtype){
-    const newer = getNewExercise(id, diff, qtype);
+  E.getEngineExercise = function(id, diff, qtype, opts){
+    const newer = getNewExercise(id, diff, qtype, opts);
     if(newer) return newer;
-    return typeof oldGetEngineExercise === 'function' ? oldGetEngineExercise(id, diff, qtype) : null;
+    return typeof oldGetEngineExercise === 'function' ? oldGetEngineExercise(id, diff, qtype, opts) : null;
   };
 
   if(typeof generators !== 'undefined'){
