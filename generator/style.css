@@ -6,15 +6,26 @@
 /* ── Reset ── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
+/* ── Design tokens (centralized: do not scatter font-family / colors) ── */
+:root {
+  --font-hebrew: "Assistant", "Rubik", "Noto Sans Hebrew", "Segoe UI", Arial, sans-serif;
+  --font-math: "Cambria Math", "Times New Roman", serif;
+  --ink: #0f172a;
+  --ink-soft: #475569;
+  --card-border: #e6eaf0;
+}
+
 /* ── Base ── */
 html { font-size: 16px; -webkit-text-size-adjust: 100%; }
 body {
-  font-family: "Segoe UI", "Arial", "Helvetica Neue", sans-serif;
+  font-family: var(--font-hebrew);
   background: #f1f5f9;
-  color: #0f172a;
+  color: var(--ink);
   direction: rtl;
   min-height: 100vh;
   line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
 
 /* ── Header ── */
@@ -160,13 +171,25 @@ select:focus {
 }
 .notice.open { display: block; }
 
-/* ── Question card ── */
+/* ── Question card (clean, textbook-like, print-friendly) ── */
 .qcard {
   background: #fff;
-  border-radius: 16px;
-  padding: 22px 20px 18px;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.08), 0 4px 16px rgba(0,0,0,0.06);
+  border: 1px solid var(--card-border);
+  border-radius: 14px;
+  padding: 22px 22px 18px;
+  box-shadow: 0 1px 2px rgba(15,23,42,0.04), 0 6px 18px rgba(15,23,42,0.05);
   margin-bottom: 16px;
+}
+/* exercise number reads as a quiet index on screen, like a workbook in print */
+.ex-num {
+  font-weight: 800;
+  color: var(--ink-soft);
+  font-variant-numeric: tabular-nums;
+}
+/* worksheet exercise cards: neutral textbook border (not the blue engine-preview border) */
+.exset .ex-card {
+  border: 1px solid var(--card-border);
+  border-radius: 14px;
 }
 
 /* ── Meta tags row ── */
@@ -200,27 +223,30 @@ select:focus {
 .katex, .katex-display { direction: ltr; unicode-bidi: isolate; }
 svg text { unicode-bidi: plaintext; }
 
-/* ── Diagram / SVG container ── */
+/* ── Diagram / SVG container (centered, larger, never clipped) ── */
 .diagram {
   display: flex;
   justify-content: center;
-  margin: 8px 0 18px;
+  margin: 10px 0 18px;
+  max-width: 100%;
+  overflow: visible;
 }
 .diagram svg {
-  max-width: min(280px, 100%);
+  max-width: min(340px, 100%);
   height: auto;
   display: block;
 }
 
 /* ── Question text ── */
 .qtext {
-  font-size: 1.05rem;
-  line-height: 1.8;
-  color: #0f172a;
+  font-size: 1.06rem;
+  line-height: 1.85;
+  color: var(--ink);
   margin-bottom: 18px;
   white-space: pre-line;
+  font-weight: 500;
 }
-.qtext .katex { font-size: 1.0rem; }
+.qtext .katex { font-size: 1.02rem; }
 
 /* ── Answer toggle button ── */
 .btn-ans {
