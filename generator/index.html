@@ -9,6 +9,7 @@
 <link rel="stylesheet" href="style.css">
 <link rel="stylesheet" href="credit-fix.css?v=20260612-yaniv-mizrachi">
 <link rel="stylesheet" href="mobile-polish.css?v=20260614-mobile-1">
+<link rel="stylesheet" href="landing.css?v=20260614-landing-2">
 <style>
 .engine-panel{background:#fff;border-radius:14px;padding:16px 20px;margin-bottom:18px;border-right:4px solid #2563eb;box-shadow:0 2px 14px rgba(0,0,0,.07)}
 .engine-panel-inner{display:grid;grid-template-columns:1fr 1fr;gap:14px}.engine-badge{background:#2563eb;color:#fff;border-radius:20px;padding:2px 10px;font-size:.72rem;font-weight:800}.engine-card{border:1px solid #dbeafe}.engine-svg{max-width:min(300px,100%);height:auto;display:block;margin:auto}.mcq-choices{display:flex;flex-direction:column;gap:8px;margin-top:14px}.mcq-choice{background:#f8fafc;border:1.5px solid #dbeafe;border-radius:10px;padding:10px 14px}.mcq-label{font-weight:800;color:#2563eb;margin-left:6px}.mcq-correct{background:#f0fdf4;border-color:#86efac;color:#166534;font-weight:800}.tf-statement{background:#fff7ed;border-right:4px solid #f59e0b;border-radius:10px;padding:12px 16px}.tf-label{font-weight:800;color:#92400e;margin-left:8px}.tf-verdict{font-weight:800;color:#166534;margin-bottom:8px}.mistake-prompt{font-weight:800;color:#dc2626;margin-bottom:10px}.mistake-box{background:#fff1f2;border:1.5px solid #fca5a5;border-radius:10px;padding:12px 16px}.book-link{display:inline-flex;align-items:center;gap:6px;margin-top:8px;color:#fef3c7;background:rgba(245,158,11,.16);border:1px solid rgba(245,158,11,.45);border-radius:999px;padding:7px 12px;text-decoration:none;font-weight:900;font-size:.9rem}@media(max-width:520px){.engine-panel-inner{grid-template-columns:1fr}}@media print{.engine-panel,.engine-badge,.book-link{display:none!important}.engine-svg{max-width:260px}}
@@ -19,8 +20,53 @@
 </head>
 <body>
 <header class="hdr"><div><h1>תרגילים</h1><div class="sub">מחולל תרגילי מתמטיקה — כיתות ז׳–ח׳</div><div class="credit">האתר מנוהל ע"י יניב רז</div><a class="book-link" href="book.html">פתח ספר מקורות דיגיטלי</a></div><span class="badge" id="gradeBadge">כיתה ז׳</span></header>
+<section class="landing" aria-label="פתיחת האתר">
+  <section class="landing-hero" aria-label="מחולל תרגילים למורים">
+    <div class="hero-label">מתמטיקה בעברית • מוכן להדפסה</div>
+    <h2 class="hero-title">מחולל תרגילים <span class="gold-word">חכם ומעוצב</span> לכיתה</h2>
+    <p class="hero-sub">בחרו כיתה, תחום ונושא — וקבלו דף תרגול ממוספר, עם גרפיקה מתמטית, מפתח תשובות, מצב מורה והעתקה נוחה ל-Word או Canva.</p>
+    <a class="hero-cta" href="#generatorSettings">צור דף תרגילים <span class="hero-cta-arrow">↓</span></a>
+    <div class="hero-badges" aria-label="יתרונות מרכזיים">
+      <span class="hero-badge">50 מנועים</span>
+      <span class="hero-badge">0 fallback</span>
+      <span class="hero-badge">RTL מלא</span>
+      <span class="hero-badge">הדפסה A4</span>
+    </div>
+  </section>
+  <section class="landing-benefits" aria-label="יתרונות">
+    <div class="section-label">למה זה עובד בכיתה</div>
+    <h2 class="section-title">דף תרגול שמוכן לשיעור — לא עוד טיוטה</h2>
+    <p class="section-desc">המנוע בנוי סביב חומרי המקור, תצוגת תלמיד נקייה, ומצב מורה שמאפשר שליטה, פתרונות והעתקה מהירה.</p>
+    <div class="benefits-grid">
+      <article class="benefit-card"><div class="benefit-icon">📐</div><h3 class="benefit-title">שרטוטים מתמטיים</h3><p class="benefit-desc">שאלות גיאומטריה וגרפים עם SVG ברור שמתאים גם להדפסה.</p></article>
+      <article class="benefit-card"><div class="benefit-icon">🧠</div><h3 class="benefit-title">מנועים מעוגני מקור</h3><p class="benefit-desc">נושאים מחוברים למיפוי מקור, בלי דמו ובלי fallback פעיל.</p></article>
+      <article class="benefit-card"><div class="benefit-icon">🖨️</div><h3 class="benefit-title">Print-first</h3><p class="benefit-desc">דף עבודה ממוספר, מפתח תשובות ובקרות מורה שמוסתרות בהדפסת תלמיד.</p></article>
+      <article class="benefit-card"><div class="benefit-icon">🎛️</div><h3 class="benefit-title">מצב מורה</h3><p class="benefit-desc">פתרונות, מקור, שינוי רמה, שינוי סוג שאלה והעתקה לכרטיסים.</p></article>
+      <article class="benefit-card"><div class="benefit-icon">📋</div><h3 class="benefit-title">העתקה כתמונה</h3><p class="benefit-desc">העתקת כרטיס שאלה מלא, כולל עברית ושרטוט, לשימוש במסמכים ועיצובים.</p></article>
+      <article class="benefit-card"><div class="benefit-icon">✅</div><h3 class="benefit-title">בדיקות איכות</h3><p class="benefit-desc">שער verify עמוק, גלריית מנועים ולוח QA חזותי לבדיקת איכות אנושית.</p></article>
+    </div>
+  </section>
+  <section class="landing-how" aria-label="איך זה עובד">
+    <div class="section-label">3 צעדים</div>
+    <h2 class="section-title">מהגדרה לדף עבודה</h2>
+    <p class="section-desc">בחרו, צרו, הדפיסו — או עברו למצב מורה לשיפור מהיר.</p>
+    <div class="steps-row">
+      <article class="step-card"><div class="step-num">1</div><h3 class="step-title">בוחרים נושא</h3><p class="step-desc">כיתה, תחום, נושא, רמה ומספר תרגילים.</p></article>
+      <div class="steps-connector">←</div>
+      <article class="step-card"><div class="step-num">2</div><h3 class="step-title">יוצרים דף</h3><p class="step-desc">המערכת מפיקה שאלות שונות עם תשובות ושרטוטים לפי הצורך.</p></article>
+      <div class="steps-connector">←</div>
+      <article class="step-card"><div class="step-num">3</div><h3 class="step-title">מדפיסים או מעתיקים</h3><p class="step-desc">הדפסה לכיתה או העתקה למסמך, Canva או סביבת עבודה אחרת.</p></article>
+    </div>
+  </section>
+  <section class="landing-trust" aria-label="קריאה לפעולה">
+    <h2 class="trust-title">בנוי למורה שרוצה לעבוד מהר — אבל מדויק</h2>
+    <p class="trust-text">המחולל שומר על עברית, מבנה שיעור, שרטוטים ותיעוד — כדי שתוכל להפיק דף שימושי בזמן קצר.</p>
+    <a class="trust-cta" href="#generatorSettings">התחל עכשיו ↓</a>
+  </section>
+</section>
 <main>
 <div class="main-title" id="mainTitle" style="display:none"></div>
+<div class="generator-anchor-heading" id="generatorSettings">מחולל התרגילים</div><div class="generator-anchor-line"></div>
 <div class="card"><h2>הגדרות תרגיל</h2><div class="grid"><div><label for="sg">כיתה</label><select id="sg" onchange="onGrade()"><option value="7">כיתה ז׳</option><option value="8">כיתה ח׳</option></select></div><div><label for="sd">תחום</label><select id="sd" onchange="onDomain()"><option value="geometry">גיאומטרי</option><option value="algebra">אלגברי</option><option value="numeric">מספרי</option><option value="uncertainty">אי-ודאות</option></select></div><div><label for="st">נושא</label><select id="st"></select></div><div><label for="sl">רמה</label><select id="sl"><option value="standard">סטנדרטית</option><option value="challenge">מאתגרת</option></select></div><div><label for="sv">תצוגת שרטוטים</label><select id="sv" onchange="onVisualMode()"><option value="color">צבע</option><option value="gray">גווני אפור</option><option value="bw">שחור-לבן</option></select></div><div><label for="sn">מספר תרגילים</label><select id="sn"><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5" selected>5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option></select></div></div><button class="btn-gen" onclick="generate()">צור דף תרגילים ◀</button></div>
 <div class="engine-panel" id="enginePanel" style="display:none"><div class="engine-panel-inner"><div><label for="selQType">סוג שאלות</label><select id="selQType"><option value="mixed" selected>מעורב</option><option value="open">שאלה פתוחה</option><option value="mcq">רב־ברירה</option><option value="tf">נכון / שגוי</option><option value="mistake">מצא את הטעות</option></select></div><div><label for="selDiff">רמת קושי</label><select id="selDiff"><option value="standard">סטנדרטית</option><option value="basic">בסיסית</option><option value="challenge">מאתגרת</option></select></div><div><label for="selMcqMode">רב־ברירה: מספר תשובות נכונות</label><select id="selMcqMode"><option value="single" selected>תשובה אחת נכונה</option><option value="multi">ייתכן יותר מאחת</option></select></div></div><div class="teacher-toggle-row"><button class="btn-teacher" id="btnTeacherMode" onclick="Teacher.toggle()">מצב מורה</button><a class="btn-teacher gallery-link" href="gallery.html">גלריית מנועים ▦</a><a class="btn-teacher gallery-link" href="visual-qa.html?v=20260614-vc1">QA חזותי ✓</a><span class="teacher-hint">מצב מורה מוסיף לכל שאלה כרטיס מורה, כפתורי עריכה והעתקה/ייצוא — ומוסתר בהדפסת התלמיד.</span></div></div>
 <div id="out"><div class="empty"><span class="empty-icon">📐</span>בחרו כיתה, תחום, נושא ומספר תרגילים — ולחצו על ״צור דף תרגילים ◀״.<br>יופק דף ממוספר עם מפתח תשובות, מבוסס על חומרי תוכנית הלימודים לכיתות ז׳–ח׳.</div></div>
