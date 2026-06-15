@@ -79,7 +79,7 @@
   topic(7,'uncertainty','U7-06-ENGINE','תרשים מטעה — ביקורת ✦ מקור');
   if(Array.isArray(E.ENGINE_TOPIC_IDS)) IDS.forEach(id=>{ if(E.ENGINE_TOPIC_IDS.indexOf(id)<0) E.ENGINE_TOPIC_IDS.push(id); });
   const oldIs=E.isEngineTopic; E.isEngineTopic=function(id){ return IDS.indexOf(id)>=0 || (typeof oldIs==='function' && oldIs(id)); };
-  const oldGet=E.getEngineExercise; E.getEngineExercise=function(id,diff,qtype){ return asExercise(id,diff,qtype) || (typeof oldGet==='function'?oldGet(id,diff,qtype):null); };
+  const oldGet=E.getEngineExercise; E.getEngineExercise=function(id,diff,qtype,opts){ return asExercise(id,diff,qtype,opts) || (typeof oldGet==='function'?oldGet(id,diff,qtype,opts):null); };
   if(typeof generators!=='undefined'){
     generators['U7-05-ENGINE']=function(){ const d=document.getElementById('selDiff')?.value||'standard', q=document.getElementById('selQType')?.value||'open'; E.renderEngineCard('U7-05-ENGINE','דיאגרמת עוגה ושכיחות יחסית',genU705(d,q)); };
     generators['U7-06-ENGINE']=function(){ const d=document.getElementById('selDiff')?.value||'standard', q=document.getElementById('selQType')?.value||'open'; E.renderEngineCard('U7-06-ENGINE','תרשים מטעה — ביקורת',genU706(d,q)); };

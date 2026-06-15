@@ -377,7 +377,7 @@
   IDS.forEach(id => { const m = MAP[id]; topicReg(m.g, m.d, id, m.title + ' ✦ מנוע מקור'); });
   if (Array.isArray(E.ENGINE_TOPIC_IDS)) IDS.forEach(id => { if (E.ENGINE_TOPIC_IDS.indexOf(id) < 0) E.ENGINE_TOPIC_IDS.push(id); });
   const oldIs = E.isEngineTopic; E.isEngineTopic = function (id) { return IDS.indexOf(id) >= 0 || (typeof oldIs === 'function' && oldIs(id)); };
-  const oldGet = E.getEngineExercise; E.getEngineExercise = function (id, diff, qtype) { return asExercise(id, diff, qtype) || (typeof oldGet === 'function' ? oldGet(id, diff, qtype) : null); };
+  const oldGet = E.getEngineExercise; E.getEngineExercise = function (id, diff, qtype, opts) { return asExercise(id, diff, qtype, opts) || (typeof oldGet === 'function' ? oldGet(id, diff, qtype, opts) : null); };
   if (typeof generators !== 'undefined') {
     IDS.forEach(id => { const m = MAP[id]; generators[id] = function () { const d = (document.getElementById('selDiff') && document.getElementById('selDiff').value) || 'standard', q = (document.getElementById('selQType') && document.getElementById('selQType').value) || 'open'; E.renderEngineCard(id, m.title, m.fn(d, q)); }; });
   }
