@@ -41,7 +41,7 @@ check('export.js untouched API', read('generator/export.js').includes('copyImg')
 
 // 5. Visual mode wiring
 check('visual mode select exists', index.includes('id="sv"'));
-check('visual mode labels Hebrew', index.includes('גווני אפור') && index.includes('שחור-לבן'));
+check('visual mode labels Hebrew', index.includes('צבע') && index.includes('שחור-לבן'));
 check('applyVisualMode defined', read('generator/core.js').includes('function applyVisualMode'));
 check('applyVisualMode on classic render', /renderMathInElement[\s\S]{0,200}applyVisualMode\(\)/.test(read('generator/core.js')));
 check('applyVisualMode on engine render', pattern.includes('applyVisualMode'));

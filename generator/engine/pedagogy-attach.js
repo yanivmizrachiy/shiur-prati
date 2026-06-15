@@ -39,8 +39,8 @@
 
   if (typeof E.getEngineExercise === 'function') {
     const inner = E.getEngineExercise;
-    E.getEngineExercise = function (id, diff, qtype) {
-      const r = inner(id, diff, qtype);
+    E.getEngineExercise = function (id, diff, qtype, opts) {
+      const r = inner(id, diff, qtype, opts);
       if (r && typeof r === 'object' && !r.meta) {
         try { r.meta = E.buildMeta(id, qtype, diff, r.questionFamily); } catch (e) { /* never break the card */ }
       }
