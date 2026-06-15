@@ -1,8 +1,10 @@
 # Project Status — Targilim תרגילים
 
-**Last updated:** 2026-06-14  
-**Default branch:** `main`  
-**Current repo state:** Phase 1 merged and active on `main`  
+**Last updated:** 2026-06-15 · baseline 2026-06-14  
+**Central rules:** see `RULES.md` (authoritative operating guide; this file is the status snapshot).  
+**Default branch:** `main` (HEAD `ba1a0ee`)  
+**Live site:** GitHub Pages serves `generator/` from `main` — https://yanivmizrachiy.github.io/targilim/ . **The live site reflects `main` only**; open branches (incl. the UI/UX round) do not appear until merged + redeployed.  
+**Current repo state:** Phase 1 merged and active on `main`; UI/UX premium round in review on branches (PR1–PR4 + docs).  
 **Package version:** `0.78.0`
 
 ## Executive snapshot
@@ -25,6 +27,11 @@
 - PR #7 merged the 50-engine source-backed generator, teacher mode, visual QA, copy/export, documentation organization, and verification gates.
 - PR #8 merged the final Phase 1 integration into `main`, including the 1–10 exercise selector, MCQ single/multi UI support, mobile Hebrew fixes, and deterministic stress fixes for true/false sampling.
 - Cleanup pass removed stale generated live-verification FAIL artifacts and added documentation policy. It did not change product behavior.
+- PRs #15–#18 merged: A7-04 work, stress PER raised to 100 (#16), a standalone A7-04 multi-correct guard (#17, see caveat in the MCQ layer), and a PDF duplicate audit with no deletion (#18). PDF inventory is 20 files (10 working + 10 originals; no accidental duplicates).
+
+## UI/UX premium round — in review (not merged)
+
+A focused design round is pushed across five branches but **not yet merged** to `main`, so it is **not live**. Branch list, purpose and the required merge order (PR1 → PR2 → PR3 → PR4 → PR5; do not merge PR4 before PR1–PR3) are documented in `RULES.md` §5.
 
 ## Current verification gates
 
@@ -80,6 +87,7 @@ npm run verify:deep
 - Single-answer mode exists and prints a single-answer instruction.
 - Multi-answer wording exists and the answer key supports 1..N correct answers.
 - Current engine content still emits exactly one correct answer per MCQ; real multi-correct content remains a future item and must not be claimed as completed until engines actually emit more than one correct answer.
+- **Verified 2026-06-15:** despite PR #15/#17 titles, `A7-04-ENGINE` emits exactly **one** correct choice in both single and multi mode (40 samples). The standalone guard `tools/verify-multi-correct-coverage.mjs` currently **fails** and is **not** wired into `verify:deep`. Real multi-correct MCQ is therefore `NOT DONE`; finishing it (and wiring the guard into `verify:deep`) is open work.
 
 ### Teacher layer
 
@@ -142,14 +150,14 @@ Repository paths:
 
 ## Remaining high-value work
 
-1. Human visual QA across engines using `generator/visual-qa.html`.
-2. Real A4 print review, with and without answer key.
-3. Confirm teacher-only content never appears in student print/export.
-4. Manual copy-as-image paste test into Word/Canva/Docs.
-5. Decide whether to keep duplicate source PDFs in `originals/`.
-6. Decide whether to consolidate overlapping fallback reports.
-7. Optional future feature after approval only: source-question coverage gap for inequalities / A8-05.
-8. Optional future feature after approval only: real multi-correct MCQ content.
+1. Merge the UI/UX premium round in order (PR1 → PR2 → PR3 → PR4 → PR5) and confirm Pages redeploys; then run the live UI checklist in `RULES.md` §9.
+2. Next content feature (after the UI round): **U7-03 single-answer MCQ** from source 06 (U7-03-ENGINE currently has only open + TF).
+3. Finish real multi-correct MCQ (A7-04 still emits one correct) and wire `verify-multi-correct-coverage.mjs` into `verify:deep`.
+4. Human visual QA across engines using `generator/visual-qa.html`.
+5. Real A4 print review, with and without answer key.
+6. Confirm teacher-only content never appears in student print/export.
+7. Manual copy-as-image paste test into Word/Canva/Docs.
+8. Optional future feature after approval only: source-question coverage gap for inequalities / A8-05.
 
 ## Release / CI gate
 
