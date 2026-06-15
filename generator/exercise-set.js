@@ -88,21 +88,18 @@ function generateSet(){
   renderExerciseSet(meta,exercises);
 }
 
-// Answer area shaped per question type, like a printed workbook:
-// open → solution lines + final-answer blank; mcq → answer blank + short
-// justification; tf → verdict blank + correction line; mistake → error + fix.
+// One professional student answer box ("תשובת התלמיד") for every question
+// type — replaces the old split work areas (דרך:/תשובה:, verdict, error/fix).
+// The box is part of the captured card (it is NOT html2canvas-ignored), so the
+// copied / downloaded image always carries a clean, labeled place to answer.
+// Line count adapts to the type so there is enough room without wasting paper.
 function workAreaHTML(qtype){
-  function lines(n){let s='';for(let i=0;i<n;i++)s+='<div class="wl"></div>';return s}
-  if(qtype==='mcq')return '<div class="work-area">'
-    +'<div class="wa-final"><span class="work-label">תשובה:</span><span class="wa-blank wa-short"></span><span class="work-label">נימוק:</span><span class="wa-blank"></span></div></div>';
-  if(qtype==='tf')return '<div class="work-area">'
-    +'<div class="wa-final"><span class="work-label">נכון / שגוי:</span><span class="wa-blank wa-short"></span><span class="work-label">אם שגוי — תקנו:</span><span class="wa-blank"></span></div></div>';
-  if(qtype==='mistake')return '<div class="work-area">'
-    +'<div class="wa-row"><span class="work-label">הטעות:</span></div>'+lines(1)
-    +'<div class="wa-row"><span class="work-label">תיקון:</span></div>'+lines(1)+'</div>';
-  return '<div class="work-area">'
-    +'<div class="wa-row"><span class="work-label">דרך:</span></div>'+lines(2)
-    +'<div class="wa-final"><span class="work-label">תשובה:</span><span class="wa-blank"></span></div></div>';
+  const LINES={open:4,mistake:4,tf:3,mcq:2};
+  const n=LINES[qtype]||3;
+  let wl='';for(let i=0;i<n;i++)wl+='<div class="wl"></div>';
+  return '<div class="answer-box">'
+    +'<div class="answer-box-head">תשובת התלמיד</div>'
+    +'<div class="answer-box-body">'+wl+'</div></div>';
 }
 
 function renderExerciseSet(meta,exercises){

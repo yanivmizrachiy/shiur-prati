@@ -407,37 +407,34 @@ svg text { unicode-bidi: plaintext; }
   font-weight: inherit;
 }
 
-/* ── Student work area (writing space, shaped per question type) ── */
-.work-area {
-  margin-top: 14px;
-  padding-top: 8px;
-  border-top: 1px dashed #e2e8f0;
+/* ── Student answer box: ONE professional "תשובת התלמיד" box per question.
+   Replaces the old split work areas; rendered inside the card so it is part of
+   the copied / downloaded image. ── */
+.answer-box {
+  margin-top: 16px;
+  border: 1px solid var(--card-border, #e6eaf0);
+  border-radius: 10px;
+  background: #fcfdff;
+  overflow: hidden;
 }
-.work-label {
-  display: inline-block;
-  font-size: 0.76rem;
+.answer-box-head {
+  font-size: 0.82rem;
   font-weight: 700;
-  color: #64748b;
-  white-space: nowrap;
+  color: var(--ink-soft, #475569);
+  padding: 7px 14px;
+  background: #f1f5f9;
+  border-bottom: 1px solid var(--card-border, #e6eaf0);
 }
-.wa-row { margin-top: 6px; }
-.wa-row .work-label { display: block; margin-bottom: 0; }
-.work-area .wl {
+.answer-box-body {
+  padding: 14px 14px 8px;
+}
+.answer-box .wl {
   height: 30px;
   border-bottom: 1px solid #cbd5e1;
 }
-.wa-final {
-  display: flex;
-  align-items: flex-end;
-  gap: 10px;
-  margin-top: 10px;
+.answer-box .wl:last-child {
+  border-bottom-color: #e2e8f0;
 }
-.wa-blank {
-  flex: 1 1 auto;
-  height: 22px;
-  border-bottom: 1.5px solid #94a3b8;
-}
-.wa-short { flex: 0 0 88px; }
 
 /* ── Printed worksheet name/date line (print only) ── */
 .exset-nameline {
@@ -570,10 +567,11 @@ svg text { unicode-bidi: plaintext; }
   .ex-card .diagram svg { max-width: 215px; }
   .mcq-choices { gap: 4px; margin-top: 8px; }
   .mcq-choice { padding: 6px 10px; background: none; border-color: #cbd5e1; }
-  .work-area { border-top: none; padding-top: 2px; margin-top: 8px; }
-  .work-area .wl { height: 34px; border-bottom-color: #64748b; }
-  .wa-blank { border-bottom-color: #64748b; }
-  .work-label { color: #111827; }
+  .answer-box { margin-top: 10px; border-color: #94a3b8; background: none; }
+  .answer-box-head { background: none; color: #111827; padding: 3px 10px; border-bottom-color: #94a3b8; }
+  .answer-box-body { padding: 8px 10px 2px; }
+  .answer-box .wl { height: 34px; border-bottom-color: #64748b; }
+  .answer-box .wl:last-child { border-bottom-color: #64748b; }
   .answer-key:not(.open) { display: none !important; }
   .answer-key.open {
     box-shadow: none;
