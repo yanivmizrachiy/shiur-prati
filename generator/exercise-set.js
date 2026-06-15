@@ -103,13 +103,19 @@ function workAreaHTML(qtype){
     +'<div class="answer-box-body">'+wl+'</div></div>';
 }
 
+function sharpenMathRects(html){
+  return String(html||'').replace(/<rect\b[^>]*>/g,function(tag){
+    return tag.replace(/\s+r[xy]=(?:"[^"]*"|'[^']*'|[^\s/>]+)/g,'');
+  });
+}
+
 function renderExerciseSet(meta,exercises){
-  const TYPE_LABELS={open:'שאלה פתוחה',mcq:'רב־ברירה',tf:'נכון / שגוי',mistake:'מצא את הטעות'};
   if(typeof setMainTitle==='function')setMainTitle(meta.cls,meta.topicLabel);
   const cards=exercises.map(function(ex,i){
+    const questionHTML=sharpenMathRects(ex.questionHTML);
     return '<div class="qcard engine-card ex-card" id="exCard'+i+'" data-idx="'+i+'">'
-      +'<div class="qmeta" data-html2canvas-ignore="true"><span class="ex-num">תרגיל '+(i+1)+'</span><span class="tag '+meta.cls+'">'+(TYPE_LABELS[ex.qtype]||TYPE_LABELS.open)+'</span></div>'
-      +'<div class="ex-body">'+ex.questionHTML+'</div>'
+      +'<div class="qmeta" data-html2canvas-ignore="true"><span class="ex-num">תרגיל '+(i+1)+'</span></div>'
+      +'<div class="ex-body">'+questionHTML+'</div>'
       +workAreaHTML(ex.qtype)
       +'<div class="ex-imgbar" data-html2canvas-ignore="true">'
         +'<button class="btn-img btn-img-primary" onclick="exImageCopy('+i+',this)">📋 העתק כתמונה</button>'
