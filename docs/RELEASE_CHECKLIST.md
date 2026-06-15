@@ -94,11 +94,13 @@ These are not hidden; keep them explicit:
 4. Future enhancement: real multi-correct MCQ content — do not claim as complete until engines actually emit more than one correct answer and verifiers distinguish single from multi mode.
 5. Final live site URL/status — verify after deployment before presenting it as active.
 
-## Safety rule
+## Merge safety rules
 
-- Do not merge feature/product PRs to `main` without explicit approval from Yaniv.
+- Do not merge to `main` without explicit approval from Yaniv.
+- GitHub Actions must be green before merge.
+- `npm run verify:deep` must pass before merge.
 - Do not force-push.
-- Do not weaken verifiers.
+- Do not weaken verifiers to make CI pass.
 - Do not delete protected source PDFs.
 - Do not mix product feature work into cleanup-only PRs.
 
@@ -116,12 +118,3 @@ Yaniv explicitly approves the merge
 ```
 
 For cleanup-only PRs, the PR body must prove that product code, engines, sources and verifier logic were not touched.
-
-## Merge safety rules
-
-- Do not merge to `main` without explicit approval from Yaniv.
-- GitHub Actions must be green before merge.
-- `npm run verify:deep` must pass before merge.
-- Do not push directly to `main`.
-- Do not force-push.
-- Do not weaken verifiers to make CI pass.
