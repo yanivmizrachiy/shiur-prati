@@ -20,6 +20,15 @@ jobs:
       - uses: actions/checkout@v4
       - name: Verify generator exists
         run: test -f generator/index.html || (echo "generator/index.html missing" && exit 1)
+      - name: Bundle learning-material PDFs into the published site
+        run: |
+          mkdir -p generator/assets/sources
+          for f in sources/intake/2026-06-09/*/*.pdf; do
+            case "$f" in */originals/*) continue;; esac
+            cp "$f" generator/assets/sources/
+          done
+          echo "Bundled $(ls -1 generator/assets/sources/*.pdf | wc -l) learning-material PDFs."
+          test "$(ls -1 generator/assets/sources/*.pdf | wc -l)" -eq 10 || (echo "expected 10 learning-material PDFs" && exit 1)
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:

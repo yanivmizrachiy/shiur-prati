@@ -114,8 +114,11 @@ if (!loadError) {
   check('set renders 10 exercises (engine topic, mixed)', (html.match(/ex-card/g)||[]).length === 10 && html.includes('תרגיל 10'));
   check('set has answer key with 10 entries', html.includes('מפתח תשובות') && (html.match(/ak-item/g)||[]).length === 10);
   check('set has answer toggle and print buttons', html.includes('הצג תשובות') && html.includes('הדפס דף תרגילים'));
-  const typeHits = ['שאלה פתוחה','רב־ברירה','נכון / שגוי','מצא את הטעות'].filter(t=>html.includes(t)).length;
-  check('mixed set contains multiple question types', typeHits >= 3);
+  // Question-type badges were removed from the student card (worksheet polish), so
+  // verify variety by question STRUCTURE instead of by the removed label text:
+  // mcq → choices, tf → statement/verdict, mistake → prompt/box (open has none).
+  const structHits = [/mcq-choice/.test(html), /tf-statement|tf-verdict/.test(html), /mistake-prompt|mistake-box/.test(html)].filter(Boolean).length;
+  check('mixed set contains multiple question types (by structure)', structHits >= 2);
   check('no undefined/NaN in set output', !BAD.test(html));
   check('no engine ids in set output', !html.includes('-ENGINE'));
 

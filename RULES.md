@@ -1,412 +1,237 @@
-# Project Rules — Targilim Hebrew Math Exercise Generator
+# Targilim — Central Rules & AI Operating Guide
+# תרגילים — דף כללים מרכזי לבינה מלאכותית ולמפתחים
 
-Repository: `yanivmizrachiy/targilim`
+Repository: `yanivmizrachiy/targilim` · Hebrew name: `תרגילים`
+**Last updated: 2026-06-15** · Baseline: 2026-06-14
 
-Hebrew project name: `תרגילים`
-
-Last updated: 2026-06-14
-
----
-
-## CURRENT STATE — AUTHORITATIVE (2026-06-14)
-
-This banner overrides any older claims further down (e.g. "25 engines").
-Cross-check with `docs/SOURCE_BIBLE.md`, `generator/engine/source-registry.js`,
-`PROJECT_STATUS.md`, and `REQUIREMENTS_STATUS.md`.
-
-- **Scope: Grades 7–8 only.** Grade 9 is **out of scope / locked** until real Grade-9
-  sources and examples exist. Do not add Grade 9.
-- **Engine inventory: 50 engine topics (`*-ENGINE`) / 0 fallback** (counted in
-  `source-registry.js`, enforced by `verify:source-lock`). The "25 engines"
-  statements below are **historical**, not current.
-- Every question must be grounded in the **10 source files**
-  (`sources/intake/2026-06-09/originals/` + `source-learning/2026-06-09/*.learning.md`).
-  No external/official curriculum is a question source unless it is one of those 10.
-- **Source file 10 (teaching sequence) is planning only — never a direct question source.**
-- **Two-layer architecture:** legacy/source-fit topics (e.g. in `generator/a8-03.js`)
-  alongside dedicated `*-ENGINE` engines.
-- **A8-04 = inequalities** exists as a **legacy/source-fit topic** in `a8-03.js`;
-  there is **no `A8-04-ENGINE`**. Do **not** create a duplicate A8-04.
-  (A8-05 = percent equations, also legacy in `a8-03.js`.)
-- **No "engine 51"** (new dedicated engine) without full planning: registry +
-  pedagogy + docs + verifiers + engine count update. Check first whether the
-  topic/engine already exists.
-- **copy/export must preserve the full question**: text + KaTeX + SVG + graphs + tables.
-  Mathematical graphics must be accurate; math shapes are not rounded UI cards.
-- **No demo / mock / placeholder.** All output real and source-grounded.
-- **`npm run verify:deep` is the mandatory quality gate** and must stay green.
-  Keep PRs small and focused; update the chosen source-of-truth logs on every change.
+> **This file is the central operating guide.** Any AI or developer must read it
+> (and `PROJECT_STATUS.md`) before any change. It overrides older claims found in
+> historical docs. When this file and code disagree, **the code + verifiers win** —
+> fix this file.
 
 ---
 
-## 0. Governance — read this first
+## 1. What the project is
 
-Every worker, human or AI, must read this file and `PROJECT_STATUS.md` before any change.
-
-### 0.1 Product definition
-
-- The product is a Hebrew smart math exercise generator for Grades 7–8 only.
-- In scope: browser-based multi-exercise generation for the selected topic, including count control, mixed question types, numbered exercise set, browser print, and answer key inside the web app.
-- Removed from active scope: Grade 9, separate booklet mode, PDF workbook mode, bulk A4 workbook generation, and separate answer-key booklet systems.
-- The in-browser exercise-set generator is not considered the removed PDF/booklet scope.
-- These removed items are not backlog items and must not be treated as pending work unless Yaniv explicitly reopens them.
-- No `engine2`. No `new-engine`. There is one engine; improve it in place.
-- No fake controls.
-- No demo-only UI.
-
-### 0.2 Preservation rule
-
-- Do not delete or restart existing working engines.
-- The 25 existing working engine topics are preserved by default.
-- Existing working engines must be improved in place, not replaced or rewritten from scratch.
-
-### 0.3 Content authority
-
-- Source files/pages uploaded to the repo (`sources/`, `source-materials/`, `source-learning/`) are the content authority.
-- Current engine code is implementation, not content authority.
-- If engine IDs differ from source topic IDs: do not delete engines — map/remap and document the mapping.
-- Every active topic must be traceable to: source file, source topic/skill, question families, and visual requirement when relevant.
-
-### 0.4 Pedagogy rules
-
-- Questions must be pedagogically aligned with the sources, not generic math filler.
-- Difficulty must be mathematically real, not just longer text.
-- MCQ distractors must represent real student misconceptions.
-- True/false items must be non-trivial.
-- Mistake/critique questions must test real misconceptions.
-- UI must be Hebrew, teacher-friendly, and grammatically correct.
-
-### 0.5 Worker obligations
-
-- Every worker must update `PROJECT_STATUS.md` and `docs/WORKLOG.md` after real work.
-- Do not claim DONE without evidence/tests.
-- Progress percentage (`REAL_PROGRESS_PERCENT` in `PROJECT_STATUS.md`) is an honest estimate based on evidence.
-
-### 0.6 Status vocabulary
-
-Use only these statuses for work items: `DONE`, `PARTIAL`, `NOT DONE`, `NEEDS REVIEW`, `BLOCKED`.
+- A **Hebrew, RTL** smart math **exercise generator** for **Grades 7–8 only** (no Grade 9).
+- Fully source-bound: every question maps to one of the **10 approved source PDFs**.
+- It is a **print-first teaching product**, not an online auto-graded task.
+- Capabilities: single-exercise + numbered worksheet generation, mixed question
+  types, answer key, **teacher mode**, **engine gallery**, **visual-QA dashboard**,
+  and **image export** (copy/download a whole question as PNG).
+- **Live site:** GitHub Pages serves `generator/` from `main`:
+  https://yanivmizrachiy.github.io/targilim/
+  - **The live site reflects `main` only.** Changes on open branches do **not**
+    appear on the site until they are merged into `main` and Pages redeploys.
 
 ---
 
-## 1. Product scope
+## 2. Source-of-truth map (do not duplicate; reference these)
 
-The approved product is a **smart Hebrew math exercise generator for Grades 7–8 only**.
+| Concern | Source of truth |
+|---|---|
+| Operating rules / forbidden actions / merge order | **`RULES.md`** (this file) |
+| Current project status snapshot | **`PROJECT_STATUS.md`** |
+| Pedagogy / per-topic intent | **`docs/SOURCE_BIBLE.md`** |
+| Approved source materials | **`sources/intake/2026-06-09/`** (10 PDFs) |
+| Live engine inventory (the real list) | **`generator/engine/source-registry.js`** |
+| Quality gates | **`package.json`** scripts (`verify:deep`) |
+| Coverage gaps roadmap | `docs/reports/SOURCE_BACKED_COVERAGE_GAPS_20260614.md` |
+| PDF duplicate audit | `docs/reports/PDF_DUPLICATE_AUDIT_20260614.md` |
+| Verifier/tool index | `tools/README.md` · Docs index `docs/README.md` |
 
-Active in-scope browser behavior:
-
-- single-question generation for quick checking;
-- multi-exercise browser set generation;
-- question count selection;
-- mixed question types;
-- numbered exercise set rendering;
-- answer key inside the web app;
-- browser print/export compatibility.
-
-Removed from active project scope:
-
-- Grade 9.
-- Separate booklet mode.
-- PDF workbook mode.
-- Bulk A4 workbook generation.
-- Separate answer-key booklet system.
-
-Do not plan, design, or implement removed scope unless Yaniv explicitly reopens it later.
+Before adding any fact to docs, check it does not already live in one of the
+above. If it does, **link to it — do not copy it**.
 
 ---
 
-## 2. Roles
+## 3. Repository structure
 
-Yaniv is the product owner and teacher.
-
-Claude is the project manager / pedagogy / design decision-maker.
-
-ChatGPT/Codex are execution assistants.
-
-Execution rule:
-
-- Claude decides strategy, pedagogy, design direction, source interpretation, and quality gates.
-- ChatGPT/Codex execute approved repository changes while preserving repository reality.
-- Yaniv must not be forced to manage routine technical decisions.
-- No agent may ask Yaniv to repeat the generator vision already documented in the repo.
-
----
-
-## 3. Current true status
-
-Completed or present:
-
-- Source audit and source-learning phase completed.
-- Repository structure is modular and organized.
-- Public generator exists under `generator/`.
-- GitHub Pages deployment workflow exists.
-- `generator/.nojekyll` exists.
-- `phase2-loader.js` exists.
-- Static verifiers exist.
-- Browser/live verification workflows exist.
-- Pages healthcheck workflow exists.
-- `PROJECT_STATUS.md` exists and must remain truthful.
-- Premium mobile-first RTL CSS redesign has been applied.
-- 25 code-active legacy slices exist for Grades 7–8.
-- 25 active engine topics exist in code for the approved Grades 7–8 scope.
-- Browser-based exercise-set generation exists in code.
-- Yaniv's generator vision is documented in the repo.
-
-Current limitation:
-
-- Human live browser QA, copy-image pixel review, print-output review, and teacher feedback are recommended non-blocking checks.
-- Optional future improvements may include larger case pools and additional source-backed topics beyond the current 25, only if explicitly approved.
+```text
+generator/              the live site + the generator runtime
+generator/engine/       engines, source-registry, pedagogy-registry, diagrams
+sources/                approved source PDFs (protected)
+docs/                   documentation
+docs/reports/           audit, coverage and hardening reports
+tools/                  verifiers and deep checks (run via package.json)
+.github/workflows/      CI + GitHub Pages deployment
+PROJECT_STATUS.md       current status snapshot
+RULES.md                this central operating guide
+```
 
 ---
 
-## 4. Active generator slices and engines
+## 4. Iron rules (forbidden without explicit approval)
 
-The project has 25 approved source-mapped topics for Grades 7–8.
-
-### Grade 7
-
-- `G7-01` / `G7-01-ENGINE` — Rectangle and box.
-- `G7-02` / `G7-02-ENGINE` — Flat shape areas.
-- `G7-03` / `G7-03-ENGINE` — Pythagoras.
-- `G7-04` / `G7-04-ENGINE` — Missing angle.
-- `N7-03` / `N7-03-ENGINE` — Negative numbers on number line.
-- `N7-04` / `N7-04-ENGINE` — Signed addition/subtraction.
-- `N7-05` / `N7-05-ENGINE` — Signed multiplication/division.
-- `N7-06` / `N7-06-ENGINE` — Powers.
-- `N7-07` / `N7-07-ENGINE` — Square root.
-- `A7-01` / `A7-01-ENGINE` — Algebraic expressions.
-- `A7-02` / `A7-02-ENGINE` — Substitution.
-- `A7-03` / `A7-03-ENGINE` — First-degree equations.
-- `U7-01` / `U7-01-ENGINE` — Frequency table.
-- `U7-02` / `U7-02-ENGINE` — Basic probability.
-
-### Grade 8
-
-- `G8-01` / `G8-01-ENGINE` — Circle circumference and area.
-- `G8-04` / `G8-04-ENGINE` — Similarity / scale factor.
-- `N8-01` / `N8-01-ENGINE` — Ratio.
-- `N8-02` / `N8-02-ENGINE` — Proportion.
-- `N8-03` / `N8-03-ENGINE` — Scale.
-- `N8-04` / `N8-04-ENGINE` — Static percentages.
-- `N8-05` / `N8-05-ENGINE` — Dynamic percentages.
-- `A8-02` / `A8-02-ENGINE` — Slope and line equation.
-- `A8-03` / `A8-03-ENGINE` — Systems of equations.
-- `U8-01` / `U8-01-ENGINE` — Mean, median, range.
-- `U8-02` / `U8-02-ENGINE` — Probability from table.
+- **Do not work directly on `main`.** Feature branches only; merge via PR.
+- **No force push.**
+- **No merge to `main`** without `verify:deep` green in GitHub Actions **and** Yaniv's explicit approval.
+- **Do not delete** source PDFs or `sources/.../originals/`.
+- **Do not change** `generator/engine/source-registry.js` without a proven reason.
+- **No new engine without full planning** (registry + pedagogy + docs + verifiers + count update). Check first whether it already exists.
+- **No `A8-04-ENGINE`** — A8-04 (inequalities) is a **legacy/source-fit topic in `a8-03.js`**, intentionally not a dedicated engine. (A8-05 = percent equations, also legacy.)
+- **No "engine 51".** The inventory is **50 engines / 0 fallback** — keep it unless a planned, approved change updates the count everywhere.
+- **Do not weaken a verifier.** Adding guards is fine; loosening existing checks is not.
+- **No demo / mock / placeholder / fake controls.** All output must be real and source-grounded.
+- **Do not invent questions** without a source. No new Grade-8 numeric/uncertainty content without **new** source intake.
+- **Do not claim something is done if it only exists on a branch** and is not merged.
+- **Every PR must pass `npm run verify:deep`.**
+- **Update docs** (`PROJECT_STATUS.md`, this file) after any meaningful change — truthfully.
 
 ---
 
-## 5. Do not repeat completed work
+## 5. Recent UI/UX premium round — branches & merge order
 
-Future work must not repeat these completed actions:
+Five branches were pushed (not yet merged). **Merge order: PR1 → PR2 → PR3 → PR4 → PR5.**
 
-- Do not recreate the source-learning phase.
-- Do not recreate the curriculum map from scratch.
-- Do not rebuild the modular architecture from scratch.
-- Do not rewrite `index.html` wholesale.
-- Do not rewrite `core.js` wholesale.
-- Do not rewrite `phase2-loader.js` unless there is a proven loader failure.
-- Do not rewrite `export.js` unless export is proven broken.
-- Do not re-add the same 25 legacy slices.
-- Do not recreate the engine foundation already present under `generator/engine/`.
-- Do not create duplicate topic IDs.
-- Do not mark `Live ✅` without actual verification.
+| Order | Branch | Purpose | Status | Note |
+|---|---|---|---|---|
+| PR1 | `design/professional-exercise-card-v1` | Professional card + Assistant typography + larger diagrams | pushed, not merged | base of the round |
+| PR2 | `design/student-answer-box` | One clean untitled answer box replaces split דרך:/תשובה: (title removed in #24) | pushed, not merged | |
+| PR3 | `feature/premium-image-export-and-bw-mode` | Color/שחור־לבן only; central "העתק/הורד כתמונה"; unified `captureExerciseCardAsPng` | pushed, not merged | |
+| PR4 | `test/premium-ui-guards` | `verify:premium-ui` guard wired into `verify:deep` | pushed, not merged | **stacked on PR1–PR3** |
+| PR5 | `docs/refresh-status-after-ui-and-pages` | PROJECT_STATUS refresh for the round | pushed, not merged | docs |
 
-Every future change must first inspect repository reality.
+- **Do not merge PR4 before PR1–PR3** (the guard only passes when the UI it protects is present).
+- **Do not claim the live site has these UI changes** until they are merged into `main` and Pages redeploys.
+- This central-rules PR (`docs/update-central-ai-rules`) overlaps `PROJECT_STATUS.md` with PR5; merge one, then rebase the other.
 
 ---
 
-## 6. Protected files and folders
+## 6. Verified completed work (only what was empirically checked on 2026-06-15)
 
-Do not touch these unless there is explicit need and a clear reason:
+- GitHub Pages publishes `generator/` from `main`.
+- `npm run verify:deep` exists and aggregates the deep gates (see `package.json`).
+- **50 engine topics (`*-ENGINE`) / 0 fallback** — counted from `source-registry.js`.
+- **No `A8-04-ENGINE`** (A8-04 inequalities is legacy in `a8-03.js`).
+- Merged on `main` (HEAD `ba1a0ee`): PR #15 (A7-04 work), **#16** (stress PER → 100), **#17** (A7-04 multi-correct guard, standalone), **#18** (PDF duplicate audit, no deletion).
+- **PDF inventory = 20:** 10 working (folders `01-…10-…`) + 10 in `originals/`; the audit found **no accidental duplicates** (originals are intentional backups).
+- Source-backed coverage-gaps report exists for the roadmap.
 
-- `sources/`
-- `archive/`
-- `knowledge-base/`
-- `generator/export.js`, unless export is proven broken.
-- `generator/phase2-loader.js`, unless a loader failure is proven.
-- legacy slice files, unless fixing a real mathematical/UI/runtime issue.
-- `RULES.md`, except for truth/status/rule updates.
-- `PROJECT_STATUS.md`, except for truthful status updates.
+### A7-04 "multi-correct" — was broken on `main`, fixed by PR #25
 
-Do not delete files without explicit approval.
+What was wrong on `main` (HEAD `ba1a0ee`), verified 2026-06-15 (40 samples):
+- Despite PR #15/#17 titles, `A7-04-ENGINE` emitted **exactly 1 correct answer in
+  BOTH single and multi mode**; the guard `tools/verify-multi-correct-coverage.mjs`
+  **failed (30)** and was **not** wired into `verify:deep`.
+- Root cause: the `getEngineExercise` decorator chain dropped the 4th `opts`
+  argument (which carries `mcqMode`) before it reached the engine. The multi-correct
+  engine logic already existed but was unreachable.
 
----
+Fix: **PR #25** (`fix/forward-mcqmode-multi-correct`) forwards `opts` through every
+wrapper and wires the guard into `verify:deep`. Verified after the fix: multi → 2
+correct (40/40), single → 1 correct (40/40), `verify:deep` PASS.
 
-## 7. Source-bound rule
-
-Every exercise must remain source-bound.
-
-No generic curriculum invention.
-
-Every generated topic/template must map to:
-
-- grade;
-- domain;
-- topic;
-- skill;
-- source or approved source-learning note;
-- safe parameter set;
-- correct answer logic;
-- diagram need, if relevant;
-- question type behavior, if relevant;
-- difficulty behavior, if relevant.
-
-If a topic lacks source-backed examples, mark it pending or keep it outside active scope.
+Status: real multi-correct MCQ is **`DONE` once PR #25 is merged**. Until then,
+`main` still emits one correct answer — do not claim it on the live site before
+PR #25 is merged and Pages redeploys.
 
 ---
 
-## 8. True generator vision rule
+## 7. Merge status (the UI/UX round is DONE)
 
-Phase work must not become shallow slices.
+The 2026-06-15 round is **merged to `main`** and live. Historical detail:
+`docs/reports/OPEN_PR_RELEASE_QUEUE_20260615.md`, `docs/reports/MERGE_RUNBOOK_20260615.md`.
 
-Required generator capabilities include:
+```text
+MERGED: #21 professional card + typography
+MERGED: #22 single untitled student answer box
+MERGED: #23 premium image export + color/BW only
+MERGED: #24 verify:premium-ui guard
+MERGED: #27 worksheet polish (sharp math rects + no question-type badge)
+MERGED: #28 real A7-04 multi-correct (forward mcqMode; verify:multi-correct in verify:deep)
+LAST:   #20 this central rules + status PR
+CLOSED: #25 (superseded by #28) · docs/refresh-status-after-ui-and-pages (superseded by #20)
+HOLD:   #19 luxury landing page (draft; rebase on main, then review)
+```
 
-- many questions per topic;
-- multiple mathematical pattern families per topic;
-- dynamic data generation;
-- unknown switching;
-- Hebrew wording variation;
-- controlled visual themes;
-- dynamic SVG diagrams;
-- multiple question types: open, multiple choice, completion, true/false, matching, reasoning, mistake identification;
-- real difficulty levels: basic, standard, challenge;
-- mobile, print, and export compatibility;
-- No fake controls;
-- no demo-only UI.
+`verify:deep` now includes `verify:premium-ui` + `verify:worksheet-polish` + `verify:multi-correct`.
 
----
+### Next content work — choose only after checking existing coverage
+- **U7-03 single-answer MCQ already exists** in `source-fit-extensions.js` (verified: U7-03-ENGINE emits MCQ with choices). **Do not duplicate it.**
+- Real multi-correct dispatch works (PR #28). A future option (approval only): a second source-backed multi-correct path (e.g. numeric fraction-equivalence, source 05/07).
+- Always check existing engine coverage before starting new content.
 
-## 9. Source-based question variety and mathematical writing
-
-The generator must create varied question types based on the actual question patterns found in the source PDFs and source-learning notes.
-
-For each source-backed topic, identify which of the following are appropriate and supported by the sources:
-
-- open calculation questions;
-- multiple-choice questions;
-- completion questions;
-- true/false questions;
-- matching questions;
-- explanation/reasoning questions;
-- identify-the-mistake questions;
-- build-an-equation questions;
-- read-from-diagram questions;
-- diagram-construction or label-the-diagram questions;
-- word problems;
-- table-based questions;
-- graph/chart-based questions when source-backed.
-
-The mathematical writing layer must be strong and professional:
-
-- use KaTeX-compatible notation where appropriate;
-- support fractions, roots, powers, percentages, equations, ratios, units, tables, and structured solution steps;
-- preserve Hebrew RTL clarity;
-- avoid plain-text-only math when proper mathematical notation is needed;
-- keep printed and exported math readable.
-
-Do not create unsupported generic question types.
+### Do NOT
+- Add Grade-8 numeric or uncertainty engines without **new** source intake.
 
 ---
 
-## 10. UI, graphics, export and print rules
+## 8. Permanent design requirements (UI)
 
-The public site must remain:
-
-- Hebrew-only for user-facing text;
-- RTL;
-- mobile-first;
-- visually premium;
-- readable on phone;
-- teacher-friendly;
-- suitable for print/export;
-- free of demo labels and fake controls.
-
-Graphics are first-class product behavior, not decoration.
-
-Dynamic visual work must preserve:
-
-- premium educational visual quality;
-- clean drawings and diagrams;
-- controlled colors;
-- strong visual hierarchy;
-- no overlap;
-- export-safe SVG/HTML;
-- mobile-safe layout;
-- print-safe layout;
-- classroom-ready appearance.
-
-The following must remain working:
-
-- copy as image;
-- PNG download fallback;
-- print layout;
-- browser-based exercise-set print/export.
-
-Do not change `export.js` unless the export pipeline is proven broken.
+- The interface must look **premium**; fonts must read like a real math textbook.
+- View options are **`צבע` / `שחור־לבן` only** — never the words "גווני אפור".
+- Every exercise card carries central primary buttons **`העתק כתמונה`** and **`הורד כתמונה`**.
+- The copied/downloaded image must include **the full question and all drawings**.
+- Students see **one** clean, untitled answer box — no title/label, never split "דרך"/"תשובה". A stable `data-student-answer-box="true"` hook identifies it.
+- Diagrams must be **sharp, readable, not clipped**.
+- Mobile must look professional; print must be clean.
+- Teacher-only content must never appear in the student print/export.
 
 ---
 
-## 11. Deployment and verification rules
+## 9. Mandatory tests
 
-Public URL:
+Automated gate (required for every PR, must be green in GitHub Actions):
+```bash
+npm install
+npm run verify:deep
+```
 
-`https://yanivmizrachiy.github.io/targilim/`
-
-Required verification assets:
-
-- `tools/verify-phase2-static.mjs`
-- `tools/verify-phase3a-static.mjs`
-- `tools/harness-engines.mjs`
-- `tools/release-audit.mjs`
-- `.github/workflows/verify-phase2-static.yml`
-- `.github/workflows/pages-healthcheck.yml`
-- `.github/workflows/verify-phase2-batch.yml`
-- `.github/workflows/verify-phase3a.yml`
-- `.github/workflows/verify-phase3a-static.yml`
-
-Before claiming final public release quality, verify:
-
-- all 25 engine topics appear and generate correctly;
-- browser-based exercise-set generation works for count > 1;
-- answer key toggle works;
-- engine panel controls are real and affect output;
-- supported question types work;
-- difficulty levels work;
-- export buttons remain present;
-- mobile view has no horizontal scroll;
-- `PROJECT_STATUS.md` matches observed results.
-
-No `Live ✅` without real live verification.
+Manual UI checks (required when a UI PR is reviewed, on the **live** site after deploy):
+```text
+- open the live site
+- generate a worksheet
+- check color view
+- check black-and-white view
+- copy as image
+- download as image
+- open the PNG
+- confirm all drawings appear in the image
+- check mobile layout
+- check print output
+- confirm teacher-only content does not appear on the student page
+```
 
 ---
 
-## 12. Documentation truth rule
+## 10. AI Work Report Template
 
-`PROJECT_STATUS.md` must describe the current truth.
+Every AI must end its work by filling this in:
 
-Never write fake PASS, fake live verification, fake production readiness, fake test results, or claims that a workflow passed if it was not actually observed.
-
-Use honest statuses:
-
-- `Code ✅` for code that exists and is registered.
-- `Live ⚠️` for code that is not yet live/browser verified.
-- `Live ✅` only after real verification.
-- `Local Live ✅` for local browser verification.
+```text
+Branch:
+PR:
+Changed files:
+What changed:
+UI / logic / docs:
+Sources touched:
+Engines touched:
+Registry touched:
+verify:deep:
+GitHub Actions:
+Live URL checked:
+Screenshot before:
+Screenshot after:
+Risks:
+What remains:
+Estimated improvement:
+```
 
 ---
 
-## 13. Current next action
+## 11. Roles
 
-The approved core scope is complete in code. Future work should be limited to:
+- **Yaniv** — product owner and teacher; should not be asked to manage routine technical decisions or to repeat the documented vision.
+- **Claude** — project manager / pedagogy / design / quality-gate owner.
+- **ChatGPT/Codex** — execution assistants that preserve repository reality.
 
-1. Human live browser QA.
-2. Visual-mode review.
-3. Copy-image pixel review.
-4. Print output review.
-5. Teacher feedback and small pedagogical refinements.
-6. Larger case pools or new source-backed Grade 7–8 topics only if explicitly approved.
-7. Small browser-based exercise-set UX improvements that preserve the current scope.
+---
 
-Do not start Grade 9, separate booklet mode, PDF workbook mode, bulk A4 workbook generation, or separate answer-key booklet systems.
+## Appendix — historical note
 
-Report truth only.
+Earlier docs reference **"25 engines"**. That is historical: the current inventory is
+**50 engines** (25 dedicated `*-ENGINE` source-fit engines + 25 pilot engines), 0 fallback.
+The authoritative live list is `generator/engine/source-registry.js`. Removed scope
+(Grade 9, separate booklet/PDF-workbook/A4-bulk/answer-key-booklet modes) is **not** backlog
+and must not be reopened unless Yaniv explicitly says so.

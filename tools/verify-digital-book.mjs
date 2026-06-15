@@ -40,7 +40,7 @@ const fileNames = [...js.matchAll(/'([^']+\.pdf)'/g)].map(m => m[1]).filter(v =>
 const missingPdfPaths = sourcePdfPaths.filter(pdfPath => !fs.existsSync(path.normalize(path.join('generator', pdfPath))));
 
 check('book files exist', ['generator/book.html','generator/book.css','generator/book.js'].every(p => fs.existsSync(p)));
-check('index links to digital source book', index.includes('book.html') && index.includes('ספר מקורות דיגיטלי'));
+check('index links to digital learning-materials book', index.includes('book.html') && index.includes('ספר חומרי לימוד'));
 check('book has RTL Hebrew document', html.includes('<html lang="he" dir="rtl">'));
 check('book loads local CSS and JS', html.includes('href="book.css"') && html.includes('src="book.js"'));
 check('book has table of contents and reader controls', ['tocList','openToc','focusReader','pdfFrame','nextBtn','prevBtn'].every(id => html.includes(id)));

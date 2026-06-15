@@ -59,5 +59,10 @@ check('copyImage captures the card with html2canvas', /copyImage[\s\S]*?html2can
 check('copyImage writes an image to the clipboard (ClipboardItem)', /ClipboardItem\(\{\s*'image\/png'|ClipboardItem\(\{ 'image\/png'/.test(src) && /clipboard\.write\(/.test(src));
 check('copyImage falls back to a PNG download when blocked', /copyImage[\s\S]*?download\(/.test(src));
 
+// copy-as-image must not include worksheet numbering/type/settings chips.
+const setSrc = read('generator/exercise-set.js');
+check('question number/type meta is ignored in copied images', /<div class="qmeta" data-html2canvas-ignore="true">[\s\S]*?<span class="ex-num">/.test(setSrc));
+check('exercise-set settings meta is ignored in copied images', /<div class="qmeta" data-html2canvas-ignore="true">[\s\S]*?meta\.gradeLabel[\s\S]*?meta\.diffLabel/.test(setSrc));
+
 console.log(fails ? 'COPY_EXPORT_FAIL (' + fails + ')' : 'COPY_EXPORT_PASS');
 process.exit(fails ? 1 : 0);

@@ -74,7 +74,7 @@ function generateSet(){
       ex.questionHTML=ex.questionHTML.replace('<div class="mcq-choices">',mcqInstr+'<div class="mcq-choices">');
   });
   const sel=document.getElementById('st');
-  const topicLabel=(sel.options[sel.selectedIndex]?.textContent||'').replace(/\s*—\s*(מנוע (מלא|חדש)|גרסה חכמה)\s*✦?\s*$/,'');
+  const topicLabel=(typeof cleanTopicLabel==='function'?cleanTopicLabel(sel.options[sel.selectedIndex]?.textContent||''):(sel.options[sel.selectedIndex]?.textContent||''));
   const domainKey=typeof domain==='function'?domain():'numeric';
   const meta={
     topicLabel:topicLabel,
@@ -88,31 +88,39 @@ function generateSet(){
   renderExerciseSet(meta,exercises);
 }
 
-// Answer area shaped per question type, like a printed workbook:
-// open → solution lines + final-answer blank; mcq → answer blank + short
-// justification; tf → verdict blank + correction line; mistake → error + fix.
+// A clean, untitled writing area — but ONLY for free-write question types.
+// open → solution lines; mistake → find/correct the error. Mark-the-answer types
+// get NO box: mcq the student marks one of the lettered choices, tf the student
+// circles נכון/שגוי — a blank box there is redundant and confusing. The box (when
+// present) is part of the captured card (not html2canvas-ignored) and carries a
+// stable data-student-answer-box hook for verifiers.
 function workAreaHTML(qtype){
-  function lines(n){let s='';for(let i=0;i<n;i++)s+='<div class="wl"></div>';return s}
-  if(qtype==='mcq')return '<div class="work-area">'
-    +'<div class="wa-final"><span class="work-label">תשובה:</span><span class="wa-blank wa-short"></span><span class="work-label">נימוק:</span><span class="wa-blank"></span></div></div>';
-  if(qtype==='tf')return '<div class="work-area">'
-    +'<div class="wa-final"><span class="work-label">נכון / שגוי:</span><span class="wa-blank wa-short"></span><span class="work-label">אם שגוי — תקנו:</span><span class="wa-blank"></span></div></div>';
-  if(qtype==='mistake')return '<div class="work-area">'
-    +'<div class="wa-row"><span class="work-label">הטעות:</span></div>'+lines(1)
-    +'<div class="wa-row"><span class="work-label">תיקון:</span></div>'+lines(1)+'</div>';
-  return '<div class="work-area">'
-    +'<div class="wa-row"><span class="work-label">דרך:</span></div>'+lines(2)
-    +'<div class="wa-final"><span class="work-label">תשובה:</span><span class="wa-blank"></span></div></div>';
+  const LINES={open:4,mistake:4};
+  const n=LINES[qtype];
+  if(!n) return ''; // mcq, tf — no writing box; the answer is the marked choice
+  let wl='';for(let i=0;i<n;i++)wl+='<div class="wl"></div>';
+  return '<div class="answer-box" data-student-answer-box="true">'
+    +'<div class="answer-box-body">'+wl+'</div></div>';
+}
+
+function sharpenMathRects(html){
+  return String(html||'').replace(/<rect\b[^>]*>/g,function(tag){
+    return tag.replace(/\s+r[xy]=(?:"[^"]*"|'[^']*'|[^\s/>]+)/g,'');
+  });
 }
 
 function renderExerciseSet(meta,exercises){
-  const TYPE_LABELS={open:'שאלה פתוחה',mcq:'רב־ברירה',tf:'נכון / שגוי',mistake:'מצא את הטעות'};
   if(typeof setMainTitle==='function')setMainTitle(meta.cls,meta.topicLabel);
   const cards=exercises.map(function(ex,i){
+    const questionHTML=sharpenMathRects(ex.questionHTML);
     return '<div class="qcard engine-card ex-card" id="exCard'+i+'" data-idx="'+i+'">'
-      +'<div class="qmeta"><span class="ex-num">תרגיל '+(i+1)+'</span><span class="tag '+meta.cls+'">'+(TYPE_LABELS[ex.qtype]||TYPE_LABELS.open)+'</span></div>'
-      +'<div class="ex-body">'+ex.questionHTML+'</div>'
+      +'<div class="qmeta" data-html2canvas-ignore="true"><span class="ex-num">תרגיל '+(i+1)+'</span></div>'
+      +'<div class="ex-body">'+questionHTML+'</div>'
       +workAreaHTML(ex.qtype)
+      +'<div class="ex-imgbar" data-html2canvas-ignore="true">'
+        +'<button class="btn-img btn-img-primary" onclick="exImageCopy('+i+',this)">📋 העתק כתמונה</button>'
+        +'<button class="btn-img btn-img-primary" onclick="exImageDownload('+i+',this)">⬇ הורד כתמונה</button>'
+      +'</div>'
       +'</div>';
   }).join('');
   const keyItems=exercises.map(function(ex,i){
@@ -128,7 +136,7 @@ function renderExerciseSet(meta,exercises){
     +'<div class="exset-head">'
     +'<div class="exset-title">דף תרגילים — '+meta.topicLabel+'</div>'
     +'<div class="exset-nameline">שם: ______________________&nbsp;&nbsp;&nbsp; תאריך: ______________&nbsp;&nbsp;&nbsp; כיתה: ________</div>'
-    +'<div class="qmeta"><span class="tag '+meta.cls+'">'+meta.gradeLabel+'</span><span class="tag '+meta.cls+'">'+meta.domainLabel+'</span><span class="tag '+meta.cls+'">רמה: '+meta.diffLabel+'</span><span class="tag '+meta.cls+'">'+countLabel+'</span></div>'
+    +'<div class="qmeta" data-html2canvas-ignore="true"><span class="tag '+meta.cls+'">'+meta.gradeLabel+'</span><span class="tag '+meta.cls+'">'+meta.domainLabel+'</span><span class="tag '+meta.cls+'">רמה: '+meta.diffLabel+'</span><span class="tag '+meta.cls+'">'+countLabel+'</span></div>'
     +'<div class="exset-actions" data-html2canvas-ignore="true">'
     +'<button class="btn-key" id="btnAnswerKey" onclick="toggleAnswerKey()">הצג תשובות</button>'
     +'<button class="btn-printset" onclick="printExerciseSet()">הדפס דף תרגילים</button>'
@@ -143,6 +151,20 @@ function renderExerciseSet(meta,exercises){
   // Teacher Advanced Mode decoration (teacher cards + per-question controls)
   if(window.Teacher&&typeof window.Teacher.decorateSet==='function')window.Teacher.decorateSet();
 }
+
+// Per-question image actions — available to every teacher, not only in teacher
+// mode. They snapshot the whole card (text + diagram + answer box) through the
+// unified premium pipeline in export.js; the buttons are data-html2canvas-ignore
+// so they never appear in the captured image.
+function exImageAction(i,btn,fn,doneCopied,doneDl){
+  const card=document.getElementById('exCard'+i);if(!card||!btn)return;
+  const prev=btn.textContent;btn.disabled=true;btn.textContent='מכין…';
+  fn(card,i+1).then(function(res){btn.textContent=res==='copied'?doneCopied:doneDl;})
+    .catch(function(){btn.textContent='שגיאה';})
+    .finally(function(){setTimeout(function(){btn.disabled=false;btn.textContent=prev;},1700);});
+}
+function exImageCopy(i,btn){exImageAction(i,btn,copyExerciseImage,'הועתק ✓','הורד PNG ✓');}
+function exImageDownload(i,btn){exImageAction(i,btn,downloadExerciseImage,'הורד ✓','הורד ✓');}
 
 function toggleAnswerKey(){
   const key=document.getElementById('answerKey'),btn=document.getElementById('btnAnswerKey');
