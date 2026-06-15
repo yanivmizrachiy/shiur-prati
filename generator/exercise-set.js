@@ -88,16 +88,16 @@ function generateSet(){
   renderExerciseSet(meta,exercises);
 }
 
-// One clean, untitled student answer box for every question type — replaces the
-// old split work areas (דרך:/תשובה:, verdict, error/fix). No heading or label:
-// just a professional blank writing area, like a printed worksheet. The box is
-// part of the captured card (it is NOT html2canvas-ignored), so the copied /
-// downloaded image always carries the writing space. A stable
-// data-student-answer-box hook lets verifiers assert the box exists without
-// depending on any visible label text. Line count adapts to the question type.
+// A clean, untitled writing area — but ONLY for free-write question types.
+// open → solution lines; mistake → find/correct the error. Mark-the-answer types
+// get NO box: mcq the student marks one of the lettered choices, tf the student
+// circles נכון/שגוי — a blank box there is redundant and confusing. The box (when
+// present) is part of the captured card (not html2canvas-ignored) and carries a
+// stable data-student-answer-box hook for verifiers.
 function workAreaHTML(qtype){
-  const LINES={open:4,mistake:4,tf:3,mcq:2};
-  const n=LINES[qtype]||3;
+  const LINES={open:4,mistake:4};
+  const n=LINES[qtype];
+  if(!n) return ''; // mcq, tf — no writing box; the answer is the marked choice
   let wl='';for(let i=0;i<n;i++)wl+='<div class="wl"></div>';
   return '<div class="answer-box" data-student-answer-box="true">'
     +'<div class="answer-box-body">'+wl+'</div></div>';

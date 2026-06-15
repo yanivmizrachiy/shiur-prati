@@ -44,6 +44,12 @@ check('one student answer box via stable hook', /data-student-answer-box="true"/
 check('answer box is captured in the image (not html2canvas-ignored)',
   /<div class="answer-box" data-student-answer-box="true">(?![^>]*html2canvas-ignore)/.test(setSrc));
 check('answer box has NO title/label ("תשובת התלמיד")', setSrc.indexOf('תשובת התלמיד') < 0 && setSrc.indexOf('answer-box-head') < 0);
+// Mark-the-answer types (mcq, tf) must NOT get a blank writing box — the answer is
+// the marked choice / circled נכון-שגוי. Only free-write types (open, mistake) do.
+check('no writing box for mcq/tf (mark-the-answer types)',
+  /LINES\s*=\s*\{\s*open\s*:\s*\d+\s*,\s*mistake\s*:\s*\d+\s*\}/.test(setSrc) &&
+  !/LINES\s*=\s*\{[^}]*\b(?:mcq|tf)\s*:/.test(setSrc) &&
+  /if\s*\(\s*!n\s*\)\s*return\s*''/.test(setSrc));
 check('no split work-area (.work-area removed)', setSrc.indexOf('class="work-area"') < 0);
 check('no split "דרך:" label', setSrc.indexOf('work-label">דרך:') < 0 && setSrc.indexOf('>דרך:<') < 0);
 check('no split "תשובה:" work label', setSrc.indexOf('work-label">תשובה:') < 0);
