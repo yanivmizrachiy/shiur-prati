@@ -1,6 +1,7 @@
-name: Verify live generator and write report
+name: Verify live generator report artifact
 
 on:
+  workflow_dispatch:
   push:
     branches: [main]
     paths:
@@ -9,10 +10,9 @@ on:
       - "generator/core.js"
       - "generator/engine/**"
       - ".github/workflows/verify-generator-live-report.yml"
-  workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
 
 concurrency:
   group: verify-generator-live-report
@@ -24,8 +24,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Setup Node
         uses: actions/setup-node@v4
@@ -34,18 +32,17 @@ jobs:
 
       - name: Install Playwright
         run: |
-          npm init -y
-          npm i -D playwright
+          npm install -D playwright
           npx playwright install chromium --with-deps
 
-      - name: Run live browser verification and prepare report
+      - name: Run live browser verification
         id: verify
         env:
           GENERATOR_URL: "https://yanivmizrachiy.github.io/targilim/"
         shell: bash
         run: |
           set +e
-          mkdir -p docs/verification
+          mkdir -p live-verification-artifacts
           cat > verify-generator-live.mjs <<'EOF'
           import { chromium } from 'playwright';
           import fs from 'node:fs';
@@ -82,18 +79,22 @@ jobs:
             await page.waitForFunction((topicId) => [...document.querySelectorAll('#st option')].some(o => o.value === topicId), id, { timeout: 15000 });
             await page.selectOption('#st', id);
           }
+          async function latestCard(){
+            await page.waitForSelector('.qcard', { timeout: 10000 });
+            return page.locator('.qcard').last();
+          }
           async function generateAssert(label, requireSvg = true){
             await page.click('.btn-gen');
-            await page.waitForSelector('.qcard', { timeout: 10000 });
-            if (requireSvg) await page.waitForSelector('.qcard svg', { timeout: 10000 });
-            await page.waitForSelector('.qtext', { timeout: 10000 });
-            const q = await page.locator('.qtext').innerText();
+            const card = await latestCard();
+            if (requireSvg) await card.locator('svg').first().waitFor({ timeout: 10000 });
+            await card.locator('.qtext').first().waitFor({ timeout: 10000 });
+            const q = await card.locator('.qtext').first().innerText();
             if (!q || q.trim().length < 3 || !/משולש|יתר|רגל|מלבן|אלכסון|שגוי|טעות|אחוז|מתוך|כמה|מהווים/.test(q)) throw new Error(label + ' bad question text: ' + q);
-            const count = await page.locator('.btn-exp').count();
+            const count = await card.locator('.btn-exp').count();
             if (count < 3) throw new Error(label + ' expected at least 3 export buttons, found ' + count);
-            await page.click('.btn-ans');
-            await page.waitForSelector('.answer.open', { timeout: 10000 });
-            const a = await page.locator('.answer.open').innerText();
+            await card.locator('.btn-ans').first().click();
+            await card.locator('.answer.open').first().waitFor({ timeout: 10000 });
+            const a = await card.locator('.answer.open').first().innerText();
             assertMathAnswer(label, a);
             const hasHorizontalScroll = await page.evaluate(() => document.body.scrollWidth > window.innerWidth + 2);
             if (hasHorizontalScroll) throw new Error(label + ' horizontal scroll detected on mobile viewport');
@@ -110,7 +111,7 @@ jobs:
               const engineResult = await generateAssert('engine ' + id + ' ' + qtype, needSvg);
               result.engineChecks.push({ id, qtype, ok: true, questionText: engineResult.questionText, exportButtonCount: engineResult.exportButtonCount });
             }
-            ok('Phase 3A ' + id + ' verified: ' + qtypes.join(', '));
+            ok('engine ' + id + ' verified: ' + qtypes.join(', '));
           }
 
           try {
@@ -122,7 +123,7 @@ jobs:
             await page.waitForSelector('#sd', { timeout: 10000 });
             await page.waitForSelector('#st', { timeout: 10000 });
             ok('selectors visible');
-            await page.waitForFunction(() => typeof TOPICS !== 'undefined' && TOPICS[7]?.geometry?.some(t => t[0] === 'G7-03'), null, { timeout: 30000 });
+
             await page.selectOption('#sg', '7');
             await page.selectOption('#sd', 'geometry');
             await selectTopic('G7-03');
@@ -137,7 +138,7 @@ jobs:
             await verifyEngineTopic({grade:'7', domain:'geometry', id:'G7-03-ENGINE', qtypes:['open','mcq','tf','mistake'], needSvg:true});
             await verifyEngineTopic({grade:'8', domain:'numeric', id:'N8-04-ENGINE', qtypes:['open','mcq','tf','mistake'], needSvg:false});
 
-            await page.screenshot({ path: 'docs/verification/generator-live-smoke.png', fullPage: true });
+            await page.screenshot({ path: 'live-verification-artifacts/generator-live-smoke.png', fullPage: true });
             ok('screenshot saved');
             if (errors.length > 0) throw new Error('Browser console/page errors: ' + errors.join(' | '));
             ok('no browser console errors');
@@ -145,7 +146,7 @@ jobs:
           } catch (err) {
             result.status = 'FAIL';
             result.error = String(err?.stack || err?.message || err);
-            try { await page.screenshot({ path: 'docs/verification/generator-live-smoke.png', fullPage: true }); } catch {}
+            try { await page.screenshot({ path: 'live-verification-artifacts/generator-live-smoke.png', fullPage: true }); } catch {}
           } finally {
             await browser.close();
           }
@@ -172,35 +173,20 @@ jobs:
           if (result.questionText) lines.push('- questionText: ' + result.questionText.replace(/\n/g, ' / '));
           if (result.answerText) lines.push('- answerText: ' + result.answerText.replace(/\n/g, ' / '));
           if (result.error) { lines.push(''); lines.push('## Error'); lines.push('```'); lines.push(result.error); lines.push('```'); }
-          fs.writeFileSync('docs/verification/generator-live-latest.md', lines.join('\n'), 'utf8');
-          fs.writeFileSync('docs/verification/generator-live-latest.json', JSON.stringify(result, null, 2), 'utf8');
+          fs.writeFileSync('live-verification-artifacts/generator-live-latest.md', lines.join('\n'), 'utf8');
+          fs.writeFileSync('live-verification-artifacts/generator-live-latest.json', JSON.stringify(result, null, 2), 'utf8');
           process.exit(result.status === 'PASS' ? 0 : 1);
           EOF
 
           node verify-generator-live.mjs
           status=$?
           echo "verify_status=$status" >> "$GITHUB_OUTPUT"
-          exit 0
+          exit $status
 
-      - name: Commit verification report back to repository
+      - name: Upload live verification artifacts
         if: always()
-        shell: bash
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add docs/verification/generator-live-latest.md docs/verification/generator-live-latest.json docs/verification/generator-live-smoke.png || true
-          if git diff --cached --quiet; then
-            echo "No verification report changes to commit."
-          else
-            git commit -m "ci: update live generator verification report"
-            git push
-          fi
-
-      - name: Fail workflow if verification failed
-        if: always()
-        run: |
-          if [ "${{ steps.verify.outputs.verify_status }}" != "0" ]; then
-            echo "Live generator verification failed. See docs/verification/generator-live-latest.md"
-            exit 1
-          fi
-          echo "Live generator verification passed."
+        uses: actions/upload-artifact@v4
+        with:
+          name: generator-live-verification
+          path: live-verification-artifacts/
+          if-no-files-found: warn
