@@ -113,6 +113,10 @@ function renderExerciseSet(meta,exercises){
       +'<div class="qmeta" data-html2canvas-ignore="true"><span class="ex-num">תרגיל '+(i+1)+'</span><span class="tag '+meta.cls+'">'+(TYPE_LABELS[ex.qtype]||TYPE_LABELS.open)+'</span></div>'
       +'<div class="ex-body">'+ex.questionHTML+'</div>'
       +workAreaHTML(ex.qtype)
+      +'<div class="ex-imgbar" data-html2canvas-ignore="true">'
+        +'<button class="btn-img btn-img-primary" onclick="exImageCopy('+i+',this)">📋 העתק כתמונה</button>'
+        +'<button class="btn-img btn-img-primary" onclick="exImageDownload('+i+',this)">⬇ הורד כתמונה</button>'
+      +'</div>'
       +'</div>';
   }).join('');
   const keyItems=exercises.map(function(ex,i){
@@ -143,6 +147,20 @@ function renderExerciseSet(meta,exercises){
   // Teacher Advanced Mode decoration (teacher cards + per-question controls)
   if(window.Teacher&&typeof window.Teacher.decorateSet==='function')window.Teacher.decorateSet();
 }
+
+// Per-question image actions — available to every teacher, not only in teacher
+// mode. They snapshot the whole card (text + diagram + answer box) through the
+// unified premium pipeline in export.js; the buttons are data-html2canvas-ignore
+// so they never appear in the captured image.
+function exImageAction(i,btn,fn,doneCopied,doneDl){
+  const card=document.getElementById('exCard'+i);if(!card||!btn)return;
+  const prev=btn.textContent;btn.disabled=true;btn.textContent='מכין…';
+  fn(card,i+1).then(function(res){btn.textContent=res==='copied'?doneCopied:doneDl;})
+    .catch(function(){btn.textContent='שגיאה';})
+    .finally(function(){setTimeout(function(){btn.disabled=false;btn.textContent=prev;},1700);});
+}
+function exImageCopy(i,btn){exImageAction(i,btn,copyExerciseImage,'הועתק ✓','הורד PNG ✓');}
+function exImageDownload(i,btn){exImageAction(i,btn,downloadExerciseImage,'הורד ✓','הורד ✓');}
 
 function toggleAnswerKey(){
   const key=document.getElementById('answerKey'),btn=document.getElementById('btnAnswerKey');
