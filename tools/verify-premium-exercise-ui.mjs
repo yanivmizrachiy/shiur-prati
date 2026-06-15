@@ -79,5 +79,20 @@ check('image filename is targil-matematika-<n>.png', /targil-matematika-/.test(e
 check('teacher control bar is html2canvas-ignored', /teacher-controls teacher-only" data-html2canvas-ignore="true"/.test(teacherSrc));
 check('teacher card is html2canvas-ignored', /teacher-card teacher-only" data-html2canvas-ignore="true"/.test(teacherSrc));
 
+// ── 6. Learning-material viewer (book): served from the site, no 404, no repo paths ──
+const bookJs = read('generator/book.js');
+const bookHtml = read('generator/book.html');
+const deployYml = fs.existsSync('.github/workflows/deploy-pages.yml') ? read('.github/workflows/deploy-pages.yml') : '';
+check('book viewer serves materials from the site (assets/sources/)', /assets\/sources\//.test(bookJs));
+check('book frame is NOT pointed at the unreachable repo path', !/\$\('pdfFrame'\)\.src\s*=\s*b\[6\]/.test(bookJs) && !/pdfFrame[\s\S]{0,30}\.\.\/sources\/intake/.test(bookJs));
+check('book viewer does not display a raw file path/name', !/\$\('pdfPath'\)\.textContent\s*=\s*b\[6\]/.test(bookJs) && !/\$\('fileName'\)\.textContent\s*=\s*b\[5\]/.test(bookJs));
+const bookVisible = bookHtml
+  .replace(/<script[\s\S]*?<\/script>/gi, ' ')
+  .replace(/<style[\s\S]*?<\/style>/gi, ' ')
+  .replace(/<[^>]+>/g, ' ');
+['sources/intake', 'מניפסט', 'הריפו', 'מקורות', 'מקוריים'].forEach(w =>
+  check('book view has no "' + w + '"', bookVisible.indexOf(w) < 0));
+check('deploy bundles learning materials into the published site', /generator\/assets\/sources/.test(deployYml));
+
 console.log(fails ? 'PREMIUM_UI_FAIL (' + fails + ')' : 'PREMIUM_UI_PASS');
 process.exit(fails ? 1 : 0);
