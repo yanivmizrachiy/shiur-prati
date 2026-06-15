@@ -48,6 +48,23 @@ check('no split work-area (.work-area removed)', setSrc.indexOf('class="work-are
 check('no split "דרך:" label', setSrc.indexOf('work-label">דרך:') < 0 && setSrc.indexOf('>דרך:<') < 0);
 check('no split "תשובה:" work label', setSrc.indexOf('work-label">תשובה:') < 0);
 
+// ── 3b. No developer/repo jargon in the regular teacher view ──
+// Teachers see pedagogy, not repo words. Check the VISIBLE text of index.html
+// (scripts/styles/tags stripped, so code identifiers and src paths don't count).
+const indexVisible = index
+  .replace(/<script[\s\S]*?<\/script>/gi, ' ')
+  .replace(/<style[\s\S]*?<\/style>/gi, ' ')
+  .replace(/<[^>]+>/g, ' ');
+['מנוע', 'מקור', 'QA', 'fallback', 'Registry'].forEach(w =>
+  check('teacher view has no "' + w + '"', indexVisible.indexOf(w) < 0));
+check('no "גלריית מנועים" link text', index.indexOf('גלריית מנועים') < 0);
+check('no "QA חזותי" link text', index.indexOf('QA חזותי') < 0);
+// Topic-dropdown labels are cleaned of internal markers (✦ / מנוע / גרסה חכמה) at display time.
+const coreSrc = read('generator/core.js');
+check('cleanTopicLabel exists and strips internal markers', /function cleanTopicLabel/.test(coreSrc) && /✦/.test(coreSrc) && /מנוע/.test(coreSrc));
+check('topic dropdown applies cleanTopicLabel', /cleanTopicLabel\(t\[1\]\)/.test(coreSrc));
+check('worksheet title applies cleanTopicLabel', /cleanTopicLabel\(/.test(setSrc));
+
 // ── 4. Unified premium image export pipeline ──
 check('captureExerciseCardAsPng exists', /function captureExerciseCardAsPng/.test(exportSrc));
 check('capture uses html2canvas', /html2canvas\(/.test(exportSrc));

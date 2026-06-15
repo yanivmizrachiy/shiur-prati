@@ -51,7 +51,7 @@ const g7b = read('docs/SOURCE_FIT_GEOMETRY_G7_PYTHAGORAS_ANGLES_20260612.md');
 const g8 = read('docs/SOURCE_FIT_GEOMETRY_G8_EXPANSION_20260612.md');
 
 must(pkg, 'package scripts', ['verify:all', 'verify:runtime', 'verify:links', 'verify:book', 'verify:inventory']);
-must(index, 'index digital book link', ['book.html', 'ספר מקורות דיגיטלי']);
+must(index, 'index digital book link', ['book.html', 'ספר חומרי לימוד']);
 must(bookJs, 'digital book source list', [
   '01_grade-7_algebra_curriculum.pdf',
   '02_grade-8_algebra_curriculum.pdf',

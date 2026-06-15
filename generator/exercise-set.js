@@ -74,7 +74,7 @@ function generateSet(){
       ex.questionHTML=ex.questionHTML.replace('<div class="mcq-choices">',mcqInstr+'<div class="mcq-choices">');
   });
   const sel=document.getElementById('st');
-  const topicLabel=(sel.options[sel.selectedIndex]?.textContent||'').replace(/\s*—\s*(מנוע (מלא|חדש)|גרסה חכמה)\s*✦?\s*$/,'');
+  const topicLabel=(typeof cleanTopicLabel==='function'?cleanTopicLabel(sel.options[sel.selectedIndex]?.textContent||''):(sel.options[sel.selectedIndex]?.textContent||''));
   const domainKey=typeof domain==='function'?domain():'numeric';
   const meta={
     topicLabel:topicLabel,

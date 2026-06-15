@@ -39,7 +39,7 @@
     const fu = (meta.followUpIdeas && meta.followUpIdeas.length) ? meta.followUpIdeas.join(' · ') : '';
     return '<div class="teacher-card teacher-only" data-html2canvas-ignore="true">'
       + '<div class="tc-title">כרטיס מורה</div>'
-      + row('מקור', meta.sourceFile)
+      + row('חומר לימוד', meta.sourceFile)
       + row('כיתה/תחום', (meta.grade ? 'כיתה ' + meta.grade : '') + (meta.domain ? ' · ' + meta.domain : ''))
       + row('מיומנות', meta.skill)
       + row('משפחת שאלה', meta.questionFamily + (meta.familyProvenance ? ' (' + meta.familyProvenance + ')' : ''))
@@ -60,7 +60,7 @@
       case 'question_solution': return q + '\n\n— פתרון —\n' + a;
       case 'teacher_card':
         return ['כרטיס מורה',
-          m.sourceFile ? 'מקור: ' + m.sourceFile : '',
+          m.sourceFile ? 'חומר לימוד: ' + m.sourceFile : '',
           m.skill ? 'מיומנות: ' + m.skill : '',
           m.questionFamily ? 'משפחת שאלה: ' + m.questionFamily : '',
           m.learningGoal ? 'מטרת למידה: ' + m.learningGoal : '',
@@ -113,7 +113,7 @@
       + '<select class="tc-sel" id="fuMode' + i + '">' + fuOpts + '</select>'
       + b('followUp(' + i + ')', '➟ שאלת המשך', 'tc-follow')
       + b('toggleSolution(' + i + ')', '✓ פתרון')
-      + b('toggleSource(' + i + ')', 'ⓘ מקור')
+      + b('toggleSource(' + i + ')', 'ⓘ חומר לימוד')
       + b('toggleGraphic(' + i + ')', '▣ שרטוט')
       + '</div>'
       + '<div class="tc-group tc-export">'
@@ -190,7 +190,7 @@
     if (el) el.classList.toggle('show');
   }
   Teacher.toggleSolution = function (i) { toggleClass(i, 'inline-solution', function (ex) { const d = document.createElement('div'); d.className = 'inline-solution teacher-only'; d.setAttribute('data-html2canvas-ignore', 'true'); d.innerHTML = '<div class="is-title">פתרון</div>' + (ex.answerHTML || ''); if (typeof renderMathInElement === 'function') setTimeout(function () { renderMathInElement(d, { delimiters: [{ left: '$$', right: '$$', display: true }, { left: '$', right: '$', display: false }], throwOnError: false }); }, 0); return d; }); };
-  Teacher.toggleSource = function (i) { toggleClass(i, 'inline-source', function (ex) { const m = ex.meta || {}; const d = document.createElement('div'); d.className = 'inline-source teacher-only'; d.setAttribute('data-html2canvas-ignore', 'true'); d.innerHTML = 'מקור: ' + (m.sourceFile || '—') + ' · משפחה: ' + (m.questionFamily || '—'); return d; }); };
+  Teacher.toggleSource = function (i) { toggleClass(i, 'inline-source', function (ex) { const m = ex.meta || {}; const d = document.createElement('div'); d.className = 'inline-source teacher-only'; d.setAttribute('data-html2canvas-ignore', 'true'); d.innerHTML = 'חומר לימוד: ' + (m.sourceFile || '—') + ' · משפחה: ' + (m.questionFamily || '—'); return d; }); };
   Teacher.toggleGraphic = function (i) { const card = document.getElementById('exCard' + i); if (!card) return; const svg = card.querySelector('.ex-body svg, .ex-body table'); if (svg) svg.classList.toggle('hidden-graphic'); };
 
   function flash(msg) { let t = document.getElementById('tcToast'); if (!t) { t = document.createElement('div'); t.id = 'tcToast'; t.className = 'tc-toast'; document.body.appendChild(t); } t.textContent = msg; t.classList.add('show'); setTimeout(function () { t.classList.remove('show'); }, 1400); }
