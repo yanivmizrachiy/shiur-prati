@@ -39,8 +39,11 @@ check('image bar is excluded from the captured image',
   /<div class="ex-imgbar" data-html2canvas-ignore="true">/.test(setSrc));
 check('image buttons call the unified actions', /exImageCopy\(/.test(setSrc) && /exImageDownload\(/.test(setSrc));
 
-// ── 3. One student answer box, no split work area ──
-check('student answer box is "תשובת התלמיד"', setSrc.indexOf('תשובת התלמיד') >= 0 && /class="answer-box"/.test(setSrc));
+// ── 3. One clean, untitled student answer box, no split work area ──
+check('one student answer box via stable hook', /data-student-answer-box="true"/.test(setSrc) && /class="answer-box"/.test(setSrc));
+check('answer box is captured in the image (not html2canvas-ignored)',
+  /<div class="answer-box" data-student-answer-box="true">(?![^>]*html2canvas-ignore)/.test(setSrc));
+check('answer box has NO title/label ("תשובת התלמיד")', setSrc.indexOf('תשובת התלמיד') < 0 && setSrc.indexOf('answer-box-head') < 0);
 check('no split work-area (.work-area removed)', setSrc.indexOf('class="work-area"') < 0);
 check('no split "דרך:" label', setSrc.indexOf('work-label">דרך:') < 0 && setSrc.indexOf('>דרך:<') < 0);
 check('no split "תשובה:" work label', setSrc.indexOf('work-label">תשובה:') < 0);

@@ -88,17 +88,18 @@ function generateSet(){
   renderExerciseSet(meta,exercises);
 }
 
-// One professional student answer box ("תשובת התלמיד") for every question
-// type — replaces the old split work areas (דרך:/תשובה:, verdict, error/fix).
-// The box is part of the captured card (it is NOT html2canvas-ignored), so the
-// copied / downloaded image always carries a clean, labeled place to answer.
-// Line count adapts to the type so there is enough room without wasting paper.
+// One clean, untitled student answer box for every question type — replaces the
+// old split work areas (דרך:/תשובה:, verdict, error/fix). No heading or label:
+// just a professional blank writing area, like a printed worksheet. The box is
+// part of the captured card (it is NOT html2canvas-ignored), so the copied /
+// downloaded image always carries the writing space. A stable
+// data-student-answer-box hook lets verifiers assert the box exists without
+// depending on any visible label text. Line count adapts to the question type.
 function workAreaHTML(qtype){
   const LINES={open:4,mistake:4,tf:3,mcq:2};
   const n=LINES[qtype]||3;
   let wl='';for(let i=0;i<n;i++)wl+='<div class="wl"></div>';
-  return '<div class="answer-box">'
-    +'<div class="answer-box-head">תשובת התלמיד</div>'
+  return '<div class="answer-box" data-student-answer-box="true">'
     +'<div class="answer-box-body">'+wl+'</div></div>';
 }
 
