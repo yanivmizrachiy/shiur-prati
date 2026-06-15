@@ -86,8 +86,8 @@ npm run verify:deep
 
 - Single-answer mode exists and prints a single-answer instruction.
 - Multi-answer wording exists and the answer key supports 1..N correct answers.
-- Current engine content still emits exactly one correct answer per MCQ; real multi-correct content remains a future item and must not be claimed as completed until engines actually emit more than one correct answer.
-- **Verified 2026-06-15:** despite PR #15/#17 titles, `A7-04-ENGINE` emits exactly **one** correct choice in both single and multi mode (40 samples). The standalone guard `tools/verify-multi-correct-coverage.mjs` currently **fails** and is **not** wired into `verify:deep`. Real multi-correct MCQ is therefore `NOT DONE`; finishing it (and wiring the guard into `verify:deep`) is open work.
+- On `main`, engine content still emits exactly one correct answer per MCQ; do not claim multi-correct on the live site until PR #25 is merged and Pages redeploys.
+- **Root cause found + fixed (PR #25):** despite PR #15/#17 titles, `A7-04-ENGINE` emitted exactly **one** correct choice in both single and multi mode (verified 2026-06-15, 40 samples) because the `getEngineExercise` wrapper chain dropped the `mcqMode` argument. PR #25 (`fix/forward-mcqmode-multi-correct`) forwards `opts` through every wrapper and wires `tools/verify-multi-correct-coverage.mjs` into `verify:deep`. After the fix: multi → 2 correct, single → 1 correct (40/40), `verify:deep` PASS. Real multi-correct MCQ is `DONE` once PR #25 is merged.
 
 ### Teacher layer
 
@@ -152,7 +152,7 @@ Repository paths:
 
 1. Merge the UI/UX premium round in order (PR1 → PR2 → PR3 → PR4 → PR5) and confirm Pages redeploys; then run the live UI checklist in `RULES.md` §9.
 2. Next content feature (after the UI round): **U7-03 single-answer MCQ** from source 06 (U7-03-ENGINE currently has only open + TF).
-3. Finish real multi-correct MCQ (A7-04 still emits one correct) and wire `verify-multi-correct-coverage.mjs` into `verify:deep`.
+3. Merge PR #25 to make real multi-correct MCQ live (A7-04 multi → 2 correct; guard wired into `verify:deep`).
 4. Human visual QA across engines using `generator/visual-qa.html`.
 5. Real A4 print review, with and without answer key.
 6. Confirm teacher-only content never appears in student print/export.

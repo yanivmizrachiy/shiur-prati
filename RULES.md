@@ -108,29 +108,46 @@ Five branches were pushed (not yet merged). **Merge order: PR1 → PR2 → PR3 �
 - **PDF inventory = 20:** 10 working (folders `01-…10-…`) + 10 in `originals/`; the audit found **no accidental duplicates** (originals are intentional backups).
 - Source-backed coverage-gaps report exists for the roadmap.
 
-### ⚠️ Verified discrepancy — A7-04 "multi-correct" is NOT working
+### A7-04 "multi-correct" — was broken on `main`, fixed by PR #25
 
-Despite PR #15 ("real multi-correct A7-04 MCQ") and PR #17 (guard):
+What was wrong on `main` (HEAD `ba1a0ee`), verified 2026-06-15 (40 samples):
+- Despite PR #15/#17 titles, `A7-04-ENGINE` emitted **exactly 1 correct answer in
+  BOTH single and multi mode**; the guard `tools/verify-multi-correct-coverage.mjs`
+  **failed (30)** and was **not** wired into `verify:deep`.
+- Root cause: the `getEngineExercise` decorator chain dropped the 4th `opts`
+  argument (which carries `mcqMode`) before it reached the engine. The multi-correct
+  engine logic already existed but was unreachable.
 
-- `A7-04-ENGINE` emits **exactly 1 correct answer per MCQ in BOTH single and multi mode** (verified 2026-06-15, 40 samples → max 1 correct).
-- The guard `tools/verify-multi-correct-coverage.mjs` **FAILS (30 failures)** and is **NOT wired into `verify:deep`**, so the failure is currently unenforced.
-- The coverage-gaps report wrongly marks A7-04 as "MCQ multi ✅".
+Fix: **PR #25** (`fix/forward-mcqmode-multi-correct`) forwards `opts` through every
+wrapper and wires the guard into `verify:deep`. Verified after the fix: multi → 2
+correct (40/40), single → 1 correct (40/40), `verify:deep` PASS.
 
-**Therefore real multi-correct MCQ is `NOT DONE`.** Do not document it as complete
-until an engine actually emits ≥2 correct choices and the guard passes inside `verify:deep`.
-The MCQ **UI** (single/multi instruction + answer key supporting 1..N) does exist; the
-**engine content** does not yet produce more than one correct answer.
+Status: real multi-correct MCQ is **`DONE` once PR #25 is merged**. Until then,
+`main` still emits one correct answer — do not claim it on the live site before
+PR #25 is merged and Pages redeploys.
 
 ---
 
-## 7. Open work / next steps
+## 7. Open PR queue & merge order
 
-### Immediate (this round)
-1. Merge PR1 → 2. PR2 → 3. PR3 → 4. PR4 (guard) → 5. PR5 (docs).
-6. After Pages redeploys, verify the live site (see §9 checklist).
-7. Only then continue content features.
+All open PRs were created 2026-06-15; each passes `verify:deep`. Recommended order:
 
-### Next content PR (after the UI round)
+```text
+1. #21  design/professional-exercise-card-v1        (UI PR1)
+2. #22  design/student-answer-box                   (UI PR2)
+3. #23  feature/premium-image-export-and-bw-mode    (UI PR3)
+4. #24  test/premium-ui-guards                      (UI guard, STACKED on #21–#23)
+5. #25  fix/forward-mcqmode-multi-correct           (real A7-04 multi-correct + guard in verify:deep)
+6. #20  docs/update-central-ai-rules                (this central rules + status PR)
+```
+
+- Do not merge #24 before #21–#23. `#24` and `#25` both touch the `package.json`
+  `verify:deep` line — trivial conflict, keep both `verify:premium-ui` and `verify:multi-correct`.
+- `docs/refresh-status-after-ui-and-pages` (old "PR5") is **superseded by #20** — do not merge it.
+- After each merge, confirm GitHub Actions `verify:deep` is green; after the last
+  merge, confirm Pages redeploys and run the §9 live checklist.
+
+### Next content PR (after the above)
 ```text
 feat: add source-backed MCQ single to U7-03-ENGINE
 ```
@@ -141,8 +158,8 @@ feat: add source-backed MCQ single to U7-03-ENGINE
 ```text
 feat: add a second source-backed multi-correct MCQ path
 ```
-- Candidate: numeric fraction-equivalence (source **05** or **07**) — and/or actually
-  finish A7-04 multi-correct and wire its guard into `verify:deep`.
+- Candidate: numeric fraction-equivalence (source **05** or **07**), now that the
+  multi-correct dispatch works (PR #25).
 
 ### Do NOT
 - Add Grade-8 numeric or uncertainty engines without **new** source intake.
