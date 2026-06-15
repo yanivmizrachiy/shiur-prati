@@ -466,9 +466,10 @@ svg text { unicode-bidi: plaintext; }
   font-weight: inherit;
 }
 
-/* ── Student answer box: ONE professional "תשובת התלמיד" box per question.
-   Replaces the old split work areas; rendered inside the card so it is part of
-   the copied / downloaded image. ── */
+/* ── Student answer box: ONE clean, untitled writing box per question.
+   No heading/label — just a professional blank writing area, like a printed
+   worksheet. Rendered inside the card so it is part of the copied / downloaded
+   image. ── */
 .answer-box {
   margin-top: 16px;
   border: 1px solid var(--card-border, #e6eaf0);
@@ -476,16 +477,8 @@ svg text { unicode-bidi: plaintext; }
   background: #fcfdff;
   overflow: hidden;
 }
-.answer-box-head {
-  font-size: 0.82rem;
-  font-weight: 700;
-  color: var(--ink-soft, #475569);
-  padding: 7px 14px;
-  background: #f1f5f9;
-  border-bottom: 1px solid var(--card-border, #e6eaf0);
-}
 .answer-box-body {
-  padding: 14px 14px 8px;
+  padding: 16px 14px 8px;
 }
 .answer-box .wl {
   height: 30px;
@@ -628,8 +621,7 @@ svg text { unicode-bidi: plaintext; }
   .mcq-choices { gap: 4px; margin-top: 8px; }
   .mcq-choice { padding: 6px 10px; background: none; border-color: #cbd5e1; }
   .answer-box { margin-top: 10px; border-color: #94a3b8; background: none; }
-  .answer-box-head { background: none; color: #111827; padding: 3px 10px; border-bottom-color: #94a3b8; }
-  .answer-box-body { padding: 8px 10px 2px; }
+  .answer-box-body { padding: 10px 10px 2px; }
   .answer-box .wl { height: 34px; border-bottom-color: #64748b; }
   .answer-box .wl:last-child { border-bottom-color: #64748b; }
   .answer-key:not(.open) { display: none !important; }
