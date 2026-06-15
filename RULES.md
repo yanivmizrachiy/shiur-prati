@@ -130,6 +130,9 @@ PR #25 is merged and Pages redeploys.
 
 ## 7. Open PR queue & merge order
 
+> Detailed queue, dependency graph, conflict preflight + resolution:
+> `docs/reports/OPEN_PR_RELEASE_QUEUE_20260615.md`.
+
 All open PRs were created 2026-06-15; each passes `verify:deep`. Recommended order:
 
 ```text
