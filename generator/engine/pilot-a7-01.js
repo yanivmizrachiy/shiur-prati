@@ -33,10 +33,52 @@
     {a:'x',b:'y',n1:2,n2:5,left:'כרטיסי מבוגר',right:'כרטיסי ילד',unit:'כרטיסים',expr:'2x+5y'}
   ];
 
+  // Generalize family — the core source-file-01 skill: compute for concrete
+  // values, write the GENERAL expression with a variable, then SUBSTITUTE a value.
+  // (equilateral-triangle perimeter 3·s; fuel cost k·L; fuel cost + fixed surcharge.)
+  const GENERALIZE = [
+    {kind:'tri',  k:3, c:0, v:'m', n1:5,  n2:7,  sub:10},
+    {kind:'fuel', k:7, c:0, v:'b', n1:20, n2:30, sub:40},
+    {kind:'fuel', k:7, c:2, v:'b', n1:20, n2:30, sub:40},
+    {kind:'tick', k:8, c:0, v:'n', n1:4,  n2:6,  sub:10}
+  ];
+  function genParts(x){
+    const expr = x.c>0 ? `${x.k}${x.v}+${x.c}` : `${x.k}${x.v}`;
+    const exprSub = x.c>0 ? `${x.k}\\cdot ${x.sub}+${x.c}` : `${x.k}\\cdot ${x.sub}`;
+    const val = n => x.k*n + x.c;
+    if(x.kind==='tri') return {expr, exprSub, val, unit:'ס״מ', quantity:'היקף המשולש',
+      scene:'נתון משולש שווה־צלעות.',
+      concrete:n=>`מהו היקף משולש שווה־צלעות שאורך צלעו $${n}$ ס״מ?`,
+      general:`כתבו ביטוי כללי להיקף משולש שאורך צלעו $${x.v}$ ס״מ.`,
+      rule:'היקף משולש שווה־צלעות הוא פי $3$ מאורך הצלע'};
+    if(x.kind==='tick') return {expr, exprSub, val, unit:'שקלים', quantity:'מחיר הכרטיסים',
+      scene:`מחיר כרטיס להופעה הוא $${x.k}$ שקלים.`,
+      concrete:n=>`מהו מחיר $${n}$ כרטיסים?`,
+      general:`כתבו ביטוי כללי למחיר $${x.v}$ כרטיסים.`,
+      rule:'המחיר = מחיר כרטיס כפול מספר הכרטיסים'};
+    return {expr, exprSub, val, unit:'שקלים', quantity:'עלות הדלק',
+      scene:`מחיר ליטר דלק הוא $${x.k}$ שקלים${x.c>0?`, ובנוסף עמלה קבועה של $${x.c}$ שקלים לכל מילוי`:''}.`,
+      concrete:n=>`מהי העלות של $${n}$ ליטרים?`,
+      general:`כתבו ביטוי כללי לעלות של $${x.v}$ ליטרים.`,
+      rule:`העלות = מחיר לליטר כפול מספר הליטרים${x.c>0?' ועוד העמלה הקבועה':''}`};
+  }
+
+  // Sequence family — source file 01: an arithmetic sequence; find specific terms,
+  // the GENERAL n-th term (an algebraic expression), and a far term. aₙ = d·n + (a1−d).
+  const SEQ = [{a1:13,d:-2},{a1:3,d:4},{a1:5,d:5},{a1:2,d:3},{a1:20,d:-3},{a1:7,d:7}];
+  function seqExpr(d,a1){
+    const k=a1-d, dn=(d===1?'n':d===-1?'-n':d+'n');
+    if(k===0) return dn;
+    if(d<0 && k>0) return k+''+dn;          // "15-2n"
+    return dn + (k>0?'+'+k:''+k);            // "4n-1", "5n+2"
+  }
+  const seqVal = (d,a1,n) => d*n + (a1-d);
+  const seqTerms = x => [1,2,3,4,5].map(n=>seqVal(x.d,x.a1,n)).join(', ');
+
   function pickFamily(diff){
-    if(diff === 'basic') return E.pick(['from_words','simplify','match_expr']);
-    if(diff === 'challenge') return E.pick(['tower','simplify_mixed','tower','rect_expr','match_expr','two_var']);
-    return E.pick(['from_words','simplify','simplify_mixed','tower','rect_expr','match_expr','two_var']);
+    if(diff === 'basic') return E.pick(['from_words','simplify','match_expr','generalize','sequence']);
+    if(diff === 'challenge') return E.pick(['tower','simplify_mixed','rect_expr','match_expr','two_var','generalize','sequence']);
+    return E.pick(['from_words','simplify','simplify_mixed','tower','rect_expr','match_expr','two_var','generalize','sequence']);
   }
   function pickCase(f){
     if(f==='simplify') return E.pick(SIMPLIFY);
@@ -45,6 +87,8 @@
     if(f==='rect_expr') return E.pick(RECT);
     if(f==='match_expr') return E.pick(MATCH_EXPR);
     if(f==='two_var') return E.pick(TWO_VAR);
+    if(f==='generalize') return E.pick(GENERALIZE);
+    if(f==='sequence') return E.pick(SEQ);
     return E.pick(FROM_WORDS);
   }
 
@@ -52,6 +96,15 @@
     let correct, wrongs;
     if(family==='match_expr'){
       correct=x.correct; wrongs=x.wrongs;
+    }
+    else if(family==='generalize'){
+      const v=x.v,k=x.k,c=x.c;
+      correct = c>0 ? `${k}${v}+${c}` : `${k}${v}`;
+      wrongs = c>0 ? [`${k}${v}`, `${k+c}${v}`, `${v}+${k+c}`] : [`${v}+${k}`, `${k}+${v}`, `${k}`];
+    }
+    else if(family==='sequence'){
+      correct = seqExpr(x.d, x.a1);
+      wrongs = [seqExpr(x.d, x.a1 + x.d), seqExpr(x.d, x.d), seqExpr(x.d + 1, x.a1)];
     }
     else if(family==='two_var'){
       correct=x.expr; wrongs=[`${x.n1+x.n2}${x.a}${x.b}`, `${x.n1}${x.a}+${x.n2}`, `${x.a}+${x.b}+${x.n1+x.n2}`];
@@ -70,6 +123,20 @@
   }
 
   function question(family,x,qtype,tfTrue){
+    if(family==='sequence'){
+      const terms=seqTerms(x), expr=seqExpr(x.d,x.a1), wrongE=seqExpr(x.d,x.a1+x.d);
+      if(qtype==='tf') return `בסדרה $${terms},\\ldots$ האיבר ה-$n$ הוא $${tfTrue?expr:wrongE}$.`;
+      if(qtype==='mistake') return `נתונה הסדרה $${terms},\\ldots$ תלמיד כתב שהאיבר ה-$n$ הוא $${wrongE}$.`;
+      if(qtype==='mcq') return `נתונה הסדרה $${terms},\\ldots$\nאיזה ביטוי מתאר את האיבר ה-$n$?`;
+      return `נתונה הסדרה $${terms},\\ldots$\nא. מהו האיבר ה-$7$?\nב. כתבו ביטוי לאיבר ה-$n$.\nג. מהו האיבר ה-$50$?`;
+    }
+    if(family==='generalize'){
+      const g=genParts(x), wrong = x.c>0 ? `${x.k}${x.v}` : `${x.v}+${x.k}`;
+      if(qtype==='tf') return `${g.scene} הביטוי הכללי ל${g.quantity} עבור $${x.v}$ הוא $${tfTrue?g.expr:wrong}$.`;
+      if(qtype==='mistake') return `${g.scene} כדי לכתוב ביטוי ל${g.quantity} עבור $${x.v}$, תלמיד כתב $${wrong}$ — חיבר במקום להכפיל.`;
+      if(qtype==='mcq') return `${g.scene}\nאיזה ביטוי כללי מתאר את ${g.quantity} עבור $${x.v}$?`;
+      return `${g.scene}\nא. ${g.concrete(x.n1)}\nב. ${g.concrete(x.n2)}\nג. ${g.general}\nד. מהי התוצאה כאשר $${x.v}=${x.sub}$?`;
+    }
     if(family==='match_expr'){
       const wrong=x.wrongs[0];
       if(qtype==='tf') return `הביטוי $${tfTrue?x.correct:wrong}$ מתאים לתיאור: ${x.desc}.`;
@@ -121,6 +188,24 @@
 
   function answer(family,x,qtype,tfTrue){
     const wrong = qtype==='mistake' || (qtype==='tf' && !tfTrue);
+    if(family==='sequence'){
+      const expr=seqExpr(x.d,x.a1), dShown=(x.d<0?'('+x.d+')':x.d);
+      const prefix = wrong ? 'שגוי — האיבר ה-$n$: איבר ראשון ועוד $(n-1)$ פעמים ההפרש; יש לפשט.\n' : '';
+      return `${prefix}ההפרש הקבוע בין איברים עוקבים הוא $${x.d}$.
+$$a_n=${x.a1}+(n-1)\\cdot ${dShown}=${expr}$$
+א. האיבר ה-$7$: $${seqVal(x.d,x.a1,7)}$.
+ב. הביטוי הכללי לאיבר ה-$n$: $${expr}$.
+ג. האיבר ה-$50$: $${seqVal(x.d,x.a1,50)}$.`;
+    }
+    if(family==='generalize'){
+      const g=genParts(x);
+      const prefix = wrong ? 'שגוי — "פי" / "כפול" הוא כפל, לא חיבור; הביטוי הכללי מכפיל את המשתנה.\n' : '';
+      return `${prefix}${g.rule}.
+א. $${g.val(x.n1)}$ ${g.unit}.
+ב. $${g.val(x.n2)}$ ${g.unit}.
+ג. הביטוי הכללי: $$${g.expr}$$
+ד. הצבה $${x.v}=${x.sub}$:  $$${g.exprSub}=${g.val(x.sub)}$$ ${g.unit}.`;
+    }
     if(family==='match_expr'){
       const prefix = wrong ? 'שגוי — צריך לתרגם כל פעולה מילולית לפעולה אלגברית מתאימה.\n' : '';
       return `${prefix}התיאור: ${x.desc}
