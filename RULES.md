@@ -2,7 +2,7 @@
 # תרגילים — דף כללים מרכזי לבינה מלאכותית ולמפתחים
 
 Repository: `yanivmizrachiy/targilim` · Hebrew name: `תרגילים`
-**Last updated: 2026-06-15** · Baseline: 2026-06-14
+**Last updated: 2026-06-16** · Baseline: 2026-06-14
 
 > **This file is the central operating guide.** Any AI or developer must read it
 > (and `PROJECT_STATUS.md`) before any change. It overrides older claims found in
@@ -33,12 +33,15 @@ Repository: `yanivmizrachiy/targilim` · Hebrew name: `תרגילים`
 | Operating rules / forbidden actions / merge order | **`RULES.md`** (this file) |
 | Current project status snapshot | **`PROJECT_STATUS.md`** |
 | Pedagogy / per-topic intent | **`docs/SOURCE_BIBLE.md`** |
-| Approved source materials | **`sources/intake/2026-06-09/`** (10 PDFs) |
+| **Single truth snapshot (what exists NOW)** | **`PROJECT_TRUTH.md`** ← added 2026-06-16 |
+| Approved source materials | `sources/intake/2026-06-09/` (10 PDFs) |
 | Live engine inventory (the real list) | **`generator/engine/source-registry.js`** |
 | Quality gates | **`package.json`** scripts (`verify:deep`) |
 | Coverage gaps roadmap | `docs/reports/SOURCE_BACKED_COVERAGE_GAPS_20260614.md` |
 | PDF duplicate audit | `docs/reports/PDF_DUPLICATE_AUDIT_20260614.md` |
 | Verifier/tool index | `tools/README.md` · Docs index `docs/README.md` |
+| Phase 1 requirements status | `REQUIREMENTS_STATUS.md` |
+| Historical docs (do not act on) | `docs/planning/PRODUCT_REQUIREMENTS.md` · `docs/planning/TRUE_GENERATOR_TEACHER_CONTROLS_REQUIREMENTS.md` |
 
 Before adding any fact to docs, check it does not already live in one of the
 above. If it does, **link to it — do not copy it**.
@@ -48,15 +51,20 @@ above. If it does, **link to it — do not copy it**.
 ## 3. Repository structure
 
 ```text
-generator/              the live site + the generator runtime
-generator/engine/       engines, source-registry, pedagogy-registry, diagrams
-sources/                approved source PDFs (protected)
-docs/                   documentation
-docs/reports/           audit, coverage and hardening reports
-tools/                  verifiers and deep checks (run via package.json)
-.github/workflows/      CI + GitHub Pages deployment
-PROJECT_STATUS.md       current status snapshot
-RULES.md                this central operating guide
+generator/                     the live site + the generator runtime
+generator/engine/               engines, source-registry, pedagogy-registry, diagrams
+generator/sw.js                 PWA Service Worker (added 2026-06-16, PR #31)
+generator/manifest.webmanifest  PWA manifest (added 2026-06-16, PR #31)
+generator/icon.svg              PWA icon (added 2026-06-16, PR #31)
+sources/                        approved source PDFs (protected)
+docs/                           documentation
+docs/reports/                   audit, coverage and hardening reports
+docs/planning/                  historical planning docs (tagged — do not act on)
+tools/                          verifiers and deep checks (run via package.json)
+.github/workflows/              CI + GitHub Pages deployment
+PROJECT_STATUS.md               current status snapshot
+PROJECT_TRUTH.md                single truth snapshot — what exists NOW (added 2026-06-16)
+RULES.md                        this central operating guide
 ```
 
 ---
@@ -80,158 +88,135 @@ RULES.md                this central operating guide
 
 ---
 
-## 5. Recent UI/UX premium round — branches & merge order
+## 5. UI/UX round — fully merged to `main`
 
-Five branches were pushed (not yet merged). **Merge order: PR1 → PR2 → PR3 → PR4 → PR5.**
+All UI/UX branches from the 2026-06-15 round are **merged and live** on the site.
 
-| Order | Branch | Purpose | Status | Note |
-|---|---|---|---|---|
-| PR1 | `design/professional-exercise-card-v1` | Professional card + Assistant typography + larger diagrams | pushed, not merged | base of the round |
-| PR2 | `design/student-answer-box` | One clean untitled answer box replaces split דרך:/תשובה: (title removed in #24) | pushed, not merged | |
-| PR3 | `feature/premium-image-export-and-bw-mode` | Color/שחור־לבן only; central "העתק/הורד כתמונה"; unified `captureExerciseCardAsPng` | pushed, not merged | |
-| PR4 | `test/premium-ui-guards` | `verify:premium-ui` guard wired into `verify:deep` | pushed, not merged | **stacked on PR1–PR3** |
-| PR5 | `docs/refresh-status-after-ui-and-pages` | PROJECT_STATUS refresh for the round | pushed, not merged | docs |
+| PR | Purpose | Status |
+|---|---|---|
+| #21 | Professional card + Assistant typography | ✅ MERGED |
+| #22 | Single untitled student answer box | ✅ MERGED |
+| #23 | Premium image export + color/BW mode | ✅ MERGED |
+| #24 | verify:premium-ui guard wired into verify:deep | ✅ MERGED |
+| #27 | Worksheet polish (sharp math rects, no question-type badge) | ✅ MERGED |
+| #28 | Real A7-04 multi-correct (forward mcqMode; verify:multi-correct) | ✅ MERGED |
+| #29 | No blank answer box for MCQ/TF question types | ✅ MERGED |
+| #30 | Level selector shows רמה 1/2/3 and actually drives difficulty | ✅ MERGED |
+| #19 | Luxury landing page (factual, dry copy) | ✅ MERGED |
+| #20 | Central AI rules + status refresh | ✅ MERGED |
 
-- **Do not merge PR4 before PR1–PR3** (the guard only passes when the UI it protects is present).
-- **Do not claim the live site has these UI changes** until they are merged into `main` and Pages redeploys.
-- This central-rules PR (`docs/update-central-ai-rules`) overlaps `PROJECT_STATUS.md` with PR5; merge one, then rebase the other.
-
----
-
-## 6. Verified completed work (only what was empirically checked on 2026-06-15)
-
-- GitHub Pages publishes `generator/` from `main`.
-- `npm run verify:deep` exists and aggregates the deep gates (see `package.json`).
-- **50 engine topics (`*-ENGINE`) / 0 fallback** — counted from `source-registry.js`.
-- **No `A8-04-ENGINE`** (A8-04 inequalities is legacy in `a8-03.js`).
-- Merged on `main` (HEAD `ba1a0ee`): PR #15 (A7-04 work), **#16** (stress PER → 100), **#17** (A7-04 multi-correct guard, standalone), **#18** (PDF duplicate audit, no deletion).
-- **PDF inventory = 20:** 10 working (folders `01-…10-…`) + 10 in `originals/`; the audit found **no accidental duplicates** (originals are intentional backups).
-- Source-backed coverage-gaps report exists for the roadmap.
-
-### A7-04 "multi-correct" — was broken on `main`, fixed by PR #25
-
-What was wrong on `main` (HEAD `ba1a0ee`), verified 2026-06-15 (40 samples):
-- Despite PR #15/#17 titles, `A7-04-ENGINE` emitted **exactly 1 correct answer in
-  BOTH single and multi mode**; the guard `tools/verify-multi-correct-coverage.mjs`
-  **failed (30)** and was **not** wired into `verify:deep`.
-- Root cause: the `getEngineExercise` decorator chain dropped the 4th `opts`
-  argument (which carries `mcqMode`) before it reached the engine. The multi-correct
-  engine logic already existed but was unreachable.
-
-Fix: **PR #25** (`fix/forward-mcqmode-multi-correct`) forwards `opts` through every
-wrapper and wires the guard into `verify:deep`. Verified after the fix: multi → 2
-correct (40/40), single → 1 correct (40/40), `verify:deep` PASS.
-
-Status: real multi-correct MCQ is **`DONE` once PR #25 is merged**. Until then,
-`main` still emits one correct answer — do not claim it on the live site before
-PR #25 is merged and Pages redeploys.
+**Open branch — not yet merged:** `docs/critical-improvements-20260616` → PR #31
+(SOURCE_BIBLE fix, PROJECT_TRUTH.md, PWA, gallery filter, sticky CTA, verify:pwa 22/22 PASS)
 
 ---
 
-## 7. Merge status (the UI/UX round is DONE)
+## 6. Verified completed work (empirically confirmed, 2026-06-16)
 
-The 2026-06-15 round is **merged to `main`** and live. Historical detail:
-`docs/reports/OPEN_PR_RELEASE_QUEUE_20260615.md`, `docs/reports/MERGE_RUNBOOK_20260615.md`.
+- **GitHub Pages** publishes `generator/` from `main` — live at https://yanivmizrachiy.github.io/targilim/
+- **`npm run verify:deep`** — 24 gates (was 23; `verify:pwa` added 2026-06-16).
+- **50 engine topics (`*-ENGINE`) / 0 fallback** — runtime-verified from `source-registry.js`.
+- **No `A8-04-ENGINE`** — A8-04 inequalities is legacy/source-fit inside `a8-03.js`.
+- **PDF inventory = 20:** 10 working (`01-…`–`10-…`) + 10 in `originals/` (intentional backups, no deletion).
+- **A7-04 multi-correct — DONE** (PR #28): `mcqMode` forwarded through all wrappers; multi → 2 correct, single → 1 correct. `verify:multi-correct` in `verify:deep`.
+- **MCQ shuffle** — real shuffle (א/ב/ג/ד even distribution), no leakage.
+- **Print-first** — teacher-only content hidden in print/export. Verified.
+- **Image export** — `captureExerciseCardAsPng` unified, waits fonts.ready + 2x rAF. PNG includes full card and drawings.
+- **Level selector** — רמה 1 / רמה 2 / רמה 3 labels drive `basic/standard/challenge` correctly (PR #30).
+- **No blank answer box under MCQ/TF** (PR #29) — answer space only for open/mistake types.
+
+### SOURCE_BIBLE — fixed 2026-06-16 (branch PR #31)
+
+`tools/gen-source-bible.mjs` had hardcoded `"33 active + 17 fallback"` — fixed to dynamic calculation from `E.PEDAGOGY[id].status`. `docs/SOURCE_BIBLE.md` regenerated: header now correctly reads **`50 dedicated engines / 0 fallback`**.
+
+### PWA — added 2026-06-16 (branch PR #31, pending merge)
+
+| File | Description |
+|---|---|
+| `generator/manifest.webmanifest` | RTL Hebrew, display:standalone, name/short_name/icon |
+| `generator/sw.js` | Network-first service worker, offline fallback, pre-cache core assets |
+| `generator/icon.svg` | Dark `#0f172a` bg, blue ת, gold ² superscript |
+| `generator/index.html` | `<link rel="manifest">`, `<link rel="apple-touch-icon">`, SW registration |
+| `tools/verify-pwa.mjs` | 22/22 checks: manifest JSON + fields, icon, sw.js structure, index.html wiring |
+| `package.json` | `verify:pwa` wired to end of `verify:deep` |
+
+### Gallery filter improvements — 2026-06-16 (branch PR #31)
+
+- Label "Provenance" → **"מוצא מקור"** (Hebrew)
+- `.active-filter` CSS class: blue border + light blue bg when filter is active
+- **✕ איפוס** button: resets all 4 filters in one click
+- Uniform select/input styling across the filter bar
+
+### Sticky CTA + progress indicator — 2026-06-16 (branch PR #31)
+
+- `#stickyGenBar`: `position:fixed; bottom:0`, dark backdrop, Intersection Observer on `#btnGenMain` — shown only when main button scrolled out of viewport
+- G2: `⏳ מכין…` spinner on generate() start, `הופקו N תרגילים בהצלחה ✓` on completion
+- Double rAF before `origGenerate()` — allows spinner repaint before heavy sync work
+
+### Multi-correct status (2026-06-16)
+
+| Engine | Status |
+|---|---|
+| A7-04 (ביטויים שקולים) | ✅ DONE — PR #28 merged |
+| 49 other engines | ⏳ PENDING Phase 2 — still emit 1 correct in multi mode |
+
+Phase 2: add real multi-correct paths only where natural and source-grounded. See `NEXT_STEPS.md`.
+
+## 7. PR and branch status (2026-06-16)
 
 ```text
-MERGED: #21 professional card + typography
-MERGED: #22 single untitled student answer box
-MERGED: #23 premium image export + color/BW only
-MERGED: #24 verify:premium-ui guard
-MERGED: #27 worksheet polish (sharp math rects + no question-type badge)
-MERGED: #28 real A7-04 multi-correct (forward mcqMode; verify:multi-correct in verify:deep)
-LAST:   #20 this central rules + status PR
-CLOSED: #25 (superseded by #28) · docs/refresh-status-after-ui-and-pages (superseded by #20)
-HOLD:   #19 luxury landing page (draft; rebase on main, then review)
+MERGED to main:
+  #19 luxury landing page (factual dry copy)
+  #20 central AI rules + status refresh
+  #21 professional card + typography
+  #22 single untitled student answer box
+  #23 premium image export + color/BW only
+  #24 verify:premium-ui guard
+  #27 worksheet polish (sharp math rects, no question-type badge)
+  #28 real A7-04 multi-correct (forward mcqMode; verify:multi-correct)
+  #29 no blank answer box under MCQ/TF
+  #30 level selector רמה 1/2/3 drives difficulty correctly
+
+OPEN — awaiting verify:deep green + Yaniv approval:
+  #31 docs/critical-improvements-20260616
+      SOURCE_BIBLE fix, PROJECT_TRUTH.md, PWA (manifest+sw+icon),
+      gallery filter (Hebrew labels + active-filter + reset),
+      sticky CTA + progress indicator, verify:pwa (22/22 PASS)
+
+STALE / DO NOT MERGE without full review:
+  claude/source-fit-coordinate-chart-v1
+  claude/source-fit-visual-expansion-v2
+  a804clean
+  fix/release-docs-baseline-20260614 (v1 + v2)
+  sources-intake-20260609
+
+CLOSED / SUPERSEDED:
+  #25 (superseded by #28)
+  #26 (resolved by #27, closed manually)
 ```
 
-`verify:deep` now includes `verify:premium-ui` + `verify:worksheet-polish` + `verify:multi-correct`.
+`verify:deep` gates (24 total, current on PR #31 branch):
+`hygiene · baseline · brand · links · book · inventory · source-fit · source-lock · source-bible · premium-geometry · coordinate-grid · numeric7 · algebra8 · geometry7 · geometry8 · runtime · coverage · stress · variety · visual · family · followups · graphics-quality · visual-coverage · gallery · visual-qa · teacher · teacher-controls · copy-export · premium-ui · worksheet-polish · multi-correct · print-layout · release-docs · pwa`
 
-### Next content work — choose only after checking existing coverage
-- **U7-03 single-answer MCQ already exists** in `source-fit-extensions.js` (verified: U7-03-ENGINE emits MCQ with choices). **Do not duplicate it.**
-- Real multi-correct dispatch works (PR #28). A future option (approval only): a second source-backed multi-correct path (e.g. numeric fraction-equivalence, source 05/07).
-- Always check existing engine coverage before starting new content.
+### Next content work — check existing coverage first
+- **U7-03 MCQ already exists** in `source-fit-extensions.js`. Do not duplicate.
+- Multi-correct Phase 2: 49 engines pending. Only add where natural + source-grounded. See `NEXT_STEPS.md`.
+- **Do not** add Grade-8 numeric/uncertainty engines without new source intake.
 
-### Do NOT
-- Add Grade-8 numeric or uncertainty engines without **new** source intake.
+## Appendix — historical notes
 
----
+### Engine count
+Earlier docs reference **"25 engines"** or **"33 active + 17 fallback"**. Both are historical.
+Current inventory: **50 dedicated `*-ENGINE` topics / 0 fallback** (runtime-verified, 2026-06-16).
+Authoritative live list: `generator/engine/source-registry.js`.
 
-## 8. Permanent design requirements (UI)
+### Removed scope
+Grade 9, separate booklet/PDF-workbook/A4-bulk/answer-key-booklet modes are **not backlog**.
+Do not reopen unless Yaniv explicitly says so.
 
-- The interface must look **premium**; fonts must read like a real math textbook.
-- View options are **`צבע` / `שחור־לבן` only** — never the words "גווני אפור".
-- Every exercise card carries central primary buttons **`העתק כתמונה`** and **`הורד כתמונה`**.
-- The copied/downloaded image must include **the full question and all drawings**.
-- Students see **one** clean, untitled answer box — no title/label, never split "דרך"/"תשובה". A stable `data-student-answer-box="true"` hook identifies it.
-- Diagrams must be **sharp, readable, not clipped**.
-- Mobile must look professional; print must be clean.
-- Teacher-only content must never appear in the student print/export.
+### Historical planning docs (do not act on)
+The following docs were written during initial planning and **do not reflect current implementation**.
+They are tagged with warning blocks and preserved for historical reference only:
+- `docs/planning/PRODUCT_REQUIREMENTS.md` — tagged with ⚠️ warning + reference to PROJECT_TRUTH.md
+- `docs/planning/TRUE_GENERATOR_TEACHER_CONTROLS_REQUIREMENTS.md` — tagged with contradiction table (4 levels claimed vs 3 actual; no worksheet claimed vs worksheet 1–10 actual)
 
----
-
-## 9. Mandatory tests
-
-Automated gate (required for every PR, must be green in GitHub Actions):
-```bash
-npm install
-npm run verify:deep
-```
-
-Manual UI checks (required when a UI PR is reviewed, on the **live** site after deploy):
-```text
-- open the live site
-- generate a worksheet
-- check color view
-- check black-and-white view
-- copy as image
-- download as image
-- open the PNG
-- confirm all drawings appear in the image
-- check mobile layout
-- check print output
-- confirm teacher-only content does not appear on the student page
-```
-
----
-
-## 10. AI Work Report Template
-
-Every AI must end its work by filling this in:
-
-```text
-Branch:
-PR:
-Changed files:
-What changed:
-UI / logic / docs:
-Sources touched:
-Engines touched:
-Registry touched:
-verify:deep:
-GitHub Actions:
-Live URL checked:
-Screenshot before:
-Screenshot after:
-Risks:
-What remains:
-Estimated improvement:
-```
-
----
-
-## 11. Roles
-
-- **Yaniv** — product owner and teacher; should not be asked to manage routine technical decisions or to repeat the documented vision.
-- **Claude** — project manager / pedagogy / design / quality-gate owner.
-- **ChatGPT/Codex** — execution assistants that preserve repository reality.
-
----
-
-## Appendix — historical note
-
-Earlier docs reference **"25 engines"**. That is historical: the current inventory is
-**50 engines** (25 dedicated `*-ENGINE` source-fit engines + 25 pilot engines), 0 fallback.
-The authoritative live list is `generator/engine/source-registry.js`. Removed scope
-(Grade 9, separate booklet/PDF-workbook/A4-bulk/answer-key-booklet modes) is **not** backlog
-and must not be reopened unless Yaniv explicitly says so.
+For current state: see `PROJECT_TRUTH.md` (added 2026-06-16) and `PROJECT_STATUS.md`.
