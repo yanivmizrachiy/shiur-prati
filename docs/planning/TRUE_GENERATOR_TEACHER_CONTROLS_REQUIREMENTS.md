@@ -1,5 +1,16 @@
 # TRUE GENERATOR — DETAILED TEACHER CONTROLS REQUIREMENTS
 
+> **⚠️ חזון/דרישות היסטוריות (2026-06-10) — חלקים מיושנים לעומת המצב הנוכחי.**
+>
+> | נושא | מסמך זה | מצב בפועל |
+> |---|---|---|
+> | רמות קושי | 4 רמות (remedial/standard/advanced/challenge) | **3 רמות** (basic/standard/challenge) |
+> | מצב worksheet | "no worksheet/booklet mode" | **מופק דף תרגילים 1–10** |
+> | מבנה מוצר | סינגל-קארד בלבד | **set דינמי + answer key + print** |
+> | סוגי שאלות | 10 סוגים | **4 סוגים** (open/mcq/tf/mistake) |
+>
+> מצב עדכני ומחייב: [`PROJECT_STATUS.md`](../../PROJECT_STATUS.md) · [`RULES.md`](../../RULES.md) · [`PROJECT_TRUTH.md`](../../PROJECT_TRUTH.md)
+
 Date: 2026-06-10
 Owner: Yaniv
 Project: Targilim / תרגילים

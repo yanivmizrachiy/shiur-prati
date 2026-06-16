@@ -5,7 +5,7 @@ _Do not edit by hand; edit the registry and regenerate._
 
 Sources 01–06 = direct question/example sources. 07–09 = principles, skills, misconceptions, visual requirements. **File 10 is never a question source.**
 
-- Topics: 50 (33 active engines + 17 fallback)
+- Topics: 50 (50 dedicated engines / 0 fallback)
 - Question families: 173
 
 ## Numeric

@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 192" width="192" height="192">
+  <rect width="192" height="192" rx="40" fill="#0f172a"/>
+  <!-- ת — Hebrew Tav, stylized as math symbol -->
+  <text x="96" y="130" font-family="Arial, Helvetica, sans-serif" font-size="110" font-weight="900" text-anchor="middle" fill="#2563eb">ת</text>
+  <!-- small math accent -->
+  <text x="148" y="68" font-family="Arial, Helvetica, sans-serif" font-size="38" font-weight="700" text-anchor="middle" fill="#f59e0b">²</text>
+</svg>

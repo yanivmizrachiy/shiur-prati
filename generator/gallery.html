@@ -12,6 +12,12 @@
 .gal-head h1{font-size:1.15rem;font-weight:800}.gal-head a{color:#93c5fd;text-decoration:none;font-weight:700;margin-inline-start:auto}
 .gal-filters{display:flex;gap:10px;flex-wrap:wrap;align-items:end;background:#fff;border-radius:14px;padding:14px 16px;margin:16px 0;box-shadow:0 1px 3px rgba(0,0,0,.08)}
 .gal-filters .f{display:flex;flex-direction:column;gap:4px}
+.gal-filters select,.gal-filters input{height:36px;border:1.5px solid #e2e8f0;border-radius:9px;padding:0 10px;font-size:.88rem;transition:border-color .15s}
+.gal-filters select:focus,.gal-filters input:focus{outline:none;border-color:#2563eb}
+.gal-filters select.active-filter{border-color:#2563eb;background:#eff6ff;font-weight:700}
+.gal-filters label{font-size:.78rem;font-weight:700;color:#64748b}
+.btn-reset{background:none;border:1.5px solid #e2e8f0;border-radius:9px;padding:0 14px;height:36px;cursor:pointer;font-weight:700;font-size:.82rem;color:#94a3b8;transition:all .15s;align-self:flex-end}
+.btn-reset:hover{border-color:#dc2626;color:#dc2626}
 .gal-stat{margin-inline-start:auto;color:#475569;font-weight:700;font-size:.85rem}
 .gal-grid{display:grid;grid-template-columns:1fr;gap:14px}
 @media(min-width:720px){.gal-grid{grid-template-columns:1fr 1fr}}
@@ -36,8 +42,9 @@
 <div class="gal-filters">
   <div class="f"><label for="fGrade">כיתה</label><select id="fGrade"><option value="">הכול</option><option value="7">ז׳</option><option value="8">ח׳</option></select></div>
   <div class="f"><label for="fDomain">תחום</label><select id="fDomain"><option value="">הכול</option><option value="geometry">גאומטריה</option><option value="algebra">אלגברה</option><option value="numeric">מספרי</option><option value="uncertainty">אי-ודאות</option></select></div>
-  <div class="f"><label for="fProv">Provenance</label><select id="fProv"><option value="">הכול</option><option value="exact">מדויק</option><option value="default">ברירת מחדל</option></select></div>
+  <div class="f"><label for="fProv">מוצא מקור</label><select id="fProv"><option value="">הכול</option><option value="exact">מדויק (ייעודי)</option><option value="default">בסיסי</option></select></div>
   <div class="f"><label for="fSearch">חיפוש</label><input id="fSearch" type="text" placeholder="מזהה / נושא" style="height:38px;border:1.5px solid #e2e8f0;border-radius:10px;padding:0 10px"></div>
+  <button class="btn-reset" id="btnReset" title="איפוס כל הסינונים">✕ איפוס</button>
   <span class="gal-stat" id="galStat"></span>
 </div>
 <div class="gal-grid" id="galGrid"></div>
@@ -166,8 +173,21 @@
     document.getElementById('galStat').textContent=shown+' / '+ids.length+' מנועים';
     document.getElementById('galEmpty').style.display=shown?'none':'block';
   }
-  ['fGrade','fDomain','fProv'].forEach(function(idf){document.getElementById(idf).addEventListener('change',applyFilter);});
-  document.getElementById('fSearch').addEventListener('input',applyFilter);
+  ['fGrade','fDomain','fProv'].forEach(function(idf){
+    document.getElementById(idf).addEventListener('change',function(){
+      this.classList.toggle('active-filter', this.value !== '');
+      applyFilter();
+    });
+  });
+  document.getElementById('fSearch').addEventListener('input',function(){
+    this.classList.toggle('active-filter', this.value.trim() !== '');
+    applyFilter();
+  });
+  document.getElementById('btnReset').addEventListener('click',function(){
+    ['fGrade','fDomain','fProv'].forEach(function(idf){var el=document.getElementById(idf);el.value='';el.classList.remove('active-filter');});
+    var fs=document.getElementById('fSearch');fs.value='';fs.classList.remove('active-filter');
+    applyFilter();
+  });
   applyFilter();
 })();
 </script>
