@@ -22,8 +22,12 @@ FNS.forEach(fn => check('Teacher.' + fn + ' is a function', Teacher && typeof Te
 const src = read('generator/teacher-mode.js');
 const cbStart = src.indexOf('function controlBar');
 const controlBarSrc = cbStart >= 0 ? src.slice(cbStart, src.indexOf('Teacher.decorateSet')) : src;
-const WIRED = ['refresh', 'easier', 'harder', 'cycleType', 'toggleNumbers', 'followUp',
-  'toggleSolution', 'toggleSource', 'toggleGraphic', 'copy', 'copyImage', 'exportHTML', 'exportPNG', 'addToWorksheet'];
+// Buttons surfaced in the lean teacher bar. easier/harder were removed (difficulty
+// is set by the main רמה 1/2/3 selector) and copyImage/exportHTML/exportPNG were
+// removed as redundant (image copy/download are the big per-card buttons). Those
+// Teacher.* functions still exist (checked in FNS above) — just not as buttons.
+const WIRED = ['refresh', 'cycleType', 'toggleNumbers', 'followUp',
+  'toggleSolution', 'toggleSource', 'toggleGraphic', 'copy', 'addToWorksheet'];
 WIRED.forEach(w => check('control bar wires ' + w + '()', controlBarSrc.indexOf("b('" + w + "(") >= 0));
 check('onclick handlers are namespaced to Teacher.*', /onclick="Teacher\.'/.test(src));
 
