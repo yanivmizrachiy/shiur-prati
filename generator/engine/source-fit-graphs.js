@@ -26,7 +26,7 @@
     const W=292,H=210,l=38,b=44,t=36,r=20,max=Math.max(...data.map(d=>d.v));
     const gap=11,bw=(W-l-r-gap*(data.length-1))/data.length;
     const bars=data.map((d,i)=>{ const h=Math.round((H-b-t)*d.v/max), x=l+i*(bw+gap), y=H-b-h; return `<rect x="${x}" y="${y}" width="${bw}" height="${h}" rx="7" fill="${T.helper}" stroke="${T.stroke}"/><text x="${x+bw/2}" y="${y-6}" font-size="11" font-weight="800" text-anchor="middle" fill="${T.given}">${d.v}</text><text x="${x+bw/2}" y="${H-22}" font-size="11" font-weight="800" text-anchor="middle" fill="${T.label}">${d.k}</text>`; }).join('');
-    return `<svg class="engine-svg" viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg"><rect x="12" y="10" width="268" height="186" rx="14" fill="${T.fill}" stroke="${T.stroke}" stroke-width="1.8"/><text x="146" y="31" fill="${T.label}" font-size="12" font-weight="800" text-anchor="middle">${title}</text><line x1="${l}" y1="${H-b}" x2="${W-r}" y2="${H-b}" stroke="${T.stroke}" stroke-width="2"/><line x1="${l}" y1="${H-b}" x2="${l}" y2="${t}" stroke="${T.stroke}" stroke-width="2"/>${bars}<text x="146" y="205" font-size="10.5" font-weight="800" text-anchor="middle" fill="${T.label}">מקור קובץ 06 — תרשים עמודות</text></svg>`;
+    return `<svg class="engine-svg" viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg"><rect x="12" y="10" width="268" height="186" rx="14" fill="${T.fill}" stroke="${T.stroke}" stroke-width="1.8"/><text x="146" y="31" fill="${T.label}" font-size="12" font-weight="800" text-anchor="middle">${title}</text><line x1="${l}" y1="${H-b}" x2="${W-r}" y2="${H-b}" stroke="${T.stroke}" stroke-width="2"/><line x1="${l}" y1="${H-b}" x2="${l}" y2="${t}" stroke="${T.stroke}" stroke-width="2"/>${bars}<text x="146" y="205" font-size="10.5" font-weight="800" text-anchor="middle" fill="${T.label}">תרשים עמודות</text></svg>`;
   }
 
   // mapping diagram (קלט→פלט). violating=true draws one input with TWO arrows
@@ -41,9 +41,9 @@
     body+=`<text x="${lx}" y="32" font-size="11.5" font-weight="800" text-anchor="middle" fill="${T.label}">קלט</text><text x="${rx}" y="32" font-size="11.5" font-weight="800" text-anchor="middle" fill="${T.label}">פלט</text>`;
     for(const y of ys){ body+=dot(lx,y,'#dbeafe'); body+=dot(rx,y,'#dbeafe'); }
     if(violating){ body+=arr(lx,ys[0],rx,ys[0],T.bad)+arr(lx,ys[0],rx,ys[1],T.bad)+arr(lx,ys[1],rx,ys[2],T.given)+arr(lx,ys[2],rx,ys[2],T.given);
-      body+=`<text x="140" y="190" font-size="10.5" font-weight="800" text-anchor="middle" fill="${T.bad}">קלט אחד → שני פלטים (אינה פונקציה) — מקור קובץ 02</text>`; }
+      body+=`<text x="140" y="190" font-size="10.5" font-weight="800" text-anchor="middle" fill="${T.bad}">קלט אחד → שני פלטים (אינה פונקציה)</text>`; }
     else { body+=arr(lx,ys[0],rx,ys[0],T.given)+arr(lx,ys[1],rx,ys[1],T.given)+arr(lx,ys[2],rx,ys[2],T.given);
-      body+=`<text x="140" y="190" font-size="10.5" font-weight="800" text-anchor="middle" fill="${T.given}">לכל קלט פלט אחד (פונקציה) — מקור קובץ 02</text>`; }
+      body+=`<text x="140" y="190" font-size="10.5" font-weight="800" text-anchor="middle" fill="${T.given}">לכל קלט פלט אחד (פונקציה)</text>`; }
     return `<svg class="engine-svg" viewBox="0 0 280 205" xmlns="http://www.w3.org/2000/svg" style="paint-order:stroke">${body}</svg>`;
   }
 

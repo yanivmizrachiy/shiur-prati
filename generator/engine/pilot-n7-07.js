@@ -92,7 +92,7 @@
       `<text x="${x+s/2}" y="${y+s/2+5}" fill="${T.label}" font-size="14" font-weight="800" text-anchor="middle">שטח = ${area}</text>`+
       `<text x="${x+s/2}" y="${y+s+20}" fill="${T.unknown}" font-size="13" font-weight="800" text-anchor="middle">צלע = ${sideLabel}</text>`+
       `<text x="${x-10}" y="${y+s/2}" fill="${T.unknown}" font-size="13" font-weight="800" text-anchor="end">${sideLabel}</text>`+
-      `<text x="100" y="172" fill="${T.label}" font-size="10" font-weight="700" text-anchor="middle">ריבוע: צלע = שורש השטח — מקור קובץ 05</text></svg>`;
+      `<text x="100" y="172" fill="${T.label}" font-size="10" font-weight="700" text-anchor="middle">ריבוע: צלע = שורש השטח</text></svg>`;
   }
   function visual(family,x){
     if(family==='missing_sq') return squareSvg(x.n+' סמ״ר','?');

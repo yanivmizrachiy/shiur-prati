@@ -51,7 +51,7 @@
       <text x="${X(max)+21}" y="${Y(0)+4}" font-size="12" font-weight="800" fill="${T.label}">x</text>
       <text x="${X(0)-4}" y="${Y(max)-18}" font-size="12" font-weight="800" fill="${T.label}">y</text>
       ${nums.join('')}${lines}${dots}
-      <text x="143" y="238" font-size="10.5" font-weight="800" fill="${T.label}" text-anchor="middle">רביע ראשון — מקור קובץ 05</text>
+      <text x="143" y="238" font-size="10.5" font-weight="800" fill="${T.label}" text-anchor="middle">רביע ראשון</text>
     </svg>`;
   }
 
@@ -71,7 +71,7 @@
       <text x="143" y="36" font-size="13" font-weight="800" fill="${T.label}" text-anchor="middle">השוואה לפי שיעור, לא רק לפי מספר</text>
       ${row(55,'כיתה א׳',c.n1,c.k1)}
       ${row(93,'כיתה ב׳',c.n2,c.k2)}
-      <text x="143" y="160" font-size="10.5" font-weight="800" fill="${T.label}" text-anchor="middle">מקור קובץ 06 — מלכודת תדירות יחסית</text>
+      <text x="143" y="160" font-size="10.5" font-weight="800" fill="${T.label}" text-anchor="middle">מלכודת תדירות יחסית</text>
     </svg>`;
   }
 

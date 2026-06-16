@@ -100,7 +100,7 @@
     return `<svg class="engine-svg" viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">`+
       `<line x1="${x0-6}" y1="${baseY}" x2="${x1+6}" y2="${baseY}" stroke="${T.stroke}" stroke-width="2"/>`+
       ticks+dots+
-      `<text x="${W/2}" y="13" fill="${T.label}" font-size="10.5" font-weight="700" text-anchor="middle">פיזור הנתונים על ציר — מקור קובץ 06</text></svg>`;
+      `<text x="${W/2}" y="13" fill="${T.label}" font-size="10.5" font-weight="700" text-anchor="middle">פיזור הנתונים על ציר</text></svg>`;
   }
 
   E.generateU801Engine = function(difficulty, questionType){
