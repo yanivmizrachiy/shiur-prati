@@ -45,7 +45,7 @@
 
   function answer(family,x,qtype,tfTrue){
     const even = x.n % 2 === 0;
-    const expand = Array(x.n).fill('(-'+x.a+')').join('\\times ');
+    const expand = Array(x.n).fill('(-'+x.a+')').join('\\cdot ');
     if(family==='compare_both'){
       const prefix = (qtype==='mistake'||qtype==='tf') ? (even ? 'שגוי — עם מעריך זוגי הם שונים!\n' : 'במקרה זה (מעריך אי-זוגי) הערכים שווים, אך הנימוק שגוי — הסוגריים כן קובעים את הבסיס.\n') : '';
       return `${prefix}א. $(-${x.a})^{${x.n}}$: הבסיס הוא $-${x.a}$.\n$$${expand}=${x.p}$$\nב. $-${x.a}^{${x.n}}$: קודם חזקה, אחר כך מינוס.\n$$-(${x.a}^{${x.n}})=${x.np}$$\n${even ? 'התוצאות שונות: $'+x.p+' \\ne '+x.np+'$.' : 'כאן התוצאות שוות במקרה ($'+x.p+'$) — אבל רק כי המעריך אי-זוגי.'}`;

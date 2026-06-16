@@ -47,18 +47,18 @@
 
   function question(family,x,qtype,tfTrue){
     if(family==='mul'){
-      if(qtype==='tf') return `$${wrap(x.a)} \\times ${wrap(x.b)} = ${tfTrue?x.r:-x.r}$.`;
-      if(qtype==='mistake') return `תלמיד חישב: "$${wrap(x.a)} \\times ${wrap(x.b)} = ${-x.r}$" — טעה בסימן.`;
-      return `חשבו: $$${wrap(x.a)} \\times ${wrap(x.b)} = ?$$`;
+      if(qtype==='tf') return `$${wrap(x.a)} \\cdot ${wrap(x.b)} = ${tfTrue?x.r:-x.r}$.`;
+      if(qtype==='mistake') return `תלמיד חישב: "$${wrap(x.a)} \\cdot ${wrap(x.b)} = ${-x.r}$" — טעה בסימן.`;
+      return `חשבו: $$${wrap(x.a)} \\cdot ${wrap(x.b)} = ?$$`;
     }
     if(family==='div'){
       if(qtype==='tf') return `$${wrap(x.a)} \\div ${wrap(x.b)} = ${tfTrue?x.r:-x.r}$.`;
       if(qtype==='mistake') return `תלמיד חישב: "$${wrap(x.a)} \\div ${wrap(x.b)} = ${-x.r}$" — טעה בכלל הסימנים.`;
       return `חשבו: $$${wrap(x.a)} \\div ${wrap(x.b)} = ?$$`;
     }
-    if(qtype==='tf') return `$${wrap(x.a)} \\times \\square = ${x.r}$ — הגורם החסר הוא $${tfTrue?x.m:-x.m}$.`;
-    if(qtype==='mistake') return `$${wrap(x.a)} \\times \\square = ${x.r}$. תלמיד כתב: "$\\square=${-x.m}$".`;
-    return `השלימו את הגורם החסר:\n$$${wrap(x.a)} \\times \\square = ${x.r}$$`;
+    if(qtype==='tf') return `$${wrap(x.a)} \\cdot \\square = ${x.r}$ — הגורם החסר הוא $${tfTrue?x.m:-x.m}$.`;
+    if(qtype==='mistake') return `$${wrap(x.a)} \\cdot \\square = ${x.r}$. תלמיד כתב: "$\\square=${-x.m}$".`;
+    return `השלימו את הגורם החסר:\n$$${wrap(x.a)} \\cdot \\square = ${x.r}$$`;
   }
 
   function signRule(a,b){
@@ -69,14 +69,14 @@
     const wrong = qtype==='mistake' || (qtype==='tf' && !tfTrue);
     if(family==='mul'){
       const prefix = wrong ? 'שגוי בסימן.\n' : '';
-      return `${prefix}${signRule(x.a,x.b)}:\n$$${wrap(x.a)} \\times ${wrap(x.b)} = ${x.r}$$`;
+      return `${prefix}${signRule(x.a,x.b)}:\n$$${wrap(x.a)} \\cdot ${wrap(x.b)} = ${x.r}$$`;
     }
     if(family==='div'){
       const prefix = wrong ? 'שגוי בסימן.\n' : '';
       return `${prefix}${signRule(x.a,x.b)} (כללי הסימנים זהים בכפל ובחילוק):\n$$${wrap(x.a)} \\div ${wrap(x.b)} = ${x.r}$$`;
     }
     const prefix = wrong ? 'שגוי — בודקים את הסימן: ' + signRule(x.a,x.m) + '.\n' : '';
-    return `${prefix}$$\\square = ${x.r} \\div ${wrap(x.a)} = ${x.m}$$\nבדיקה: $${wrap(x.a)} \\times ${wrap(x.m)} = ${x.r}$ ✓`;
+    return `${prefix}$$\\square = ${x.r} \\div ${wrap(x.a)} = ${x.m}$$\nבדיקה: $${wrap(x.a)} \\cdot ${wrap(x.m)} = ${x.r}$ ✓`;
   }
 
   E.generateN705Engine = function(difficulty, questionType){

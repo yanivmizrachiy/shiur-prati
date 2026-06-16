@@ -56,31 +56,31 @@
     }
     if(sub==='find_whole'){
       if(qt==='tf') return `אם $${x.k}$ ${x.ctx} הם $${x.p}\\%$, אז בסך הכל יש $${tfTrue?x.n:x.n+10}$ ${x.ctx}.`;
-      if(qt==='mistake') return `תלמיד חישב: "$${x.k}\\times ${x.p}\\div 100$" כדי למצוא את הכמות הכוללת.\nמצאו את הטעות.`;
+      if(qt==='mistake') return `תלמיד חישב: "$${x.k}\\cdot ${x.p}\\div 100$" כדי למצוא את הכמות הכוללת.\nמצאו את הטעות.`;
       return `$${x.k}$ ${x.ctx} מהווים $${x.p}\\%$ מכלל ה${x.ctx}.\nכמה ${x.ctx} יש בסך הכל?`;
     }
     if(qt==='tf') return `מתוך $${x.n}$ ${x.ctx}, $${x.k}$ ${x.ctx} הם $${tfTrue?x.p:x.p+10}\\%$.`;
-    if(qt==='mistake') return `תלמיד חישב: "$${x.n}\\div ${x.k}\\times 100$" כדי למצוא את האחוז.\nמצאו את הטעות.`;
+    if(qt==='mistake') return `תלמיד חישב: "$${x.n}\\div ${x.k}\\cdot 100$" כדי למצוא את האחוז.\nמצאו את הטעות.`;
     return `מתוך $${x.n}$ ${x.ctx}, $${x.k}$ ${x.ctx} השלימו משימה.\nכמה אחוזים מה${x.ctx} השלימו?`;
   }
 
   function answer(sub,x,qt,tfTrue){
     if(sub==='pct_of_n'){
       if(qt==='tf') return tfTrue
-        ? `$$${x.p}\\% \\text{ מ-} ${x.n}=\\frac{${x.p}}{100}\\times ${x.n}=${x.k}$$`
-        : `שגויה.\n$$${x.p}\\% \\text{ מ-} ${x.n}=\\frac{${x.p}}{100}\\times ${x.n}=${x.k}$$\nהתשובה הנכונה היא $${x.k}$, לא $${x.k+10}$.`;
-      if(qt==='mistake') return `הטעות: התלמיד חילק במקום לחשב אחוז מתוך כמות.\nהדרך הנכונה:\n$$\\frac{${x.p}}{100}\\times ${x.n}=${x.k}$$`;
-      return `$$${x.p}\\% \\text{ מ-} ${x.n}=\\frac{${x.p}}{100}\\times ${x.n}=${x.k}$$`;
+        ? `$$${x.p}\\% \\text{ מ-} ${x.n}=\\frac{${x.p}}{100}\\cdot ${x.n}=${x.k}$$`
+        : `שגויה.\n$$${x.p}\\% \\text{ מ-} ${x.n}=\\frac{${x.p}}{100}\\cdot ${x.n}=${x.k}$$\nהתשובה הנכונה היא $${x.k}$, לא $${x.k+10}$.`;
+      if(qt==='mistake') return `הטעות: התלמיד חילק במקום לחשב אחוז מתוך כמות.\nהדרך הנכונה:\n$$\\frac{${x.p}}{100}\\cdot ${x.n}=${x.k}$$`;
+      return `$$${x.p}\\% \\text{ מ-} ${x.n}=\\frac{${x.p}}{100}\\cdot ${x.n}=${x.k}$$`;
     }
     if(sub==='find_whole'){
       const prefix = qt==='mistake' ? 'הטעות היא חישוב אחוז מתוך כמות במקום חזרה אל השלם.\n' : '';
-      return `${prefix}אם $${x.k}$ הם $${x.p}\\%$, אז $100\\%$ הם:\n$$\\frac{${x.k}}{${x.p}}\\times 100=${x.n}$$`;
+      return `${prefix}אם $${x.k}$ הם $${x.p}\\%$, אז $100\\%$ הם:\n$$\\frac{${x.k}}{${x.p}}\\cdot 100=${x.n}$$`;
     }
     const prefix = qt==='mistake' ? 'הטעות היא היפוך היחס. מחשבים חלק מתוך שלם, ולא שלם מתוך חלק.\n' : '';
-    return `${prefix}$$\\frac{${x.k}}{${x.n}}\\times 100=${x.p}\\%$$`;
+    return `${prefix}$$\\frac{${x.k}}{${x.n}}\\cdot 100=${x.p}\\%$$`;
   }
 
-  // 10×10 percent grid: p of 100 cells shaded — the canonical area model for "%".
+  // 10·10 percent grid: p of 100 cells shaded — the canonical area model for "%".
   function pctGridSvg(p){
     const T=(E.themes&&E.themes.geometry)||{stroke:'#334155',given:'#2563eb',label:'#0f172a'};
     const x0=30,y0=20,c=13,fill='#2563eb';

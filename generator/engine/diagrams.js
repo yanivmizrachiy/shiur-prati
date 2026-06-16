@@ -130,8 +130,8 @@
   };
   E.rectangleSvg = function(p, unknown){
     const T = E.themes.geometry;
-    // Aspect ratio follows the actual side values (clamped), so a 12×3 rectangle
-    // really looks long and a 6×5 looks almost square.
+    // Aspect ratio follows the actual side values (clamped), so a 12·3 rectangle
+    // really looks long and a 6·5 looks almost square.
     const W=260,H=160;
     let ratio = (p.l>0 && p.w>0) ? p.w/p.l : 0.55;
     ratio = Math.max(0.3, Math.min(0.85, ratio));

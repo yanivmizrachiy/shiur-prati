@@ -3,7 +3,7 @@
 // eight topics (no longer "fallback"): U7-05 pie chart, U7-06 misleading graph,
 // U7-07 frequency table, U7-08 mean/median/range, G8-06 circle parts,
 // G8-08 isosceles triangle, N7-08 number-line comparison, N7-09 opposite/abs.
-// Each supports open/mcq/tf/mistake × basic/standard/challenge, balanced TF,
+// Each supports open/mcq/tf/mistake · basic/standard/challenge, balanced TF,
 // smart MCQ, mistake-with-correction, and a source visual where required.
 // Loaded after the other source-fit files, before pedagogy-attach (so meta wraps).
 (function () {
@@ -88,24 +88,24 @@
     let q, a, cs, isTrue = tfTrue;
     if (sub === 'missing') {
       const others = s.pcts.filter((v, i) => i !== idx);
-      a = `סכום כל הגזרות בעוגה הוא 100%. ${others.join('+')}=${100 - pct}, ולכן החסר הוא ${pct}%. הזווית המרכזית: ${pct}%×360°=${ang}°.`;
+      a = `סכום כל הגזרות בעוגה הוא 100%. ${others.join('+')}=${100 - pct}, ולכן החסר הוא ${pct}%. הזווית המרכזית: ${pct}%·360°=${ang}°.`;
       q = `בתרשים העוגה של ${s.thing} חסר האחוז של "${s.cats[idx]}". מצאו אותו וחשבו את הזווית המרכזית.`;
       if (qtype === 'tf') { q = `בתרשים העוגה חסר האחוז של "${s.cats[idx]}". הוא ${tfTrue ? pct : pct + 5}%.`; a = (tfTrue ? 'נכון. ' : 'שגוי. ') + a; }
       else if (qtype === 'mcq') { q = `מהו האחוז החסר של "${s.cats[idx]}" בתרשים העוגה?`; cs = ch([{ text: pct + '%', correct: true }, { text: (pct + 5) + '%', correct: false }, { text: (100 - pct) + '%', correct: false }, { text: Math.abs(pct - 5) + '%', correct: false }]); }
       else if (qtype === 'mistake') { q = `תלמיד טען שאי אפשר לדעת את האחוז החסר של "${s.cats[idx]}".`; a = 'הטעות: סכום כל הגזרות בעוגה הוא 100%. ' + a; }
     } else if (sub === 'largest') {
       const mx = Math.max.apply(null, s.pcts), big = s.cats[s.pcts.indexOf(mx)];
-      a = `הגזרה הגדולה ביותר היא "${big}" עם ${mx}%. הזווית המרכזית שלה: ${mx}%×360°=${mx * 3.6}°.`;
+      a = `הגזרה הגדולה ביותר היא "${big}" עם ${mx}%. הזווית המרכזית שלה: ${mx}%·360°=${mx * 3.6}°.`;
       q = `לאיזו קטגוריה הזווית המרכזית הגדולה ביותר בתרשים? חשבו אותה.`;
       if (qtype === 'tf') { q = `הגזרה הגדולה ביותר בתרשים היא "${tfTrue ? big : s.cats[0]}".`; a = (tfTrue ? 'נכון. ' : 'שגוי. ') + a; }
       else if (qtype === 'mcq') { q = `לאיזו קטגוריה הגזרה הגדולה ביותר?`; cs = ch([{ text: big, correct: true }].concat(s.cats.filter(c => c !== big).map(c => ({ text: c, correct: false })))); }
       else if (qtype === 'mistake') { q = `תלמיד קבע שהגזרה הגדולה היא "${s.cats[0]}" כי היא ראשונה במקרא.`; a = 'הטעות: גודל גזרה לפי האחוז, לא לפי הסדר. ' + a; }
     } else {
-      a = `זווית מרכזית = החלק מתוך השלם × 360°: ${pct}%×360°=${ang}°.`;
+      a = `זווית מרכזית = החלק מתוך השלם · 360°: ${pct}%·360°=${ang}°.`;
       q = `הקטגוריה "${s.cats[idx]}" מהווה ${pct}% מתרשים העוגה. חשבו את הזווית המרכזית של הגזרה.`;
       if (qtype === 'tf') { q = `הזווית המרכזית של הגזרה "${s.cats[idx]}" (${pct}%) היא ${tfTrue ? ang : pct}°.`; a = (tfTrue ? 'נכון. ' : 'שגוי — אחוז אינו מעלות. ') + a; }
       else if (qtype === 'mcq') { q = `מהי הזווית המרכזית של הגזרה "${s.cats[idx]}" (${pct}%)?`; cs = ch([{ text: ang + '°', correct: true }, { text: pct + '°', correct: false }, { text: (pct * 100) + '°', correct: false }, { text: (360 - ang) + '°', correct: false }]); }
-      else if (qtype === 'mistake') { q = `תלמיד חישב זווית מרכזית של "${s.cats[idx]}": "${pct}×100=${pct * 100}°".`; a = 'הטעות: כופלים ב-360 ולא ב-100. ' + a; }
+      else if (qtype === 'mistake') { q = `תלמיד חישב זווית מרכזית של "${s.cats[idx]}": "${pct}·100=${pct * 100}°".`; a = 'הטעות: כופלים ב-360 ולא ב-100. ' + a; }
     }
     return render(qtype, q, a, svg, cs, isTrue, sub);
   }
@@ -223,7 +223,7 @@
     const svg = E.circleSvg ? E.circleSvg({ mode: 'r', r: r }, null) : '';
     let q, a, cs, isTrue = tfTrue;
     if (fam === 'relation') {
-      a = `הקוטר עובר דרך המרכז ושווה לפעמיים הרדיוס: 2×${r}=${2 * r} ס״מ.`;
+      a = `הקוטר עובר דרך המרכז ושווה לפעמיים הרדיוס: 2·${r}=${2 * r} ס״מ.`;
       q = `רדיוס עיגול ${r} ס״מ. מהו הקוטר? נמקו.`;
       if (qtype === 'tf') { q = `רדיוס העיגול ${r} ס״מ, ולכן הקוטר ${tfTrue ? 2 * r : r + 2} ס״מ.`; a = (tfTrue ? 'נכון. ' : 'שגוי. ') + a; }
       else if (qtype === 'mcq') { q = `מהו הקוטר של עיגול שרדיוסו ${r} ס״מ?`; cs = ch([{ text: (2 * r) + ' ס״מ', correct: true }, { text: r + ' ס״מ', correct: false }, { text: (r + 2) + ' ס״מ', correct: false }, { text: (r * r) + ' ס״מ', correct: false }]); }

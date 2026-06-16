@@ -66,15 +66,15 @@
     const wrong = qtype==='mistake' || (qtype==='tf' && !tfTrue);
     if(family === 'circ_from_radius'){
       const prefix = wrong ? 'שגוי — $\\pi r^2$ היא נוסחת השטח. היקף: $2\\pi r$.\n' : '';
-      return `${prefix}$$C=2\\pi r=2\\pi\\times ${x.r}=${2*x.r}\\pi$$\nהיקף העיגול: $${2*x.r}\\pi\\approx ${Math.round(2*x.r*3.14*10)/10}$ ס״מ.`;
+      return `${prefix}$$C=2\\pi r=2\\pi\\cdot ${x.r}=${2*x.r}\\pi$$\nהיקף העיגול: $${2*x.r}\\pi\\approx ${Math.round(2*x.r*3.14*10)/10}$ ס״מ.`;
     }
     if(family === 'area_from_radius'){
       const prefix = wrong ? 'שגוי — $2\\pi r$ היא נוסחת ההיקף. שטח: $\\pi r^2$.\n' : '';
-      return `${prefix}$$S=\\pi r^2=\\pi\\times ${x.r}^2=${x.r*x.r}\\pi$$\nשטח העיגול: $${x.r*x.r}\\pi\\approx ${Math.round(x.r*x.r*3.14*10)/10}$ סמ״ר.`;
+      return `${prefix}$$S=\\pi r^2=\\pi\\cdot ${x.r}^2=${x.r*x.r}\\pi$$\nשטח העיגול: $${x.r*x.r}\\pi\\approx ${Math.round(x.r*x.r*3.14*10)/10}$ סמ״ר.`;
     }
     if(family === 'circ_from_diameter'){
       const prefix = wrong ? 'שגוי — עם קוטר אין צורך בכפל ב-$2$: ההיקף הוא $\\pi d$.\n' : '';
-      return `${prefix}$$C=\\pi d=\\pi\\times ${x.d}=${x.d}\\pi$$\nהיקף העיגול: $${x.d}\\pi\\approx ${Math.round(x.d*3.14*10)/10}$ ס״מ.`;
+      return `${prefix}$$C=\\pi d=\\pi\\cdot ${x.d}=${x.d}\\pi$$\nהיקף העיגול: $${x.d}\\pi\\approx ${Math.round(x.d*3.14*10)/10}$ ס״מ.`;
     }
     if(family === 'radius_from_circ'){
       const prefix = wrong ? 'שגוי — לאחר השוואת $2\\pi r=${x.Ck}\\pi$ יש גם לחלק ב-$2$.\n'.replace('${x.Ck}', x.Ck) : '';
