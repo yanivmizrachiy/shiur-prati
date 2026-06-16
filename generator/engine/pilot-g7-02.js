@@ -1,5 +1,5 @@
 // generator/engine/pilot-g7-02.js
-// G7-02 Flat Shape Areas (שטחי צורות שטוחות) — Smart Engine
+// G7-02 Polygon Areas (שטחי מצולעים) — Smart Engine
 // Source: source-learning/2026-06-09/03_grade-7_pre_deductive_geometry_curriculum.learning.md, 09
 (function(){
   const E = window.TargilimEngine = window.TargilimEngine || {};
