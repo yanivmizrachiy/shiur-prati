@@ -2,7 +2,7 @@
 # תרגילים — דף כללים מרכזי לבינה מלאכותית ולמפתחים
 
 Repository: `yanivmizrachiy/targilim` · Hebrew name: `תרגילים`
-**Last updated: 2026-06-15** · Baseline: 2026-06-14
+**Last updated: 2026-06-16** · Baseline: 2026-06-14
 
 > **This file is the central operating guide.** Any AI or developer must read it
 > (and `PROJECT_STATUS.md`) before any change. It overrides older claims found in
@@ -80,90 +80,64 @@ RULES.md                this central operating guide
 
 ---
 
-## 5. Recent UI/UX premium round — branches & merge order
+## 5. Changelog — merged improvements (most recent first)
 
-Five branches were pushed (not yet merged). **Merge order: PR1 → PR2 → PR3 → PR4 → PR5.**
+All entries below are **merged to `main`, live, and `verify:deep`-green**. Newest first.
 
-| Order | Branch | Purpose | Status | Note |
-|---|---|---|---|---|
-| PR1 | `design/professional-exercise-card-v1` | Professional card + Assistant typography + larger diagrams | pushed, not merged | base of the round |
-| PR2 | `design/student-answer-box` | One clean untitled answer box replaces split דרך:/תשובה: (title removed in #24) | pushed, not merged | |
-| PR3 | `feature/premium-image-export-and-bw-mode` | Color/שחור־לבן only; central "העתק/הורד כתמונה"; unified `captureExerciseCardAsPng` | pushed, not merged | |
-| PR4 | `test/premium-ui-guards` | `verify:premium-ui` guard wired into `verify:deep` | pushed, not merged | **stacked on PR1–PR3** |
-| PR5 | `docs/refresh-status-after-ui-and-pages` | PROJECT_STATUS refresh for the round | pushed, not merged | docs |
+| PR | Date | Improvement |
+|---|---|---|
+| **#34** | 2026-06-16 | **Pythagoras (legacy G7-03) fixes** — diagram no longer reveals the answer (the unknown side is marked **`?`**, like `angleSvg` already did for the unknown angle); fixed the clipped "ס\"מ" label (`text-anchor="middle"`); precise Hebrew (**"חשבו את אורך היתר"** / "אורך הרגל השנייה"); **premium student answer box** (rounded, soft shadow, 5 comfortable 40px ruled lines). |
+| **#33** | 2026-06-16 | **Source-faithful topic labels** — `G7-02` "שטחי צורות שטוחות" → **"שטחי מצולעים"** (source: "שטחי מצולעים" / "Areas of polygons"); `G8-04` "ניידות משולשים" → **"דמיון משולשים"** (curriculum-map "Triangle similarity"; engine + questions already used "דמיון"). `U7-01` "טבלת תדירות" kept — the source uses "תדירות". |
+| **#32** | 2026-06-16 | **Removed the landing splash** — the main page opens **directly** to the "הגדרות תרגיל" topic-selection tool (no hero/benefits/CTA/marketing). `generator/landing.css` deleted. |
+| **#30** | 2026-06-16 | **Level selector = רמה 1 / רמה 2 / רמה 3**, and the visible `#sl` selector now actually drives difficulty for every topic (it was previously a hidden no-op reading `#selDiff`). |
+| #20 | 2026-06-15 | Central rules + status refresh. |
+| #28 | 2026-06-15 | Real **A7-04 multi-correct** — forward `mcqMode` through the wrapper chain; `verify:multi-correct` wired into `verify:deep` (multi → 2 correct, single → 1). |
+| #27 | 2026-06-15 | Worksheet polish — sharp math rectangles (`sharpenMathRects`); no question-type badge on the student card. |
+| #21–#24 | 2026-06-15 | UI premium round — professional card + Assistant typography; one clean untitled answer box; color/שחור-לבן only + per-card image export; `verify:premium-ui` guard. |
 
-- **Do not merge PR4 before PR1–PR3** (the guard only passes when the UI it protects is present).
-- **Do not claim the live site has these UI changes** until they are merged into `main` and Pages redeploys.
-- This central-rules PR (`docs/update-central-ai-rules`) overlaps `PROJECT_STATUS.md` with PR5; merge one, then rebase the other.
+Earlier history: PR #7/#8 (Phase 1, 50-engine generator), #15–#18 (A7-04 + stress + PDF audit, inventory = 20 = 10 working + 10 `originals/` backups). Detail in `docs/reports/`.
 
 ---
 
-## 6. Verified completed work (only what was empirically checked on 2026-06-15)
+## 6. Current state (verified 2026-06-16)
 
-- GitHub Pages publishes `generator/` from `main`.
-- `npm run verify:deep` exists and aggregates the deep gates (see `package.json`).
+- The live site reflects `main`; **no open PRs**. GitHub Pages publishes `generator/` from `main`.
+- The main page **opens directly to the generator** — there is no landing/marketing page.
 - **50 engine topics (`*-ENGINE`) / 0 fallback** — counted from `source-registry.js`.
-- **No `A8-04-ENGINE`** (A8-04 inequalities is legacy in `a8-03.js`).
-- Merged on `main` (HEAD `ba1a0ee`): PR #15 (A7-04 work), **#16** (stress PER → 100), **#17** (A7-04 multi-correct guard, standalone), **#18** (PDF duplicate audit, no deletion).
-- **PDF inventory = 20:** 10 working (folders `01-…10-…`) + 10 in `originals/`; the audit found **no accidental duplicates** (originals are intentional backups).
-- Source-backed coverage-gaps report exists for the roadmap.
+- **No `A8-04-ENGINE`** (A8-04 inequalities is legacy in `a8-03.js`; A8-05 percent equations is legacy too).
+- `verify:deep` aggregates the deep gates and includes `verify:premium-ui` + `verify:worksheet-polish` + `verify:multi-correct`.
+- Real A7-04 multi-correct works; **U7-03 single-answer MCQ already exists** in `source-fit-extensions.js` — do **not** duplicate it.
 
-### A7-04 "multi-correct" — was broken on `main`, fixed by PR #25
-
-What was wrong on `main` (HEAD `ba1a0ee`), verified 2026-06-15 (40 samples):
-- Despite PR #15/#17 titles, `A7-04-ENGINE` emitted **exactly 1 correct answer in
-  BOTH single and multi mode**; the guard `tools/verify-multi-correct-coverage.mjs`
-  **failed (30)** and was **not** wired into `verify:deep`.
-- Root cause: the `getEngineExercise` decorator chain dropped the 4th `opts`
-  argument (which carries `mcqMode`) before it reached the engine. The multi-correct
-  engine logic already existed but was unreachable.
-
-Fix: **PR #25** (`fix/forward-mcqmode-multi-correct`) forwards `opts` through every
-wrapper and wires the guard into `verify:deep`. Verified after the fix: multi → 2
-correct (40/40), single → 1 correct (40/40), `verify:deep` PASS.
-
-Status: real multi-correct MCQ is **`DONE` once PR #25 is merged**. Until then,
-`main` still emits one correct answer — do not claim it on the live site before
-PR #25 is merged and Pages redeploys.
-
----
-
-## 7. Merge status (the UI/UX round is DONE)
-
-The 2026-06-15 round is **merged to `main`** and live. Historical detail:
-`docs/reports/OPEN_PR_RELEASE_QUEUE_20260615.md`, `docs/reports/MERGE_RUNBOOK_20260615.md`.
-
-```text
-MERGED: #21 professional card + typography
-MERGED: #22 single untitled student answer box
-MERGED: #23 premium image export + color/BW only
-MERGED: #24 verify:premium-ui guard
-MERGED: #27 worksheet polish (sharp math rects + no question-type badge)
-MERGED: #28 real A7-04 multi-correct (forward mcqMode; verify:multi-correct in verify:deep)
-LAST:   #20 this central rules + status PR
-CLOSED: #25 (superseded by #28) · docs/refresh-status-after-ui-and-pages (superseded by #20)
-HOLD:   #19 luxury landing page (draft; rebase on main, then review)
-```
-
-`verify:deep` now includes `verify:premium-ui` + `verify:worksheet-polish` + `verify:multi-correct`.
-
-### Next content work — choose only after checking existing coverage
-- **U7-03 single-answer MCQ already exists** in `source-fit-extensions.js` (verified: U7-03-ENGINE emits MCQ with choices). **Do not duplicate it.**
-- Real multi-correct dispatch works (PR #28). A future option (approval only): a second source-backed multi-correct path (e.g. numeric fraction-equivalence, source 05/07).
-- Always check existing engine coverage before starting new content.
+### Known follow-up (flagged, needs approval — not yet done)
+- **Legacy ↔ engine topic dedup.** Several topics appear **twice** in the dropdown — once as a legacy generator (e.g. `geo.js` G7-03) and once as a `*-ENGINE` "גרסה חכמה". The legacy generators are lower quality; the #33/#34 fixes were both on legacy files. Unifying each topic to its single smart engine would prevent a whole class of label/diagram inconsistencies at the root.
 
 ### Do NOT
 - Add Grade-8 numeric or uncertainty engines without **new** source intake.
+- Start new content before checking existing engine coverage.
 
 ---
 
 ## 8. Permanent design requirements (UI)
 
+- **It is a work tool, not a landing page.** The main page opens **directly** to the
+  "הגדרות תרגיל" topic-selection card — no hero/benefits/CTA splash.
+- **No marketing / demo language anywhere user-facing.** Dry, factual, teacher-oriented
+  copy only (e.g. "מחולל דפי תרגול במתמטיקה", not "מחולל חכם ומעוצב"). No "דמו", no slogans,
+  no unproven claims, no `fallback`/`QA`/`מנוע`/`Registry` developer jargon in visible text.
 - The interface must look **premium**; fonts must read like a real math textbook.
 - View options are **`צבע` / `שחור־לבן` only** — never the words "גווני אפור".
+- The level selector is **`רמה 1` / `רמה 2` / `רמה 3`** (the visible `#sl`) and must
+  actually drive difficulty for every topic.
+- **Diagrams must never reveal the answer.** The unknown side/angle/value is marked **`?`**;
+  only the givens carry values. Labels must sit fully inside the viewBox (`text-anchor="middle"`),
+  never clipped, with full units (`ס"מ`, not `ס`).
+- **Topic labels and wording must be source-faithful** — verified against `source-learning/`
+  and `curriculum-map/` — and use precise Hebrew (e.g. "אורך היתר", not "היתר").
 - Every exercise card carries central primary buttons **`העתק כתמונה`** and **`הורד כתמונה`**.
 - The copied/downloaded image must include **the full question and all drawings**.
-- Students see **one** clean, untitled answer box — no title/label, never split "דרך"/"תשובה". A stable `data-student-answer-box="true"` hook identifies it.
+- The student answer area is **one** clean, untitled, comfortable **premium writing box**
+  (generous ruled lines) — present only for free-write types (open/mistake); mark-the-answer
+  types (mcq/tf) get **no** box. A stable `data-student-answer-box="true"` hook identifies it.
 - Diagrams must be **sharp, readable, not clipped**.
 - Mobile must look professional; print must be clean.
 - Teacher-only content must never appear in the student print/export.
