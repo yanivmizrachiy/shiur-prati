@@ -101,11 +101,14 @@
   function controlBar(i, ex) {
     const b = function (fn, txt, cls) { return '<button class="tc-btn ' + (cls || '') + '" onclick="Teacher.' + fn + '">' + txt + '</button>'; };
     const fuOpts = Teacher.MODES.map(function (mode) { return '<option value="' + mode + '">' + (FU_LABEL[mode] || mode) + '</option>'; }).join('');
+    // Lean teacher bar: difficulty is set by the main רמה 1/2/3 selector, so no
+    // easier/harder here; image copy/download live on the big per-card buttons, so
+    // the only extra copy a teacher needs is one text "question+solution". The full
+    // Teacher.* API (easier/harder/copyImage/exportPNG/exportHTML) still exists for
+    // programmatic use — it's just no longer surfaced as redundant buttons.
     return '<div class="teacher-controls teacher-only" data-html2canvas-ignore="true">'
       + '<div class="tc-group">'
-      + b('refresh(' + i + ')', '↻ רענן', 'tc-refresh')
-      + b('easier(' + i + ')', '− קל יותר')
-      + b('harder(' + i + ')', '+ קשה יותר')
+      + b('refresh(' + i + ')', '↻ שאלה חדשה', 'tc-refresh')
       + b('cycleType(' + i + ')', '⇄ סוג שאלה')
       + b('toggleNumbers(' + i + ')', '# מספרים חדשים')
       + '</div>'
@@ -117,12 +120,7 @@
       + b('toggleGraphic(' + i + ')', '▣ שרטוט')
       + '</div>'
       + '<div class="tc-group tc-export">'
-      + b('copy(' + i + ",'question')", '⧉ העתק שאלה')
-      + b('copy(' + i + ",'question_solution')", '⧉ שאלה+פתרון')
-      + b('copy(' + i + ",'teacher_card')", '⧉ כרטיס מורה')
-      + b('copyImage(' + i + ')', '🖼 העתק כתמונה', 'tc-copyimg')
-      + b('exportHTML(' + i + ')', '⤓ HTML')
-      + b('exportPNG(' + i + ')', '⤓ PNG')
+      + b('copy(' + i + ",'question_solution')", '⧉ העתק שאלה+פתרון')
       + b('addToWorksheet(' + i + ')', '＋ לדף עבודה')
       + '</div>'
       + '</div>';
