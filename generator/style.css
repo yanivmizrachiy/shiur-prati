@@ -123,15 +123,15 @@ select {
   height: 44px;
   border: 1.5px solid #e2e8f0;
   border-radius: 10px;
-  padding: 0 10px;
+  padding: 0 32px 0 10px;
   font-size: 0.88rem;
   font-family: inherit;
   direction: rtl;
-  background: #f8fafc;
+  background: #f8fafc url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%2364748b' stroke-width='1.6' fill='none' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat left 10px center;
   color: #0f172a;
   appearance: none;
   cursor: pointer;
-  transition: border-color 0.15s;
+  transition: border-color 0.15s, background-color 0.15s;
 }
 select:focus {
   outline: none;
@@ -360,6 +360,18 @@ svg text { unicode-bidi: plaintext; }
   color: #5b21b6;
   line-height: 1.65;
 }
+/* topic-count badge shown next to label in dropdown */
+.topic-count-badge {
+  display: inline-block;
+  background: #2563eb;
+  color: #fff;
+  border-radius: 20px;
+  padding: 1px 8px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  margin-inline-start: 6px;
+  vertical-align: middle;
+}
 
 /* ── Empty state ── */
 .empty {
@@ -568,7 +580,14 @@ svg text { unicode-bidi: plaintext; }
   .teacher-card,
   .follow-up-host,
   .tc-toast,
-  .notice { display: none !important; }
+  .notice,
+  .landing,
+  .engine-panel,
+  #stickyGenBar,
+  #genProgress,
+  .mobile-share-dock,
+  .generator-anchor-heading,
+  .generator-anchor-line { display: none !important; }
   .qcard {
     box-shadow: none;
     border: 1px solid #e2e8f0;
