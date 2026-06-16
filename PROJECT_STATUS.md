@@ -1,10 +1,10 @@
 # Project Status — Targilim תרגילים
 
-**Last updated:** 2026-06-15 · baseline 2026-06-14  
+**Last updated:** 2026-06-16 · baseline 2026-06-14  
 **Central rules:** see `RULES.md` (authoritative operating guide; this file is the status snapshot).  
-**Default branch:** `main` (UI/UX round + A7-04 multi-correct merged)  
+**Default branch:** `main` — no open PRs.  
 **Live site:** GitHub Pages serves `generator/` from `main` — https://yanivmizrachiy.github.io/targilim/ . The live site reflects `main` only.  
-**Current repo state:** Phase 1 + UI/UX premium round (#21–#24), worksheet polish (#27) and real A7-04 multi-correct (#28) are merged and live.  
+**Current repo state:** Phase 1 + the UI premium round (#21–#24), worksheet polish (#27), A7-04 multi-correct (#28), the **רמה 1/2/3** level selector (#30), **landing splash removed — opens directly to the tool** (#32), source-faithful topic labels (#33), and the Pythagoras diagram/phrasing/answer-box fixes (#34) are all merged and live.  
 **Package version:** `0.78.0`
 
 ## Executive snapshot
@@ -29,9 +29,22 @@
 - Cleanup pass removed stale generated live-verification FAIL artifacts and added documentation policy. It did not change product behavior.
 - PRs #15–#18 merged: A7-04 work, stress PER raised to 100 (#16), a standalone A7-04 multi-correct guard (#17, see caveat in the MCQ layer), and a PDF duplicate audit with no deletion (#18). PDF inventory is 20 files (10 working + 10 originals; no accidental duplicates).
 
-## UI/UX premium round — MERGED + live
+## Changelog — merged improvements (newest first)
 
-Merged to `main` (2026-06-15): professional card + typography (#21), single untitled student answer box (#22), premium image export + color/BW-only (#23), `verify:premium-ui` guard (#24), worksheet polish — sharp math rectangles + no question-type badge (#27), and real A7-04 multi-correct (#28). The book/learning-material viewer is served from the site (no GitHub Pages 404). `verify:deep` now includes `verify:premium-ui`, `verify:worksheet-polish` and `verify:multi-correct`.
+All merged to `main`, live, and `verify:deep`-green.
+
+| PR | Date | Improvement |
+|---|---|---|
+| #34 | 2026-06-16 | Pythagoras (legacy G7-03): diagram marks the unknown side `?` instead of revealing the answer; fixed the clipped "ס\"מ" label; precise Hebrew ("חשבו את אורך היתר"); premium student answer box (5 comfortable 40px ruled lines). |
+| #33 | 2026-06-16 | Source-faithful topic labels: G7-02 → "שטחי מצולעים"; G8-04 → "דמיון משולשים" (U7-01 "טבלת תדירות" kept — source uses "תדירות"). |
+| #32 | 2026-06-16 | Removed the landing splash — the main page opens directly to the topic-selection tool; `landing.css` deleted. |
+| #30 | 2026-06-16 | Level selector shows **רמה 1 / רמה 2 / רמה 3** and the visible selector actually drives difficulty. |
+| #20 | 2026-06-15 | Central rules + status refresh. |
+| #28 | 2026-06-15 | Real A7-04 multi-correct (forward `mcqMode`; `verify:multi-correct` in `verify:deep`). |
+| #27 | 2026-06-15 | Worksheet polish — sharp math rectangles + no question-type badge. |
+| #21–#24 | 2026-06-15 | UI premium round — professional card + typography; single untitled answer box; premium image export + color/שחור-לבן only; `verify:premium-ui` guard. |
+
+The book/learning-material viewer is served from the site (no GitHub Pages 404). `verify:deep` now includes `verify:premium-ui`, `verify:worksheet-polish` and `verify:multi-correct`.
 
 ## Current verification gates
 
@@ -149,13 +162,13 @@ Repository paths:
 
 ## Remaining high-value work
 
-1. **U7-03 single-answer MCQ already exists** in `source-fit-extensions.js` (verified: U7-03-ENGINE emits MCQ with choices). Do **not** duplicate it. Select next content work only after checking existing engine coverage.
-2. Merge this docs PR (#20) last so docs match `main`; then run the live UI checklist in `RULES.md` §9.
+1. **Legacy ↔ engine topic dedup (flagged, needs approval).** Several topics appear twice in the dropdown — a legacy generator (e.g. `geo.js` G7-03) and a `*-ENGINE` "גרסה חכמה". The legacy generators are lower quality (the #33/#34 fixes were on legacy files). Unifying each topic to its single smart engine would prevent label/diagram inconsistencies at the root.
+2. **U7-03 single-answer MCQ already exists** in `source-fit-extensions.js` (verified: U7-03-ENGINE emits MCQ with choices). Do **not** duplicate it. Select next content work only after checking existing engine coverage.
 3. Human visual QA across engines using `generator/visual-qa.html`.
-5. Real A4 print review, with and without answer key.
-6. Confirm teacher-only content never appears in student print/export.
-7. Manual copy-as-image paste test into Word/Canva/Docs.
-8. Optional future feature after approval only: source-question coverage gap for inequalities / A8-05.
+4. Real A4 print review, with and without answer key.
+5. Confirm teacher-only content never appears in student print/export.
+6. Manual copy-as-image paste test into Word/Canva/Docs.
+7. Optional future feature after approval only: source-question coverage gap for inequalities / A8-05.
 
 ## Release / CI gate
 
