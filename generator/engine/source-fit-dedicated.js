@@ -192,7 +192,7 @@
     for (let v = lo; v <= hi; v += step) ticks += `<line x1="${X(v)}" y1="${baseY - 4}" x2="${X(v)}" y2="${baseY + 4}" stroke="#64748b" stroke-width="1.2"/><text x="${X(v)}" y="${baseY + 18}" fill="#334155" font-size="9.5" text-anchor="middle">${v}</text>`;
     const counts = {}; let dots = '';
     d.slice().sort((a, b) => a - b).forEach(v => { counts[v] = (counts[v] || 0) + 1; dots += `<circle cx="${X(v)}" cy="${baseY - 9 - (counts[v] - 1) * 11}" r="5" fill="${T.unknown}" stroke="#fff" stroke-width="1"/>`; });
-    return `<svg class="engine-svg" viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg"><line x1="${x0 - 6}" y1="${baseY}" x2="${x1 + 6}" y2="${baseY}" stroke="${T.stroke}" stroke-width="2"/>${ticks}${dots}<text x="${W / 2}" y="13" fill="${T.label}" font-size="10.5" font-weight="700" text-anchor="middle">פיזור הנתונים על ציר — מקור קובץ 06</text></svg>`;
+    return `<svg class="engine-svg" viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg"><line x1="${x0 - 6}" y1="${baseY}" x2="${x1 + 6}" y2="${baseY}" stroke="${T.stroke}" stroke-width="2"/>${ticks}${dots}<text x="${W / 2}" y="13" fill="${T.label}" font-size="10.5" font-weight="700" text-anchor="middle">פיזור הנתונים על ציר</text></svg>`;
   }
   let U708_TF_TOGGLE = 0; // deterministic True/False alternation so TF is never one-sided across samples
   function genU708(diff, qtype) {

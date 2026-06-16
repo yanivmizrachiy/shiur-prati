@@ -31,7 +31,7 @@
       `<line x1="${cx}" y1="${cy}" x2="${x2.toFixed(1)}" y2="${y2.toFixed(1)}" stroke="${T.stroke}" stroke-width="2"/>` +
       `<circle cx="${cx}" cy="${cy}" r="3" fill="${T.stroke}"/>` +
       `<text x="${(cx + 26 * Math.cos(mid)).toFixed(1)}" y="${(cy + 26 * Math.sin(mid)).toFixed(1)}" fill="${T.unknown}" font-size="13" font-weight="800" text-anchor="middle" dominant-baseline="middle">${angle}°</text>` +
-      `<text x="120" y="190" fill="${T.label}" font-size="10.5" font-weight="700" text-anchor="middle">גזרה וזווית מרכזית — מקור קובץ 04</text>`);
+      `<text x="120" y="190" fill="${T.label}" font-size="10.5" font-weight="700" text-anchor="middle">גזרה וזווית מרכזית</text>`);
   }
   function poleShadowSvg(h1, s1, h2, s2, unknownTall) {
     // two right triangles (pole + shadow) sharing the sun angle
@@ -47,7 +47,7 @@
       `<line x1="20" y1="${baseY}" x2="270" y2="${baseY}" stroke="${T.stroke}" stroke-width="1.5"/>` +
       tri(x0, h1, s1, unknownTall ? '?' : h1, unknownTall) +
       tri(x0 + 150, h2, s2, h2, false) +
-      `<text x="145" y="172" fill="${T.label}" font-size="10.5" font-weight="700" text-anchor="middle">דמיון וצללים — מקור קובץ 04</text>`);
+      `<text x="145" y="172" fill="${T.label}" font-size="10.5" font-weight="700" text-anchor="middle">דמיון וצללים</text>`);
   }
   function congruenceSvg(showTicks) {
     function tri(ox) {
@@ -81,7 +81,7 @@
     else if (kind === 'rotate') { after = rotShape(4, 4, T.unknown, "'A"); kname = 'סיבוב'; }
     else { after = shape(1 + dx, 1, T.unknown, "'A"); kname = 'הזזה'; }
     return svgWrap(ox + n * g + 20, oy + n * g + 28, grid + shape(1, 1, T.given, 'A') + after +
-      `<text x="${ox + n * g / 2}" y="${oy + n * g + 18}" fill="${T.label}" font-size="10.5" font-weight="700" text-anchor="middle">${kname} ברשת — מקור קובץ 03</text>`);
+      `<text x="${ox + n * g / 2}" y="${oy + n * g + 18}" fill="${T.label}" font-size="10.5" font-weight="700" text-anchor="middle">${kname} ברשת</text>`);
   }
 
   function render(qtype, q, a, svg, cs, isTrue, family) {

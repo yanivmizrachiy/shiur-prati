@@ -70,6 +70,15 @@ const coreSrc = read('generator/core.js');
 check('cleanTopicLabel exists and strips internal markers', /function cleanTopicLabel/.test(coreSrc) && /✦/.test(coreSrc) && /מנוע/.test(coreSrc));
 check('topic dropdown applies cleanTopicLabel', /cleanTopicLabel\(t\[1\]\)/.test(coreSrc));
 check('worksheet title applies cleanTopicLabel', /cleanTopicLabel\(/.test(setSrc));
+// No source-file jargon ("מקור קובץ NN") in ANY generator output — diagram
+// captions, question/answer text, etc. Teachers/students must never see repo
+// provenance like "מקור קובץ 06". Scans every generator + engine .js file.
+const genJsFiles = [];
+for (const dir of ['generator', 'generator/engine']) {
+  for (const f of fs.readdirSync(dir)) if (f.endsWith('.js')) genJsFiles.push(dir + '/' + f);
+}
+const jargonHits = genJsFiles.filter(f => /מקור קובץ/.test(read(f)));
+check('no "מקור קובץ" source-file jargon in any generator output', jargonHits.length === 0, jargonHits.join(', '));
 
 // ── 4. Unified premium image export pipeline ──
 check('captureExerciseCardAsPng exists', /function captureExerciseCardAsPng/.test(exportSrc));

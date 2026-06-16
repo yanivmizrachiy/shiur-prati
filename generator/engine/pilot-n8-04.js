@@ -91,7 +91,7 @@
     return `<svg class="engine-svg" viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">`+
       cells+
       `<text x="${W/2}" y="${y0+10*c+18}" fill="${T.given}" font-size="12.5" font-weight="800" text-anchor="middle">${p}% מתוך 100</text>`+
-      `<text x="${W/2}" y="${y0+10*c+30}" fill="${T.label}" font-size="9.5" font-weight="700" text-anchor="middle">מודל אחוז — מקור קובץ 07</text></svg>`;
+      `<text x="${W/2}" y="${y0+10*c+30}" fill="${T.label}" font-size="9.5" font-weight="700" text-anchor="middle">מודל אחוז</text></svg>`;
   }
 
   E.generateN804Engine = function(difficulty, questionType){
