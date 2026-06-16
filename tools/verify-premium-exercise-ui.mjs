@@ -75,7 +75,7 @@ check('worksheet title applies cleanTopicLabel', /cleanTopicLabel\(/.test(setSrc
 check('captureExerciseCardAsPng exists', /function captureExerciseCardAsPng/.test(exportSrc));
 check('capture uses html2canvas', /html2canvas\(/.test(exportSrc));
 check('capture renders on a white background', /backgroundColor:\s*'#ffffff'/.test(exportSrc));
-check('capture renders at device resolution', /scale:\s*Math\.max\(2,\s*window\.devicePixelRatio/.test(exportSrc));
+check('capture renders at high resolution (scale floor >= 3)', /scale:\s*Math\.max\(3,/.test(exportSrc));
 check('capture waits for web fonts before snapshot', /document\.fonts[\s\S]*?\.ready/.test(exportSrc));
 check('capture supports black-and-white output', /grayscale|0\.299/.test(exportSrc));
 check('copy-as-image falls back to a PNG download', /copyExerciseImage[\s\S]*?ClipboardItem[\s\S]*?downloadBlob/.test(exportSrc));

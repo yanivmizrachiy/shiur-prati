@@ -323,7 +323,8 @@ svg text { unicode-bidi: plaintext; }
 .ex-imgbar {
   display: flex;
   justify-content: center;
-  gap: 10px;
+  align-items: center;
+  gap: 12px;
   flex-wrap: wrap;
   margin-top: 16px;
   padding-top: 14px;
@@ -349,6 +350,31 @@ svg text { unicode-bidi: plaintext; }
 .btn-img-primary:hover { background: #1d4ed8; }
 .btn-img-primary:active { transform: scale(0.98); }
 .btn-img:disabled { opacity: 0.6; cursor: default; box-shadow: none; }
+/* Copy-as-image is the primary action — roughly 2× the size of the rest. */
+.btn-img-copy {
+  height: 88px;
+  padding: 0 48px;
+  font-size: 1.45rem;
+  border-radius: 16px;
+  letter-spacing: 0.2px;
+  box-shadow: 0 2px 4px rgba(37,99,235,0.28), 0 10px 24px rgba(37,99,235,0.22);
+}
+/* Download stays as a compact secondary so the copy button clearly dominates. */
+.btn-img-download {
+  background: #ffffff;
+  color: #2563eb;
+  border-color: #c7d7f5;
+}
+.btn-img-download:hover { background: #f1f5ff; }
+/* Persistent success state: after a real copy, the button turns green and stays
+   green until the teacher takes another action (clears via clearImgCopied). */
+.btn-img.is-copied,
+.btn-img.is-copied:hover {
+  background: #16a34a;
+  border-color: #16a34a;
+  color: #ffffff;
+  box-shadow: 0 2px 4px rgba(22,163,74,0.30), 0 10px 24px rgba(22,163,74,0.22);
+}
 
 /* ── WIP / not implemented ── */
 .wip {

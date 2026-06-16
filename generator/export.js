@@ -25,8 +25,12 @@ async function captureExerciseCardAsPng(cardElement, options) {
   await new Promise(function (r) { requestAnimationFrame(function () { requestAnimationFrame(r); }); });
   const canvas = await html2canvas(cardElement, {
     backgroundColor: '#ffffff',
-    scale: Math.max(2, window.devicePixelRatio || 1),
+    // Maximum-quality capture: render at 2× the device pixel ratio with a hard
+    // floor of 3 (→ 3 on standard screens, 4 on Retina) so the PNG is razor-sharp
+    // when pasted into Word / Canva / Docs. PNG output is lossless.
+    scale: Math.max(3, (window.devicePixelRatio || 1) * 2),
     useCORS: true,
+    imageTimeout: 0,
     logging: false,
     onclone: function (doc, el) {
       // present the card as a flat white tile: no shadow/clip so nothing is cut
