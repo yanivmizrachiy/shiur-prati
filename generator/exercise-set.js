@@ -120,8 +120,8 @@ function renderExerciseSet(meta,exercises){
       +'<div class="ex-body">'+questionHTML+'</div>'
       +workAreaHTML(ex.qtype)
       +'<div class="ex-imgbar" data-html2canvas-ignore="true">'
-        +'<button class="btn-img btn-img-primary" onclick="exImageCopy('+i+',this)">📋 העתק כתמונה</button>'
-        +'<button class="btn-img btn-img-primary" onclick="exImageDownload('+i+',this)">⬇ הורד כתמונה</button>'
+        +'<button class="btn-img btn-img-primary btn-img-copy" onclick="exImageCopy('+i+',this)">📋 העתק כתמונה</button>'
+        +'<button class="btn-img btn-img-download" onclick="exImageDownload('+i+',this)">⬇ הורד כתמונה</button>'
       +'</div>'
       +'</div>';
   }).join('');
@@ -158,12 +158,31 @@ function renderExerciseSet(meta,exercises){
 // mode. They snapshot the whole card (text + diagram + answer box) through the
 // unified premium pipeline in export.js; the buttons are data-html2canvas-ignore
 // so they never appear in the captured image.
-function exImageAction(i,btn,fn,doneCopied,doneDl){
+// Reset any button left in the persistent "copied" (green) state — called when the
+// teacher takes another action, so exactly one button is green at a time.
+function clearImgCopied(){
+  document.querySelectorAll('.ex-imgbar .btn-img.is-copied').forEach(function(b){
+    b.classList.remove('is-copied');
+    if(b.dataset.label) b.textContent=b.dataset.label;
+  });
+}
+function exImageAction(i,btn,fn,labelCopied,labelDone){
   const card=document.getElementById('exCard'+i);if(!card||!btn)return;
-  const prev=btn.textContent;btn.disabled=true;btn.textContent='מכין…';
-  fn(card,i+1).then(function(res){btn.textContent=res==='copied'?doneCopied:doneDl;})
-    .catch(function(){btn.textContent='שגיאה';})
-    .finally(function(){setTimeout(function(){btn.disabled=false;btn.textContent=prev;},1700);});
+  clearImgCopied(); // "doing something else" releases the previous green button
+  const prev=btn.dataset.label||btn.textContent;btn.dataset.label=prev;
+  btn.disabled=true;btn.textContent='מכין…';
+  fn(card,i+1).then(function(res){
+    btn.disabled=false;
+    if(res==='copied'){
+      // real clipboard copy succeeded → stay green until the next action
+      btn.textContent=labelCopied;btn.classList.add('is-copied');
+    }else{
+      // download / clipboard fallback → brief confirmation, then restore
+      btn.textContent=labelDone;setTimeout(function(){btn.textContent=btn.dataset.label;},1800);
+    }
+  }).catch(function(){
+    btn.disabled=false;btn.textContent='שגיאה';setTimeout(function(){btn.textContent=btn.dataset.label;},1800);
+  });
 }
 function exImageCopy(i,btn){exImageAction(i,btn,copyExerciseImage,'הועתק ✓','הורד PNG ✓');}
 function exImageDownload(i,btn){exImageAction(i,btn,downloadExerciseImage,'הורד ✓','הורד ✓');}
