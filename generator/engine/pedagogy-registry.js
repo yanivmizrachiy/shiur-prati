@@ -393,7 +393,7 @@
     families: [
       fam('G7-03-side', 'find_side', 'רגליים 3,4 — יתר?', 'חיבור רגליים', ['יתר', 'רגל'], ['סכום ריבועים'], { requiredVisual: true }),
       fam('G7-03-check', 'check_right_triangle', 'האם 3,4,6 ישר-זווית?', 'הנחה שכל משולש ישר', ['בדיקת שלשה'], ['בדיקת השוויון'], { requiredVisual: true }),
-      fam('G7-03-rect', 'rectangle_diagonal', 'אלכסון מלבן 3·4', 'חיבור צלעות לאלכסון', ['אלכסון מלבן'], ['היתר במשולש'], { requiredVisual: true })
+      fam('G7-03-rect', 'rectangle_diagonal', 'אלכסון מלבן 3 על 4', 'חיבור צלעות לאלכסון', ['אלכסון מלבן'], ['היתר במשולש'], { requiredVisual: true })
     ]
   });
   topic('G7-04-ENGINE', {
