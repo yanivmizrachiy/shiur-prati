@@ -54,7 +54,7 @@
   // Used by the exercise-set runtime layer; renderEngineCard above stays for single-card mode.
   const ENGINE_FN = {
     'G7-01-ENGINE':['generateG701Engine','מלבן ותיבה'],
-    'G7-02-ENGINE':['generateG702Engine','שטחי צורות'],
+    'G7-02-ENGINE':['generateG702Engine','שטחי מצולעים'],
     'G7-03-ENGINE':['generateG703Engine','משפט פיתגורס'],
     'G7-04-ENGINE':['generateG704Engine','זווית חסרה'],
     'N7-03-ENGINE':['generateN703Engine','מספרים שליליים'],
@@ -135,7 +135,7 @@
     TOPICS[7].geometry.push(['G7-01-ENGINE','מלבן ותיבה — גרסה חכמה ✦',1]);
   }
   if(typeof TOPICS !== 'undefined' && TOPICS[7] && TOPICS[7].geometry && !TOPICS[7].geometry.some(t=>t[0]==='G7-02-ENGINE')){
-    TOPICS[7].geometry.push(['G7-02-ENGINE','שטחי צורות — גרסה חכמה ✦',1]);
+    TOPICS[7].geometry.push(['G7-02-ENGINE','שטחי מצולעים — גרסה חכמה ✦',1]);
   }
   if(typeof TOPICS !== 'undefined' && TOPICS[7] && TOPICS[7].geometry && !TOPICS[7].geometry.some(t=>t[0]==='G7-04-ENGINE')){
     TOPICS[7].geometry.push(['G7-04-ENGINE','זווית חסרה — גרסה חכמה ✦',1]);
@@ -242,7 +242,7 @@
   generators['G7-02-ENGINE'] = function(){
     const diff = document.getElementById('selDiff')?.value || document.getElementById('sl')?.value || 'standard';
     const qtype = document.getElementById('selQType')?.value || 'open';
-    E.renderEngineCard('G7-02-ENGINE','שטחי צורות — גרסה חכמה', E.generateG702Engine(diff, qtype));
+    E.renderEngineCard('G7-02-ENGINE','שטחי מצולעים — גרסה חכמה', E.generateG702Engine(diff, qtype));
   };
 
   generators['G7-04-ENGINE'] = function(){
