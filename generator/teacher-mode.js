@@ -132,7 +132,7 @@
     c.exercises.forEach(function (ex, i) {
       const card = document.getElementById('exCard' + i);
       if (!card || card.querySelector('.teacher-controls')) return;
-      const bar = document.createElement('div'); bar.innerHTML = controlBar(i, ex) + buildTeacherCardHTML(ex.meta || {});
+      const bar = document.createElement('div'); bar.innerHTML = controlBar(i, ex);
       while (bar.firstChild) card.appendChild(bar.firstChild);
     });
   };
@@ -150,10 +150,7 @@
     c.exercises[i] = ex;
     const card = document.getElementById('exCard' + i); if (!card) return;
     const body = card.querySelector('.ex-body'); if (body) body.innerHTML = ex.questionHTML;
-    // refresh teacher card meta
-    const old = card.querySelector('.teacher-card'); if (old) old.remove();
-    const ctrls = card.querySelector('.teacher-controls');
-    if (ctrls) ctrls.insertAdjacentHTML('afterend', buildTeacherCardHTML(ex.meta || {}));
+    // The on-card "כרטיס מורה" panel was removed from the UI; nothing to refresh.
     if (typeof renderMathInElement === 'function') renderMathInElement(card, { delimiters: [{ left: '$$', right: '$$', display: true }, { left: '$', right: '$', display: false }], throwOnError: false });
     if (typeof applyVisualMode === 'function') applyVisualMode();
   }
