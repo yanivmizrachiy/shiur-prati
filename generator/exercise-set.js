@@ -97,7 +97,7 @@ function generateSet(){
 // present) is part of the captured card (not html2canvas-ignored) and carries a
 // stable data-student-answer-box hook for verifiers.
 function workAreaHTML(qtype){
-  const LINES={open:4,mistake:4};
+  const LINES={open:5,mistake:5};
   const n=LINES[qtype];
   if(!n) return ''; // mcq, tf — no writing box; the answer is the marked choice
   let wl='';for(let i=0;i<n;i++)wl+='<div class="wl"></div>';

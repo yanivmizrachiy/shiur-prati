@@ -473,19 +473,20 @@ svg text { unicode-bidi: plaintext; }
 .answer-box {
   margin-top: 16px;
   border: 1px solid var(--card-border, #e6eaf0);
-  border-radius: 10px;
-  background: #fcfdff;
+  border-radius: 14px;
+  background: linear-gradient(180deg, #ffffff 0%, #fbfcfe 100%);
+  box-shadow: inset 0 1px 0 #ffffff, 0 1px 3px rgba(15, 23, 42, .04);
   overflow: hidden;
 }
 .answer-box-body {
-  padding: 16px 14px 8px;
+  padding: 20px 20px 12px;
 }
 .answer-box .wl {
-  height: 30px;
-  border-bottom: 1px solid #cbd5e1;
+  height: 40px;
+  border-bottom: 1.5px solid #dde3ee;
 }
 .answer-box .wl:last-child {
-  border-bottom-color: #e2e8f0;
+  border-bottom-color: #eef2f8;
 }
 
 /* ── Printed worksheet name/date line (print only) ── */
@@ -620,9 +621,9 @@ svg text { unicode-bidi: plaintext; }
   .ex-card .diagram svg { max-width: 215px; }
   .mcq-choices { gap: 4px; margin-top: 8px; }
   .mcq-choice { padding: 6px 10px; background: none; border-color: #cbd5e1; }
-  .answer-box { margin-top: 10px; border-color: #94a3b8; background: none; }
-  .answer-box-body { padding: 10px 10px 2px; }
-  .answer-box .wl { height: 34px; border-bottom-color: #64748b; }
+  .answer-box { margin-top: 10px; border-color: #94a3b8; background: none; box-shadow: none; }
+  .answer-box-body { padding: 12px 12px 4px; }
+  .answer-box .wl { height: 38px; border-bottom-color: #64748b; }
   .answer-box .wl:last-child { border-bottom-color: #64748b; }
   .answer-key:not(.open) { display: none !important; }
   .answer-key.open {
