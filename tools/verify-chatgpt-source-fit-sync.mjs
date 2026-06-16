@@ -45,13 +45,15 @@ includesAll('manifest source files', manifest, [
   '10_grade-8_teaching_sequence_2026-2027.pdf'
 ]);
 
+// Query-agnostic: the cache-busting ?v=... suffix may change per deploy; the
+// load ORDER is asserted separately below by filename.
 includesAll('index source-fit runtime load order', index, [
   'engine/pattern-engine.js',
-  'engine/source-fit-extensions.js?v=20260612-source-fit-1',
-  'engine/source-fit-graphs.js?v=20260612-source-fit-2',
-  'engine/source-fit-geometry.js?v=20260612-source-fit-3',
-  'engine/source-fit-algebra-g7.js?v=20260612-source-fit-5',
-  'exercise-set.js?v=20260612-chatgpt-sync'
+  'engine/source-fit-extensions.js',
+  'engine/source-fit-graphs.js',
+  'engine/source-fit-geometry.js',
+  'engine/source-fit-algebra-g7.js',
+  'exercise-set.js'
 ]);
 assert('source-fit extensions load before exercise-set', index.indexOf('source-fit-extensions.js') < index.indexOf('exercise-set.js'));
 assert('source-fit graphs load before exercise-set', index.indexOf('source-fit-graphs.js') < index.indexOf('exercise-set.js'));
