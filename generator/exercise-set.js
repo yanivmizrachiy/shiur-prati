@@ -41,7 +41,9 @@ function generateSet(){
   const count=+(document.getElementById('sn')?.value||10);
   const E=window.TargilimEngine||{};
   const isEngine=typeof E.isEngineTopic==='function'&&E.isEngineTopic(id)&&typeof E.getEngineExercise==='function';
-  const diff=isEngine?(document.getElementById('selDiff')?.value||'standard'):(document.getElementById('sl')?.value||'standard');
+  // The visible level selector (#sl: רמה 1/2/3 → basic/standard/challenge) drives
+  // difficulty for every topic; the engine panel's hidden #selDiff is a fallback.
+  const diff=(document.getElementById('sl')?.value)||(document.getElementById('selDiff')?.value)||'standard';
   const qtype=isEngine?(document.getElementById('selQType')?.value||'mixed'):'open';
   const mcqMode=document.getElementById('selMcqMode')?.value||'single';
   const plan=buildTypePlan(qtype,count);
@@ -81,7 +83,7 @@ function generateSet(){
     gradeLabel:(typeof grade==='function'&&grade()===8)?'כיתה ח׳':'כיתה ז׳',
     domainLabel:{geometry:'גאומטריה',algebra:'אלגברה',numeric:'תחום מספרי',uncertainty:'אי־ודאות'}[domainKey]||'',
     cls:{geometry:'geo',algebra:'alg',numeric:'num',uncertainty:'unc'}[domainKey]||'num',
-    diffLabel:{standard:'סטנדרטית',basic:'בסיסית',challenge:'מאתגרת'}[diff]||diff
+    diffLabel:{basic:'רמה 1',standard:'רמה 2',challenge:'רמה 3'}[diff]||diff
   };
   // publish set context so Teacher Advanced Mode can regenerate single items
   window.__exsetCtx={id:id,isEngine:isEngine,diff:diff,topicLabel:topicLabel,cls:meta.cls,mcqMode:mcqMode,exercises:exercises};
@@ -136,7 +138,7 @@ function renderExerciseSet(meta,exercises){
     +'<div class="exset-head">'
     +'<div class="exset-title">דף תרגילים — '+meta.topicLabel+'</div>'
     +'<div class="exset-nameline">שם: ______________________&nbsp;&nbsp;&nbsp; תאריך: ______________&nbsp;&nbsp;&nbsp; כיתה: ________</div>'
-    +'<div class="qmeta" data-html2canvas-ignore="true"><span class="tag '+meta.cls+'">'+meta.gradeLabel+'</span><span class="tag '+meta.cls+'">'+meta.domainLabel+'</span><span class="tag '+meta.cls+'">רמה: '+meta.diffLabel+'</span><span class="tag '+meta.cls+'">'+countLabel+'</span></div>'
+    +'<div class="qmeta" data-html2canvas-ignore="true"><span class="tag '+meta.cls+'">'+meta.gradeLabel+'</span><span class="tag '+meta.cls+'">'+meta.domainLabel+'</span><span class="tag '+meta.cls+'">'+meta.diffLabel+'</span><span class="tag '+meta.cls+'">'+countLabel+'</span></div>'
     +'<div class="exset-actions" data-html2canvas-ignore="true">'
     +'<button class="btn-key" id="btnAnswerKey" onclick="toggleAnswerKey()">הצג תשובות</button>'
     +'<button class="btn-printset" onclick="printExerciseSet()">הדפס דף תרגילים</button>'
