@@ -17,14 +17,37 @@
     {ev:'מספר קטן מ-3',fav:2,p:'\\frac{1}{3}',faces:[1,2]},
     {ev:'המספר 6',fav:1,p:'\\frac{1}{6}',faces:[6]}
   ];
+  // Expected count over many trials (source file 06 / PDF p.1): a spinner with k
+  // equal sectors, `fav` of colour `color`; over `spins` spins the expected count
+  // landing on that colour = (fav/k)·spins. Pre-validated for whole-number results.
+  const SPIN_FILL = {'אדום':'#fecaca','כחול':'#bfdbfe','ירוק':'#bbf7d0','כתום':'#fed7aa','צהוב':'#fde68a','סגול':'#e9d5ff'};
+  const SPINNER = [
+    {k:8,fav:3,color:'אדום',spins:400,exp:150},
+    {k:5,fav:2,color:'כחול',spins:200,exp:80},
+    {k:10,fav:3,color:'כתום',spins:500,exp:150},
+    {k:6,fav:2,color:'ירוק',spins:300,exp:100}
+  ];
+  function spinnerSvg(x){
+    const cx=150,cy=110,r=60,step=360/x.k,fill=SPIN_FILL[x.color]||'#fde68a';
+    let secs='';
+    for(let i=0;i<x.k;i++){
+      const a0=(i*step-90)*Math.PI/180,a1=((i+1)*step-90)*Math.PI/180;
+      const x0=(cx+r*Math.cos(a0)).toFixed(1),y0=(cy+r*Math.sin(a0)).toFixed(1);
+      const x1=(cx+r*Math.cos(a1)).toFixed(1),y1=(cy+r*Math.sin(a1)).toFixed(1);
+      secs+=`<path d="M${cx} ${cy} L${x0} ${y0} A${r} ${r} 0 0 1 ${x1} ${y1} Z" fill="${i<x.fav?fill:'#eef2f7'}" stroke="#475569" stroke-width="1.3"/>`;
+    }
+    secs+=`<line x1="${cx}" y1="${cy}" x2="${(cx+r*0.68).toFixed(1)}" y2="${(cy-r*0.5).toFixed(1)}" stroke="#0f172a" stroke-width="3"/><circle cx="${cx}" cy="${cy}" r="4.5" fill="#0f172a"/>`;
+    return `<svg class="engine-svg" viewBox="0 0 300 200" role="img" aria-label="גלגל הסתברות"><text x="150" y="20" text-anchor="middle" font-size="14" font-weight="900" fill="#0f172a">גלגל מחולק ל-${x.k} גזרות שוות</text>${secs}<text x="150" y="192" text-anchor="middle" font-size="12.5" font-weight="800" fill="#334155">${x.fav} גזרות בצבע ${x.color} מתוך ${x.k}</text></svg>`;
+  }
 
   function pickFamily(diff){
-    if(diff === 'basic') return 'bag_simple';
-    if(diff === 'challenge') return E.pick(['complement','die','complement']);
-    return E.pick(['bag_simple','complement','die']);
+    if(diff === 'basic') return E.pick(['bag_simple','spinner']);
+    if(diff === 'challenge') return E.pick(['complement','die','spinner']);
+    return E.pick(['bag_simple','complement','die','spinner']);
   }
   function pickCase(f){
     if(f==='die') return E.pick(DIE);
+    if(f==='spinner') return E.pick(SPINNER);
     return E.pick(BAGS);
   }
 
@@ -64,10 +87,17 @@
       +'<text x="160" y="158" text-anchor="middle" font-size="13" font-weight="800" fill="#334155">תוצאות מתאימות: '+x.fav+' מתוך 6</text>'
       +'</svg>';
   }
-  function modelSvg(family,x){ return family==='die' ? dieSvg(x) : bagSvg(x,family); }
+  function modelSvg(family,x){ return family==='spinner' ? spinnerSvg(x) : family==='die' ? dieSvg(x) : bagSvg(x,family); }
 
   function choices(family,x){
     let correct, wrongs;
+    if(family==='spinner'){
+      const per=x.spins/x.k; // per single sector — the "forgot ×fav" trap
+      correct='$'+x.exp+'$'; wrongs=['$'+per+'$','$'+(x.spins-x.exp)+'$','$'+(x.exp+per)+'$'];
+      const values=[correct].concat(wrongs).filter((v,i,a)=>a.indexOf(v)===i).slice(0,4);
+      while(values.length<4) values.push('$'+(x.exp+values.length*7)+'$');
+      return E.shuffle(values).map((v,i)=>({label:['א','ב','ג','ד'][i], text:v, correct:v===correct}));
+    }
     if(family==='die'){ correct='$'+x.p+'$'; wrongs=['$\\frac{'+x.fav+'}{'+(6-x.fav)+'}$','$\\frac{1}{6}$'==='$'+x.p+'$'?'$\\frac{1}{3}$':'$\\frac{1}{6}$','$\\frac{'+(6-x.fav)+'}{6}$']; }
     else if(family==='complement'){ correct='$'+x.prc+'$'; wrongs=['$'+x.pr+'$','$\\frac{'+x.b+'}{'+x.r+'}$','$1$']; }
     else { correct='$'+x.pr+'$'; wrongs=['$'+x.prc+'$','$\\frac{'+x.r+'}{'+x.b+'}$','$\\frac{1}{'+x.r+'}$']; }
@@ -77,6 +107,13 @@
   }
 
   function question(family,x,qtype,tfTrue){
+    if(family==='spinner'){
+      const per=x.spins/x.k;
+      const base=`גלגל מחולק ל-$${x.k}$ גזרות שוות, $${x.fav}$ מהן בצבע ${x.color}. מסובבים את המחוג $${x.spins}$ פעמים.`;
+      if(qtype==='tf') return `${base} צפוי שהמחוג ייעצר על ${x.color} בערך $${tfTrue?x.exp:per}$ פעמים.`;
+      if(qtype==='mistake') return `${base} תלמיד אמר: "ייעצר על ${x.color} בערך $${per}$ פעמים" — חישב גזרה אחת בלבד.`;
+      return `${base}\nכמה פעמים בערך צפוי שהמחוג ייעצר על גזרה בצבע ${x.color}?`;
+    }
     if(family==='die'){
       if(qtype==='tf') return tfTrue
         ? `מטילים קובייה הוגנת. ההסתברות לקבל ${x.ev} היא $${x.p}$.`
@@ -99,6 +136,12 @@
 
   function answer(family,x,qtype,tfTrue){
     const wrong = qtype==='mistake' || (qtype==='tf' && !tfTrue);
+    if(family==='spinner'){
+      const prefix = wrong ? 'שגוי — מספר הפעמים הצפוי = הסתברות כפול מספר הסיבובים (לכל הגזרות בצבע, לא אחת).\n' : '';
+      return `${prefix}ההסתברות לעצירה על ${x.color}: $\\frac{${x.fav}}{${x.k}}$.
+מספר הפעמים הצפוי = הסתברות $\\cdot$ מספר הסיבובים:
+$$\\frac{${x.fav}}{${x.k}}\\cdot ${x.spins}=${x.exp}$$`;
+    }
     if(family==='die'){
       const prefix = wrong ? 'שגוי — המכנה הוא סך כל התוצאות האפשריות ($6$), לא הכישלונות.\n' : '';
       return `${prefix}תוצאות אפשריות: $6$. תוצאות מתאימות: $${x.fav}$.\n$$P=\\frac{${x.fav}}{6}=${x.p}$$`;
