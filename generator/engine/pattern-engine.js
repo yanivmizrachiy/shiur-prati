@@ -11,10 +11,10 @@
     'U8-01-ENGINE','U8-02-ENGINE'
   ];
 
-  if(!document.querySelector('link[href="engine/engine.css"]')){
+  if(!document.querySelector('link[href^="engine/engine.css"]')){
     const link=document.createElement('link');
     link.rel='stylesheet';
-    link.href='engine/engine.css';
+    link.href='engine/engine.css?v=20260616a';
     document.head.appendChild(link);
   }
 
