@@ -65,7 +65,7 @@
     if(family==='missing_from_mean'){
       const sum = x.mean*x.n, ks = x.known.reduce((a,b)=>a+b,0);
       const prefix = wrong ? 'שגוי — הציון החמישי אינו בהכרח הממוצע. מחשבים מסכום כולל.\n' : '';
-      return `${prefix}סכום נדרש: $${x.mean}\\times ${x.n}=${sum}$.\nסכום קיים: $${x.known.join('+')}=${ks}$.\n$$${sum}-${ks}=${x.missing}$$\nהציון החמישי: $${x.missing}$.`;
+      return `${prefix}סכום נדרש: $${x.mean}\\cdot ${x.n}=${sum}$.\nסכום קיים: $${x.known.join('+')}=${ks}$.\n$$${sum}-${ks}=${x.missing}$$\nהציון החמישי: $${x.missing}$.`;
     }
     const sorted = x.d.slice().sort((a,b)=>a-b);
     if(family==='mean'){

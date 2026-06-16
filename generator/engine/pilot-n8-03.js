@@ -64,12 +64,12 @@
       if(qtype === 'tf') return tfTrue
         ? `${x.ctx} ${x.thing} הוא $${x.map}$ ס״מ. קנה המידה הוא $1:${x.scale}$. המרחק האמיתי הוא ${x.real}.`
         : `${x.ctx} ${x.thing} הוא $${x.map}$ ס״מ. קנה המידה הוא $1:${x.scale}$. המרחק האמיתי הוא ${x.map} ק״מ.`;
-      if(qtype === 'mistake') return `תלמיד כתב: $${x.map}\\times ${x.scale}=${x.map*x.scale}$, ולכן המרחק האמיתי הוא $${x.map*x.scale}$ ק״מ.`;
+      if(qtype === 'mistake') return `תלמיד כתב: $${x.map}\\cdot ${x.scale}=${x.map*x.scale}$, ולכן המרחק האמיתי הוא $${x.map*x.scale}$ ק״מ.`;
       return `${x.ctx} ${x.thing} הוא $${x.map}$ ס״מ. קנה המידה הוא $1:${x.scale}$.\nמה המרחק האמיתי?`;
     }
     if(family === 'scale_map_distance'){
       if(qtype === 'tf') return `${x.ctx}, ${x.thing} במציאות הוא ${x.real}. בקנה מידה $1:${x.scale}$, המרחק בשרטוט הוא $${tfTrue?x.map:x.map+2}$ ס״מ.`;
-      if(qtype === 'mistake') return `תלמיד כתב: "${x.real} \\times ${x.scale}" כדי למצוא את המרחק בשרטוט.\nמצאו את הטעות.`;
+      if(qtype === 'mistake') return `תלמיד כתב: "${x.real} \\cdot ${x.scale}" כדי למצוא את המרחק בשרטוט.\nמצאו את הטעות.`;
       return `${x.ctx}, ${x.thing} במציאות הוא ${x.real}. קנה המידה הוא $1:${x.scale}$.\nכמה ס״מ יהיה המרחק בשרטוט?`;
     }
     if(qtype === 'tf') return `${x.ctx}, ${x.thing} הוא $${x.map}$ ס״מ במפה ו-${x.real} במציאות. קנה המידה הוא $1:${tfTrue?x.scale:Math.round(x.scale/10)}$.`;
@@ -80,7 +80,7 @@
   function answer(family,x,qtype){
     if(family === 'scale_real_distance'){
       const prefix = qtype === 'mistake' ? 'הטעות היא שהמספר שהתקבל הוא בסנטימטרים, לא בקילומטרים.\n' : '';
-      return `${prefix}בקנה מידה $1:${x.scale}$ כל $1$ ס״מ במפה מייצג $${x.scale}$ ס״מ במציאות.\n$$${x.map}\\times ${x.scale}=${x.realCm}\\text{ ס״מ}$$\n$$${x.realCm}\\text{ ס״מ}=${x.real}$$`;
+      return `${prefix}בקנה מידה $1:${x.scale}$ כל $1$ ס״מ במפה מייצג $${x.scale}$ ס״מ במציאות.\n$$${x.map}\\cdot ${x.scale}=${x.realCm}\\text{ ס״מ}$$\n$$${x.realCm}\\text{ ס״מ}=${x.real}$$`;
     }
     if(family === 'scale_map_distance'){
       const prefix = qtype === 'mistake' ? 'הטעות היא כפל במקום חילוק. כדי לחזור לשרטוט מחלקים בקנה המידה.\n' : '';

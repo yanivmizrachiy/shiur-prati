@@ -362,10 +362,10 @@
     followUpIdeas: ['מצאו צלע חסרה', 'נפח תיבה', 'גובה חסר מתוך נפח'],
     requiredVisual: true,
     families: [
-      fam('G7-01-area', 'rectangle_area', 'שטח מלבן a×b', 'חיבור צלעות', ['שטח'], ['שטח=מכפלה'], { requiredVisual: true }),
+      fam('G7-01-area', 'rectangle_area', 'שטח מלבן a·b', 'חיבור צלעות', ['שטח'], ['שטח=מכפלה'], { requiredVisual: true }),
       fam('G7-01-perim', 'rectangle_perimeter', 'היקף מלבן', 'כפל במקום סכום', ['היקף'], ['סכום כל הצלעות'], { requiredVisual: true }),
       fam('G7-01-missing', 'rectangle_missing_side', 'שטח/היקף ידוע — צלע חסרה', 'חיסור במקום חילוק', ['צלע חסרה'], ['פעולה הופכית מתאימה'], { requiredVisual: true }),
-      fam('G7-01-volume', 'box_volume', 'נפח תיבה l×w×h', 'חיבור ממדים', ['נפח'], ['מכפלת שלושה ממדים'], { requiredVisual: true }),
+      fam('G7-01-volume', 'box_volume', 'נפח תיבה l·w·h', 'חיבור ממדים', ['נפח'], ['מכפלת שלושה ממדים'], { requiredVisual: true }),
       fam('G7-01-box-missing', 'box_missing_dim', 'נפח ידוע — ממד חסר', 'חיסור במקום חילוק', ['ממד חסר'], ['חילוק בשטח בסיס'], { requiredVisual: true })
     ]
   });
@@ -393,7 +393,7 @@
     families: [
       fam('G7-03-side', 'find_side', 'רגליים 3,4 — יתר?', 'חיבור רגליים', ['יתר', 'רגל'], ['סכום ריבועים'], { requiredVisual: true }),
       fam('G7-03-check', 'check_right_triangle', 'האם 3,4,6 ישר-זווית?', 'הנחה שכל משולש ישר', ['בדיקת שלשה'], ['בדיקת השוויון'], { requiredVisual: true }),
-      fam('G7-03-rect', 'rectangle_diagonal', 'אלכסון מלבן 3×4', 'חיבור צלעות לאלכסון', ['אלכסון מלבן'], ['היתר במשולש'], { requiredVisual: true })
+      fam('G7-03-rect', 'rectangle_diagonal', 'אלכסון מלבן 3·4', 'חיבור צלעות לאלכסון', ['אלכסון מלבן'], ['היתר במשולש'], { requiredVisual: true })
     ]
   });
   topic('G7-04-ENGINE', {
@@ -550,13 +550,13 @@
   // source-fit-dedicated-2.js so per-question provenance (F3) is accurate.
   topic('G8-05-ENGINE', {
     topicName: 'זווית מרכזית וחלק מעיגול', skill: 'זווית מרכזית, חלק מהעיגול וגזרה',
-    learningGoal: 'התלמיד יקשר בין אחוז מהעיגול לזווית מרכזית (×360°) וישווה גזרות',
+    learningGoal: 'התלמיד יקשר בין אחוז מהעיגול לזווית מרכזית (·360°) וישווה גזרות',
     teacherPurpose: 'ביסוס הקשר חלק↔זווית מרכזית והבחנה ממעלות',
     misconceptions: ['אחוז כמעלות', 'כפל ב-100 במקום ב-360', 'בלבול זווית מרכזית עם היקפית'],
     followUpIdeas: ['זווית מרכזית מאחוז', 'אחוז מזווית', 'איזו גזרה גדולה יותר'],
     requiredVisual: true, engineSupport: 'dedicated', status: 'active',
     families: [
-      fam('G8-05-angle_from_part', 'angle_from_part', 'זווית מרכזית מאחוז (אחוז×360°)', 'אחוז=מעלות', ['אחוז→זווית'], ['זווית=אחוז×360°'], { requiredVisual: true }),
+      fam('G8-05-angle_from_part', 'angle_from_part', 'זווית מרכזית מאחוז (אחוז·360°)', 'אחוז=מעלות', ['אחוז→זווית'], ['זווית=אחוז·360°'], { requiredVisual: true }),
       fam('G8-05-part_from_angle', 'part_from_angle', 'חלק מהעיגול מזווית מרכזית (זווית/360°)', 'הזווית כאחוז', ['זווית→אחוז'], ['חלק=זווית/360°'], { requiredVisual: true }),
       fam('G8-05-compare', 'compare', 'איזו גזרה גדולה יותר?', 'בחירה לפי מספר "עגול"', ['השוואת גזרות'], ['לפי הזווית המרכזית'], { requiredVisual: true })
     ]
@@ -670,12 +670,12 @@
   topic('U7-05-ENGINE', {
     topicName: 'דיאגרמת עוגה ושכיחות יחסית', skill: 'זווית מרכזית מאחוז, אחוז חסר, גזרה גדולה',
     learningGoal: 'התלמיד יחשב זווית מרכזית מאחוז ויקרא דיאגרמת עוגה',
-    teacherPurpose: 'חיבור אחוז לזווית מרכזית (×360°)',
+    teacherPurpose: 'חיבור אחוז לזווית מרכזית (·360°)',
     misconceptions: ['אחוז כמעלות', 'כפל ב-100 במקום ב-360', 'גזרה גדולה לפי סדר במקרא'],
     followUpIdeas: ['חשבו זווית מרכזית', 'מצאו אחוז חסר', 'זהו את הגזרה הגדולה'],
     requiredVisual: true, engineSupport: 'dedicated', status: 'active',
     families: [
-      fam('U7-05-angle', 'pie_central_angle', 'זווית מרכזית מאחוז (×3.6°)', 'אחוז=מעלות', ['גזרה'], ['זווית=אחוז×360°'], { requiredVisual: true }),
+      fam('U7-05-angle', 'pie_central_angle', 'זווית מרכזית מאחוז (·3.6°)', 'אחוז=מעלות', ['גזרה'], ['זווית=אחוז·360°'], { requiredVisual: true }),
       fam('U7-05-missing', 'pie_missing_percent', 'מצאו את האחוז החסר (סכום 100%)', 'התעלמות מסכום 100%', ['אחוז חסר'], ['סכום הגזרות 100%'], { requiredVisual: true }),
       fam('U7-05-largest', 'pie_largest_sector', 'איזו גזרה הגדולה ביותר?', 'בחירה לפי סדר במקרא', ['גזרה גדולה'], ['לפי האחוז'], { requiredVisual: true })
     ]
@@ -740,7 +740,7 @@
     followUpIdeas: ['מצאו זווית ראש', 'מצאו זוויות בסיס', 'סווגו משולש'],
     requiredVisual: true, engineSupport: 'dedicated', status: 'active',
     families: [
-      fam('G8-08-apex', 'find_apex', 'זוויות בסיס נתונות — זווית הראש?', 'זווית ראש=זווית בסיס', ['זווית ראש'], ['180−2×בסיס'], { requiredVisual: true }),
+      fam('G8-08-apex', 'find_apex', 'זוויות בסיס נתונות — זווית הראש?', 'זווית ראש=זווית בסיס', ['זווית ראש'], ['180−2·בסיס'], { requiredVisual: true }),
       fam('G8-08-base', 'find_base_angles', 'זווית ראש נתונה — זוויות הבסיס?', 'אי-חלוקה ב-2', ['זוויות בסיס'], ['(180−ראש)/2'], { requiredVisual: true }),
       fam('G8-08-classify', 'classify_isosceles', 'סווגו לפי הזוויות', 'סיווג לפי הקטנה', ['חד/ישר/קהה'], ['לפי הזווית הגדולה'], { requiredVisual: true })
     ]

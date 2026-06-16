@@ -51,12 +51,12 @@
   function question(family,x,qtype,tfTrue){
     if(family === 'rect_area'){
       if(qtype==='tf') return `שטח מלבן שאורכו $${x.l}$ ס״מ ורוחבו $${x.w}$ ס״מ הוא $${tfTrue?x.A:(2*(x.l+x.w)===x.A?x.A+x.l:2*(x.l+x.w))}$ סמ״ר.`;
-      if(qtype==='mistake') return `תלמיד חישב שטח מלבן $${x.l}\\times ${x.w}$: "$${x.l}+${x.w}=${x.l+x.w}$, ואז כפול $2$: $${2*(x.l+x.w)}$ סמ״ר".`;
+      if(qtype==='mistake') return `תלמיד חישב שטח מלבן $${x.l}\\cdot ${x.w}$: "$${x.l}+${x.w}=${x.l+x.w}$, ואז כפול $2$: $${2*(x.l+x.w)}$ סמ״ר".`;
       return `מלבן שאורכו $${x.l}$ ס״מ ורוחבו $${x.w}$ ס״מ.\nחשבו את שטח המלבן.`;
     }
     if(family === 'rect_perimeter'){
       if(qtype==='tf') return `היקף מלבן שאורכו $${x.l}$ ס״מ ורוחבו $${x.w}$ ס״מ הוא $${tfTrue?x.P:(x.l*x.w===x.P?x.P+x.w:x.l*x.w)}$ ס״מ.`;
-      if(qtype==='mistake') return `תלמיד חישב היקף מלבן $${x.l}\\times ${x.w}$: "$${x.l}\\times ${x.w}=${x.l*x.w}$ ס״מ".`;
+      if(qtype==='mistake') return `תלמיד חישב היקף מלבן $${x.l}\\cdot ${x.w}$: "$${x.l}\\cdot ${x.w}=${x.l*x.w}$ ס״מ".`;
       return `מלבן שאורכו $${x.l}$ ס״מ ורוחבו $${x.w}$ ס״מ.\nחשבו את היקף המלבן.`;
     }
     if(family === 'rect_missing_side_area'){
@@ -70,8 +70,8 @@
       return `היקף מלבן הוא $${x.P}$ ס״מ ואורכו $${x.l}$ ס״מ.\nמה רוחב המלבן?`;
     }
     if(family === 'box_volume'){
-      if(qtype==='tf') return `נפח תיבה שממדיה $${x.l}\\times ${x.w}\\times ${x.h}$ ס״מ הוא $${tfTrue?x.V:x.l+x.w+x.h}$ סמ״ק.`;
-      if(qtype==='mistake') return `תלמיד חישב נפח תיבה $${x.l}\\times ${x.w}\\times ${x.h}$: "$${x.l}+${x.w}+${x.h}=${x.l+x.w+x.h}$ סמ״ק".`;
+      if(qtype==='tf') return `נפח תיבה שממדיה $${x.l}\\cdot ${x.w}\\cdot ${x.h}$ ס״מ הוא $${tfTrue?x.V:x.l+x.w+x.h}$ סמ״ק.`;
+      if(qtype==='mistake') return `תלמיד חישב נפח תיבה $${x.l}\\cdot ${x.w}\\cdot ${x.h}$: "$${x.l}+${x.w}+${x.h}=${x.l+x.w+x.h}$ סמ״ק".`;
       return `תיבה שאורכה $${x.l}$ ס״מ, רוחבה $${x.w}$ ס״מ וגובהה $${x.h}$ ס״מ.\nחשבו את נפח התיבה.`;
     }
     // box_missing_dim
@@ -83,12 +83,12 @@
   function answer(family,x,qtype,tfTrue){
     const wrongNote = qtype==='mistake' || (qtype==='tf' && !tfTrue);
     if(family === 'rect_area'){
-      const prefix = wrongNote ? 'שגוי — חיבור הצלעות נותן היקף (חצי ממנו), לא שטח. שטח = אורך × רוחב.\n' : '';
-      return `${prefix}$$S=${x.l}\\times ${x.w}=${x.A}$$\nשטח המלבן: $${x.A}$ סמ״ר.`;
+      const prefix = wrongNote ? 'שגוי — חיבור הצלעות נותן היקף (חצי ממנו), לא שטח. שטח = אורך · רוחב.\n' : '';
+      return `${prefix}$$S=${x.l}\\cdot ${x.w}=${x.A}$$\nשטח המלבן: $${x.A}$ סמ״ר.`;
     }
     if(family === 'rect_perimeter'){
       const prefix = wrongNote ? 'שגוי — כפל הצלעות נותן שטח, לא היקף. היקף = סכום כל הצלעות.\n' : '';
-      return `${prefix}$$P=2\\times(${x.l}+${x.w})=2\\times ${x.l+x.w}=${x.P}$$\nהיקף המלבן: $${x.P}$ ס״מ.`;
+      return `${prefix}$$P=2\\cdot(${x.l}+${x.w})=2\\cdot ${x.l+x.w}=${x.P}$$\nהיקף המלבן: $${x.P}$ ס״מ.`;
     }
     if(family === 'rect_missing_side_area'){
       const prefix = wrongNote ? 'שגוי — שטח מתקבל מכפל, לכן את הצלע החסרה מוצאים בחילוק, לא בחיסור.\n' : '';
@@ -96,14 +96,14 @@
     }
     if(family === 'rect_missing_side_perimeter'){
       const prefix = wrongNote ? 'שגוי — בהיקף יש שתי צלעות מכל סוג.\n' : '';
-      return `${prefix}$$${x.P}=2\\times(${x.l}+w)$$\n$$${x.l}+w=${x.P/2}$$\n$$w=${x.P/2}-${x.l}=${x.w}$$\nרוחב המלבן: $${x.w}$ ס״מ.`;
+      return `${prefix}$$${x.P}=2\\cdot(${x.l}+w)$$\n$$${x.l}+w=${x.P/2}$$\n$$w=${x.P/2}-${x.l}=${x.w}$$\nרוחב המלבן: $${x.w}$ ס״מ.`;
     }
     if(family === 'box_volume'){
       const prefix = wrongNote ? 'שגוי — נפח הוא מכפלת שלושת הממדים, לא סכומם.\n' : '';
-      return `${prefix}$$V=${x.l}\\times ${x.w}\\times ${x.h}=${x.V}$$\nנפח התיבה: $${x.V}$ סמ״ק.`;
+      return `${prefix}$$V=${x.l}\\cdot ${x.w}\\cdot ${x.h}=${x.V}$$\nנפח התיבה: $${x.V}$ סמ״ק.`;
     }
     const prefix = wrongNote ? 'שגוי — נפח מתקבל מכפל, לכן את הממד החסר מוצאים בחילוק.\n' : '';
-    return `${prefix}שטח הבסיס: $${x.l}\\times ${x.w}=${x.l*x.w}$.\n$$h=V\\div(l\\times w)=${x.V}\\div ${x.l*x.w}=${x.h}$$\nגובה התיבה: $${x.h}$ ס״מ.`;
+    return `${prefix}שטח הבסיס: $${x.l}\\cdot ${x.w}=${x.l*x.w}$.\n$$h=V\\div(l\\cdot w)=${x.V}\\div ${x.l*x.w}=${x.h}$$\nגובה התיבה: $${x.h}$ ס״מ.`;
   }
 
   E.generateG701Engine = function(difficulty, questionType){

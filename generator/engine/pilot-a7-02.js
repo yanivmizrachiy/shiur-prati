@@ -65,7 +65,7 @@
       return `${prefix}$$x^2+${x.c}=${wrap(x.v)}^2+${x.c}=${sq}+${x.c}=${x.r}$$`;
     }
     const prefix = wrong ? 'שגוי — $'+x.k+'x$ פירושו $'+x.k+'$ כפול $x$, לא חיבור.\n' : '';
-    return `${prefix}$$${x.k}x+${x.c}=${x.k}\\times ${wrap(x.v)}+${x.c}=${x.k*x.v}+${x.c}=${x.r}$$`;
+    return `${prefix}$$${x.k}x+${x.c}=${x.k}\\cdot ${wrap(x.v)}+${x.c}=${x.k*x.v}+${x.c}=${x.r}$$`;
   }
 
   E.generateA702Engine = function(difficulty, questionType){

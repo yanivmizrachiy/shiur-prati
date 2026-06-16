@@ -64,7 +64,7 @@
     }
     if(family === 'area_ratio'){
       if(qtype==='tf') return `שני משולשים דומים ביחס $1:${x.k}$. שטח הקטן: $${x.A1}$ סמ״ר. שטח הגדול: $${tfTrue?x.A2:(x.A1*x.k===x.A2?x.A2+x.k:x.A1*x.k)}$ סמ״ר.`;
-      if(qtype==='mistake') return `שני משולשים דומים ביחס $1:${x.k}$, שטח הקטן $${x.A1}$ סמ״ר. תלמיד חישב: "שטח הגדול $=${x.A1}\\times ${x.k}=${x.A1*x.k}$".`;
+      if(qtype==='mistake') return `שני משולשים דומים ביחס $1:${x.k}$, שטח הקטן $${x.A1}$ סמ״ר. תלמיד חישב: "שטח הגדול $=${x.A1}\\cdot ${x.k}=${x.A1*x.k}$".`;
       return `שני משולשים דומים ביחס $1:${x.k}$. שטח המשולש הקטן: $${x.A1}$ סמ״ר.\nמה שטח המשולש הגדול?`;
     }
     // is_similar
@@ -82,11 +82,11 @@
     }
     if(family === 'corresponding_side'){
       const prefix = wrong ? 'שגוי — ביחס דמיון מכפילים, לא מחברים.\n' : '';
-      return `${prefix}$$${x.a1}\\times ${x.k}=${x.a2}$$\nהצלע המתאימה: $${x.a2}$ ס״מ.`;
+      return `${prefix}$$${x.a1}\\cdot ${x.k}=${x.a2}$$\nהצלע המתאימה: $${x.a2}$ ס״מ.`;
     }
     if(family === 'area_ratio'){
       const prefix = wrong ? 'שגוי — יחס שטחים אינו יחס הצלעות: כל מימד גדל פי $'+x.k+'$, ולכן השטח גדל פי $'+x.k+'^2$.\n' : '';
-      return `${prefix}יחס שטחים = ריבוע יחס הדמיון:\n$$\\frac{S_2}{S_1}=${x.k}^2=${x.k*x.k}$$\n$$S_2=${x.A1}\\times ${x.k*x.k}=${x.A2}$$`;
+      return `${prefix}יחס שטחים = ריבוע יחס הדמיון:\n$$\\frac{S_2}{S_1}=${x.k}^2=${x.k*x.k}$$\n$$S_2=${x.A1}\\cdot ${x.k*x.k}=${x.A2}$$`;
     }
     // is_similar
     const r1 = x.a2/x.a1, r2 = Math.round(x.b2/x.b1*100)/100;

@@ -3,7 +3,7 @@
 // textbook-quality SVG: G8-09 similarity/shadows, G8-07 congruence markings,
 // G8-05 central angle/sector, G7-06 composite area, G7-05 transformations,
 // N7-10/N7-11 directed add/sub, N7-12/N7-13 directed mul/div.
-// open/mcq/tf/mistake × basic/standard/challenge, balanced TF, smart MCQ,
+// open/mcq/tf/mistake · basic/standard/challenge, balanced TF, smart MCQ,
 // mistake-with-correction, full pedagogy meta. Loaded after source-fit-dedicated.
 (function () {
   const E = window.TargilimEngine = window.TargilimEngine || {};
@@ -59,16 +59,16 @@
       `<text x="220" y="145" fill="${T.label}" font-size="10" font-weight="700" text-anchor="middle">משולש 2</text>`);
   }
   function compositeSvg(a, b, c, d) {
-    // L-shape: big rect a×b minus small rect c×d (top-right), decomposition line
+    // L-shape: big rect a·b minus small rect c·d (top-right), decomposition line
     const sc = 9, ox = 40, oy = 24, W = a * sc, H = b * sc, cw = c * sc, chh = d * sc;
-    return svgWrap(Math.max(220, ox + W + 40), oy + H + 36,
+    return svgWrap(Math.max(240, ox + W + 66), oy + H + 38,
       `<path d="M ${ox} ${oy} h ${W - cw} v ${chh} h ${cw} v ${H - chh} h ${-W} Z" fill="${T.fill}" stroke="${T.stroke}" stroke-width="2" stroke-linejoin="round"/>` +
       `<line x1="${ox + W - cw}" y1="${oy}" x2="${ox + W - cw}" y2="${oy + chh}" stroke="${T.helper}" stroke-width="1.5" stroke-dasharray="5 4"/>` +
       `<line x1="${ox + W - cw}" y1="${oy + chh}" x2="${ox + W}" y2="${oy + chh}" stroke="${T.helper}" stroke-width="1.5" stroke-dasharray="5 4"/>` +
-      `<text x="${ox + (W - cw) / 2}" y="${oy + H + 16}" fill="${T.given}" font-size="11" font-weight="700" text-anchor="middle">${a} ס״מ</text>` +
-      `<text x="${ox - 8}" y="${oy + H / 2}" fill="${T.given}" font-size="11" font-weight="700" text-anchor="end">${b} ס״מ</text>` +
-      `<text x="${ox + W - cw / 2}" y="${oy - 6}" fill="${T.given}" font-size="10" font-weight="700" text-anchor="middle">${c}</text>` +
-      `<text x="${ox + W + 6}" y="${oy + chh / 2}" fill="${T.given}" font-size="10" font-weight="700">${d}</text>`);
+      `<text x="${ox + W / 2}" y="${oy + H + 18}" fill="${T.given}" font-size="11" font-weight="700" text-anchor="middle">${a} ס״מ</text>` +
+      `<text x="${ox - 10}" y="${oy + H / 2}" fill="${T.given}" font-size="11" font-weight="700" text-anchor="end" dominant-baseline="middle">${b} ס״מ</text>` +
+      `<text x="${ox + W - cw / 2}" y="${oy - 6}" fill="${T.given}" font-size="10" font-weight="700" text-anchor="middle">${c} ס״מ</text>` +
+      `<text x="${ox + W + 7}" y="${oy + chh / 2}" fill="${T.given}" font-size="10" font-weight="700" dominant-baseline="middle">${d} ס״מ</text>`);
   }
   function transformSvg(kind, dx) {
     const g = 20, ox = 24, oy = 18, n = 9;
@@ -116,11 +116,11 @@
       else if (qtype === 'mcq') { cs = ch([{ text: 'הגזרה של ' + Math.max(ang, ang2) + '°', correct: true }, { text: 'הגזרה של ' + Math.min(ang, ang2) + '°', correct: false }, { text: 'שוות', correct: false }, { text: 'אי אפשר לדעת', correct: false }]); }
       else if (qtype === 'mistake') { q = `תלמיד קבע שהגזרה של ${Math.min(ang, ang2)}° גדולה יותר כי המספר נראה לו "עגול".`; a = `הטעות: גודל גזרה לפי הזווית המרכזית. ${Math.max(ang, ang2)}° > ${Math.min(ang, ang2)}°.`; }
     } else {
-      a = `הזווית המרכזית = החלק מהעיגול × 360°: ${pct}%×360°=${ang}°.`;
+      a = `הזווית המרכזית = החלק מהעיגול · 360°: ${pct}%·360°=${ang}°.`;
       q = `גזרה מהווה ${pct}% מהעיגול. מהי הזווית המרכזית שלה?`;
       if (qtype === 'tf') { q = `גזרה המהווה ${pct}% מהעיגול היא בעלת זווית מרכזית ${tfTrue ? ang : pct}°.`; a = (tfTrue ? 'נכון. ' : 'שגוי — אחוז אינו מעלות. ') + a; }
       else if (qtype === 'mcq') { cs = ch([{ text: ang + '°', correct: true }, { text: pct + '°', correct: false }, { text: (pct * 100) + '°', correct: false }, { text: (360 - ang) + '°', correct: false }]); }
-      else if (qtype === 'mistake') { q = `תלמיד חישב זווית מרכזית של גזרת ${pct}%: "${pct}°".`; a = `הטעות: הזווית = אחוז×360°, לא האחוז עצמו. ${pct}%×360°=${ang}°.`; }
+      else if (qtype === 'mistake') { q = `תלמיד חישב זווית מרכזית של גזרת ${pct}%: "${pct}°".`; a = `הטעות: הזווית = אחוז·360°, לא האחוז עצמו. ${pct}%·360°=${ang}°.`; }
     }
     return render(qtype, q, a, svg, cs, isTrue, fam);
   }
@@ -179,7 +179,7 @@
       else if (qtype === 'mcq') { cs = ch([{ text: 'כי המשולשים דומים (זוויות שוות)', correct: true }, { text: 'כי הם חופפים', correct: false }, { text: 'כי הצללים שווים', correct: false }, { text: 'כי העצמים שווים', correct: false }]); }
       else if (qtype === 'mistake') { q = `תלמיד טען שהמשולשים חופפים ולכן הגבהים שווים.`; a = `הטעות: המשולשים דומים (לא חופפים); הצלעות ביחס קבוע, לא שוות. ` + a; }
     } else {
-      a = `לפי דמיון, גובה/צל קבוע: ${h2}/${s2}=h/${s1}, ולכן h=${h2}×${s1}/${s2}=${ans} מ׳.`;
+      a = `לפי דמיון, גובה/צל קבוע: ${h2}/${s2}=h/${s1}, ולכן h=${h2}·${s1}/${s2}=${ans} מ׳.`;
       q = `עמוד בגובה ${h2} מ׳ מטיל צל ${s2} מ׳. באותה שעה מוט מטיל צל ${s1} מ׳. מה גובה המוט?`;
       if (qtype === 'tf') { q = `גובה המוט הוא ${tfTrue ? ans : s1} מ׳.`; a = (tfTrue ? 'נכון. ' : 'שגוי — זה אורך הצל, לא הגובה. ') + a; }
       else if (qtype === 'mcq') { cs = ch([{ text: ans + ' מ׳', correct: true }, { text: s1 + ' מ׳', correct: false }, { text: (h2) + ' מ׳', correct: false }, { text: (Math.round(h2 * s2 / s1 * 10) / 10) + ' מ׳', correct: false }]); }
@@ -199,24 +199,24 @@
     const perim = 2 * (a + b);
     let q, ans, cs, isTrue = tfTrue;
     if (fam === 'perimeter') {
-      ans = `חיתוך מלבן מפינה אינו משנה את ההיקף: שני הקטעים שהוסרו מוחלפים בשני קטעים פנימיים באותו אורך. לכן ההיקף = 2×(${a}+${b})=${perim} ס״מ.`;
+      ans = `חיתוך מלבן מפינה אינו משנה את ההיקף: שני הקטעים שהוסרו מוחלפים בשני קטעים פנימיים באותו אורך. לכן ההיקף = 2·(${a}+${b})=${perim} ס״מ.`;
       q = `מהו היקף צורת ה-L שבשרטוט? (הממדים בס״מ)`;
       if (qtype === 'tf') { q = `היקף הצורה הוא ${tfTrue ? perim : perim - 2 * c} ס״מ.`; ans = (tfTrue ? 'נכון. ' : 'שגוי — חיתוך פינה אינו מקטין את ההיקף. ') + ans; }
       else if (qtype === 'mcq') { cs = ch([{ text: perim + ' ס״מ', correct: true }, { text: (perim - 2 * c) + ' ס״מ', correct: false }, { text: area + ' ס״מ', correct: false }, { text: (2 * (a - c + b - d)) + ' ס״מ', correct: false }]); }
-      else if (qtype === 'mistake') { q = `תלמיד חישב היקף = 2×(${a}+${b})−2×${c}−2×${d}=${perim - 2 * c - 2 * d} ס״מ, בטענה שהחיתוך מקצר את ההיקף.`; ans = `הטעות: הקטעים שהוסרו מוחלפים בקטעים פנימיים שווי אורך, ולכן ההיקף נשמר: ${perim} ס״מ.`; }
+      else if (qtype === 'mistake') { q = `תלמיד חישב היקף = 2·(${a}+${b})−2·${c}−2·${d}=${perim - 2 * c - 2 * d} ס״מ, בטענה שהחיתוך מקצר את ההיקף.`; ans = `הטעות: הקטעים שהוסרו מוחלפים בקטעים פנימיים שווי אורך, ולכן ההיקף נשמר: ${perim} ס״מ.`; }
     } else if (fam === 'decompose') {
       const big = (a - c) * b, small = c * (b - d);
-      ans = `מפרקים לשני מלבנים: ${a - c}×${b}=${big} ו-${c}×${b - d}=${small}. סך השטח: ${big}+${small}=${big + small} סמ״ר.`;
+      ans = `מפרקים לשני מלבנים: ${a - c}·${b}=${big} ו-${c}·${b - d}=${small}. סך השטח: ${big}+${small}=${big + small} סמ״ר.`;
       q = `חשבו את שטח הצורה (צורת L) בעזרת פירוק לשני מלבנים. הממדים בשרטוט (ס״מ).`;
       if (qtype === 'tf') { q = `שטח הצורה הוא ${tfTrue ? area : a * b} סמ״ר.`; ans = (tfTrue ? 'נכון. ' : 'שגוי — זה שטח המלבן המלא, לפני החיסור. ') + `שטח צורת ה-L: ${area} סמ״ר.`; }
       else if (qtype === 'mcq') { cs = ch([{ text: area + ' סמ״ר', correct: true }, { text: (a * b) + ' סמ״ר', correct: false }, { text: (a * b - c) + ' סמ״ר', correct: false }, { text: (c * d) + ' סמ״ר', correct: false }]); }
-      else if (qtype === 'mistake') { q = `תלמיד חישב את השטח כ-${a}×${b}=${a * b} סמ״ר.`; ans = `הטעות: זה המלבן השלם. צריך לחסר את המלבן החסר ${c}×${d}=${c * d}: ${a * b}−${c * d}=${area} סמ״ר.`; }
+      else if (qtype === 'mistake') { q = `תלמיד חישב את השטח כ-${a}·${b}=${a * b} סמ״ר.`; ans = `הטעות: זה המלבן השלם. צריך לחסר את המלבן החסר ${c}·${d}=${c * d}: ${a * b}−${c * d}=${area} סמ״ר.`; }
     } else {
-      ans = `מלבן שלם ${a}×${b}=${a * b}, פחות החלק החסר ${c}×${d}=${c * d}. שטח: ${a * b}−${c * d}=${area} סמ״ר.`;
+      ans = `מלבן שלם ${a}·${b}=${a * b}, פחות החלק החסר ${c}·${d}=${c * d}. שטח: ${a * b}−${c * d}=${area} סמ״ר.`;
       q = `חשבו את שטח הצורה (צורת L) שבשרטוט. הממדים בס״מ.`;
       if (qtype === 'tf') { q = `שטח הצורה הוא ${tfTrue ? area : a * b} סמ״ר.`; ans = (tfTrue ? 'נכון. ' : 'שגוי — זה המלבן המלא לפני החיסור. ') + ans; }
       else if (qtype === 'mcq') { cs = ch([{ text: area + ' סמ״ר', correct: true }, { text: (a * b) + ' סמ״ר', correct: false }, { text: (a * b - c - d) + ' סמ״ר', correct: false }, { text: (a + b) + ' סמ״ר', correct: false }]); }
-      else if (qtype === 'mistake') { q = `תלמיד חישב ${a}×${b}=${a * b} ושכח את הפינה החסרה.`; ans = `הטעות: יש לחסר את המלבן החסר ${c}×${d}=${c * d}. השטח: ${area} סמ״ר.`; }
+      else if (qtype === 'mistake') { q = `תלמיד חישב ${a}·${b}=${a * b} ושכח את הפינה החסרה.`; ans = `הטעות: יש לחסר את המלבן החסר ${c}·${d}=${c * d}. השטח: ${area} סמ״ר.`; }
     }
     return render(qtype, q, ans, svg, cs, isTrue, fam);
   }
@@ -327,12 +327,12 @@
     } else if (fam === 'three_factors') {
       const a1 = rnd(2, 5) * sgn(), b1 = rnd(2, 5) * sgn(), c1 = rnd(2, 5) * sgn(); res = a1 * b1 * c1;
       const negs = [a1, b1, c1].filter(v => v < 0).length;
-      expr = `${wrap(a1)} × ${wrap(b1)} × ${wrap(c1)}`;
+      expr = `${wrap(a1)} · ${wrap(b1)} · ${wrap(c1)}`;
       a = `סופרים את הגורמים השליליים: ${negs} (${negs % 2 === 0 ? 'זוגי → תוצאה חיובית' : 'אי-זוגי → תוצאה שלילית'}). ${expr}=${res}.`;
     } else {
       let a1 = rnd(2, 9) * sgn(), b1 = rnd(2, 9) * sgn(); if (a1 > 0 && b1 > 0) a1 = -a1; res = a1 * b1;
       const same = (a1 < 0) === (b1 < 0);
-      expr = `${wrap(a1)} × ${wrap(b1)}`;
+      expr = `${wrap(a1)} · ${wrap(b1)}`;
       a = `${same ? 'סימנים זהים → תוצאה חיובית' : 'סימנים שונים → תוצאה שלילית'}: ${expr}=${res}.`;
     }
     let q, cs, isTrue = tfTrue;

@@ -67,7 +67,7 @@
     }
     if(family==='value_at'){
       const prefix = wrong ? 'שגוי — $'+x.m+'x$ פירושו כפל, לא חיבור.\n' : '';
-      return `${prefix}$$y=${x.m}\\times ${x.x}${x.b>=0?'+'+x.b:x.b}=${x.m*x.x}${x.b>=0?'+'+x.b:x.b}=${x.y}$$`;
+      return `${prefix}$$y=${x.m}\\cdot ${x.x}${x.b>=0?'+'+x.b:x.b}=${x.m*x.x}${x.b>=0?'+'+x.b:x.b}=${x.y}$$`;
     }
     if(family==='equation_from_points'){
       const prefix = wrong ? 'שגוי — קודם שיפוע, אחר כך חיתוך.\n' : '';

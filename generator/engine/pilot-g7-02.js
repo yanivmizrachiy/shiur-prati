@@ -46,17 +46,17 @@
   function question(family,x,qtype,tfTrue){
     if(family === 'tri_area'){
       if(qtype==='tf') return `שטח משולש שבסיסו $${x.b}$ ס״מ וגובהו $${x.h}$ ס״מ הוא $${tfTrue?x.A:x.b*x.h}$ סמ״ר.`;
-      if(qtype==='mistake') return `תלמיד חישב שטח משולש (בסיס $${x.b}$, גובה $${x.h}$): "$${x.b}\\times ${x.h}=${x.b*x.h}$ סמ״ר".`;
+      if(qtype==='mistake') return `תלמיד חישב שטח משולש (בסיס $${x.b}$, גובה $${x.h}$): "$${x.b}\\cdot ${x.h}=${x.b*x.h}$ סמ״ר".`;
       return `משולש שבסיסו $${x.b}$ ס״מ וגובהו $${x.h}$ ס״מ.\nחשבו את שטח המשולש.`;
     }
     if(family === 'para_area'){
       if(qtype==='tf') return `שטח מקבילית שבסיסה $${x.b}$ ס״מ וגובהה $${x.h}$ ס״מ הוא $${tfTrue?x.A:Math.round(x.b*x.h/2)}$ סמ״ר.`;
-      if(qtype==='mistake') return `תלמיד חישב שטח מקבילית (בסיס $${x.b}$, גובה $${x.h}$): "$\\frac{${x.b}\\times ${x.h}}{2}=${Math.round(x.b*x.h/2)}$ סמ״ר".`;
+      if(qtype==='mistake') return `תלמיד חישב שטח מקבילית (בסיס $${x.b}$, גובה $${x.h}$): "$\\frac{${x.b}\\cdot ${x.h}}{2}=${Math.round(x.b*x.h/2)}$ סמ״ר".`;
       return `מקבילית שבסיסה $${x.b}$ ס״מ וגובהה $${x.h}$ ס״מ.\nחשבו את שטח המקבילית.`;
     }
     if(family === 'trap_area'){
       if(qtype==='tf') return `שטח טרפז שבסיסיו $${x.a}$ ו-$${x.b}$ ס״מ וגובהו $${x.h}$ ס״מ הוא $${tfTrue?x.A:(x.a+x.b)*x.h}$ סמ״ר.`;
-      if(qtype==='mistake') return `תלמיד חישב שטח טרפז (בסיסים $${x.a}$, $${x.b}$, גובה $${x.h}$): "$(${x.a}+${x.b})\\times ${x.h}=${(x.a+x.b)*x.h}$ סמ״ר".`;
+      if(qtype==='mistake') return `תלמיד חישב שטח טרפז (בסיסים $${x.a}$, $${x.b}$, גובה $${x.h}$): "$(${x.a}+${x.b})\\cdot ${x.h}=${(x.a+x.b)*x.h}$ סמ״ר".`;
       return `טרפז שבסיסיו $${x.a}$ ס״מ ו-$${x.b}$ ס״מ, וגובהו $${x.h}$ ס״מ.\nחשבו את שטח הטרפז.`;
     }
     // tri_missing_height
@@ -69,19 +69,19 @@
     const wrong = qtype==='mistake' || (qtype==='tf' && !tfTrue);
     if(family === 'tri_area'){
       const prefix = wrong ? 'שגוי — בשטח משולש מחלקים ב-$2$: המשולש הוא חצי מלבן.\n' : '';
-      return `${prefix}$$S=\\frac{${x.b}\\times ${x.h}}{2}=\\frac{${x.b*x.h}}{2}=${x.A}$$\nשטח המשולש: $${x.A}$ סמ״ר.`;
+      return `${prefix}$$S=\\frac{${x.b}\\cdot ${x.h}}{2}=\\frac{${x.b*x.h}}{2}=${x.A}$$\nשטח המשולש: $${x.A}$ סמ״ר.`;
     }
     if(family === 'para_area'){
-      const prefix = wrong ? 'שגוי — במקבילית לא מחלקים ב-$2$. הנוסחה: בסיס × גובה.\n' : '';
-      return `${prefix}$$S=${x.b}\\times ${x.h}=${x.A}$$\nשטח המקבילית: $${x.A}$ סמ״ר.`;
+      const prefix = wrong ? 'שגוי — במקבילית לא מחלקים ב-$2$. הנוסחה: בסיס · גובה.\n' : '';
+      return `${prefix}$$S=${x.b}\\cdot ${x.h}=${x.A}$$\nשטח המקבילית: $${x.A}$ סמ״ר.`;
     }
     if(family === 'trap_area'){
       const prefix = wrong ? 'שגוי — בטרפז מחלקים ב-$2$ את מכפלת סכום הבסיסים בגובה.\n' : '';
-      return `${prefix}$$S=\\frac{(${x.a}+${x.b})\\times ${x.h}}{2}=\\frac{${(x.a+x.b)*x.h}}{2}=${x.A}$$\nשטח הטרפז: $${x.A}$ סמ״ר.`;
+      return `${prefix}$$S=\\frac{(${x.a}+${x.b})\\cdot ${x.h}}{2}=\\frac{${(x.a+x.b)*x.h}}{2}=${x.A}$$\nשטח הטרפז: $${x.A}$ סמ״ר.`;
     }
     // tri_missing_height
     const prefix = wrong ? 'שגוי — לפני החילוק בבסיס יש להכפיל את השטח ב-$2$, כי בנוסחת המשולש מחלקים ב-$2$.\n' : '';
-    return `${prefix}$$S=\\frac{b\\times h}{2}\\;\\Rightarrow\\; h=\\frac{2S}{b}$$\n$$h=\\frac{2\\times ${x.A}}{${x.b}}=\\frac{${2*x.A}}{${x.b}}=${x.h}$$\nגובה המשולש: $${x.h}$ ס״מ.`;
+    return `${prefix}$$S=\\frac{b\\cdot h}{2}\\;\\Rightarrow\\; h=\\frac{2S}{b}$$\n$$h=\\frac{2\\cdot ${x.A}}{${x.b}}=\\frac{${2*x.A}}{${x.b}}=${x.h}$$\nגובה המשולש: $${x.h}$ ס״מ.`;
   }
 
   E.generateG702Engine = function(difficulty, questionType){
