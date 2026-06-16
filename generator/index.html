@@ -4,6 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#0f172a">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon.svg">
 <title>תרגילים — מחולל תרגילי מתמטיקה</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -15,6 +17,13 @@
 <style>
 .engine-panel{background:#fff;border-radius:14px;padding:16px 20px;margin-bottom:18px;border-right:4px solid #2563eb;box-shadow:0 2px 14px rgba(0,0,0,.07)}
 .engine-panel-inner{display:grid;grid-template-columns:1fr 1fr;gap:14px}.engine-badge{background:#2563eb;color:#fff;border-radius:20px;padding:2px 10px;font-size:.72rem;font-weight:800}.engine-card{border:1px solid #dbeafe}.engine-svg{max-width:min(300px,100%);height:auto;display:block;margin:auto}.mcq-choices{display:flex;flex-direction:column;gap:8px;margin-top:14px}.mcq-choice{background:#f8fafc;border:1.5px solid #dbeafe;border-radius:10px;padding:10px 14px}.mcq-label{font-weight:800;color:#2563eb;margin-left:6px}.mcq-correct{background:#f0fdf4;border-color:#86efac;color:#166534;font-weight:800}.tf-statement{background:#fff7ed;border-right:4px solid #f59e0b;border-radius:10px;padding:12px 16px}.tf-label{font-weight:800;color:#92400e;margin-left:8px}.tf-verdict{font-weight:800;color:#166534;margin-bottom:8px}.mistake-prompt{font-weight:800;color:#dc2626;margin-bottom:10px}.mistake-box{background:#fff1f2;border:1.5px solid #fca5a5;border-radius:10px;padding:12px 16px}.book-link{display:inline-flex;align-items:center;gap:6px;margin-top:8px;color:#fef3c7;background:rgba(245,158,11,.16);border:1px solid rgba(245,158,11,.45);border-radius:999px;padding:7px 12px;text-decoration:none;font-weight:900;font-size:.9rem}@media(max-width:520px){.engine-panel-inner{grid-template-columns:1fr}}@media print{.engine-panel,.engine-badge,.book-link{display:none!important}.engine-svg{max-width:260px}}
+/* G1: Sticky CTA bar */
+#stickyGenBar{position:fixed;bottom:0;right:0;left:0;z-index:200;background:rgba(15,23,42,.97);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);padding:12px 16px;box-shadow:0 -4px 24px rgba(0,0,0,.18);display:none}
+#stickyGenBar .btn-gen{max-width:480px;margin:0 auto;display:block;height:44px;font-size:.95rem}
+@media print{#stickyGenBar{display:none!important}}
+/* G2: Progress / spinner state */
+.btn-gen.is-loading{opacity:.75;pointer-events:none;cursor:default}
+#genProgress{font-size:.78rem;font-weight:700;color:#64748b;margin-top:6px;text-align:center;min-height:1em;transition:opacity .2s}
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
@@ -69,7 +78,20 @@
 <main>
 <div class="main-title" id="mainTitle" style="display:none"></div>
 <div class="generator-anchor-heading" id="generatorSettings">מחולל התרגילים</div><div class="generator-anchor-line"></div>
-<div class="card"><h2>הגדרות תרגיל</h2><div class="grid"><div><label for="sg">כיתה</label><select id="sg" onchange="onGrade()"><option value="7">כיתה ז׳</option><option value="8">כיתה ח׳</option></select></div><div><label for="sd">תחום</label><select id="sd" onchange="onDomain()"><option value="geometry">גיאומטרי</option><option value="algebra">אלגברי</option><option value="numeric">מספרי</option><option value="uncertainty">אי-ודאות</option></select></div><div><label for="st">נושא</label><select id="st"></select></div><div><label for="sl">רמה</label><select id="sl"><option value="basic">רמה 1</option><option value="standard" selected>רמה 2</option><option value="challenge">רמה 3</option></select></div><div><label for="sv">תצוגת שרטוטים</label><select id="sv" onchange="onVisualMode()"><option value="color">צבע</option><option value="bw">שחור-לבן</option></select></div><div><label for="sn">מספר תרגילים</label><select id="sn"><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5" selected>5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option></select></div></div><button class="btn-gen" onclick="generate()">צור דף תרגילים ◀</button></div>
+<div class="card"><h2>הגדרות תרגיל</h2><div class="grid"><div><label for="sg">כיתה</label><select id="sg" onchange="onGrade()"><option value="7">כיתה ז׳</option><option value="8">כיתה ח׳</option></select></div><div><label for="sd">תחום</label><select id="sd" onchange="onDomain()"><option value="geometry">גיאומטרי</option><option value="algebra">אלגברי</option><option value="numeric">מספרי</option><option value="uncertainty">אי-ודאות</option></select></div><div><label for="st">נושא</label><select id="st"></select></div><div><label for="sl">רמה</label><select id="sl"><option value="basic">רמה 1</option><option value="standard" selected>רמה 2</option><option value="challenge">רמה 3</option></select></div><div><label for="sv">תצוגת שרטוטים</label><select id="sv" onchange="onVisualMode()"><option value="color">צבע</option><option value="bw">שחור-לבן</option></select></div><div><label for="sn">מספר תרגילים</label><select id="sn"><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5" selected>5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option></select></div></div><button class="btn-gen" id="btnGenMain" onclick="generate()">
+  <span id="btnGenLabel">צור דף תרגילים ◀</span>
+  <span id="btnGenSpinner" style="display:none" aria-hidden="true">⏳ מכין…</span>
+</button>
+</div>
+<!-- G2: Progress indicator -->
+<div id="genProgress"></div>
+<!-- G1: Sticky CTA — visible only when main btn is out of viewport -->
+<div id="stickyGenBar" aria-hidden="true">
+  <button class="btn-gen" id="btnGenSticky" onclick="generate()">
+    <span id="btnStickyLabel">צור דף תרגילים ◀</span>
+    <span id="btnStickySpinner" style="display:none">⏳ מכין…</span>
+  </button>
+</div>
 <div class="engine-panel" id="enginePanel" style="display:none"><div class="engine-panel-inner"><div><label for="selQType">סוג שאלות</label><select id="selQType"><option value="mixed" selected>מעורב</option><option value="open">שאלה פתוחה</option><option value="mcq">רב־ברירה</option><option value="tf">נכון / שגוי</option><option value="mistake">מצא את הטעות</option></select></div><div><label for="selDiff">רמת קושי</label><select id="selDiff"><option value="basic">רמה 1</option><option value="standard" selected>רמה 2</option><option value="challenge">רמה 3</option></select></div><div><label for="selMcqMode">רב־ברירה: מספר תשובות נכונות</label><select id="selMcqMode"><option value="single" selected>תשובה אחת נכונה</option><option value="multi">ייתכן יותר מאחת</option></select></div></div><div class="teacher-toggle-row"><button class="btn-teacher" id="btnTeacherMode" onclick="Teacher.toggle()">מצב מורה</button><a class="btn-teacher gallery-link" href="gallery.html">גלריית נושאים ▦</a><a class="btn-teacher gallery-link" href="visual-qa.html?v=20260614-vc1">בדיקת שרטוטים ✓</a><span class="teacher-hint">מצב מורה מוסיף לכל שאלה כרטיס מורה, כפתורי עריכה והעתקה/ייצוא — ומוסתר בהדפסת התלמיד.</span></div></div>
 <div id="out"><div class="empty"><span class="empty-icon">📐</span>בחרו כיתה, תחום, נושא ומספר תרגילים — ולחצו על ״צור דף תרגילים ◀״.<br>יופק דף ממוספר עם מפתח תשובות, מבוסס על חומרי תוכנית הלימודים לכיתות ז׳–ח׳.</div></div>
 </main>
@@ -128,4 +150,72 @@
 <script src="teacher-mode.js?v=20260614-teacher-1"></script>
 <script src="mobile-share.js?v=20260614-mobile-1"></script>
 <script src="phase2-loader.js"></script>
+<script>
+// PWA Service Worker registration
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./sw.js')
+      .then(reg => console.log('[SW] registered, scope:', reg.scope))
+      .catch(err => console.warn('[SW] registration failed:', err));
+  });
+}
+
+// G1: Sticky CTA — Intersection Observer on main btn
+(function() {
+  var mainBtn = document.getElementById('btnGenMain');
+  var stickyBar = document.getElementById('stickyGenBar');
+  if (!mainBtn || !stickyBar || !window.IntersectionObserver) return;
+  var io = new IntersectionObserver(function(entries) {
+    var visible = entries[0].isIntersecting;
+    stickyBar.style.display = visible ? 'none' : 'block';
+    stickyBar.setAttribute('aria-hidden', visible ? 'true' : 'false');
+  }, { threshold: 0.5 });
+  io.observe(mainBtn);
+})();
+
+// G2: Progress indicator + spinner wrapper
+// Wraps window.generate — shows spinner on start, progress on completion.
+(function() {
+  function setGenLoading(on, label) {
+    var btns = [document.getElementById('btnGenMain'), document.getElementById('btnGenSticky')];
+    var labels = [document.getElementById('btnGenLabel'), document.getElementById('btnStickyLabel')];
+    var spinners = [document.getElementById('btnGenSpinner'), document.getElementById('btnStickySpinner')];
+    btns.forEach(function(b) { if(b) b.classList.toggle('is-loading', on); });
+    labels.forEach(function(l) { if(l) l.style.display = on ? 'none' : ''; });
+    spinners.forEach(function(s) { if(s) s.style.display = on ? '' : 'none'; });
+    var prog = document.getElementById('genProgress');
+    if(prog) prog.textContent = label || '';
+  }
+
+  function hookGenerate() {
+    var origGenerate = window.generate;
+    if (typeof origGenerate !== 'function') return false;
+    window.generate = function() {
+      var count = +(document.getElementById('sn') && document.getElementById('sn').value || 1);
+      setGenLoading(true, '');
+      // Use rAF to allow repaint before heavy synchronous work
+      requestAnimationFrame(function() {
+        requestAnimationFrame(function() {
+          try {
+            origGenerate();
+            // Count rendered exercise cards as progress feedback
+            var cards = document.querySelectorAll('#out .qcard, #out .ex-card, #out [class*="ex-"]');
+            var n = cards.length;
+            setGenLoading(false, n > 0 ? 'הופקו ' + n + ' תרגיל' + (n === 1 ? '' : 'ים') + ' בהצלחה ✓' : '');
+          } catch(e) {
+            setGenLoading(false, '');
+            throw e;
+          }
+        });
+      });
+    };
+    return true;
+  }
+
+  // Hook after all scripts load
+  if (!hookGenerate()) {
+    window.addEventListener('load', function() { hookGenerate(); });
+  }
+})();
+</script>
 </body></html>

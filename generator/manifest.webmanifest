@@ -1,0 +1,23 @@
+{
+  "name": "תרגילים — מחולל תרגילי מתמטיקה",
+  "short_name": "תרגילים",
+  "description": "מחולל דפי תרגול במתמטיקה לכיתות ז׳–ח׳ — מבוסס מקורות, print-first, ללא אינטרנט אחרי טעינה ראשונה",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#0f172a",
+  "theme_color": "#0f172a",
+  "dir": "rtl",
+  "lang": "he",
+  "orientation": "portrait-primary",
+  "categories": ["education", "productivity"],
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "screenshots": [],
+  "prefer_related_applications": false
+}

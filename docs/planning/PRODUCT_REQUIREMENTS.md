@@ -1,5 +1,11 @@
 # Product Requirements — Targilim
 
+> **⚠️ מסמך היסטורי — לא מצב נוכחי.**
+> נכתב בשלב התכנון הראשוני. המוצר יושם ועבר verify:deep.
+> מצב עדכני ומחייב: [`PROJECT_STATUS.md`](../../PROJECT_STATUS.md) · [`RULES.md`](../../RULES.md) · [`PROJECT_TRUTH.md`](../../PROJECT_TRUTH.md)
+> שינויים ספציפיים: שורת "Requirements collection and planning only" **מיושנת** — המוצר פעיל ב-production.
+> כיתה ט' **נעולה** עד שיסופקו מקורות. הטבלה "Required teacher controls" **חלקית** — ראו RULES.md.
+
 ## Product name
 
 Hebrew product name: `תרגילים`.
