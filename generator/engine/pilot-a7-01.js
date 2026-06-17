@@ -104,12 +104,30 @@
     return E.pick(forms)();
   }
 
+  // Polygon perimeter with ALGEBRAIC sides — source file 01 (כתבו ביטוי להיקף, פשטו):
+  // sum algebraic side lengths, combine like terms, then substitute. Triangle or quad,
+  // with a labeled diagram. perimeter = (Σ coeffs)·v + (Σ constants).
+  function casePolyPerimeter(){
+    const v = E.pick(['x','a','m','y']);
+    if(Math.random()<0.55){
+      const a=rndi(2,8), k=E.pick([2,3]);                 // sides v, v+a, k·v
+      const sides=[`${v}`, `${v}+${a}`, `${k}${v}`];
+      const coeff=k+2, cst=a;
+      return {shape:'tri', v, sides, coeff, cst, sub:rndi(3,7)};
+    }
+    const a=rndi(2,6), b=rndi(2,6);                        // sides v, v+a, 2v, v+b
+    const sides=[`${v}`, `${v}+${a}`, `2${v}`, `${v}+${b}`];
+    return {shape:'quad', v, sides, coeff:5, cst:a+b, sub:rndi(3,6)};
+  }
+  const polyPerim = x => x.cst>0 ? `${x.coeff}${x.v}+${x.cst}` : `${x.coeff}${x.v}`;
+  const polySumDisplay = sides => sides.map(s=> s.indexOf('+')>=0 ? '('+s+')' : s).join('+');
+
   function pickFamily(diff){
     // רמה 1: direct single-step (write/combine/match). רמה 2: medium, varied.
     // רמה 3: generalization & multi-step (sequence n-th term, two-var, mixed simplify).
     if(diff === 'basic') return E.pick(['from_words','simplify','match_expr','equal_expr']);
-    if(diff === 'challenge') return E.pick(['simplify_mixed','tower','rect_expr','two_var','sequence','generalize']);
-    return E.pick(['from_words','simplify','match_expr','tower','rect_expr','generalize','two_var','sequence','equal_expr']);
+    if(diff === 'challenge') return E.pick(['simplify_mixed','tower','rect_expr','two_var','sequence','generalize','poly_perimeter']);
+    return E.pick(['from_words','simplify','match_expr','tower','rect_expr','generalize','two_var','sequence','equal_expr','poly_perimeter']);
   }
   function pickCase(f){
     if(f==='simplify') return E.pick(SIMPLIFY);
@@ -121,6 +139,7 @@
     if(f==='generalize') return E.pick(GENERALIZE);
     if(f==='sequence') return E.pick(SEQ);
     if(f==='equal_expr') return caseEqualExpr();
+    if(f==='poly_perimeter') return casePolyPerimeter();
     return E.pick(FROM_WORDS);
   }
 
@@ -131,6 +150,10 @@
     }
     else if(family==='equal_expr'){
       correct=x.right; wrongs=x.wrongs;
+    }
+    else if(family==='poly_perimeter'){
+      correct=polyPerim(x);
+      wrongs=[`${x.coeff+1}${x.v}+${x.cst}`, `${x.coeff}${x.v}`, `${x.coeff+x.cst}${x.v}`];
     }
     else if(family==='generalize'){
       const v=x.v,k=x.k,c=x.c;
@@ -171,6 +194,16 @@
       if(qtype==='mistake') return `${g.scene} כדי לכתוב ביטוי ל${g.quantity} עבור $${x.v}$, תלמיד כתב $${wrong}$ — חיבר במקום להכפיל.`;
       if(qtype==='mcq') return `${g.scene}\nאיזה ביטוי כללי מתאר את ${g.quantity} עבור $${x.v}$?`;
       return `${g.scene}\nא. ${g.concrete(x.n1)}\nב. ${g.concrete(x.n2)}\nג. ${g.general}\nד. מהי התוצאה כאשר $${x.v}=${x.sub}$?`;
+    }
+    if(family==='poly_perimeter'){
+      const P=polyPerim(x), wrongP=`${x.coeff}${x.v}`, name=x.shape==='quad'?'המרובע':'המשולש';
+      if(qtype==='tf') return `אורכי צלעות ${name} שלפניכם נתונים בביטויים אלגבריים. היקף ${name} (לאחר פישוט) הוא $${tfTrue?P:wrongP}$.`;
+      if(qtype==='mistake') return `תלמיד חישב את היקף ${name} שלפניכם וקיבל $${wrongP}$ — שכח לחבר את המספרים החופשיים.`;
+      if(qtype==='mcq') return `לפניכם ${name}, ואורכי צלעותיו נתונים בביטויים אלגבריים.\nאיזה ביטוי מתאר את היקף ${name} (לאחר פישוט)?`;
+      return `לפניכם ${name}, ואורכי צלעותיו נתונים בביטויים אלגבריים.
+א. כתבו ביטוי להיקף ${name}.
+ב. פשטו את הביטוי (כנסו איברים דומים).
+ג. חשבו את ההיקף כאשר $${x.v}=${x.sub}$.`;
     }
     if(family==='equal_expr'){
       const shown = tfTrue ? x.right : x.falseRight;
@@ -248,6 +281,14 @@ $$a_n=${x.a1}+(n-1)\\cdot ${dShown}=${expr}$$
 ג. הביטוי הכללי: $$${g.expr}$$
 ד. הצבה $${x.v}=${x.sub}$:  $$${g.exprSub}=${g.val(x.sub)}$$ ${g.unit}.`;
     }
+    if(family==='poly_perimeter'){
+      const P=polyPerim(x), name=x.shape==='quad'?'המרובע':'המשולש', val=x.coeff*x.sub+x.cst;
+      const prefix = wrong ? 'שגוי — בהיקף מחברים את כל הצלעות ומכנסים: מקדמי $'+x.v+'$ יחד, והמספרים החופשיים יחד.\n' : '';
+      return `${prefix}מחברים את אורכי כל הצלעות ומכנסים איברים דומים:
+$$P=${polySumDisplay(x.sides)}=${P}$$
+ג. הצבה $${x.v}=${x.sub}$:  $$${x.coeff}\\cdot ${x.sub}${x.cst>0?'+'+x.cst:''}=${val}$$
+היקף ${name} הוא $${val}$.`;
+    }
     if(family==='equal_expr'){
       if(wrong){
         return `לא נכון.
@@ -307,9 +348,10 @@ $$${x.first}+${x.step}(n-1)=${x.step}n+${x.first-x.step}$$
     const x = pickCase(family);
     const tfTrue = questionType==='tf' && Math.random()<0.5;
     const q = question(family,x,questionType,tfTrue), a = answer(family,x,questionType,tfTrue);
-    if(questionType==='mcq') return E.questionTypes.mcq({question:q,answer:a,svg:'',choices:choices(family,x)});
-    if(questionType==='tf') return E.questionTypes.tf({question:q,answer:a,svg:'',isTrue:tfTrue});
-    if(questionType==='mistake') return E.questionTypes.mistake({question:q,answer:a,svg:''});
-    return E.questionTypes.open({question:q,answer:a,svg:''});
+    const svg = (family==='poly_perimeter' && E.polygonSidesSvg) ? E.polygonSidesSvg(x.sides, x.shape) : '';
+    if(questionType==='mcq') return E.questionTypes.mcq({question:q,answer:a,svg:svg,choices:choices(family,x)});
+    if(questionType==='tf') return E.questionTypes.tf({question:q,answer:a,svg:svg,isTrue:tfTrue});
+    if(questionType==='mistake') return E.questionTypes.mistake({question:q,answer:a,svg:svg});
+    return E.questionTypes.open({question:q,answer:a,svg:svg});
   };
 })();
