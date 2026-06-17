@@ -6,6 +6,19 @@
 
 יומן עבודה. רשומה אחת לכל מקטע עבודה משמעותי. החדש למעלה.
 
+## 2026-06-17 — ניקוי generated noise ושערי verify נקיים
+**ענף:** main · **מטרה:** למנוע מצב שבו `verify:deep` או כלי בדיקה משאירים קבצים modified ומבלבלים בין שינוי אמיתי לבין דוח שנוצר.
+
+### שונה/נוסף
+1. `tools/verify-question-coverage-deep.mjs` — כברירת מחדל לא כותב מחדש את `QUESTION_COVERAGE_CENSUS_LATEST.md`; רענון רק עם `--write` או `TARGILIM_UPDATE_REPORTS=1`.
+2. `tools/verify-visual-coverage.mjs` — כברירת מחדל לא כותב מחדש את `VISUAL_COVERAGE_MATRIX.json`; רענון רק עם `--write` או `TARGILIM_UPDATE_REPORTS=1`.
+3. `tools/README.md`, `docs/README.md`, `tools/gen-visual-coverage-report.mjs` — תיעוד הרצת דוחות ידנית.
+4. `PROJECT_RULES.md`, `RULES.md` — נוסף כלל: verifiers הם read-only כברירת מחדל.
+5. מחוץ לריפו GitHub, ב-wrapper המקומי, נמחקו רק תיקיות generated: `node_modules/`, `tmp/` ו-`output/`.
+
+### בדיקות
+- `npm run verify:coverage` ו-`npm run verify:visual-coverage` עברו בלי לשנות `docs/reports`.
+
 ## 2026-06-17 — פיתגורס: מינוח עברי תקני
 **ענף:** main · **מטרה:** להסיר ניסוח מבלבל "רגל/הרגל השנייה" משאלות פיתגורס ולמנוע חזרה שלו.
 

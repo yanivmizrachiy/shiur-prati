@@ -22,6 +22,10 @@
 - **`gen-visual-coverage-report.mjs`** → `docs/reports/VISUAL_COVERAGE_REPORT_*.md` מה-JSON.
 - **`gen-teacher-gallery.mjs`** → `docs/verification/teacher-generator-gallery.html`.
 
+דוחות snapshot כמו `QUESTION_COVERAGE_CENSUS_LATEST.md` ו-`VISUAL_COVERAGE_MATRIX.json`
+אינם מתעדכנים בריצת verify רגילה, כדי לא ללכלך את ה-working tree. לרענון ידני:
+`npm run verify:coverage -- --write` או `npm run verify:visual-coverage -- --write`.
+
 ## 4. verifiers עצמאיים (לא ב-`verify:deep`) — להרצה ידנית/היסטורית
 לא חלק משער האיכות; שמורים לבדיקות ממוקדות ולמעקב. **אין למחוק** (כלל בטיחות):
 - `verify-geometry-diagram-quality.mjs` · `verify-math-bidi-quality.mjs`
@@ -39,6 +43,6 @@
 ```bash
 npm run verify:sync        # ודא שעובדים בריפו הנכון, נקי וזהה ל-GitHub
 npm run verify:workbench   # בדיקות מרכזיות נוחות לפני המשך עבודה
-npm run verify:deep        # כל ה-31 + שערי העומק
+npm run verify:deep        # כל ה-32 + שערי העומק
 node tools/<tool>.mjs       # כלי בודד
 ```

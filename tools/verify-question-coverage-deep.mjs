@@ -1,7 +1,8 @@
 // tools/verify-question-coverage-deep.mjs
 // Deep question-coverage census: boots the real engine stack and grades every
 // question-producing engine id as STRONG / PARTIAL / NO_CLEAR_SOURCE against
-// explicit criteria, then writes docs/reports/QUESTION_COVERAGE_CENSUS_LATEST.md.
+// explicit criteria. By default this is read-only; pass --write or set
+// TARGILIM_UPDATE_REPORTS=1 to refresh docs/reports/QUESTION_COVERAGE_CENSUS_LATEST.md.
 //
 // STRONG criteria (all must hold):
 //   1. valid source metadata in the registry (sourceFile is one of the 10 PDFs)
@@ -19,6 +20,7 @@ const QTYPES = ['open', 'mcq', 'tf', 'mistake'];
 const DIFFS = ['basic', 'standard', 'challenge'];
 const SAMPLES = 14;
 const BAD = /undefined|NaN/;
+const WRITE_REPORT = process.argv.includes('--write') || process.env.TARGILIM_UPDATE_REPORTS === '1';
 
 function needsVisual(meta) {
   if (!meta) return false;
@@ -77,7 +79,7 @@ const census = {
   estimatedTemplateScore: rows.reduce((s, r) => s + r.qtypeCount * (r.svgSeen ? 2 : 1) * (r.diffCount), 0)
 };
 
-// ── write report ──
+// ── optional report refresh ──
 const domains = {};
 for (const r of rows) {
   const d = (E.getSource(r.id) || {}).domain || 'other';
@@ -99,8 +101,13 @@ for (const r of partial) {
   md += `| ${r.id} | ${reasons.join('; ') || 'n/a'} |\n`;
 }
 md += '\n## NO_CLEAR_SOURCE engines (' + noClear.length + ')\n\n' + (noClear.length ? noClear.map(r => '- ' + r.id).join('\n') : '_none_') + '\n';
-fs.mkdirSync('docs/reports', { recursive: true });
-fs.writeFileSync('docs/reports/QUESTION_COVERAGE_CENSUS_LATEST.md', md);
+if (WRITE_REPORT) {
+  fs.mkdirSync('docs/reports', { recursive: true });
+  fs.writeFileSync('docs/reports/QUESTION_COVERAGE_CENSUS_LATEST.md', md);
+  console.log('wrote docs/reports/QUESTION_COVERAGE_CENSUS_LATEST.md');
+} else {
+  console.log('report write skipped (use --write or TARGILIM_UPDATE_REPORTS=1 to refresh docs/reports/QUESTION_COVERAGE_CENSUS_LATEST.md)');
+}
 
 console.log(JSON.stringify(census, null, 2));
 const domainsCovered = new Set(strong.map(r => (E.getSource(r.id) || {}).domain));

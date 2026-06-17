@@ -73,6 +73,9 @@ RULES.md                this central operating guide
 - **No `A8-04-ENGINE`** — A8-04 (inequalities) is a **legacy/source-fit topic in `a8-03.js`**, intentionally not a dedicated engine. (A8-05 = percent equations, also legacy.)
 - **No "engine 51".** The inventory is **50 engines / 0 fallback** — keep it unless a planned, approved change updates the count everywhere.
 - **Do not weaken a verifier.** Adding guards is fine; loosening existing checks is not.
+- **Verifiers are read-only by default.** A normal `verify:*` run must not dirty
+  the working tree; generated report refreshes require `--write` or an explicit
+  update flag.
 - **No demo / mock / placeholder / fake controls.** All output must be real and source-grounded.
 - **Do not invent questions** without a source. No new Grade-8 numeric/uncertainty content without **new** source intake.
 - **Do not claim something is done if it only exists on a branch** and is not merged.

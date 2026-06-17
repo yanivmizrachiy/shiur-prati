@@ -8,7 +8,9 @@
 //   recommended -> >= 30% visual
 //   optional    -> no requirement
 // Also flags the inverse smell: an 'optional' topic that is ALWAYS visual is
-// only reported (not failed). Run from repo root.
+// only reported (not failed). By default this is read-only; pass --write or set
+// TARGILIM_UPDATE_REPORTS=1 to refresh docs/reports/VISUAL_COVERAGE_MATRIX.json.
+// Run from repo root.
 import fs from 'node:fs';
 import { loadEngines } from './engine-load.mjs';
 
@@ -17,6 +19,7 @@ const QT = ['open', 'mcq', 'tf', 'mistake'];
 const DIFFS = ['basic', 'standard', 'challenge'];
 const SAMPLES = 14;
 const THRESH = { essential: 95, recommended: 30, optional: 0 };
+const WRITE_REPORT = process.argv.includes('--write') || process.env.TARGILIM_UPDATE_REPORTS === '1';
 
 let fails = 0;
 const fail = m => { console.log('FAIL — ' + m); fails++; };
@@ -49,10 +52,14 @@ console.log('PASS — declared expectations: ' + ess.length + ' essential, ' + r
 console.log('essential min %: ' + Math.min.apply(null, ess.map(m => m.visualCoveragePercent)));
 console.log('recommended min %: ' + Math.min.apply(null, rec.map(m => m.visualCoveragePercent)));
 
-// persist the matrix so the report generator / QA page can consume it
-fs.mkdirSync('docs/reports', { recursive: true });
-fs.writeFileSync('docs/reports/VISUAL_COVERAGE_MATRIX.json', JSON.stringify(matrix, null, 2));
-console.log('wrote docs/reports/VISUAL_COVERAGE_MATRIX.json (' + matrix.length + ' engines)');
+// Keep normal verification read-only so local/CI checks do not dirty the repo.
+if (WRITE_REPORT) {
+  fs.mkdirSync('docs/reports', { recursive: true });
+  fs.writeFileSync('docs/reports/VISUAL_COVERAGE_MATRIX.json', JSON.stringify(matrix, null, 2));
+  console.log('wrote docs/reports/VISUAL_COVERAGE_MATRIX.json (' + matrix.length + ' engines)');
+} else {
+  console.log('report write skipped (use --write or TARGILIM_UPDATE_REPORTS=1 to refresh docs/reports/VISUAL_COVERAGE_MATRIX.json)');
+}
 
 console.log(fails ? 'VISUAL_COVERAGE_FAIL (' + fails + ')' : 'VISUAL_COVERAGE_PASS');
 process.exit(fails ? 1 : 0);

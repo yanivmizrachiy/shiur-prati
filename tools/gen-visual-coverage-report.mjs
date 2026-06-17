@@ -1,7 +1,7 @@
 // tools/gen-visual-coverage-report.mjs
-// Renders docs/reports/VISUAL_COVERAGE_MATRIX.json (produced by
-// verify-visual-coverage) into a human-readable Markdown matrix for all 50
-// engines. Run verify:visual-coverage first to refresh the JSON.
+// Renders docs/reports/VISUAL_COVERAGE_MATRIX.json into a human-readable
+// Markdown matrix for all 50 engines. Refresh the JSON first with:
+// npm run verify:visual-coverage -- --write
 import fs from 'node:fs';
 
 const m = JSON.parse(fs.readFileSync('docs/reports/VISUAL_COVERAGE_MATRIX.json', 'utf8'));

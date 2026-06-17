@@ -53,8 +53,10 @@
 ## דוחות אימות (docs/reports/)
 
 דוחות נקודתיים מתוארכים: BRANDING, FALLBACK, FOLLOW_UP, TEACHER, VISUAL_COVERAGE,
-COPY_TO_CANVA_WORD, VISUAL_QA_ZERO_CARDS_FIX ועוד. שני קבצים נוצרים אוטומטית:
-`VISUAL_COVERAGE_MATRIX.json` ו-`QUESTION_COVERAGE_CENSUS_LATEST.md`.
+COPY_TO_CANVA_WORD, VISUAL_QA_ZERO_CARDS_FIX ועוד. שני קבצי snapshot נשמרים כאן:
+`VISUAL_COVERAGE_MATRIX.json` ו-`QUESTION_COVERAGE_CENSUS_LATEST.md`. ריצות verify רגילות
+אינן מעדכנות אותם כדי לשמור על working tree נקי; לרענון מפורש הריצו
+`npm run verify:coverage -- --write` או `npm run verify:visual-coverage -- --write`.
 
 דוחות חשובים:
 
