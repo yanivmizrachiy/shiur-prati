@@ -145,6 +145,32 @@
       <text x="${x1-22}" y="${(y1+y2)/2+5}" fill="${cW}" font-size="14" font-weight="800" text-anchor="middle">${lW}</text>
     </svg>`;
   };
+  // Polygon with ALGEBRAIC side labels (e.g. x, x+3, 2x) for perimeter-expression
+  // questions. labels = side strings in edge order; shape 'tri' (3) or 'quad' (4).
+  // Each label sits at its edge midpoint, pushed outward along the centroid normal.
+  E.polygonSidesSvg = function(labels, shape){
+    const T = E.themes.geometry;
+    const W=260, H=180;
+    const pts = shape==='quad'
+      ? [[44,38],[214,46],[230,140],[26,134]]
+      : [[130,30],[32,150],[228,150]];
+    const n = pts.length;
+    const cx = pts.reduce((s,p)=>s+p[0],0)/n, cy = pts.reduce((s,p)=>s+p[1],0)/n;
+    const poly = pts.map(p=>p.join(',')).join(' ');
+    let texts='';
+    for(let i=0;i<n;i++){
+      const a=pts[i], b=pts[(i+1)%n];
+      const mx=(a[0]+b[0])/2, my=(a[1]+b[1])/2;
+      let ox=mx-cx, oy=my-cy; const d=Math.hypot(ox,oy)||1; ox/=d; oy/=d;
+      const tx=Math.round(mx+ox*24), ty=Math.round(my+oy*24+5);
+      const lab = labels[i]==null ? '?' : labels[i];
+      texts += `<text x="${tx}" y="${ty}" fill="${T.given}" font-size="15" font-weight="800" text-anchor="middle" font-style="italic">${lab}</text>`;
+    }
+    return `<svg class="engine-svg" viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">
+      <polygon points="${poly}" fill="${T.fill}" stroke="${T.stroke}" stroke-width="2.5" stroke-linejoin="round"/>
+      ${texts}
+    </svg>`;
+  };
   E.boxSvg = function(p, unknown){
     const T = E.themes.geometry;
     const W=270,H=180,x=46,y=64,w=130,h=72,dx=44,dy=30;
