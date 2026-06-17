@@ -32,19 +32,32 @@
     const h=rnd(2,3), k=rnd(2,4), j=rnd(2,5), c=rnd(2,8)*(Math.random()<0.5?-1:1);
     return {h:h,k:k,j:j,c:c,r:h*h*h + j*k*k + c};
   }
+  // Applied-formula substitution — source files 01/08: substitute into a NAMED real
+  // formula, not a bare expression. drop height h=5t² (free fall) and the canonical
+  // Celsius→Fahrenheit F=1.8C+32. (User-supplied screenshot: h=5t².)
+  function caseFormula(){
+    if(Math.random()<0.5){
+      const t=rnd(3,6);                      // h = 5t²  (meters after t seconds)
+      return {kind:'drop', v:t, r:5*t*t, wrongR:10*t};
+    }
+    const C=[5,10,15,20,25,30][Math.floor(Math.random()*6)]; // F = 1.8C + 32 (integer)
+    const mult=9*C/5;                        // the 1.8·C part, exact integer
+    return {kind:'temp', v:C, mult:mult, r:mult+32, wrongR:C+32};
+  }
 
   function pickFamily(diff){
-    // רמה 1: substitute a positive into kx+c. רמה 2: + negatives, single power, two-var.
-    // רמה 3: powers (incl. cube) and two-variable expressions.
+    // רמה 1: substitute a positive into kx+c. רמה 2: + negatives, single power, two-var, formula.
+    // רמה 3: powers (incl. cube), two-variable, applied formula.
     if(diff === 'basic') return 'sub_pos';
-    if(diff === 'challenge') return E.pick(['sub_neg','sub_power','sub_pow2','sub_two']);
-    return E.pick(['sub_pos','sub_neg','sub_power','sub_two']);
+    if(diff === 'challenge') return E.pick(['sub_neg','sub_power','sub_pow2','sub_two','formula']);
+    return E.pick(['sub_pos','sub_neg','sub_power','sub_two','formula']);
   }
   function pickCase(f){
     if(f==='sub_neg') return caseSubNeg();
     if(f==='sub_power') return caseSubPower();
     if(f==='sub_two') return caseSubTwo();
     if(f==='sub_pow2') return caseSubPow2();
+    if(f==='formula') return caseFormula();
     return caseSubPos();
   }
   // expression + substitution display for the two-variable families
@@ -56,7 +69,8 @@
 
   function choices(family,x){
     let correct = x.r, wrongs;
-    if(family==='sub_two') wrongs = [x.A*x.b+Math.abs(x.B)*x.c, x.A+x.B+x.b+x.c, x.r+x.A];
+    if(family==='formula') wrongs = x.kind==='drop' ? [x.wrongR, 25*x.v*x.v, 5*x.v] : [x.wrongR, x.mult, 2*x.v+32];
+    else if(family==='sub_two') wrongs = [x.A*x.b+Math.abs(x.B)*x.c, x.A+x.B+x.b+x.c, x.r+x.A];
     else if(family==='sub_pow2') wrongs = [x.h*3+x.j*x.k*2+x.c, x.h*x.h*x.h+x.j*x.k*2+x.c, x.r-2*x.c];
     else if(family==='sub_power') wrongs = [x.v < 0 ? -(x.v*x.v)+x.c : (x.v*2)+x.c, x.r+x.c, x.v*x.v];
     else if(family==='sub_neg') wrongs = [x.k*Math.abs(x.v)+x.c, x.r-2*x.c, -x.r];
@@ -67,6 +81,20 @@
   }
 
   function question(family,x,qtype,tfTrue){
+    if(family==='formula'){
+      if(x.kind==='drop'){
+        const f='h=5t^2';
+        if(qtype==='tf') return `גוף נופל ממנוחה, והדרך שעבר (במטרים) אחרי $t$ שניות נתונה בנוסחה $${f}$. אחרי $t=${x.v}$ שניות הגוף עבר $${tfTrue?x.r:x.wrongR}$ מטרים.`;
+        if(qtype==='mistake') return `לפי הנוסחה $${f}$, תלמיד חישב את הדרך אחרי $t=${x.v}$ שניות כך: "$5\\cdot ${x.v}\\cdot 2=${x.wrongR}$".`;
+        if(qtype==='mcq') return `גוף נופל ממנוחה, והדרך שעבר (במטרים) אחרי $t$ שניות נתונה בנוסחה $${f}$.\nמהי הדרך אחרי $t=${x.v}$ שניות?`;
+        return `גוף נופל ממנוחה. הדרך שעבר (במטרים) אחרי $t$ שניות נתונה בנוסחה $$${f}$$\nחשבו את הדרך שעבר הגוף אחרי $t=${x.v}$ שניות.`;
+      }
+      const f='F=1.8C+32';
+      if(qtype==='tf') return `להמרת מעלות צלזיוס ($C$) למעלות פרנהייט ($F$) משתמשים בנוסחה $${f}$. $${x.v}$ מעלות צלזיוס שוות ל-$${tfTrue?x.r:x.wrongR}$ מעלות פרנהייט.`;
+      if(qtype==='mistake') return `לפי הנוסחה $${f}$, תלמיד המיר $${x.v}$ מעלות צלזיוס וקיבל $${x.wrongR}$ — שכח להכפיל ב-$1.8$.`;
+      if(qtype==='mcq') return `להמרת מעלות צלזיוס ($C$) למעלות פרנהייט ($F$) משתמשים בנוסחה $${f}$.\nכמה מעלות פרנהייט הן $${x.v}$ מעלות צלזיוס?`;
+      return `להמרת מעלות צלזיוס ($C$) למעלות פרנהייט ($F$) משתמשים בנוסחה $$${f}$$\nכמה מעלות פרנהייט הן $${x.v}$ מעלות צלזיוס?`;
+    }
     if(family==='sub_two'){
       const e=twoExpr(x), wrongR=x.A*x.b+Math.abs(x.B)*x.c;
       if(qtype==='tf') return `ערך הביטוי $${e}$ כאשר $b=${x.b}$ ו-$c=${x.c}$ הוא $${tfTrue?x.r:wrongR}$.`;
@@ -92,6 +120,18 @@
 
   function answer(family,x,qtype,tfTrue){
     const wrong = qtype==='mistake' || (qtype==='tf' && !tfTrue);
+    if(family==='formula'){
+      if(x.kind==='drop'){
+        const prefix = wrong ? 'שגוי — $t^2$ הוא כפל עצמי ($t\\cdot t$), לא כפל ב-$2$.\n' : '';
+        return `${prefix}מציבים $t=${x.v}$ בנוסחה:
+$$h=5t^2=5\\cdot ${x.v}^2=5\\cdot ${x.v*x.v}=${x.r}$$
+הדרך שעבר הגוף היא $${x.r}$ מטרים.`;
+      }
+      const prefix = wrong ? 'שגוי — לפי הנוסחה מכפילים תחילה ב-$1.8$ ורק אז מוסיפים $32$.\n' : '';
+      return `${prefix}מציבים $C=${x.v}$ בנוסחה:
+$$F=1.8C+32=1.8\\cdot ${x.v}+32=${x.mult}+32=${x.r}$$
+כלומר $${x.v}$ מעלות צלזיוס שוות ל-$${x.r}$ מעלות פרנהייט.`;
+    }
     if(family==='sub_two'){
       const prefix = wrong ? 'שגוי — יש להציב כל משתנה בנפרד ולשמור על הסימן של כל מחובר.\n' : '';
       return `${prefix}מציבים $b=${x.b}$ ו-$c=${x.c}$:

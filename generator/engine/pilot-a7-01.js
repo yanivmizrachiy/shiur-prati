@@ -75,12 +75,41 @@
   const seqVal = (d,a1,n) => d*n + (a1-d);
   const seqTerms = x => [1,2,3,4,5].map(n=>seqVal(x.d,x.a1,n)).join(', ');
 
+  // Equal-expressions / like-terms family — the SOURCE A7-02 style ("ביטויים שווים"):
+  // is a²=a·a? is 8a+5 = 4(a+1)? combine 3a+5a. Tests algebraic equivalence and the
+  // common distribute / power / coefficient errors. Each form provides the correct
+  // equal expression, three distractors, and the "why" for both the true and false case.
+  function rndi(lo,hi){ return lo + Math.floor(Math.random()*(hi-lo+1)); }
+  function caseEqualExpr(){
+    const forms = [
+      ()=>{ const k=rndi(2,5), c=rndi(2,6); return {
+        left:`${k}(x+${c})`, right:`${k}x+${k*c}`,
+        wrongs:[`${k}x+${c}`, `${k+1}x+${k*c}`, `x+${k*c}`],
+        falseRight:`${k}x+${c}`,
+        why:`לפי חוק הפילוג כופלים את $${k}$ גם ב-$x$ וגם ב-$${c}$:  $${k}(x+${c})=${k}x+${k*c}$.`,
+        falseWhy:`יש להכפיל את $${k}$ גם ב-$${c}$ — מתקבל $${k}x+${k*c}$, לא $${k}x+${c}$.` }; },
+      ()=>{ return {
+        left:`a^2`, right:`a\\cdot a`,
+        wrongs:[`2a`, `a+a`, `2a^2`],
+        falseRight:`2a`,
+        why:`חזקה שנייה פירושה כפל המספר בעצמו:  $a^2=a\\cdot a$.`,
+        falseWhy:`$a^2$ אינו $2a$: חזקה היא כפל עצמי ($a\\cdot a$), ואילו $2a=a+a$.` }; },
+      ()=>{ let t1=rndi(2,6), t2=rndi(2,6); if(t1===2&&t2===2) t2=3; return { // avoid t1·t2==t1+t2 distractor collision
+        left:`${t1}a+${t2}a`, right:`${t1+t2}a`,
+        wrongs:[`${t1*t2}a`, `${t1+t2}a^2`, `${t1+t2}`],
+        falseRight:`${t1*t2}a`,
+        why:`איברים דומים — מחברים את המקדמים:  $${t1}a+${t2}a=(${t1}+${t2})a=${t1+t2}a$.`,
+        falseWhy:`מחברים את המקדמים ($${t1}+${t2}=${t1+t2}$), לא מכפילים אותם.` }; }
+    ];
+    return E.pick(forms)();
+  }
+
   function pickFamily(diff){
     // רמה 1: direct single-step (write/combine/match). רמה 2: medium, varied.
     // רמה 3: generalization & multi-step (sequence n-th term, two-var, mixed simplify).
-    if(diff === 'basic') return E.pick(['from_words','simplify','match_expr']);
+    if(diff === 'basic') return E.pick(['from_words','simplify','match_expr','equal_expr']);
     if(diff === 'challenge') return E.pick(['simplify_mixed','tower','rect_expr','two_var','sequence','generalize']);
-    return E.pick(['from_words','simplify','match_expr','tower','rect_expr','generalize','two_var','sequence']);
+    return E.pick(['from_words','simplify','match_expr','tower','rect_expr','generalize','two_var','sequence','equal_expr']);
   }
   function pickCase(f){
     if(f==='simplify') return E.pick(SIMPLIFY);
@@ -91,6 +120,7 @@
     if(f==='two_var') return E.pick(TWO_VAR);
     if(f==='generalize') return E.pick(GENERALIZE);
     if(f==='sequence') return E.pick(SEQ);
+    if(f==='equal_expr') return caseEqualExpr();
     return E.pick(FROM_WORDS);
   }
 
@@ -98,6 +128,9 @@
     let correct, wrongs;
     if(family==='match_expr'){
       correct=x.correct; wrongs=x.wrongs;
+    }
+    else if(family==='equal_expr'){
+      correct=x.right; wrongs=x.wrongs;
     }
     else if(family==='generalize'){
       const v=x.v,k=x.k,c=x.c;
@@ -138,6 +171,13 @@
       if(qtype==='mistake') return `${g.scene} כדי לכתוב ביטוי ל${g.quantity} עבור $${x.v}$, תלמיד כתב $${wrong}$ — חיבר במקום להכפיל.`;
       if(qtype==='mcq') return `${g.scene}\nאיזה ביטוי כללי מתאר את ${g.quantity} עבור $${x.v}$?`;
       return `${g.scene}\nא. ${g.concrete(x.n1)}\nב. ${g.concrete(x.n2)}\nג. ${g.general}\nד. מהי התוצאה כאשר $${x.v}=${x.sub}$?`;
+    }
+    if(family==='equal_expr'){
+      const shown = tfTrue ? x.right : x.falseRight;
+      if(qtype==='tf') return `נכון או לא נכון:  $${x.left}=${shown}$ עבור כל ערך של המשתנה.`;
+      if(qtype==='mistake') return `תלמיד טען ש-$${x.left}=${x.falseRight}$.`;
+      if(qtype==='mcq') return `איזה ביטוי שווה לביטוי $${x.left}$ עבור כל ערך של המשתנה?`;
+      return `האם הביטויים $${x.left}$ ו-$${x.right}$ שווים עבור כל ערך של המשתנה? נמקו.`;
     }
     if(family==='match_expr'){
       const wrong=x.wrongs[0];
@@ -207,6 +247,16 @@ $$a_n=${x.a1}+(n-1)\\cdot ${dShown}=${expr}$$
 ב. $${g.val(x.n2)}$ ${g.unit}.
 ג. הביטוי הכללי: $$${g.expr}$$
 ד. הצבה $${x.v}=${x.sub}$:  $$${g.exprSub}=${g.val(x.sub)}$$ ${g.unit}.`;
+    }
+    if(family==='equal_expr'){
+      if(wrong){
+        return `לא נכון.
+${x.falseWhy}
+הביטוי השווה ל-$${x.left}$ הוא:
+$$${x.right}$$`;
+      }
+      return `נכון — הביטויים שווים.
+${x.why}`;
     }
     if(family==='match_expr'){
       const prefix = wrong ? 'שגוי — צריך לתרגם כל פעולה מילולית לפעולה אלגברית מתאימה.\n' : '';
