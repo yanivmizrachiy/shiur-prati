@@ -39,9 +39,11 @@
   }
 
   function pickFamily(diff){
+    // רמה 1: one-step solve / check a solution. רמה 2: two-step, parentheses, word problem.
+    // רמה 3: parentheses, word problem, identify-which-equation (multi-step reasoning).
     if(diff === 'basic') return E.pick(['one_step','verify']);
-    if(diff === 'challenge') return E.pick(['parens','verify','word_eq','identify_eq']);
-    return E.pick(['one_step','two_step','parens','verify','word_eq','identify_eq']);
+    if(diff === 'challenge') return E.pick(['parens','two_step','word_eq','identify_eq']);
+    return E.pick(['one_step','two_step','parens','verify','word_eq']);
   }
   function pickCase(f){
     if(f==='two_step') return E.pick(TWO_STEP);

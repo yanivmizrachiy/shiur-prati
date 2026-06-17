@@ -76,9 +76,11 @@
   const seqTerms = x => [1,2,3,4,5].map(n=>seqVal(x.d,x.a1,n)).join(', ');
 
   function pickFamily(diff){
-    if(diff === 'basic') return E.pick(['from_words','simplify','match_expr','generalize','sequence']);
-    if(diff === 'challenge') return E.pick(['tower','simplify_mixed','rect_expr','match_expr','two_var','generalize','sequence']);
-    return E.pick(['from_words','simplify','simplify_mixed','tower','rect_expr','match_expr','two_var','generalize','sequence']);
+    // רמה 1: direct single-step (write/combine/match). רמה 2: medium, varied.
+    // רמה 3: generalization & multi-step (sequence n-th term, two-var, mixed simplify).
+    if(diff === 'basic') return E.pick(['from_words','simplify','match_expr']);
+    if(diff === 'challenge') return E.pick(['simplify_mixed','tower','rect_expr','two_var','sequence','generalize']);
+    return E.pick(['from_words','simplify','match_expr','tower','rect_expr','generalize','two_var','sequence']);
   }
   function pickCase(f){
     if(f==='simplify') return E.pick(SIMPLIFY);
