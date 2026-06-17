@@ -6,7 +6,7 @@ _Do not edit by hand; edit the registry and regenerate._
 Sources 01–06 = direct question/example sources. 07–09 = principles, skills, misconceptions, visual requirements. **File 10 is never a question source.**
 
 - Topics: 50 (50 active engines + 0 fallback)
-- Question families: 197
+- Question families: 198
 
 ## Numeric
 
@@ -466,6 +466,7 @@ Sources 01–06 = direct question/example sources. 07–09 = principles, skills,
   | `sum_and_difference` | open/mcq/tf/mistake | סכום s, הפרש d — מצאו את המספרים | חיסור נותן את הגדול | סכום והפרש |
   | `more_than` | open/mcq/tf/mistake | יחד s, לאחד k יותר | חצי+k שגוי | "יותר מ" |
   | `verify_pair` | open/mcq/tf/mistake | האם (x,y) פתרון המערכת? | בדיקה במשוואה אחת | בדיקת זוג |
+  | `system_count_and_value` | open/mcq/tf/mistake | N מטבעות/בולים בערך כולל V — כמה מכל סוג | חלוקת הסכום הכולל בערך הגבוה בלבד | מטבעות, בולים, שני ערכים |
 
 ## Geometry
 
