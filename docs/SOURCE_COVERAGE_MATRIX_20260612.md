@@ -1,5 +1,9 @@
 # Source coverage matrix — 2026-06-12
 
+> Historical snapshot. Current canonical coverage is regenerated in `docs/SOURCE_BIBLE.md`,
+> `docs/reports/QUESTION_COVERAGE_CENSUS_LATEST.md`, and
+> `docs/reports/VISUAL_COVERAGE_MATRIX.json`.
+
 Status legend:
 
 - `active smart engine` — engine topic with dynamic generation and question-type support.
@@ -12,10 +16,11 @@ Status legend:
 | Source family | Current project topic | Status | Next action |
 |---|---|---:|---|
 | Substitution into algebraic expressions | `A7-02` | active fallback | Expand variations. |
-| Equivalent expressions / simplification | `A7-04` | active fallback | Convert to smart engine. |
-| Find mistake in expressions | `A7-05` | active fallback | Convert to smart engine. |
-| First-degree equations | `A7-03` | partial | Add more contexts and mixed types. |
-| Matching table / expression / verbal rule | — | missing | Add smart engine. |
+| Equivalent expressions / simplification | `A7-04-ENGINE` | active smart engine | Keep expanding identity/equal-for-all variants. |
+| Find mistake in expressions | `A7-04-ENGINE` | active smart engine | Covered through mistake question type. |
+| First-degree equations | `A7-03-ENGINE` | active smart engine | Keep expanding verbal contexts and solution-check variants. |
+| Matching table / expression / verbal rule | `A7-05-ENGINE` | active smart engine | Add more table/graph matching contexts. |
+| Value table + first-quadrant graph | `A7-05-ENGINE` | active smart engine | Keep required visual coverage at 95%+. |
 | Expressions with two variables | — | missing | Add smart engine. |
 
 ## File 02 — Grade 8 algebra curriculum
@@ -88,10 +93,10 @@ Status legend:
 
 | Principle | Current project coverage | Status | Next action |
 |---|---|---:|---|
-| Multiple representations | `A8-01-ENGINE`, partial A7 | partial | Add table-expression-verbal matching. |
-| Algebra as generalization | A7 fallback | partial | Add structured engines. |
+| Multiple representations | `A8-01-ENGINE`, `A7-05-ENGINE` | active smart engine | Add more table-expression-verbal matching contexts. |
+| Algebra as generalization | A7 smart engines | active smart engine | Keep expanding structured variation. |
 | Function thinking | `A8-01-ENGINE` | active smart engine | Add more contexts. |
-| Mistake analysis | `A7-05` | active fallback | Convert to smart engine. |
+| Mistake analysis | `A7-04-ENGINE` | active smart engine | Covered through mistake question type. |
 
 ## File 09 — Geometry principles grades 7–8
 

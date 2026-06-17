@@ -13,13 +13,15 @@ const E = sandbox.window.TargilimEngine;
 
 const DOMAINS = [['numeric', 'Numeric'], ['algebra', 'Algebra'], ['geometry', 'Geometry'], ['uncertainty', 'Uncertainty']];
 const ids = Object.keys(E.PEDAGOGY);
+const engineCount = Object.keys(E.SOURCE_REGISTRY || {}).filter(id => /-ENGINE$/.test(id)).length;
+const fallbackCount = Object.keys(E.SOURCE_REGISTRY || {}).filter(id => !/-ENGINE$/.test(id)).length;
 
 let md = '# SOURCE BIBLE — what the generator is allowed to create, and why\n\n';
 md += '_Auto-generated from `generator/engine/pedagogy-registry.js` by `tools/gen-source-bible.mjs`._\n';
 md += '_Do not edit by hand; edit the registry and regenerate._\n\n';
 md += 'Sources 01–06 = direct question/example sources. 07–09 = principles, skills, ';
 md += 'misconceptions, visual requirements. **File 10 is never a question source.**\n\n';
-md += '- Topics: ' + ids.length + ' (33 active engines + 17 fallback)\n';
+md += '- Topics: ' + ids.length + ' (' + engineCount + ' active engines + ' + fallbackCount + ' fallback)\n';
 md += '- Question families: ' + ids.reduce((s, id) => s + (E.PEDAGOGY[id].families || []).length, 0) + '\n\n';
 
 for (const [dom, title] of DOMAINS) {

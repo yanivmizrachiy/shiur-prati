@@ -18,7 +18,7 @@ This percentage is based on product readiness, not just number of topics.
 ### Active source-fit areas
 
 1. Grade 7 numeric: coordinate system, number line, opposite number, absolute value, directed add/sub, directed mul/div, powers, roots.
-2. Grade 7 algebra: equivalent expressions and expression mistake analysis, including smart-engine support.
+2. Grade 7 algebra: equivalent expressions, first-degree equations, value tables, and first-quadrant graphing, including smart-engine support.
 3. Grade 7 geometry: transformations and composite area.
 4. Grade 7 uncertainty: relative frequency, bar charts, pie charts, misleading graphs, frequency tables, mean/median/range.
 5. Grade 8 algebra: applied graphs, slope/line, systems, inequalities, percentage equations, table/expression/function links.

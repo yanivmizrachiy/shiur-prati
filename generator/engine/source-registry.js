@@ -55,7 +55,7 @@
     ['G8-02-ENGINE', F.g8, 8, 'geometry', 'cylinder_and_net', 'standard'],
     ['G8-03-ENGINE', F.g8, 8, 'geometry', 'parallel_line_angles', 'standard'],
     ['A7-04-ENGINE', F.a7, 7, 'algebra', 'equivalent_expressions', 'standard'],
-    ['A7-05-ENGINE', F.a7, 7, 'algebra', 'expression_mistake_analysis', 'challenge'],
+    ['A7-05-ENGINE', F.a7, 7, 'algebra', 'value_table_graph_quadrant_1', 'standard'],
 
     // ── logical fallback topics (registered in legacy files, generic handler).
     //    Each carries real source metadata + fallback flag + reason. ──

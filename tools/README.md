@@ -15,6 +15,7 @@
 `verify-teacher-controls`, `verify-copy-export`, `verify-print-layout`,
 `verify-visual-qa-dashboard`, `verify-repo-hygiene`, `verify-release-readiness-docs`,
 `verify-baseline-protection`, `verify-branding`, `verify-real-generator-runtime` ועוד.
+`verify-source-fit` כולל גם guard נגד חזרת מיפוי ישן של `A7-04/A7-05`.
 
 ## 3. מחוללי תיעוד (gen-*) — מורצים ידנית
 - **`gen-source-bible.mjs`** → מרענן `docs/SOURCE_BIBLE.md` מהרישומים.

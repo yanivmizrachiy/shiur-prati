@@ -3,6 +3,7 @@
 ## What was added
 
 Two active Grade 7 algebra topics were added to strengthen source-fit coverage for the uploaded Grade 7 algebra curriculum.
+2026-06-17 sync update: `A7-05` is now the table/value-graph topic from File 01; expression-mistake work lives under the `A7-04` mistake family.
 
 ## Commit
 
@@ -25,7 +26,7 @@ Student task families:
 3. Identify equivalent expressions.
 4. Avoid common distractors such as adding unlike terms or forgetting distribution.
 
-### `A7-05` — מציאת טעות בביטויים
+### `A7-05` — טבלת ערכים וגרף ברביע ראשון
 
 Source basis:
 
@@ -34,13 +35,14 @@ Source basis:
 
 Student task families:
 
-1. Distribution mistakes, such as `2(x+5)=2x+5`.
-2. Like-term mistakes, such as `3a+4a=7a^2`.
-3. Sign mistakes when opening parentheses with subtraction.
+1. Build a value table from a verbal rule.
+2. Plot table points in the first quadrant.
+3. Read a requested value from a table or graph.
+4. Connect verbal rule, expression, table, and graph.
 
 ## Why this matters
 
-The earlier source-fit sprints emphasized visual topics: coordinate systems, charts, graphs, cylinder/net, and parallel lines. This sprint begins closing the algebra Grade 7 gap by adding expression-equivalence and mistake-analysis tasks aligned to the source files.
+The earlier source-fit sprints emphasized visual topics: coordinate systems, charts, graphs, cylinder/net, and parallel lines. This sprint closes the Grade 7 algebra gap by pairing expression-equivalence tasks with source-style table/graph representation tasks.
 
 ## Verification
 
@@ -49,12 +51,11 @@ The earlier source-fit sprints emphasized visual topics: coordinate systems, cha
 - `A7-04`
 - `ביטויים שקולים ופישוט ✦ מקור`
 - `A7-05`
-- `מציאת טעות בביטויים ✦ מקור`
+- `טבלת ערכים וגרף ברביע ראשון ✦ מקור`
 
 ## Still pending for Grade 7 algebra
 
-1. Full smart-engine mixed-mode version of `A7-04` and `A7-05`.
-2. Matching-expression tasks.
-3. Equations from verbal contexts.
-4. Table/graph/algebra representation matching.
-5. Two-variable expression contexts.
+1. More matching-expression and equal-for-all-values variants.
+2. Additional equations from verbal contexts.
+3. Additional table/graph/algebra representation matching contexts.
+4. Two-variable expression contexts.

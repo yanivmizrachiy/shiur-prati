@@ -28,7 +28,9 @@ let metaBad = 0;
 for (const id of ids) {
   const r = callEngine(id, 'standard', 'open');
   const m = r && r.meta;
-  const ok = m && m.sourceFile && m.skill && m.questionFamily && m.learningGoal && m.teacherPurpose && m.misconception && m.familyProvenance;
+  const ok = m && m.sourceFile && m.skill && m.questionFamily && m.learningGoal && m.teacherPurpose &&
+    m.misconception && m.familyProvenance && m.difficultyLabel && m.cognitiveDemand &&
+    m.teacherMove && m.scaffoldHint && m.stretchPrompt && m.evidenceLookFor;
   if (!ok) { metaBad++; console.log('  META ' + id + ' missing: ' + JSON.stringify(m)); }
 }
 check('every engine meta is complete for the teacher card (' + ids.length + ')', metaBad === 0, metaBad + ' incomplete');
@@ -41,6 +43,8 @@ check('teacher card is excluded from PNG export', /data-html2canvas-ignore="true
 check('teacher card shows source + family + goal + misconception',
   cardHTML.indexOf(sample.meta.sourceFile) >= 0 && cardHTML.indexOf(sample.meta.questionFamily) >= 0 &&
   /מטרת למידה/.test(cardHTML) && /טעות נפוצה/.test(cardHTML));
+check('teacher card shows level thinking and scaffolding',
+  /רמת חשיבה/.test(cardHTML) && /מה המורה מחפש/.test(cardHTML) && /פיגום/.test(cardHTML) && /הקפצה/.test(cardHTML));
 
 // 5. print stylesheet hides teacher chrome
 const css = read('generator/style.css');

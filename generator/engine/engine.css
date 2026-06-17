@@ -24,7 +24,7 @@
   border-radius: 20px;
   padding: 2px 10px;
   font-size: .72rem;
-  font-weight: 700;
+  font-weight: 500;
 }
 
 /* MCQ */
@@ -43,7 +43,7 @@
   direction: rtl;
 }
 .mcq-label {
-  font-weight: 700;
+  font-weight: 500;
   color: #4361ee;
   margin-left: 6px;
 }
@@ -63,13 +63,13 @@
   padding: 12px 16px;
 }
 .tf-label {
-  font-weight: 700;
+  font-weight: 500;
   color: #92400e;
   margin-left: 8px;
 }
 .tf-verdict {
   font-size: 1.1rem;
-  font-weight: 700;
+  font-weight: 500;
   margin-bottom: 10px;
 }
 .tf-verdict.pass { color: #166534; }
@@ -77,7 +77,7 @@
 
 /* Mistake */
 .mistake-prompt {
-  font-weight: 700;
+  font-weight: 500;
   color: #e63946;
   margin-bottom: 10px;
   font-size: .92rem;
@@ -97,6 +97,6 @@
 /* Engine data tables (frequency / two-way) */
 .engine-table{border-collapse:collapse;margin:8px auto;direction:rtl;font-size:.92rem}
 .engine-table th,.engine-table td{border:1.5px solid #2563eb;padding:7px 16px;text-align:center}
-.engine-table th{background:#eff6ff;font-weight:800;color:#1e40af}
+.engine-table th{background:#eff6ff;font-weight:600;color:#1e40af}
 .engine-table td{background:#fff;color:#0f172a;font-weight:600}
 @media print{.engine-table th{background:#fff}}

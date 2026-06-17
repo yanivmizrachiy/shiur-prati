@@ -13,8 +13,8 @@
 
   function pickFamily(diff){
     if(diff === 'basic') return E.pick(['read_freq','most_frequent','rel_freq']);
-    if(diff === 'challenge') return E.pick(['missing_freq','total_check','missing_freq','rel_freq']);
-    return E.pick(['read_freq','most_frequent','total_check','missing_freq','rel_freq']);
+    if(diff === 'challenge') return E.pick(['raw_to_table','missing_freq','total_check','rel_freq']);
+    return E.pick(['read_freq','most_frequent','total_check','missing_freq','rel_freq','raw_to_table']);
   }
   function gcd(a,b){ return b ? gcd(b,a%b) : a; }
 
@@ -25,12 +25,31 @@
   }
 
   function tableSvg(t, hideIdx){
-    const rows = t.vals.map((v,i)=>[v, hideIdx===i ? '?' : t.counts[i]]);
+    const rows = t.vals.map((v,i)=>[v, hideIdx==='all' || hideIdx===i ? '?' : t.counts[i]]);
     return E.freqTableHtml([t.label,'תדירות'], rows);
+  }
+
+  function rawList(t){
+    const xs = [];
+    t.vals.forEach((v,i)=>{ for(let k=0;k<t.counts[i];k++) xs.push(v); });
+    return E.shuffle(xs);
   }
 
   function choices(family,s){
     const t=s.t, idx=s.idx;
+    if(family==='raw_to_table'){
+      const c=t.counts[idx];
+      const opts=[], seen={};
+      function push(text, correct){ if(!seen[text]){ seen[text]=1; opts.push({text:text, correct:!!correct}); } }
+      push(`${t.label} $${t.vals[idx]}$ — תדירות $${c}$`, true);
+      [t.vals[idx], c+1, Math.max(1,c-1), t.total].forEach(function(w){
+        if(w!==c) push(`${t.label} $${t.vals[idx]}$ — תדירות $${w}$`, false);
+      });
+      push(`סך הכול $${t.vals.reduce((a,b)=>a+b,0)}$ נבדקים`, false);
+      push(`סך הכול $${t.total}$ נבדקים`, false);
+      const four = E.shuffle([opts[0]].concat(E.shuffle(opts.slice(1)).slice(0,3)));
+      return four.map((o,i)=>({label:['א','ב','ג','ד'][i], text:o.text, correct:o.correct}));
+    }
     if(family==='rel_freq'){
       const c=t.counts[idx], p=Math.round(c*100/t.total);
       const opts=[
@@ -61,6 +80,13 @@
 
   function question(family,s,qtype,tfTrue){
     const t=s.t, idx=s.idx;
+    if(family==='raw_to_table'){
+      const list = rawList(t).join(', ');
+      if(qtype==='tf') return `ברשימת הנתונים $${list}$, התדירות של ${t.label} $${t.vals[idx]}$ היא $${tfTrue?t.counts[idx]:t.counts[idx]+1}$.`;
+      if(qtype==='mistake') return `לפניכם נתונים: $${list}$. תלמיד טען: "בטבלת שכיחויות כותבים כל ערך פעם אחת, לכן התדירות של כל ערך היא 1".`;
+      if(qtype==='mcq') return `לפניכם נתונים: $${list}$. איזו שורה חייבת להופיע בטבלת השכיחויות?`;
+      return `לפניכם נתונים:\n$${list}$\nא. ארגנו את הנתונים בטבלת שכיחויות.\nב. חשבו תדירות יחסית של ${t.label} $${t.vals[idx]}$.`;
+    }
     if(family==='rel_freq'){
       const c=t.counts[idx];
       if(qtype==='tf') return tfTrue
@@ -96,6 +122,13 @@
   function answer(family,s,qtype,tfTrue){
     const t=s.t, idx=s.idx;
     const wrong = qtype==='mistake' || (qtype==='tf' && !tfTrue);
+    if(family==='raw_to_table'){
+      const c=t.counts[idx], g=gcd(c,t.total), fn=c/g, fd=t.total/g;
+      const table = E.freqTableHtml([t.label,'תדירות'], t.vals.map((v,i)=>[v,t.counts[i]]));
+      const rel = `\\frac{${c}}{${t.total}}` + (g>1 ? `=\\frac{${fn}}{${fd}}` : '') + `=${Math.round(c*100/t.total)}\\%`;
+      const prefix = wrong ? 'שגוי — בטבלת שכיחויות לא מסתפקים בהופעה אחת של כל ערך; סופרים כמה פעמים כל ערך הופיע ברשימה.\n' : '';
+      return `${prefix}${table}\nלתדירות היחסית של ${t.label} $${t.vals[idx]}$:\n$$${rel}$$`;
+    }
     if(family==='rel_freq'){
       const c=t.counts[idx], g=gcd(c,t.total), fn=c/g, fd=t.total/g;
       const dec=c/t.total, p=Math.round(c*100/t.total);
@@ -126,7 +159,7 @@
     difficulty = difficulty || 'standard'; questionType = questionType || 'open';
     const family = pickFamily(difficulty);
     const s = setup(family);
-    const svg = tableSvg(s.t, family==='missing_freq' ? s.idx : -1);
+    const svg = tableSvg(s.t, family==='raw_to_table' ? 'all' : (family==='missing_freq' ? s.idx : -1));
     const tfTrue = questionType==='tf' && Math.random()<0.5;
     const q = question(family,s,questionType,tfTrue), a = answer(family,s,questionType,tfTrue);
     if(questionType==='mcq') return E.questionTypes.mcq({question:q,answer:a,svg:svg,choices:choices(family,s)});

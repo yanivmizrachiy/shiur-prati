@@ -58,7 +58,7 @@ Student task families:
 7. U7-05 pie chart and relative frequency.
 8. U7-06 misleading graph critique.
 9. A7-04 equivalent expressions and simplification.
-10. A7-05 expression mistake analysis.
+10. A7-05 value tables and first-quadrant graphing.
 11. G7-05 transformations.
 12. G7-06 composite area.
 13. G8-05 central angle and sector.

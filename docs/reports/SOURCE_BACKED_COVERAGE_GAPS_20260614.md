@@ -20,15 +20,15 @@ Total pilot engines (dynamic): additional legacy engines loaded from `generator/
 
 | Engine | Grade | Topics covered | Open | MCQ single | MCQ multi | TF | Mistake |
 |---|---|---|---|---|---|---|---|
-| A7-04-ENGINE | 7 | Simplification, equivalent expressions | ✅ | ✅ | ✅ (PR #15) | ❌ | ✅ |
-| A7-05-ENGINE | 7 | Equations, substitution | ✅ | ✅ | ❌ | ✅ | ✅ |
-| A8-01-ENGINE | 8 | Inequalities (legacy sources) | ✅ | ✅ | ❌ | ❌ | ✅ |
+| A7-04-ENGINE | 7 | Simplification, equivalent expressions, equal-for-all-values checks | ✅ | ✅ | ✅ (PR #15) | ❌ | ✅ |
+| A7-05-ENGINE | 7 | Value tables and first-quadrant graphs | ✅ | ✅ | ❌ | ✅ | ✅ |
+| A8-01-ENGINE | 8 | Applied graphs and function reading | ✅ | ✅ | ❌ | ✅ | ✅ |
 
 **Algebra assessment:**
 - **Strong:** A7-04 (most complete), A7-05
-- **Weak:** A8-01 — no TF, no MCQ multi; inequalities domain is sparsely covered
+- **Weak:** A8-01 — no MCQ multi; applied-graph/function variety should keep growing
 - **Gap:** A8 has only 1 engine vs A7 with 2
-- **Gap:** No A8 MCQ multi; inequalities naturally support multi-correct ("which inequality is equivalent?")
+- **Gap:** No A8 MCQ multi; graph/function representation tasks can naturally support multi-correct choices
 
 ---
 
@@ -122,7 +122,7 @@ Total pilot engines (dynamic): additional legacy engines loaded from `generator/
    - Estimated improvement: +8% quality
    - Risk: Low if grounded in source
 
-3. **feat: add Mistake-type to A7-05-ENGINE** — already has Mistake type; verify A8-01 could add it too
+3. **feat: expand A7-05-ENGINE table/graph contexts** — already has Mistake type; add more source-style table/expression/graph matching
    - Estimated improvement: +3%
    - Risk: Low
 

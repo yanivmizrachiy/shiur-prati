@@ -117,12 +117,10 @@ Source file key: 01 grade-7 algebra · 02 grade-8 algebra · 03 grade-7 pre-dedu
 
 ## Source patterns with no engine (gap list — future work, do not build now)
 
-- N7-01/N7-02 — coordinate system quadrant-I (visual `coordinate_system_q1`)
-- A7-04 — graph + value table (visual `coordinate_system_q1`)
-- A8-01 — applied graphs (visual `applied_graph`)
+- Implemented after this historical map: N7-01 coordinate system quadrant-I, A7-05 graph + value table, and A8-01 applied graphs. Current authority is `docs/SOURCE_BIBLE.md` plus `generator/engine/source-registry.js`.
 - U7-02(pattern) — bar chart construction (visual `bar_chart`)
 - U7-03 — group comparison / relative-frequency trap
-- Curriculum-only topics without patterns: A7-05/A7-06 functions, A8-03 inequalities, A8-05 percent equations, G7-04(curric.) parallel lines, G7-05 quadrilaterals, G7-06 circle intro, G8-02 cylinder, G8-03 congruence, N7-08 arithmetic laws, U8-03 critical graph reading.
+- Curriculum-only topics without patterns: A7-06 advanced function links, A8-03 inequalities, A8-05 percent equations, G7-04(curric.) parallel lines, G7-05 quadrilaterals, G7-06 circle intro, G8-02 cylinder, G8-03 congruence, N7-08 arithmetic laws, U8-03 critical graph reading.
 
 ## Summary
 

@@ -6,13 +6,13 @@
 <meta name="theme-color" content="#0f172a">
 <title>QA חזותי — תרגילים</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
-<link rel="stylesheet" href="style.css?v=20260616a">
+<link rel="stylesheet" href="style.css?v=20260617c">
 <style>
 .qa-head{background:#0f172a;color:#fff;padding:14px 20px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;position:sticky;top:0;z-index:100}
-.qa-head h1{font-size:1.15rem;font-weight:900}.qa-head a{color:#93c5fd;text-decoration:none;font-weight:800}.qa-head .spacer{margin-inline-start:auto}.qa-sub{color:#94a3b8;font-size:.82rem}
+.qa-head h1{font-size:1.15rem;font-weight:600}.qa-head a{color:#93c5fd;text-decoration:none;font-weight:600}.qa-head .spacer{margin-inline-start:auto}.qa-sub{color:#94a3b8;font-size:.82rem}
 .qa-panel{background:#fff;border-radius:14px;padding:14px 16px;margin:16px 0;box-shadow:0 1px 3px rgba(0,0,0,.08);display:flex;flex-wrap:wrap;gap:10px;align-items:end}
-.qa-panel .f{display:flex;flex-direction:column;gap:4px;min-width:120px}.qa-panel input{height:38px;border:1.5px solid #e2e8f0;border-radius:10px;padding:0 10px;font-family:inherit}.qa-stat{margin-inline-start:auto;font-weight:800;color:#475569}.qa-btn{border:none;border-radius:9px;padding:8px 12px;font-weight:900;cursor:pointer;background:#f1f5f9;color:#0f172a}.qa-btn.primary{background:#2563eb;color:#fff}.qa-btn.danger{background:#fee2e2;color:#991b1b}.qa-grid{display:grid;grid-template-columns:1fr;gap:14px}@media(min-width:860px){.qa-grid{grid-template-columns:1fr 1fr}}
-.qa-card{background:#fff;border-radius:14px;padding:16px 18px;box-shadow:0 1px 3px rgba(0,0,0,.08);border-top:4px solid #2563eb}.qa-card.geo{border-top-color:#d97706}.qa-card.alg{border-top-color:#7c3aed}.qa-card.num{border-top-color:#16a34a}.qa-card.unc{border-top-color:#0284c7}.qa-id{font-family:ui-monospace,monospace;font-weight:900;color:#2563eb;font-size:.8rem}.qa-title{font-weight:900;font-size:1.02rem;margin:2px 0 6px}.qa-meta{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:8px}.qa-actions{display:flex;gap:6px;flex-wrap:wrap;margin:10px 0}.qa-actions button,.qa-actions select{font-size:.78rem;font-weight:800;border-radius:8px;border:1px solid #cbd5e1;padding:5px 9px;cursor:pointer;background:#f8fafc}.qa-review{display:flex;gap:6px;flex-wrap:wrap;margin:10px 0}.qa-review button{border:1px solid #cbd5e1;border-radius:999px;padding:6px 10px;background:#fff;cursor:pointer;font-weight:800;font-size:.78rem}.qa-review button.active{background:#0f172a;color:#fff;border-color:#0f172a}.qa-note{width:100%;min-height:42px;border:1px solid #e2e8f0;border-radius:10px;padding:8px 10px;font-family:inherit;resize:vertical}.qa-sample{border-top:1px dashed #e2e8f0;margin-top:10px;padding-top:10px;min-height:10px}.qa-sample .diagram svg,.qa-sample svg{max-width:min(290px,100%);height:auto}.qa-empty{text-align:center;color:#94a3b8;padding:30px}.qa-foot{color:#64748b;font-size:.82rem;margin:16px 0 60px}
+.qa-panel .f{display:flex;flex-direction:column;gap:4px;min-width:120px}.qa-panel input{height:38px;border:1.5px solid #e2e8f0;border-radius:10px;padding:0 10px;font-family:inherit}.qa-stat{margin-inline-start:auto;font-weight:600;color:#475569}.qa-btn{border:none;border-radius:9px;padding:8px 12px;font-weight:600;cursor:pointer;background:#f1f5f9;color:#0f172a}.qa-btn.primary{background:#2563eb;color:#fff}.qa-btn.danger{background:#fee2e2;color:#991b1b}.qa-grid{display:grid;grid-template-columns:1fr;gap:14px}@media(min-width:860px){.qa-grid{grid-template-columns:1fr 1fr}}
+.qa-card{background:#fff;border-radius:14px;padding:16px 18px;box-shadow:0 1px 3px rgba(0,0,0,.08);border-top:4px solid #2563eb}.qa-card.geo{border-top-color:#d97706}.qa-card.alg{border-top-color:#7c3aed}.qa-card.num{border-top-color:#16a34a}.qa-card.unc{border-top-color:#0284c7}.qa-id{font-family:ui-monospace,monospace;font-weight:600;color:#2563eb;font-size:.8rem}.qa-title{font-weight:600;font-size:1.02rem;margin:2px 0 6px}.qa-meta{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:8px}.qa-actions{display:flex;gap:6px;flex-wrap:wrap;margin:10px 0}.qa-actions button,.qa-actions select{font-size:.78rem;font-weight:600;border-radius:8px;border:1px solid #cbd5e1;padding:5px 9px;cursor:pointer;background:#f8fafc}.qa-review{display:flex;gap:6px;flex-wrap:wrap;margin:10px 0}.qa-review button{border:1px solid #cbd5e1;border-radius:999px;padding:6px 10px;background:#fff;cursor:pointer;font-weight:600;font-size:.78rem}.qa-review button.active{background:#0f172a;color:#fff;border-color:#0f172a}.qa-note{width:100%;min-height:42px;border:1px solid #e2e8f0;border-radius:10px;padding:8px 10px;font-family:inherit;resize:vertical}.qa-sample{border-top:1px dashed #e2e8f0;margin-top:10px;padding-top:10px;min-height:10px}.qa-sample .diagram svg,.qa-sample svg{max-width:min(290px,100%);height:auto}.qa-empty{text-align:center;color:#94a3b8;padding:30px}.qa-foot{color:#64748b;font-size:.82rem;margin:16px 0 60px}
 @media print{.qa-head,.qa-panel,.qa-review,.qa-actions,.qa-note,.qa-foot{display:none!important}.qa-grid{display:block}.qa-card{break-inside:avoid;box-shadow:none;border:1px solid #cbd5e1;margin-bottom:10px}}
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
@@ -38,58 +38,58 @@
   <div class="qa-foot">הסטטוסים נשמרים מקומית בדפדפן בלבד. הם מיועדים לבדיקה פדגוגית/אסתטית בעין, אחרי שהבדיקות האוטומטיות עברו.</div>
 </main>
 
-<script src="core.js?v=20260616a"></script>
-<script src="export.js?v=20260616a"></script>
-<script src="geo.js?v=20260616a"></script>
-<script src="algebra.js?v=20260616a"></script>
-<script src="numeric.js?v=20260616a"></script>
-<script src="stats.js?v=20260616a"></script>
-<script src="engine/schema.js?v=20260616a"></script>
-<script src="engine/source-schema.js?v=20260616a"></script>
-<script src="engine/source-registry.js?v=20260616a"></script>
-<script src="engine/pedagogy-registry.js?v=20260616a"></script>
-<script src="engine/random.js?v=20260616a"></script>
-<script src="engine/validators.js?v=20260616a"></script>
-<script src="engine/themes.js?v=20260616a"></script>
-<script src="engine/diagrams.js?v=20260616a"></script>
-<script src="engine/diagram-premium-overrides.js?v=20260616a"></script>
-<script src="engine/diagram-ultra-autopilot.js?v=20260616a"></script>
-<script src="engine/question-types.js?v=20260616a"></script>
-<script src="engine/pilot-g7-03.js?v=20260616a"></script>
-<script src="engine/pilot-n8-01.js?v=20260616a"></script>
-<script src="engine/pilot-n8-02.js?v=20260616a"></script>
-<script src="engine/pilot-n8-03.js?v=20260616a"></script>
-<script src="engine/pilot-n8-04.js?v=20260616a"></script>
-<script src="engine/pilot-n8-05.js?v=20260616a"></script>
-<script src="engine/pilot-g7-01.js?v=20260616a"></script>
-<script src="engine/pilot-g7-02.js?v=20260616a"></script>
-<script src="engine/pilot-g7-04.js?v=20260616a"></script>
-<script src="engine/pilot-g8-01.js?v=20260616a"></script>
-<script src="engine/pilot-g8-04.js?v=20260616a"></script>
-<script src="engine/pilot-n7-03.js?v=20260616a"></script>
-<script src="engine/pilot-n7-04.js?v=20260616a"></script>
-<script src="engine/pilot-n7-05.js?v=20260616a"></script>
-<script src="engine/pilot-n7-06.js?v=20260616a"></script>
-<script src="engine/pilot-n7-07.js?v=20260616a"></script>
-<script src="engine/pilot-a7-01.js?v=20260616a"></script>
-<script src="engine/pilot-a7-02.js?v=20260616a"></script>
-<script src="engine/pilot-a7-03.js?v=20260616a"></script>
-<script src="engine/pilot-u7-01.js?v=20260616a"></script>
-<script src="engine/pilot-u7-02.js?v=20260616a"></script>
-<script src="engine/pilot-a8-02.js?v=20260616a"></script>
-<script src="engine/pilot-a8-03.js?v=20260616a"></script>
-<script src="engine/pilot-u8-01.js?v=20260616a"></script>
-<script src="engine/pilot-u8-02.js?v=20260616a"></script>
-<script src="engine/pattern-engine.js?v=20260616a"></script>
-<script src="engine/source-fit-extensions.js?v=20260616a"></script>
-<script src="engine/source-fit-graphs.js?v=20260616a"></script>
-<script src="engine/source-fit-geometry.js?v=20260616a"></script>
-<script src="engine/source-fit-algebra-g7.js?v=20260616a"></script>
-<script src="engine/source-fit-dedicated.js?v=20260616a"></script>
-<script src="engine/source-fit-dedicated-2.js?v=20260616a"></script>
-<script src="engine/pedagogy-attach.js?v=20260616a"></script>
-<script src="engine/follow-up.js?v=20260616a"></script>
-<script src="teacher-mode.js?v=20260616a"></script>
+<script src="core.js?v=20260617c"></script>
+<script src="export.js?v=20260617c"></script>
+<script src="geo.js?v=20260617c"></script>
+<script src="algebra.js?v=20260617c"></script>
+<script src="numeric.js?v=20260617c"></script>
+<script src="stats.js?v=20260617c"></script>
+<script src="engine/schema.js?v=20260617c"></script>
+<script src="engine/source-schema.js?v=20260617c"></script>
+<script src="engine/source-registry.js?v=20260617c"></script>
+<script src="engine/pedagogy-registry.js?v=20260617c"></script>
+<script src="engine/random.js?v=20260617c"></script>
+<script src="engine/validators.js?v=20260617c"></script>
+<script src="engine/themes.js?v=20260617c"></script>
+<script src="engine/diagrams.js?v=20260617c"></script>
+<script src="engine/diagram-premium-overrides.js?v=20260617c"></script>
+<script src="engine/diagram-ultra-autopilot.js?v=20260617c"></script>
+<script src="engine/question-types.js?v=20260617c"></script>
+<script src="engine/pilot-g7-03.js?v=20260617c"></script>
+<script src="engine/pilot-n8-01.js?v=20260617c"></script>
+<script src="engine/pilot-n8-02.js?v=20260617c"></script>
+<script src="engine/pilot-n8-03.js?v=20260617c"></script>
+<script src="engine/pilot-n8-04.js?v=20260617c"></script>
+<script src="engine/pilot-n8-05.js?v=20260617c"></script>
+<script src="engine/pilot-g7-01.js?v=20260617c"></script>
+<script src="engine/pilot-g7-02.js?v=20260617c"></script>
+<script src="engine/pilot-g7-04.js?v=20260617c"></script>
+<script src="engine/pilot-g8-01.js?v=20260617c"></script>
+<script src="engine/pilot-g8-04.js?v=20260617c"></script>
+<script src="engine/pilot-n7-03.js?v=20260617c"></script>
+<script src="engine/pilot-n7-04.js?v=20260617c"></script>
+<script src="engine/pilot-n7-05.js?v=20260617c"></script>
+<script src="engine/pilot-n7-06.js?v=20260617c"></script>
+<script src="engine/pilot-n7-07.js?v=20260617c"></script>
+<script src="engine/pilot-a7-01.js?v=20260617c"></script>
+<script src="engine/pilot-a7-02.js?v=20260617c"></script>
+<script src="engine/pilot-a7-03.js?v=20260617c"></script>
+<script src="engine/pilot-u7-01.js?v=20260617c"></script>
+<script src="engine/pilot-u7-02.js?v=20260617c"></script>
+<script src="engine/pilot-a8-02.js?v=20260617c"></script>
+<script src="engine/pilot-a8-03.js?v=20260617c"></script>
+<script src="engine/pilot-u8-01.js?v=20260617c"></script>
+<script src="engine/pilot-u8-02.js?v=20260617c"></script>
+<script src="engine/pattern-engine.js?v=20260617c"></script>
+<script src="engine/source-fit-extensions.js?v=20260617c"></script>
+<script src="engine/source-fit-graphs.js?v=20260617c"></script>
+<script src="engine/source-fit-geometry.js?v=20260617c"></script>
+<script src="engine/source-fit-algebra-g7.js?v=20260617c"></script>
+<script src="engine/source-fit-dedicated.js?v=20260617c"></script>
+<script src="engine/source-fit-dedicated-2.js?v=20260617c"></script>
+<script src="engine/pedagogy-attach.js?v=20260617c"></script>
+<script src="engine/follow-up.js?v=20260617c"></script>
+<script src="teacher-mode.js?v=20260617c"></script>
 <script>
 (function(){
   var E=window.TargilimEngine||{};
@@ -101,7 +101,7 @@
   var EXP_BG={essential:'background:#fee2e2;color:#991b1b',recommended:'background:#ffedd5;color:#9a3412',optional:'background:#dcfce7;color:#166534'};
   function expOf(id){return (E.getVisualExpectation&&E.getVisualExpectation(id))||'optional';}
   function hasVis(h){return /<(svg|table)\b/.test(h||'');}
-  function visWarn(id,html){return (expOf(id)==='essential'&&!hasVis(html))?'<div class="qa-missing" style="background:#fef2f2;border:1.5px solid #fca5a5;color:#991b1b;font-weight:800;border-radius:8px;padding:6px 10px;margin-top:6px;font-size:.82rem">⚠ נושא "ציור חובה" — אך בדוגמה זו אין שרטוט</div>':'';}
+  function visWarn(id,html){return (expOf(id)==='essential'&&!hasVis(html))?'<div class="qa-missing" style="background:#fef2f2;border:1.5px solid #fca5a5;color:#991b1b;font-weight:600;border-radius:8px;padding:6px 10px;margin-top:6px;font-size:.82rem">⚠ נושא "ציור חובה" — אך בדוגמה זו אין שרטוט</div>':'';}
   var store={};
   try{store=JSON.parse(localStorage.getItem(KEY)||'{}')||{};}catch(e){store={};}
   var ids=Object.keys(E.SOURCE_REGISTRY||{}).filter(function(k){return /-ENGINE$/.test(k);}).sort();
@@ -113,7 +113,7 @@
       : !E.SOURCE_REGISTRY ? 'מאגר המקורות (SOURCE_REGISTRY) לא אותחל.'
       : 'לא נמצאו מזהי מנוע (…-ENGINE) במאגר.';
     grid.innerHTML='<div class="qa-card" style="border-inline-start-color:#dc2626">'
-      +'<div style="font-weight:900;color:#991b1b;font-size:1rem">⚠ דף ה-QA לא הצליח לטעון את המנועים</div>'
+      +'<div style="font-weight:600;color:#991b1b;font-size:1rem">⚠ דף ה-QA לא הצליח לטעון את המנועים</div>'
       +'<div style="margin-top:8px;color:#334155">'+why+'</div>'
       +'<div style="margin-top:8px;color:#334155">סיבה נפוצה: גרסה ישנה במטמון הדפדפן. בצעו <b>רענון מלא</b> שעוקף מטמון: <b>Ctrl+Shift+R</b> (Windows) או <b>Cmd+Shift+R</b> (Mac), או פתחו מחדש דרך «QA חזותי» במחולל.</div></div>';
     var stat=document.getElementById('qaStat'); if(stat) stat.textContent='0 / 0 — המנועים לא נטענו';
@@ -128,7 +128,7 @@
     var d=document.getElementById('qaDiff').value,t=document.getElementById('qaType').value,host=card.querySelector('.qa-sample');
     var r=E.generateOne?E.generateOne(id,d,t):(E.getEngineExercise&&E.getEngineExercise(id,d,t));
     if(!r){host.innerHTML='<span style="color:#dc2626">לא ניתן להפיק דוגמה</span>';return;}
-    host.innerHTML='<div class="ex-body">'+(r.questionHTML||'')+'</div>'+visWarn(id,r.questionHTML)+'<details style="margin-top:8px"><summary style="cursor:pointer;font-weight:800;color:#2563eb">פתרון</summary>'+(r.answerHTML||'')+'</details>';
+    host.innerHTML='<div class="ex-body">'+(r.questionHTML||'')+'</div>'+visWarn(id,r.questionHTML)+'<details style="margin-top:8px"><summary style="cursor:pointer;font-weight:600;color:#2563eb">פתרון</summary>'+(r.answerHTML||'')+'</details>';
     if(window.renderMathInElement)renderMathInElement(host,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false});
   }
   function card(id){

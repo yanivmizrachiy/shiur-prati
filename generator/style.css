@@ -19,6 +19,7 @@
 html { font-size: 16px; -webkit-text-size-adjust: 100%; }
 body {
   font-family: var(--font-hebrew);
+  font-weight: 400;
   background: #f1f5f9;
   color: var(--ink);
   direction: rtl;
@@ -27,6 +28,7 @@ body {
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 }
+b, strong { font-weight: 600; }
 
 /* ── Header ── */
 .hdr {
@@ -44,8 +46,8 @@ body {
 }
 .hdr h1 {
   font-size: 1.15rem;
-  font-weight: 800;
-  letter-spacing: -0.02em;
+  font-weight: 600;
+  letter-spacing: 0;
   color: #fff;
 }
 .hdr .sub {
@@ -66,7 +68,7 @@ body {
   border-radius: 20px;
   padding: 3px 12px;
   font-size: 0.72rem;
-  font-weight: 700;
+  font-weight: 500;
   white-space: nowrap;
 }
 
@@ -78,7 +80,7 @@ main {
 }
 .main-title {
   font-size: 1.05rem;
-  font-weight: 800;
+  font-weight: 600;
   color: #0f172a;
   margin-bottom: 12px;
 }
@@ -93,10 +95,10 @@ main {
 }
 .card h2 {
   font-size: 0.82rem;
-  font-weight: 700;
+  font-weight: 600;
   color: #475569;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: 0;
   margin-bottom: 14px;
 }
 
@@ -113,10 +115,10 @@ main {
 label {
   display: block;
   font-size: 0.72rem;
-  font-weight: 700;
+  font-weight: 500;
   color: #64748b;
   margin-bottom: 5px;
-  letter-spacing: 0.03em;
+  letter-spacing: 0;
 }
 select {
   width: 100%;
@@ -148,9 +150,9 @@ select:focus {
   border: none;
   border-radius: 12px;
   font-size: 1rem;
-  font-weight: 800;
+  font-weight: 600;
   cursor: pointer;
-  letter-spacing: -0.01em;
+  letter-spacing: 0;
   transition: background 0.15s, transform 0.1s;
   -webkit-tap-highlight-color: transparent;
 }
@@ -182,7 +184,7 @@ select:focus {
 }
 /* exercise number reads as a quiet index on screen, like a workbook in print */
 .ex-num {
-  font-weight: 800;
+  font-weight: 600;
   color: var(--ink-soft);
   font-variant-numeric: tabular-nums;
 }
@@ -205,7 +207,7 @@ select:focus {
   padding: 3px 10px;
   border-radius: 20px;
   font-size: 0.70rem;
-  font-weight: 700;
+  font-weight: 500;
   line-height: 1.4;
   background: #f1f5f9;
   color: #475569;
@@ -214,6 +216,7 @@ select:focus {
 .tag.alg { background: #ede9fe; color: #5b21b6; }
 .tag.num { background: #dcfce7; color: #166534; }
 .tag.unc { background: #e0f2fe; color: #0369a1; }
+.tag.level-tag { background: #f8fafc; color: #334155; border: 1px solid #cbd5e1; }
 
 /* ── Math & SVG directionality (critical on an RTL page) ──
    KaTeX lays out inline boxes in normal flow; with an RTL ancestor the whole
@@ -244,7 +247,7 @@ svg text { unicode-bidi: plaintext; }
   color: var(--ink);
   margin-bottom: 18px;
   white-space: pre-line;
-  font-weight: 500;
+  font-weight: 400;
 }
 .qtext .katex { font-size: 1.02rem; }
 
@@ -258,7 +261,7 @@ svg text { unicode-bidi: plaintext; }
   border-radius: 8px;
   padding: 8px 16px;
   font-size: 0.88rem;
-  font-weight: 600;
+  font-weight: 500;
   color: #2563eb;
   cursor: pointer;
   font-family: inherit;
@@ -302,7 +305,7 @@ svg text { unicode-bidi: plaintext; }
   border: 1.5px solid #dbeafe;
   border-radius: 8px;
   font-size: 0.80rem;
-  font-weight: 600;
+  font-weight: 500;
   cursor: pointer;
   font-family: inherit;
   transition: background 0.15s;
@@ -335,7 +338,7 @@ svg text { unicode-bidi: plaintext; }
   padding: 0 20px;
   border-radius: 12px;
   font-size: 0.92rem;
-  font-weight: 800;
+  font-weight: 600;
   font-family: inherit;
   cursor: pointer;
   border: 1.5px solid transparent;
@@ -350,14 +353,14 @@ svg text { unicode-bidi: plaintext; }
 .btn-img-primary:hover { background: #1d4ed8; }
 .btn-img-primary:active { transform: scale(0.98); }
 .btn-img:disabled { opacity: 0.6; cursor: default; box-shadow: none; }
-/* Copy-as-image is the primary action — roughly 2× the size of the rest. */
+/* Copy-as-image is the primary action, kept prominent but quiet. */
 .btn-img-copy {
-  height: 88px;
-  padding: 0 48px;
-  font-size: 1.45rem;
-  border-radius: 16px;
-  letter-spacing: 0.2px;
-  box-shadow: 0 2px 4px rgba(37,99,235,0.28), 0 10px 24px rgba(37,99,235,0.22);
+  height: 56px;
+  padding: 0 30px;
+  font-size: 1rem;
+  border-radius: 14px;
+  letter-spacing: 0;
+  box-shadow: 0 1px 2px rgba(37,99,235,0.20), 0 8px 18px rgba(37,99,235,0.14);
 }
 /* Download stays as a compact secondary so the copy button clearly dominates. */
 .btn-img-download {
@@ -412,7 +415,7 @@ svg text { unicode-bidi: plaintext; }
   background: #f0fdf4;
   color: #166534;
   padding: 8px 12px;
-  font-weight: 700;
+  font-weight: 600;
   border-bottom: 2px solid #16a34a;
   text-align: center;
 }
@@ -434,7 +437,7 @@ svg text { unicode-bidi: plaintext; }
 }
 .exset-title {
   font-size: 1.1rem;
-  font-weight: 800;
+  font-weight: 600;
   color: #0f172a;
   margin-bottom: 10px;
 }
@@ -451,7 +454,7 @@ svg text { unicode-bidi: plaintext; }
   padding: 0 18px;
   border-radius: 9px;
   font-size: 0.86rem;
-  font-weight: 700;
+  font-weight: 600;
   font-family: inherit;
   cursor: pointer;
   transition: background 0.15s;
@@ -480,8 +483,8 @@ svg text { unicode-bidi: plaintext; }
   border-radius: 8px;
   padding: 3px 12px;
   font-size: 0.78rem;
-  font-weight: 800;
-  letter-spacing: 0.02em;
+  font-weight: 600;
+  letter-spacing: 0;
 }
 /* In a worksheet the correct MCQ choice must not be revealed on the question card;
    the answer appears in the answer key instead. */
@@ -520,10 +523,10 @@ svg text { unicode-bidi: plaintext; }
 .exset-nameline {
   display: none;
   font-size: 0.95rem;
-  font-weight: 600;
+  font-weight: 500;
   color: #0f172a;
   padding: 6px 2px 2px;
-  letter-spacing: 0.02em;
+  letter-spacing: 0;
 }
 
 /* ── Answer key ── */
@@ -539,7 +542,7 @@ svg text { unicode-bidi: plaintext; }
 .answer-key.open { display: block; }
 .answer-key-title {
   font-size: 1rem;
-  font-weight: 800;
+  font-weight: 600;
   color: #14532d;
   margin-bottom: 14px;
 }
@@ -550,13 +553,13 @@ svg text { unicode-bidi: plaintext; }
 .ak-item:last-child { border-bottom: none; }
 .ak-num {
   font-size: 0.8rem;
-  font-weight: 800;
+  font-weight: 600;
   color: #166534;
   margin-bottom: 4px;
 }
 .ak-correct {
   font-size: 0.9rem;
-  font-weight: 800;
+  font-weight: 600;
   color: #166534;
   margin-bottom: 4px;
 }
@@ -669,7 +672,7 @@ svg text { unicode-bidi: plaintext; }
 .teacher-only { display: none; }
 body.teacher-advanced .teacher-only { display: block; }
 .teacher-toggle-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-top: 12px; }
-.btn-teacher { background: #0f172a; color: #fff; border: none; border-radius: 10px; padding: 8px 14px; font-weight: 800; font-size: .9rem; cursor: pointer; text-decoration: none; display: inline-block; }
+.btn-teacher { background: #0f172a; color: #fff; border: none; border-radius: 10px; padding: 8px 14px; font-weight: 600; font-size: .9rem; cursor: pointer; text-decoration: none; display: inline-block; }
 .btn-teacher:hover { background: #1e293b; }
 body.teacher-advanced #btnTeacherMode { background: #15803d; }
 .gallery-link { background: #2563eb; }
@@ -677,30 +680,32 @@ body.teacher-advanced #btnTeacherMode { background: #15803d; }
 .teacher-controls { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; padding-top: 10px; border-top: 1px dashed #cbd5e1; }
 .tc-group { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
 .tc-export { margin-inline-start: auto; }
-.tc-btn { background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 8px; padding: 5px 10px; font-size: .8rem; font-weight: 700; color: #0f172a; cursor: pointer; }
+.tc-btn { background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 8px; padding: 5px 10px; font-size: .8rem; font-weight: 500; color: #0f172a; cursor: pointer; }
 .tc-btn:hover { background: #e2e8f0; }
 .tc-refresh { background: #dbeafe; border-color: #93c5fd; }
 .tc-follow { background: #ede9fe; border-color: #c4b5fd; }
 .tc-sel { border: 1px solid #cbd5e1; border-radius: 8px; padding: 4px 8px; font-size: .8rem; }
-.teacher-card { margin-top: 12px; background: #fffbeb; border: 1px solid #fde68a; border-radius: 10px; padding: 10px 12px; font-size: .82rem; }
-.tc-title { font-weight: 900; color: #92400e; margin-bottom: 6px; }
-.tc-row { display: flex; gap: 8px; padding: 2px 0; }
-.tc-k { color: #92400e; font-weight: 800; min-width: 96px; }
-.tc-v { color: #334155; }
+.tc-level { background: #ecfeff; border-color: #67e8f9; }
+.teacher-card { margin-top: 12px; background: #fffdf5; border: 1px solid #fde68a; border-right: 4px solid #d97706; border-radius: 8px; padding: 10px 12px; font-size: .82rem; }
+.tc-title { font-weight: 600; color: #92400e; margin-bottom: 7px; }
+.tc-row { display: grid; grid-template-columns: minmax(82px, 128px) 1fr; gap: 8px; padding: 3px 0; border-top: 1px solid rgba(217,119,6,.12); }
+.tc-row:first-of-type { border-top: 0; }
+.tc-k { color: #92400e; font-weight: 600; }
+.tc-v { color: #334155; line-height: 1.55; }
 .inline-solution, .inline-source { display: none; margin-top: 10px; padding: 10px 12px; border-radius: 10px; }
 .inline-solution { background: #f0fdf4; border: 1px solid #86efac; }
 .inline-solution.show, .inline-source.show { display: block; }
-.is-title { font-weight: 800; color: #166534; margin-bottom: 4px; }
+.is-title { font-weight: 600; color: #166534; margin-bottom: 4px; }
 .inline-source { background: #eff6ff; border: 1px solid #bfdbfe; color: #1e3a8a; font-size: .82rem; }
 .follow-up-host { margin-top: 12px; display: flex; flex-direction: column; gap: 10px; }
 .follow-up-block { background: #faf5ff; border: 1px solid #e9d5ff; border-radius: 10px; padding: 10px 12px; }
-.fu-label { font-weight: 800; color: #6d28d9; margin-bottom: 6px; font-size: .85rem; }
+.fu-label { font-weight: 600; color: #6d28d9; margin-bottom: 6px; font-size: .85rem; }
 .fu-sol { margin-top: 8px; }
-.fu-sol summary { cursor: pointer; font-weight: 700; color: #6d28d9; }
+.fu-sol summary { cursor: pointer; font-weight: 500; color: #6d28d9; }
 .hidden-graphic { display: none !important; }
-.tc-toast { position: fixed; bottom: 24px; inset-inline-start: 50%; transform: translateX(50%) translateY(20px); background: #0f172a; color: #fff; padding: 10px 18px; border-radius: 999px; font-weight: 800; opacity: 0; pointer-events: none; transition: opacity .2s, transform .2s; z-index: 9999; }
+.tc-toast { position: fixed; bottom: 24px; inset-inline-start: 50%; transform: translateX(50%) translateY(20px); background: #0f172a; color: #fff; padding: 10px 18px; border-radius: 999px; font-weight: 600; opacity: 0; pointer-events: none; transition: opacity .2s, transform .2s; z-index: 9999; }
 .tc-toast.show { opacity: 1; transform: translateX(50%) translateY(0); }
 
 /* ── Multiple-choice instruction line (student-facing, printed) ── */
-.mcq-instruction { font-weight: 700; color: #334155; margin: 10px 0 6px; font-size: 0.95rem; }
+.mcq-instruction { font-weight: 500; color: #334155; margin: 10px 0 6px; font-size: 0.95rem; }
 @media print { .mcq-instruction { color: #111827; } }

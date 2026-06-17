@@ -316,16 +316,20 @@
   function genN712(diff, qtype) {
     qtype = qt(qtype);
     const sgn = () => (Math.random() < 0.5 ? -1 : 1);
+    const ensureDirected = nums => nums.some(v => v < 0) ? nums : nums.map((v, i) => i === 0 ? -v : v);
     const fam = diff === 'basic' ? 'multiply' : diff === 'challenge' ? pick(['divide', 'three_factors']) : pick(['multiply', 'divide', 'three_factors']);
     const tfTrue = qtype === 'tf' && Math.random() < 0.5;
     let expr, res, a;
     if (fam === 'divide') {
-      const b1 = rnd(2, 6) * sgn(), k = rnd(2, 6) * sgn(), a1 = b1 * k; res = a1 / b1;
+      let b1 = rnd(2, 6) * sgn(), k = rnd(2, 6) * sgn();
+      [b1, k] = ensureDirected([b1, k]);
+      const a1 = b1 * k; res = a1 / b1;
       const same = (a1 < 0) === (b1 < 0);
       expr = `${wrap(a1)} ÷ ${wrap(b1)}`;
       a = `${same ? 'סימנים זהים → מנה חיובית' : 'סימנים שונים → מנה שלילית'}: ${expr}=${res}.`;
     } else if (fam === 'three_factors') {
-      const a1 = rnd(2, 5) * sgn(), b1 = rnd(2, 5) * sgn(), c1 = rnd(2, 5) * sgn(); res = a1 * b1 * c1;
+      const factors = ensureDirected([rnd(2, 5) * sgn(), rnd(2, 5) * sgn(), rnd(2, 5) * sgn()]);
+      const a1 = factors[0], b1 = factors[1], c1 = factors[2]; res = a1 * b1 * c1;
       const negs = [a1, b1, c1].filter(v => v < 0).length;
       expr = `${wrap(a1)} · ${wrap(b1)} · ${wrap(c1)}`;
       a = `סופרים את הגורמים השליליים: ${negs} (${negs % 2 === 0 ? 'זוגי → תוצאה חיובית' : 'אי-זוגי → תוצאה שלילית'}). ${expr}=${res}.`;

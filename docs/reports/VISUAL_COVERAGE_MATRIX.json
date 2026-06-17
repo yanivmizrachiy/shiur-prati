@@ -5,9 +5,9 @@
     "domain": "algebra",
     "visualExpectation": "optional",
     "samplesChecked": 168,
-    "samplesWithSvg": 0,
+    "samplesWithSvg": 10,
     "samplesWithTable": 0,
-    "visualCoveragePercent": 0,
+    "visualCoveragePercent": 6,
     "status": "PASS"
   },
   {
@@ -67,7 +67,7 @@
   },
   {
     "topicId": "G7-02-ENGINE",
-    "topicName": "שטחי צורות שטוחות",
+    "topicName": "שטחי מצולעים",
     "domain": "geometry",
     "visualExpectation": "essential",
     "samplesChecked": 168,
@@ -137,9 +137,9 @@
     "domain": "numeric",
     "visualExpectation": "recommended",
     "samplesChecked": 168,
-    "samplesWithSvg": 137,
+    "samplesWithSvg": 129,
     "samplesWithTable": 0,
-    "visualCoveragePercent": 82,
+    "visualCoveragePercent": 77,
     "status": "PASS"
   },
   {
@@ -170,9 +170,9 @@
     "domain": "numeric",
     "visualExpectation": "recommended",
     "samplesChecked": 168,
-    "samplesWithSvg": 115,
+    "samplesWithSvg": 112,
     "samplesWithTable": 0,
-    "visualCoveragePercent": 68,
+    "visualCoveragePercent": 67,
     "status": "PASS"
   },
   {
@@ -309,7 +309,7 @@
   },
   {
     "topicId": "U7-04-ENGINE",
-    "topicName": "קריאה מתרשים עמודות",
+    "topicName": "קריאת ייצוגים חזותיים של נתונים",
     "domain": "uncertainty",
     "visualExpectation": "essential",
     "samplesChecked": 168,
@@ -353,9 +353,9 @@
   },
   {
     "topicId": "A7-05-ENGINE",
-    "topicName": "מציאת טעות בביטויים",
+    "topicName": "טבלת ערכים וגרף ברביע ראשון",
     "domain": "algebra",
-    "visualExpectation": "optional",
+    "visualExpectation": "essential",
     "samplesChecked": 168,
     "samplesWithSvg": 168,
     "samplesWithTable": 0,

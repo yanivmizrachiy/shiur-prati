@@ -6,23 +6,23 @@
 <meta name="theme-color" content="#0f172a">
 <title>גלריית מנועים — תרגילים</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
-<link rel="stylesheet" href="style.css?v=20260616a">
+<link rel="stylesheet" href="style.css?v=20260617c">
 <style>
 .gal-head{background:#0f172a;color:#fff;padding:14px 20px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;position:sticky;top:0;z-index:100}
-.gal-head h1{font-size:1.15rem;font-weight:800}.gal-head a{color:#93c5fd;text-decoration:none;font-weight:700;margin-inline-start:auto}
+.gal-head h1{font-size:1.15rem;font-weight:600}.gal-head a{color:#93c5fd;text-decoration:none;font-weight:500;margin-inline-start:auto}
 .gal-filters{display:flex;gap:10px;flex-wrap:wrap;align-items:end;background:#fff;border-radius:14px;padding:14px 16px;margin:16px 0;box-shadow:0 1px 3px rgba(0,0,0,.08)}
 .gal-filters .f{display:flex;flex-direction:column;gap:4px}
-.gal-stat{margin-inline-start:auto;color:#475569;font-weight:700;font-size:.85rem}
+.gal-stat{margin-inline-start:auto;color:#475569;font-weight:500;font-size:.85rem}
 .gal-grid{display:grid;grid-template-columns:1fr;gap:14px}
 @media(min-width:720px){.gal-grid{grid-template-columns:1fr 1fr}}
 .gal-card{background:#fff;border-radius:14px;padding:16px 18px;box-shadow:0 1px 3px rgba(0,0,0,.08);border-top:4px solid #2563eb}
 .gal-card.geo{border-top-color:#d97706}.gal-card.alg{border-top-color:#7c3aed}.gal-card.num{border-top-color:#16a34a}.gal-card.unc{border-top-color:#0284c7}
-.gal-id{font-family:ui-monospace,monospace;font-weight:800;color:#2563eb;font-size:.8rem}
-.gal-title{font-weight:900;font-size:1.02rem;margin:2px 0 6px}
+.gal-id{font-family:ui-monospace,monospace;font-weight:600;color:#2563eb;font-size:.8rem}
+.gal-title{font-weight:600;font-size:1.02rem;margin:2px 0 6px}
 .gal-tags{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:8px}
 .gal-fams{font-size:.78rem;color:#64748b;margin-bottom:10px}
 .gal-actions{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px}
-.gal-actions button,.gal-actions select{font-size:.78rem;font-weight:700;border-radius:8px;border:1px solid #cbd5e1;padding:5px 9px;cursor:pointer;background:#f1f5f9}
+.gal-actions button,.gal-actions select{font-size:.78rem;font-weight:500;border-radius:8px;border:1px solid #cbd5e1;padding:5px 9px;cursor:pointer;background:#f1f5f9}
 .gal-sample{margin-top:8px;border-top:1px dashed #e2e8f0;padding-top:10px;min-height:8px}
 .gal-sample .diagram svg,.gal-sample svg{max-width:min(260px,100%);height:auto}
 .gal-empty{color:#94a3b8;text-align:center;padding:30px}
@@ -44,58 +44,58 @@
 <div class="gal-empty" id="galEmpty" style="display:none">אין מנועים התואמים את הסינון.</div>
 </main>
 
-<script src="core.js?v=20260616a"></script>
-<script src="export.js?v=20260616a"></script>
-<script src="geo.js?v=20260616a"></script>
-<script src="algebra.js?v=20260616a"></script>
-<script src="numeric.js?v=20260616a"></script>
-<script src="stats.js?v=20260616a"></script>
-<script src="engine/schema.js?v=20260616a"></script>
-<script src="engine/source-schema.js?v=20260616a"></script>
-<script src="engine/source-registry.js?v=20260616a"></script>
-<script src="engine/pedagogy-registry.js?v=20260616a"></script>
-<script src="engine/random.js?v=20260616a"></script>
-<script src="engine/validators.js?v=20260616a"></script>
-<script src="engine/themes.js?v=20260616a"></script>
-<script src="engine/diagrams.js?v=20260616a"></script>
-<script src="engine/diagram-premium-overrides.js?v=20260616a"></script>
-<script src="engine/diagram-ultra-autopilot.js?v=20260616a"></script>
-<script src="engine/question-types.js?v=20260616a"></script>
-<script src="engine/pilot-g7-03.js?v=20260616a"></script>
-<script src="engine/pilot-n8-01.js?v=20260616a"></script>
-<script src="engine/pilot-n8-02.js?v=20260616a"></script>
-<script src="engine/pilot-n8-03.js?v=20260616a"></script>
-<script src="engine/pilot-n8-04.js?v=20260616a"></script>
-<script src="engine/pilot-n8-05.js?v=20260616a"></script>
-<script src="engine/pilot-g7-01.js?v=20260616a"></script>
-<script src="engine/pilot-g7-02.js?v=20260616a"></script>
-<script src="engine/pilot-g7-04.js?v=20260616a"></script>
-<script src="engine/pilot-g8-01.js?v=20260616a"></script>
-<script src="engine/pilot-g8-04.js?v=20260616a"></script>
-<script src="engine/pilot-n7-03.js?v=20260616a"></script>
-<script src="engine/pilot-n7-04.js?v=20260616a"></script>
-<script src="engine/pilot-n7-05.js?v=20260616a"></script>
-<script src="engine/pilot-n7-06.js?v=20260616a"></script>
-<script src="engine/pilot-n7-07.js?v=20260616a"></script>
-<script src="engine/pilot-a7-01.js?v=20260616a"></script>
-<script src="engine/pilot-a7-02.js?v=20260616a"></script>
-<script src="engine/pilot-a7-03.js?v=20260616a"></script>
-<script src="engine/pilot-u7-01.js?v=20260616a"></script>
-<script src="engine/pilot-u7-02.js?v=20260616a"></script>
-<script src="engine/pilot-a8-02.js?v=20260616a"></script>
-<script src="engine/pilot-a8-03.js?v=20260616a"></script>
-<script src="engine/pilot-u8-01.js?v=20260616a"></script>
-<script src="engine/pilot-u8-02.js?v=20260616a"></script>
-<script src="engine/pattern-engine.js?v=20260616a"></script>
-<script src="engine/source-fit-extensions.js?v=20260616a"></script>
-<script src="engine/source-fit-graphs.js?v=20260616a"></script>
-<script src="engine/source-fit-geometry.js?v=20260616a"></script>
-<script src="engine/source-fit-algebra-g7.js?v=20260616a"></script>
-<script src="engine/source-fit-dedicated.js?v=20260616a"></script>
-<script src="engine/source-fit-dedicated-2.js?v=20260616a"></script>
-<script src="engine/pedagogy-attach.js?v=20260616a"></script>
-<script src="engine/follow-up.js?v=20260616a"></script>
-<script src="teacher-mode.js?v=20260616a"></script>
+<script src="core.js?v=20260617c"></script>
+<script src="export.js?v=20260617c"></script>
+<script src="geo.js?v=20260617c"></script>
+<script src="algebra.js?v=20260617c"></script>
+<script src="numeric.js?v=20260617c"></script>
+<script src="stats.js?v=20260617c"></script>
+<script src="engine/schema.js?v=20260617c"></script>
+<script src="engine/source-schema.js?v=20260617c"></script>
+<script src="engine/source-registry.js?v=20260617c"></script>
+<script src="engine/pedagogy-registry.js?v=20260617c"></script>
+<script src="engine/random.js?v=20260617c"></script>
+<script src="engine/validators.js?v=20260617c"></script>
+<script src="engine/themes.js?v=20260617c"></script>
+<script src="engine/diagrams.js?v=20260617c"></script>
+<script src="engine/diagram-premium-overrides.js?v=20260617c"></script>
+<script src="engine/diagram-ultra-autopilot.js?v=20260617c"></script>
+<script src="engine/question-types.js?v=20260617c"></script>
+<script src="engine/pilot-g7-03.js?v=20260617c"></script>
+<script src="engine/pilot-n8-01.js?v=20260617c"></script>
+<script src="engine/pilot-n8-02.js?v=20260617c"></script>
+<script src="engine/pilot-n8-03.js?v=20260617c"></script>
+<script src="engine/pilot-n8-04.js?v=20260617c"></script>
+<script src="engine/pilot-n8-05.js?v=20260617c"></script>
+<script src="engine/pilot-g7-01.js?v=20260617c"></script>
+<script src="engine/pilot-g7-02.js?v=20260617c"></script>
+<script src="engine/pilot-g7-04.js?v=20260617c"></script>
+<script src="engine/pilot-g8-01.js?v=20260617c"></script>
+<script src="engine/pilot-g8-04.js?v=20260617c"></script>
+<script src="engine/pilot-n7-03.js?v=20260617c"></script>
+<script src="engine/pilot-n7-04.js?v=20260617c"></script>
+<script src="engine/pilot-n7-05.js?v=20260617c"></script>
+<script src="engine/pilot-n7-06.js?v=20260617c"></script>
+<script src="engine/pilot-n7-07.js?v=20260617c"></script>
+<script src="engine/pilot-a7-01.js?v=20260617c"></script>
+<script src="engine/pilot-a7-02.js?v=20260617c"></script>
+<script src="engine/pilot-a7-03.js?v=20260617c"></script>
+<script src="engine/pilot-u7-01.js?v=20260617c"></script>
+<script src="engine/pilot-u7-02.js?v=20260617c"></script>
+<script src="engine/pilot-a8-02.js?v=20260617c"></script>
+<script src="engine/pilot-a8-03.js?v=20260617c"></script>
+<script src="engine/pilot-u8-01.js?v=20260617c"></script>
+<script src="engine/pilot-u8-02.js?v=20260617c"></script>
+<script src="engine/pattern-engine.js?v=20260617c"></script>
+<script src="engine/source-fit-extensions.js?v=20260617c"></script>
+<script src="engine/source-fit-graphs.js?v=20260617c"></script>
+<script src="engine/source-fit-geometry.js?v=20260617c"></script>
+<script src="engine/source-fit-algebra-g7.js?v=20260617c"></script>
+<script src="engine/source-fit-dedicated.js?v=20260617c"></script>
+<script src="engine/source-fit-dedicated-2.js?v=20260617c"></script>
+<script src="engine/pedagogy-attach.js?v=20260617c"></script>
+<script src="engine/follow-up.js?v=20260617c"></script>
+<script src="teacher-mode.js?v=20260617c"></script>
 <script>
 // Build one card per registered engine. Samples are generated lazily (on click),
 // so the gallery never renders 50 heavy SVGs at once — fast first paint.
@@ -130,7 +130,7 @@
       var d=el.querySelector('.galDiff').value,t=el.querySelector('.galType').value;
       var r=E.generateOne?E.generateOne(id,d,t):(E.getEngineExercise&&E.getEngineExercise(id,d,t));
       if(!r){sample.innerHTML='<span style="color:#dc2626">לא ניתן להפיק כעת</span>';return;}
-      sample.innerHTML='<div class="ex-body">'+(r.questionHTML||'')+'</div><details style="margin-top:8px"><summary style="cursor:pointer;font-weight:700;color:#2563eb">פתרון</summary>'+(r.answerHTML||'')+'</details>';
+      sample.innerHTML='<div class="ex-body">'+(r.questionHTML||'')+'</div><details style="margin-top:8px"><summary style="cursor:pointer;font-weight:500;color:#2563eb">פתרון</summary>'+(r.answerHTML||'')+'</details>';
       if(window.renderMathInElement)renderMathInElement(sample,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false});
     });
     el.querySelector('.galTeach').addEventListener('click',function(){
@@ -147,7 +147,7 @@
   // Defensive: surface a clear message if the engine stack failed to load
   // (stale cache / blocked script) instead of an empty grid.
   if(!E.SOURCE_REGISTRY || ids.length===0){
-    grid.innerHTML='<div class="gal-card" style="border-top-color:#dc2626"><div style="font-weight:900;color:#991b1b">⚠ הגלריה לא הצליחה לטעון את המנועים</div><div style="margin-top:8px;color:#334155">'+(!window.TargilimEngine?'מנוע התרגילים לא נטען.':'מאגר המקורות ריק.')+' בצעו רענון מלא: <b>Ctrl+Shift+R</b> / <b>Cmd+Shift+R</b>.</div></div>';
+    grid.innerHTML='<div class="gal-card" style="border-top-color:#dc2626"><div style="font-weight:600;color:#991b1b">⚠ הגלריה לא הצליחה לטעון את המנועים</div><div style="margin-top:8px;color:#334155">'+(!window.TargilimEngine?'מנוע התרגילים לא נטען.':'מאגר המקורות ריק.')+' בצעו רענון מלא: <b>Ctrl+Shift+R</b> / <b>Cmd+Shift+R</b>.</div></div>';
     var gs=document.getElementById('galStat'); if(gs) gs.textContent='0 / 0 — המנועים לא נטענו';
     console.error('[gallery] engine stack not loaded:', {hasEngine:!!window.TargilimEngine, hasRegistry:!!E.SOURCE_REGISTRY, ids:ids.length});
     return;

@@ -43,9 +43,14 @@
       + row('כיתה/תחום', (meta.grade ? 'כיתה ' + meta.grade : '') + (meta.domain ? ' · ' + meta.domain : ''))
       + row('מיומנות', meta.skill)
       + row('משפחת שאלה', meta.questionFamily + (meta.familyProvenance ? ' (' + meta.familyProvenance + ')' : ''))
+      + row('רמת חשיבה', (meta.difficultyLabel || meta.difficulty) + (meta.cognitiveDemand ? ' · ' + meta.cognitiveDemand : ''))
       + row('מטרת למידה', meta.learningGoal)
       + row('מטרה למורה', meta.teacherPurpose)
       + row('טעות נפוצה', meta.misconception)
+      + row('מה המורה מחפש', meta.teacherMove)
+      + row('פיגום', meta.scaffoldHint)
+      + row('הקפצה', meta.stretchPrompt)
+      + row('עדות פתרון', meta.evidenceLookFor)
       + row('רעיונות להמשך', fu)
       + '</div>';
   }
@@ -63,9 +68,14 @@
           m.sourceFile ? 'חומר לימוד: ' + m.sourceFile : '',
           m.skill ? 'מיומנות: ' + m.skill : '',
           m.questionFamily ? 'משפחת שאלה: ' + m.questionFamily : '',
+          (m.difficultyLabel || m.cognitiveDemand) ? 'רמת חשיבה: ' + [m.difficultyLabel, m.cognitiveDemand].filter(Boolean).join(' · ') : '',
           m.learningGoal ? 'מטרת למידה: ' + m.learningGoal : '',
           m.teacherPurpose ? 'מטרה למורה: ' + m.teacherPurpose : '',
           m.misconception ? 'טעות נפוצה: ' + m.misconception : '',
+          m.teacherMove ? 'מה המורה מחפש: ' + m.teacherMove : '',
+          m.scaffoldHint ? 'פיגום: ' + m.scaffoldHint : '',
+          m.stretchPrompt ? 'הקפצה: ' + m.stretchPrompt : '',
+          m.evidenceLookFor ? 'עדות פתרון: ' + m.evidenceLookFor : '',
           (m.followUpIdeas && m.followUpIdeas.length) ? 'רעיונות להמשך: ' + m.followUpIdeas.join(' · ') : ''
         ].filter(Boolean).join('\n');
       case 'html': return ex.questionHTML || '';
@@ -101,14 +111,13 @@
   function controlBar(i, ex) {
     const b = function (fn, txt, cls) { return '<button class="tc-btn ' + (cls || '') + '" onclick="Teacher.' + fn + '">' + txt + '</button>'; };
     const fuOpts = Teacher.MODES.map(function (mode) { return '<option value="' + mode + '">' + (FU_LABEL[mode] || mode) + '</option>'; }).join('');
-    // Lean teacher bar: difficulty is set by the main רמה 1/2/3 selector, so no
-    // easier/harder here; image copy/download live on the big per-card buttons, so
-    // the only extra copy a teacher needs is one text "question+solution". The full
-    // Teacher.* API (easier/harder/copyImage/exportPNG/exportHTML) still exists for
-    // programmatic use — it's just no longer surfaced as redundant buttons.
+    // The teacher bar keeps the main workflow compact while exposing the two
+    // actions teachers ask for most: one step easier and one step harder.
     return '<div class="teacher-controls teacher-only" data-html2canvas-ignore="true">'
       + '<div class="tc-group">'
       + b('refresh(' + i + ')', '↻ שאלה חדשה', 'tc-refresh')
+      + b('easier(' + i + ')', '↓ קל יותר', 'tc-level')
+      + b('harder(' + i + ')', '↑ קשה יותר', 'tc-level')
       + b('cycleType(' + i + ')', '⇄ סוג שאלה')
       + b('toggleNumbers(' + i + ')', '# מספרים חדשים')
       + '</div>'
@@ -132,6 +141,8 @@
     c.exercises.forEach(function (ex, i) {
       const card = document.getElementById('exCard' + i);
       if (!card || card.querySelector('.teacher-controls')) return;
+      const meta = document.createElement('div'); meta.innerHTML = buildTeacherCardHTML(ex.meta);
+      while (meta.firstChild) card.appendChild(meta.firstChild);
       const bar = document.createElement('div'); bar.innerHTML = controlBar(i, ex);
       while (bar.firstChild) card.appendChild(bar.firstChild);
     });
@@ -150,18 +161,27 @@
     c.exercises[i] = ex;
     const card = document.getElementById('exCard' + i); if (!card) return;
     const body = card.querySelector('.ex-body'); if (body) body.innerHTML = ex.questionHTML;
-    // The on-card "כרטיס מורה" panel was removed from the UI; nothing to refresh.
+    const levelTag = card.querySelector('.level-tag');
+    if (levelTag && ex.meta && ex.meta.difficultyLabel) levelTag.textContent = ex.meta.difficultyLabel;
+    const teacherCard = card.querySelector('.teacher-card');
+    if (teacherCard) teacherCard.outerHTML = buildTeacherCardHTML(ex.meta);
     if (typeof renderMathInElement === 'function') renderMathInElement(card, { delimiters: [{ left: '$$', right: '$$', display: true }, { left: '$', right: '$', display: false }], throwOnError: false });
     if (typeof applyVisualMode === 'function') applyVisualMode();
   }
 
   function curType(i) { const c = ctx(); return (c && c.exercises[i] && c.exercises[i].qtype) || 'open'; }
+  function curDiff(i) {
+    const c = ctx(); if (!c) return 'standard';
+    const ex = c.exercises[i] || {};
+    const d = ex.meta && ex.meta.difficulty;
+    return DIFF.indexOf(d) >= 0 ? d : (DIFF.indexOf(c.diff) >= 0 ? c.diff : 'standard');
+  }
 
-  Teacher.refresh = function (i) { const c = ctx(); if (!c) return; const ex = regen(c.id, c.isEngine, c.diff, curType(i)); if (ex) replaceCardBody(i, ex); };
+  Teacher.refresh = function (i) { const c = ctx(); if (!c) return; const ex = regen(c.id, c.isEngine, curDiff(i), curType(i)); if (ex) replaceCardBody(i, ex); };
   Teacher.toggleNumbers = Teacher.refresh; // new numbers = same skill/type, fresh instance
-  Teacher.easier = function (i) { const c = ctx(); if (!c) return; const d = DIFF[Math.max(0, DIFF.indexOf(c.diff) - 1)]; c.diff = d; const ex = regen(c.id, c.isEngine, d, curType(i)); if (ex) replaceCardBody(i, ex); };
-  Teacher.harder = function (i) { const c = ctx(); if (!c) return; const d = DIFF[Math.min(DIFF.length - 1, (DIFF.indexOf(c.diff) < 0 ? 1 : DIFF.indexOf(c.diff)) + 1)]; c.diff = d; const ex = regen(c.id, c.isEngine, d, curType(i)); if (ex) replaceCardBody(i, ex); };
-  Teacher.cycleType = function (i) { const c = ctx(); if (!c) return; const next = QT_CYCLE[(QT_CYCLE.indexOf(curType(i)) + 1) % QT_CYCLE.length]; const ex = regen(c.id, c.isEngine, c.diff, next); if (ex) { ex.qtype = ex.qtype || next; replaceCardBody(i, ex); } };
+  Teacher.easier = function (i) { const c = ctx(); if (!c) return; const d = DIFF[Math.max(0, DIFF.indexOf(curDiff(i)) - 1)]; const ex = regen(c.id, c.isEngine, d, curType(i)); if (ex) replaceCardBody(i, ex); };
+  Teacher.harder = function (i) { const c = ctx(); if (!c) return; const d = DIFF[Math.min(DIFF.length - 1, DIFF.indexOf(curDiff(i)) + 1)]; const ex = regen(c.id, c.isEngine, d, curType(i)); if (ex) replaceCardBody(i, ex); };
+  Teacher.cycleType = function (i) { const c = ctx(); if (!c) return; const next = QT_CYCLE[(QT_CYCLE.indexOf(curType(i)) + 1) % QT_CYCLE.length]; const ex = regen(c.id, c.isEngine, curDiff(i), next); if (ex) { ex.qtype = ex.qtype || next; replaceCardBody(i, ex); } };
 
   Teacher.followUp = function (i) {
     const c = ctx(); if (!c || typeof E.generateFollowUpQuestion !== 'function') return;

@@ -12,21 +12,70 @@
 
   function graphSvg(points,title,xLabel,yLabel,maxX,maxY){
     const T=E.themes&&E.themes.geometry?E.themes.geometry:{fill:'#eff6ff',stroke:'#2563eb',helper:'#93c5fd',given:'#1d4ed8',unknown:'#dc2626',label:'#334155'};
-    const W=292,H=218,l=42,b=40,t=28,r=20;
-    maxX=maxX||Math.max(...points.map(p=>p.x)); maxY=maxY||Math.max(...points.map(p=>p.y));
-    function X(x){return l+x*(W-l-r)/maxX;} function Y(y){return H-b-y*(H-b-t)/maxY;}
-    const grid=[0,1,2,3,4].map(i=>`<line x1="${l}" y1="${H-b-i*(H-b-t)/4}" x2="${W-r}" y2="${H-b-i*(H-b-t)/4}" stroke="${T.helper}" opacity=".35"/>`).join('');
+    const W=292,H=230,l=46,b=48,t=38,r=20;
+    const xs=points.map(p=>p.x), ys=points.map(p=>p.y);
+    let xMin=Math.min(0,...xs), xMax=Math.max(0,...xs, maxX||0);
+    let yMin=Math.min(0,...ys), yMax=Math.max(0,...ys, maxY||0);
+    if(xMin===xMax){ xMin-=1; xMax+=1; }
+    if(yMin===yMax){ yMin-=1; yMax+=1; }
+    function X(x){return l+(x-xMin)*(W-l-r)/(xMax-xMin);}
+    function Y(y){return H-b-(y-yMin)*(H-b-t)/(yMax-yMin);}
+    function clamp(v,a,b){return Math.max(a,Math.min(b,v));}
+    function fmt(v){return Math.abs(v-Math.round(v))<0.001 ? String(Math.round(v)) : String(Math.round(v*10)/10);}
+    const axisY=clamp(X(0),l,W-r), axisX=clamp(Y(0),t,H-b);
+    let grid='';
+    for(let i=0;i<=4;i++){
+      const xv=xMin+(xMax-xMin)*i/4, x=X(xv);
+      const yv=yMin+(yMax-yMin)*i/4, y=Y(yv);
+      grid+=`<line x1="${x}" y1="${t}" x2="${x}" y2="${H-b}" stroke="${T.helper}" opacity=".28"/>`;
+      grid+=`<line x1="${l}" y1="${y}" x2="${W-r}" y2="${y}" stroke="${T.helper}" opacity=".35"/>`;
+      grid+=`<text x="${x}" y="${H-24}" font-size="9.5" text-anchor="middle" fill="${T.label}">${fmt(xv)}</text>`;
+      grid+=`<text x="${l-8}" y="${y+3}" font-size="9.5" text-anchor="end" fill="${T.label}">${fmt(yv)}</text>`;
+    }
     const poly=points.map(p=>`${X(p.x)},${Y(p.y)}`).join(' ');
-    const dots=points.map(p=>`<circle cx="${X(p.x)}" cy="${Y(p.y)}" r="4.5" fill="${T.stroke}"/>`).join('');
-    return `<svg class="engine-svg" viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg"><rect x="12" y="10" width="268" height="192" rx="14" fill="${T.fill}" stroke="${T.stroke}" stroke-width="1.8"/>${grid}<line x1="${l}" y1="${H-b}" x2="${W-r}" y2="${H-b}" stroke="${T.stroke}" stroke-width="2.2"/><line x1="${l}" y1="${H-b}" x2="${l}" y2="${t}" stroke="${T.stroke}" stroke-width="2.2"/><polyline points="${poly}" fill="none" stroke="${T.unknown}" stroke-width="3" stroke-linecap="round"/>${dots}<text x="146" y="30" font-size="12" font-weight="800" text-anchor="middle" fill="${T.label}">${title}</text><text x="146" y="208" font-size="11" font-weight="800" text-anchor="middle" fill="${T.label}">${xLabel}</text><text x="18" y="24" font-size="11" font-weight="800" fill="${T.label}">${yLabel}</text></svg>`;
+    const dots=points.map(p=>`<circle cx="${X(p.x)}" cy="${Y(p.y)}" r="4.5" fill="${T.stroke}" stroke="#fff" stroke-width="1.2"/>`).join('');
+    return `<svg class="engine-svg" viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">`+
+      `<rect x="12" y="10" width="268" height="204" rx="8" fill="${T.fill}" stroke="${T.stroke}" stroke-width="1.8"/>`+
+      `<text x="146" y="28" font-size="12" font-weight="800" text-anchor="middle" fill="${T.label}">${title}</text>`+
+      grid+
+      `<line x1="${l}" y1="${axisX}" x2="${W-r}" y2="${axisX}" stroke="${T.stroke}" stroke-width="2.2"/>`+
+      `<line x1="${axisY}" y1="${t}" x2="${axisY}" y2="${H-b}" stroke="${T.stroke}" stroke-width="2.2"/>`+
+      `<polyline points="${poly}" fill="none" stroke="${T.unknown}" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>${dots}`+
+      `<text x="146" y="${H-7}" font-size="11" font-weight="800" text-anchor="middle" fill="${T.label}">${xLabel}</text>`+
+      `<text x="22" y="28" font-size="11" font-weight="800" fill="${T.label}">${yLabel}</text></svg>`;
   }
 
   function barSvg(data,title){
     const T=E.themes&&E.themes.geometry?E.themes.geometry:{fill:'#eff6ff',stroke:'#2563eb',helper:'#93c5fd',given:'#1d4ed8',unknown:'#dc2626',label:'#334155'};
     const W=292,H=210,l=38,b=44,t=36,r=20,max=Math.max(...data.map(d=>d.v));
     const gap=11,bw=(W-l-r-gap*(data.length-1))/data.length;
-    const bars=data.map((d,i)=>{ const h=Math.round((H-b-t)*d.v/max), x=l+i*(bw+gap), y=H-b-h; return `<rect x="${x}" y="${y}" width="${bw}" height="${h}" rx="7" fill="${T.helper}" stroke="${T.stroke}"/><text x="${x+bw/2}" y="${y-6}" font-size="11" font-weight="800" text-anchor="middle" fill="${T.given}">${d.v}</text><text x="${x+bw/2}" y="${H-22}" font-size="11" font-weight="800" text-anchor="middle" fill="${T.label}">${d.k}</text>`; }).join('');
-    return `<svg class="engine-svg" viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg"><rect x="12" y="10" width="268" height="186" rx="14" fill="${T.fill}" stroke="${T.stroke}" stroke-width="1.8"/><text x="146" y="31" fill="${T.label}" font-size="12" font-weight="800" text-anchor="middle">${title}</text><line x1="${l}" y1="${H-b}" x2="${W-r}" y2="${H-b}" stroke="${T.stroke}" stroke-width="2"/><line x1="${l}" y1="${H-b}" x2="${l}" y2="${t}" stroke="${T.stroke}" stroke-width="2"/>${bars}<text x="146" y="205" font-size="10.5" font-weight="800" text-anchor="middle" fill="${T.label}">תרשים עמודות</text></svg>`;
+    let grid='';
+    for(let i=0;i<=4;i++){
+      const y=H-b-i*(H-b-t)/4, v=Math.round(max*i/4);
+      grid+=`<line x1="${l}" y1="${y}" x2="${W-r}" y2="${y}" stroke="${T.helper}" opacity=".28"/>`;
+      grid+=`<text x="${l-7}" y="${y+3}" font-size="9.5" text-anchor="end" fill="${T.label}">${v}</text>`;
+    }
+    const bars=data.map((d,i)=>{ const h=Math.round((H-b-t)*d.v/max), x=l+i*(bw+gap), y=H-b-h; return `<rect x="${x}" y="${y}" width="${bw}" height="${h}" rx="6" fill="${T.helper}" stroke="${T.stroke}"/><text x="${x+bw/2}" y="${y-6}" font-size="11" font-weight="800" text-anchor="middle" fill="${T.given}">${d.v}</text><text x="${x+bw/2}" y="${H-22}" font-size="11" font-weight="800" text-anchor="middle" fill="${T.label}">${d.k}</text>`; }).join('');
+    return `<svg class="engine-svg" viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg"><rect x="12" y="10" width="268" height="186" rx="8" fill="${T.fill}" stroke="${T.stroke}" stroke-width="1.8"/><text x="146" y="31" fill="${T.label}" font-size="12" font-weight="800" text-anchor="middle">${title}</text>${grid}<line x1="${l}" y1="${H-b}" x2="${W-r}" y2="${H-b}" stroke="${T.stroke}" stroke-width="2"/><line x1="${l}" y1="${H-b}" x2="${l}" y2="${t}" stroke="${T.stroke}" stroke-width="2"/>${bars}<text x="146" y="205" font-size="10.5" font-weight="800" text-anchor="middle" fill="${T.label}">תרשים עמודות</text></svg>`;
+  }
+
+  function tableHtml(headers, rows){ return E.freqTableHtml ? E.freqTableHtml(headers, rows) : '<table><tbody>'+rows.map(r=>'<tr>'+r.map(c=>'<td>'+c+'</td>').join('')+'</tr>').join('')+'</tbody></table>'; }
+  function combinedTableGraphSvg(rows,title){
+    const pts=rows.map(r=>({x:r.x,y:r.y}));
+    return graphSvg(pts,title,'x','y',Math.max(...pts.map(p=>p.x)),Math.max(...pts.map(p=>p.y)));
+  }
+
+  function pictogramSvg(data,title,key){
+    const T=E.themes&&E.themes.geometry?E.themes.geometry:{fill:'#eff6ff',stroke:'#2563eb',helper:'#93c5fd',given:'#1d4ed8',unknown:'#dc2626',label:'#334155'};
+    const W=292,H=218,rowH=34,startY=54,iconR=5.5;
+    function icon(x,y,c){return `<circle cx="${x}" cy="${y}" r="${iconR}" fill="${c}" stroke="#fff" stroke-width="1"/><path d="M${x-4},${y+7} L${x+4},${y+7} L${x+2},${y+18} L${x-2},${y+18} Z" fill="${c}" stroke="#fff" stroke-width=".8"/>`;}
+    const rows=data.map((d,i)=>{
+      const y=startY+i*rowH, icons=Math.round(d.v/key);
+      let body=`<text x="256" y="${y+5}" font-size="11" font-weight="800" text-anchor="end" fill="${T.label}">${d.k}</text>`;
+      for(let j=0;j<icons;j++) body+=icon(48+j*18,y,T.given);
+      return body+`<text x="30" y="${y+5}" font-size="10" font-weight="800" text-anchor="middle" fill="${T.label}">${d.v}</text>`;
+    }).join('');
+    return `<svg class="engine-svg" viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg"><rect x="12" y="10" width="268" height="196" rx="8" fill="${T.fill}" stroke="${T.stroke}" stroke-width="1.8"/><text x="146" y="30" fill="${T.label}" font-size="12" font-weight="800" text-anchor="middle">${title}</text>${rows}<text x="146" y="198" font-size="10.5" font-weight="800" text-anchor="middle" fill="${T.label}">מקרא: כל סמל = ${key}</text></svg>`;
   }
 
   // mapping diagram (קלט→פלט). violating=true draws one input with TWO arrows
@@ -49,7 +98,7 @@
 
   function genA801(diff,qtype){
     qtype=qtype==='mixed'?pick(['open','mcq','tf','mistake']):(qtype||'open');
-    const family=diff==='challenge'?pick(['heating','table','fuel']):pick(['fuel','heating','function','table']);
+    const family=diff==='basic'?pick(['fuel','table','function']):diff==='challenge'?pick(['heating','table','fuel','complete_table_graph']):pick(['fuel','heating','function','table','complete_table_graph']);
     const tfTrue=qtype==='tf'&&Math.random()<0.5;
     let q='',a='',svg='',cs=null,isTrue=true;
     if(family==='fuel'){
@@ -73,6 +122,22 @@
       cs=choices([{text:tex('10'),correct:true},{text:tex('6'),correct:false},{text:tex('9'),correct:false},{text:tex('12'),correct:false}]);
       if(qtype==='tf'){ isTrue=tfTrue; q='כאשר '+tex('x=2')+', הערך הוא '+tex(tfTrue?'y=10':'y=6')+'.'; a=(tfTrue?'נכון. ':'שגוי. ')+'מציבים בכלל המלא: '+tex('3\\cdot2+4=10')+'.'; }
       if(qtype==='mistake'){q='תלמיד הציב רק '+tex('3\\cdot2')+' וקיבל 6.'; a='הטעות: הוא שכח את האיבר החופשי +4.';}
+    } else if(family==='complete_table_graph'){
+      const m=2,b=10, xs=[-2,-1,0,1,2], rows=xs.map(x=>({x:x,y:m*x+b}));
+      const partial=tableHtml(['x','−2','−1','0','1','2'], [['y',rows[0].y,'?',rows[2].y,'?','?']]);
+      svg=combinedTableGraphSvg(rows,'השלמת טבלה וגרף');
+      q=`לפניכם כלל של פונקציה קווית: ${tex('y=2x+10')}.\nא. השלימו את הטבלה.\nב. סמנו את הנקודות על הגרף.\nג. מהו השיפוע?`;
+      a=`${partial}\nמציבים בכל פעם את ערך ${tex('x')} בכלל: ${tex('y=2x+10')}.\nהטבלה המלאה: ${tableHtml(['x','−2','−1','0','1','2'], [['y',6,8,10,12,14]])}\nהשיפוע הוא $2$, כי בכל עלייה של 1 ב-${tex('x')} הערך של ${tex('y')} גדל ב-2.`;
+      cs=choices([{text:'הערכים החסרים הם 8, 12, 14 והשיפוע 2',correct:true},{text:'הערכים החסרים הם 6, 10, 12 והשיפוע 10',correct:false},{text:'הערכים החסרים הם 9, 11, 13 והשיפוע 1',correct:false},{text:'אי אפשר להשלים בלי גרף מוכן',correct:false}]);
+      if(qtype==='tf'){
+        isTrue=tfTrue;
+        q=tfTrue?'בטבלה של '+tex('y=2x+10')+', כאשר '+tex('x=-1')+' מתקבל '+tex('y=8')+' והשיפוע הוא 2.':'בטבלה של '+tex('y=2x+10')+', כאשר '+tex('x=-1')+' מתקבל '+tex('y=9')+' והשיפוע הוא 10.';
+        a=(tfTrue?'נכון. ':'שגוי. ')+`מציבים: ${tex('2\\cdot(-1)+10=8')}. השיפוע הוא המקדם של ${tex('x')}, כלומר 2.`;
+      }
+      if(qtype==='mistake'){
+        q=`תלמיד השלים את הטבלה של ${tex('y=2x+10')} כך: עבור ${tex('x=-1')} כתב ${tex('y=9')}, כי "מוסיפים 10 ואז מחסרים 1".`;
+        a=`הטעות: קודם מכפילים את ${tex('x')} ב-2 ורק אחר כך מוסיפים 10. לכן ${tex('2\\cdot(-1)+10=8')}.`;
+      }
     } else {
       // function-identification (source 02): always shows a mapping diagram
       let violating=true;
@@ -94,26 +159,73 @@
     {title:'ספרים שהושאלו בשבוע',unit:'ספרים',cats:['ב׳','ג׳','ד׳','ה׳']},
     {title:'מספר מבקרים לפי יום',unit:'מבקרים',cats:['א׳','ב׳','ג׳','ד׳']}
   ];
+  const PICTO_SETS=[
+    {title:'סקר הגעה לבית הספר',unit:'תלמידים',key:2,data:[{k:'ברגל',v:8},{k:'אוטובוס',v:12},{k:'רכב',v:6},{k:'אופניים',v:4}]},
+    {title:'ספרים שנקראו בחודש',unit:'ספרים',key:5,data:[{k:'כיתה ז׳1',v:20},{k:'כיתה ז׳2',v:15},{k:'כיתה ז׳3',v:25},{k:'כיתה ז׳4',v:10}]}
+  ];
   function genU704(diff,qtype){
     qtype=qtype==='mixed'?pick(['open','mcq','tf','mistake']):(qtype||'open');
     const set=pick(U704_SETS);
+    const family=diff==='basic'?pick(['read','pictogram_read']):diff==='challenge'?pick(['bar_to_table','total','pictogram_read']):pick(['read','bar_to_table','total','pictogram_read']);
     const ncats=diff==='challenge'?set.cats.length:diff==='basic'?3:Math.min(4,set.cats.length);
     const seen={}, vals=[];
     while(vals.length<ncats){ const v=4+Math.floor(Math.random()*12); if(!seen[v]){ seen[v]=1; vals.push(v); } }
     const data=set.cats.slice(0,ncats).map((k,i)=>({k:k,v:vals[i]}));
     const total=data.reduce((s,d)=>s+d.v,0), max=data.reduce((a,b)=>a.v>b.v?a:b), min=data.reduce((a,b)=>a.v<b.v?a:b);
-    const svg=barSvg(data,set.title);
+    let svg=barSvg(data,set.title);
     const tfTrue=qtype==='tf'&&Math.random()<0.5;
+    const table = tableHtml(['קטגוריה','תדירות'], data.map(d=>[d.k,d.v]));
     let q=`קראו את תרשים העמודות (${set.title}): איזו קטגוריה היא הגבוהה ביותר וכמה ${set.unit} יש בסך הכול?`;
     let a=`העמודה הגבוהה היא ${max.k} עם ${max.v} ${set.unit}. הסך הכול הוא ${data.map(d=>d.v).join('+')}=${total}.`;
-    const cs=choices([{text:`${max.k}, סך הכול ${total}`,correct:true},{text:`${min.k}, סך הכול ${max.v}`,correct:false},{text:`${max.k}, סך הכול ${max.v}`,correct:false},{text:'אי אפשר לדעת מהתרשים',correct:false}]);
+    let cs=choices([{text:`${max.k}, סך הכול ${total}`,correct:true},{text:`${min.k}, סך הכול ${max.v}`,correct:false},{text:`${max.k}, סך הכול ${max.v}`,correct:false},{text:'אי אפשר לדעת מהתרשים',correct:false}]);
     let isTrue=false;
-    if(qtype==='tf'){
+    if(family==='pictogram_read'){
+      const p=pick(PICTO_SETS), focus=pick(p.data), ptotal=p.data.reduce((s,d)=>s+d.v,0), pmax=p.data.reduce((a,b)=>a.v>b.v?a:b);
+      svg=pictogramSvg(p.data,p.title,p.key);
+      q=`לפניכם פיקטוגרמה (${p.title}). לפי המקרא, כמה ${p.unit} יש בקטגוריה ${focus.k}, ומה הסך הכול?`;
+      a=`כל סמל מייצג ${p.key}. ב-${focus.k} יש ${focus.v/p.key} סמלים, לכן ${focus.v} ${p.unit}. הסך הכול: ${p.data.map(d=>d.v).join('+')}=${ptotal}.`;
+      cs=choices([{text:`${focus.v} ב-${focus.k}, סך הכול ${ptotal}`,correct:true},{text:`${focus.v/p.key} ב-${focus.k}, סך הכול ${ptotal/p.key}`,correct:false},{text:`${focus.v+p.key} ב-${focus.k}, סך הכול ${ptotal}`,correct:false},{text:`${pmax.v} ב-${focus.k}, סך הכול ${pmax.v}`,correct:false}]);
+      if(qtype==='tf'){
+        isTrue=tfTrue;
+        q=`בפיקטוגרמה, כל סמל שווה ${p.key}. בקטגוריה ${focus.k} יש ${tfTrue?focus.v:focus.v/p.key} ${p.unit}.`;
+        a=(tfTrue?'נכון. ':'שגוי. ')+`צריך להכפיל את מספר הסמלים במקרא: ${focus.v/p.key} סמלים · ${p.key} = ${focus.v}.`;
+      }
+      if(qtype==='mistake'){
+        q=`תלמיד קרא את הפיקטוגרמה ואמר: "ב-${focus.k} יש ${focus.v/p.key}, כי ספרתי ${focus.v/p.key} סמלים".`;
+        a=`הטעות: בפיקטוגרמה לא מסתפקים בספירת הסמלים; מכפילים לפי המקרא. כאן כל סמל = ${p.key}, לכן ${focus.v/p.key}·${p.key}=${focus.v}.`;
+      }
+    } else if(family==='bar_to_table'){
+      q=`לפניכם דיאגרמת עמודות (${set.title}). תארו את הנתונים באמצעות טבלת שכיחויות.`;
+      a=`טבלת השכיחויות המתאימה היא:\n${table}\nכל עמודה בתרשים הופכת לשורה בטבלה: קטגוריה ותדירות.`;
+      cs=choices([{text:`${data[0].k} — ${data[0].v}`,correct:true},{text:`${data[0].k} — ${data[1].v}`,correct:false},{text:`${max.k} — ${total}`,correct:false},{text:`סך הכול — ${max.v}`,correct:false}]);
+      if(qtype==='tf'){
+        isTrue=tfTrue;
+        q=`בדיאגרמה, השורה "${data[0].k} — ${tfTrue?data[0].v:data[1].v}" מתאימה לטבלת השכיחויות.`;
+        a=(tfTrue?'נכון. ':'שגוי. ')+`קוראים את גובה העמודה של ${data[0].k}: ${data[0].v}.`;
+      }
+      if(qtype==='mistake'){
+        q=`תלמיד בנה טבלה וכתב בשורת "${max.k}" את הסך הכול ${total}, כי זו העמודה הגבוהה ביותר.`;
+        a=`הטעות: בשורת קטגוריה כותבים את גובה העמודה שלה, לא את הסך הכול. עבור ${max.k} התדירות היא ${max.v}.`;
+      }
+    } else if(family==='total'){
+      q=`לפי תרשים העמודות (${set.title}), כמה ${set.unit} יש בסך הכול?`;
+      a=`מחברים את כל העמודות: ${data.map(d=>d.v).join('+')}=${total}.`;
+      cs=choices([{text:`${total}`,correct:true},{text:`${max.v}`,correct:false},{text:`${min.v}`,correct:false},{text:`${data.length}`,correct:false}]);
+      if(qtype==='tf'){
+        isTrue=tfTrue;
+        q=`הסך הכול בתרשים הוא ${tfTrue?total:max.v}.`;
+        a=(tfTrue?'נכון. ':'שגוי. ')+`סך הכול הוא סכום כל העמודות, לא העמודה הגבוהה בלבד: ${total}.`;
+      }
+      if(qtype==='mistake'){
+        q=`תלמיד כתב: "הסך הכול הוא ${max.v} כי זו העמודה הגבוהה ביותר".`;
+        a=`הטעות: ${max.v} הוא ערך של קטגוריה אחת. סך הכול מחשבים בחיבור כל העמודות: ${data.map(d=>d.v).join('+')}=${total}.`;
+      }
+    } else if(qtype==='tf'){
       isTrue=tfTrue;
       q=tfTrue?`לפי התרשים, הקטגוריה ${max.k} היא בעלת הערך הגבוה ביותר.`:`לפי התרשים, הקטגוריה ${min.k} היא בעלת הערך הגבוה ביותר.`;
       a=tfTrue?`נכון. ${max.k} היא העמודה הגבוהה ביותר עם ${max.v} ${set.unit}.`:`שגוי. ${max.k} היא הגבוהה ביותר (${max.v}), בעוד ${min.k} היא הנמוכה ביותר (${min.v}).`;
     }
-    if(qtype==='mistake'){q=`תלמיד כתב: "הסך הכול הוא ${max.v} כי זו העמודה הגבוהה ביותר".`; a=`הטעות: ${max.v} הוא הערך הגבוה ביותר של קטגוריה אחת. סך הכול מחשבים בחיבור כל העמודות: ${data.map(d=>d.v).join('+')}=${total}.`;}
+    if(qtype==='mistake' && family==='read'){q=`תלמיד קרא את העמודה של ${max.k} אבל ענה לפי העמודה השכנה.`; a=`הטעות: קוראים את גובה העמודה של הקטגוריה המבוקשת מול הסרגל. ${max.k} היא הגבוהה ביותר עם ${max.v} ${set.unit}.`;}
     if(qtype==='mcq') return E.questionTypes.mcq({question:q,answer:a,svg:svg,choices:cs});
     if(qtype==='tf') return E.questionTypes.tf({question:q,answer:a,svg:svg,isTrue:isTrue});
     if(qtype==='mistake') return E.questionTypes.mistake({question:q,answer:a,svg:svg});

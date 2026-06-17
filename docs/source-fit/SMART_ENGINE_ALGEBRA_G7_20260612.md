@@ -35,7 +35,7 @@ Capabilities:
 - Factoring by common factor.
 - Common algebraic distractors.
 
-### `A7-05-ENGINE` — מציאת טעות בביטויים
+### `A7-05-ENGINE` — טבלת ערכים וגרף ברביע ראשון
 
 Source basis:
 
@@ -49,17 +49,17 @@ Capabilities:
 - True/false.
 - Find-the-mistake.
 - Mixed mode.
-- Distribution mistakes.
-- Like-term mistakes.
-- Sign mistakes after opening parentheses.
-- Mistakes combining constants with variable terms.
+- Value-table completion.
+- First-quadrant coordinate plotting.
+- Reading a requested value from the graph.
+- Matching verbal rule, expression, table, and graph.
 
 ## Runtime connection
 
 The engine file is loaded in `generator/index.html` before `exercise-set.js`:
 
 ```html
-<script src="engine/source-fit-algebra-g7.js?v=20260612-source-fit-5"></script>
+<script src="engine/source-fit-algebra-g7.js?v=20260617b"></script>
 ```
 
 This keeps the engine available to both single-question generation and multi-exercise worksheet generation.

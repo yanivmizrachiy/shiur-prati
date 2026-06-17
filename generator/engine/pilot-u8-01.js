@@ -7,7 +7,7 @@
   // Precomputed datasets: clean mean, odd count for unambiguous median
   const SETS = [
     {d:[70,80,90,60,100], mean:80, median:80, range:40},
-    {d:[55,65,75,85,95],  mean:75, median:75, range:40},
+    {d:[95,55,65,85,75],  mean:75, median:75, range:40},
     {d:[60,90,70,80,100], mean:80, median:80, range:40},
     {d:[40,60,80,50,70],  mean:60, median:60, range:40},
     {d:[85,65,95,75,80],  mean:80, median:80, range:30}
@@ -19,25 +19,79 @@
     {known:[85,95,75,65], mean:81, missing:85, n:5},
     {known:[90,70,60,80], mean:78, missing:90, n:5}
   ];
+  const REPLACE = [
+    {d:[70,80,90,60,100], mean:80, old:60, neu:75, newMean:83},
+    {d:[95,55,65,85,75],  mean:75, old:55, neu:80, newMean:80},
+    {d:[40,60,80,50,70],  mean:60, old:40, neu:65, newMean:65},
+    {d:[85,65,95,75,80],  mean:80, old:65, neu:90, newMean:85}
+  ];
+  const BOOST_FAILING = [
+    {d:[40,60,80,50,70], mean:60, threshold:60, boost:10, failCount:2, addTotal:20, newMean:64},
+    {d:[95,55,65,85,75], mean:75, threshold:60, boost:10, failCount:1, addTotal:10, newMean:77},
+    {d:[52,58,64,70,76], mean:64, threshold:60, boost:10, failCount:2, addTotal:20, newMean:68}
+  ];
 
   function pickFamily(diff){
-    if(diff === 'basic') return E.pick(['mean','range']);
-    if(diff === 'challenge') return E.pick(['missing_from_mean','median','missing_from_mean']);
-    return E.pick(['mean','median','range','missing_from_mean']);
+    if(diff === 'basic') return E.pick(['mean','range','add_constant_effect']);
+    if(diff === 'challenge') return E.pick(['missing_from_mean','median','add_constant_effect','replace_value_mean','boost_failures_mean']);
+    return E.pick(['mean','median','range','missing_from_mean','add_constant_effect','replace_value_mean','boost_failures_mean']);
+  }
+
+  function addConstantCase(){
+    const x = Object.assign({}, E.pick(SETS));
+    x.k = E.pick([5,10]);
+    x.newMean = x.mean + x.k;
+    x.newMedian = x.median + x.k;
+    x.newRange = x.range;
+    return x;
   }
 
   function choices(family,x){
     let correct, wrongs;
+    if(family==='add_constant_effect'){
+      const opts=[
+        {text:`הממוצע והחציון יגדלו ב־$${x.k}$, והטווח יישאר $${x.range}$`, correct:true},
+        {text:`הממוצע, החציון והטווח יגדלו כולם ב־$${x.k}$`, correct:false},
+        {text:`רק הממוצע יגדל ב־$${x.k}$`, correct:false},
+        {text:`הטווח יגדל ל־$${x.range+x.k}$`, correct:false}
+      ];
+      return E.shuffle(opts).map((o,i)=>({label:['א','ב','ג','ד'][i], text:o.text, correct:o.correct}));
+    }
     if(family==='mean'){ correct=x.mean; wrongs=[x.median+5===x.mean?x.mean+5:x.median+5, x.mean+10, x.range]; }
     else if(family==='median'){ correct=x.median; wrongs=[x.d[2], x.mean===x.median?x.median+5:x.mean, x.median-10]; }
     else if(family==='range'){ correct=x.range; wrongs=[Math.max.apply(null,x.d), Math.min.apply(null,x.d), x.range+10]; }
-    else { correct=x.missing; wrongs=[x.mean, x.missing-10, x.missing+5]; }
+    else if(family==='missing_from_mean'){ correct=x.missing; wrongs=[x.mean, x.missing-10, x.missing+5]; }
+    else if(family==='replace_value_mean'){
+      const delta=x.neu-x.old;
+      correct=x.newMean; wrongs=[x.mean+delta, x.mean, x.newMean+5];
+    } else {
+      correct=x.newMean; wrongs=[x.mean+x.boost, x.mean, x.newMean+x.failCount];
+    }
     const values=[correct].concat(wrongs).filter((v,i,a)=>a.indexOf(v)===i && v>0).slice(0,4);
     while(values.length<4){ let f=correct+values.length*5; while(values.indexOf(f)>=0) f++; values.push(f); }
     return E.shuffle(values).map((v,i)=>({label:['א','ב','ג','ד'][i], text:'$'+v+'$', correct:v===correct}));
   }
 
   function question(family,x,qtype,tfTrue){
+    if(family==='add_constant_effect'){
+      const list = x.d.join(', ');
+      if(qtype==='tf') return `לנתונים $${list}$ מוסיפים $${x.k}$ לכל נתון. הממוצע החדש הוא $${x.newMean}$ והטווח החדש הוא $${tfTrue?x.range:x.range+x.k}$.`;
+      if(qtype==='mistake') return `לנתונים $${list}$ מוסיפים $${x.k}$ לכל נתון. תלמיד טען: "גם הטווח יגדל ב-$${x.k}$, כי כל הציונים גדלו".`;
+      return `לפניכם ציונים:\n$${list}$\nהמורה מוסיפה $${x.k}$ נקודות לכל תלמיד.\nמה יהיו הממוצע, החציון והטווח אחרי התוספת?`;
+    }
+    if(family==='replace_value_mean'){
+      const list = x.d.join(', ');
+      const wrongMean = x.mean + (x.neu-x.old);
+      if(qtype==='tf') return `בנתונים $${list}$ התברר שהציון $${x.old}$ צריך להיות $${x.neu}$. הממוצע החדש הוא $${tfTrue?x.newMean:wrongMean}$.`;
+      if(qtype==='mistake') return `בנתונים $${list}$ מתקנים ציון מ-$${x.old}$ ל-$${x.neu}$. תלמיד הוסיף את כל ההפרש לממוצע וקיבל $${wrongMean}$.`;
+      return `לפניכם ציונים:\n$${list}$\nהתברר שהציון $${x.old}$ נרשם בטעות, והציון הנכון הוא $${x.neu}$.\nחשבו את הממוצע החדש.`;
+    }
+    if(family==='boost_failures_mean'){
+      const list = x.d.join(', ');
+      if(qtype==='tf') return `בנתונים $${list}$ מוסיפים $${x.boost}$ נקודות לכל ציון נמוך מ-$${x.threshold}$. הממוצע החדש הוא $${tfTrue?x.newMean:x.mean+x.boost}$.`;
+      if(qtype==='mistake') return `בנתונים $${list}$ מוסיפים $${x.boost}$ נקודות לכל ציון נכשל (נמוך מ-$${x.threshold}$). תלמיד הוסיף $${x.boost}$ לממוצע כולו וקיבל $${x.mean+x.boost}$.`;
+      return `לפניכם ציונים:\n$${list}$\nהמורה מוסיפה $${x.boost}$ נקודות לכל ציון נכשל (נמוך מ-$${x.threshold}$).\nחשבו את הממוצע החדש.`;
+    }
     if(family==='missing_from_mean'){
       const list = x.known.join(', ');
       if(qtype==='tf') return `ארבעה ציונים: $${list}$. כדי שהממוצע של חמישה ציונים יהיה $${x.mean}$, הציון החמישי צריך להיות $${tfTrue?x.missing:x.mean}$.`;
@@ -62,6 +116,20 @@
 
   function answer(family,x,qtype,tfTrue){
     const wrong = qtype==='mistake' || (qtype==='tf' && !tfTrue);
+    if(family==='add_constant_effect'){
+      const prefix = wrong ? 'שגוי — כשמוסיפים אותו מספר לכל הנתונים, המרחקים בין הנתונים לא משתנים ולכן הטווח נשאר קבוע.\n' : '';
+      return `${prefix}כל ציון גדל ב-$${x.k}$, לכן גם הממוצע והחציון גדלים ב-$${x.k}$:\nממוצע חדש: $${x.mean}+${x.k}=${x.newMean}$.\nחציון חדש: $${x.median}+${x.k}=${x.newMedian}$.\nהטווח נשאר $${x.range}$, כי גם המקסימום וגם המינימום גדלו באותו מספר.`;
+    }
+    if(family==='replace_value_mean'){
+      const oldSum=x.mean*x.d.length, delta=x.neu-x.old, newSum=oldSum+delta;
+      const prefix = wrong ? 'שגוי — את ההפרש בציון מוסיפים לסכום הכולל, ואז מחלקים במספר הנתונים. לא מוסיפים את כל ההפרש לממוצע.\n' : '';
+      return `${prefix}הסכום המקורי: $${x.mean}\\cdot ${x.d.length}=${oldSum}$.\nהשינוי בציון: $${x.neu}-${x.old}=${delta}$.\nסכום חדש: $${oldSum}+${delta}=${newSum}$.\n$$\\frac{${newSum}}{${x.d.length}}=${x.newMean}$$\nהממוצע החדש: $${x.newMean}$.`;
+    }
+    if(family==='boost_failures_mean'){
+      const oldSum=x.mean*x.d.length, newSum=oldSum+x.addTotal;
+      const prefix = wrong ? 'שגוי — מוסיפים 10 נקודות לכל ציון נכשל בנפרד, ואז מחשבים מחדש את הממוצע. לא מוסיפים 10 ישירות לממוצע.\n' : '';
+      return `${prefix}יש $${x.failCount}$ ציונים נמוכים מ-$${x.threshold}$, לכן התוספת הכוללת לסכום היא $${x.failCount}\\cdot ${x.boost}=${x.addTotal}$.\nסכום מקורי: $${x.mean}\\cdot ${x.d.length}=${oldSum}$.\nסכום חדש: $${oldSum}+${x.addTotal}=${newSum}$.\n$$\\frac{${newSum}}{${x.d.length}}=${x.newMean}$$\nהממוצע החדש: $${x.newMean}$.`;
+    }
     if(family==='missing_from_mean'){
       const sum = x.mean*x.n, ks = x.known.reduce((a,b)=>a+b,0);
       const prefix = wrong ? 'שגוי — הציון החמישי אינו בהכרח הממוצע. מחשבים מסכום כולל.\n' : '';
@@ -106,7 +174,15 @@
   E.generateU801Engine = function(difficulty, questionType){
     difficulty = difficulty || 'standard'; questionType = questionType || 'open';
     const family = pickFamily(difficulty);
-    const x = family==='missing_from_mean' ? E.pick(MISSING) : E.pick(SETS);
+    const x = family==='missing_from_mean'
+      ? E.pick(MISSING)
+      : family==='replace_value_mean'
+        ? E.pick(REPLACE)
+        : family==='boost_failures_mean'
+          ? E.pick(BOOST_FAILING)
+          : family==='add_constant_effect'
+            ? addConstantCase()
+            : E.pick(SETS);
     const tfTrue = questionType==='tf' && Math.random()<0.5;
     const q = question(family,x,questionType,tfTrue), a = answer(family,x,questionType,tfTrue);
     const svg = dotPlotSvg(x.d || x.known);

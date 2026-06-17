@@ -5,8 +5,8 @@ _Do not edit by hand; edit the registry and regenerate._
 
 Sources 01–06 = direct question/example sources. 07–09 = principles, skills, misconceptions, visual requirements. **File 10 is never a question source.**
 
-- Topics: 50 (33 active engines + 17 fallback)
-- Question families: 186
+- Topics: 50 (50 active engines + 0 fallback)
+- Question families: 197
 
 ## Numeric
 
@@ -355,11 +355,11 @@ Sources 01–06 = direct question/example sources. 07–09 = principles, skills,
 ### A7-03-ENGINE — משוואות מדרגה ראשונה
 
 - **Source PDF:** 01_grade-7_algebra_curriculum.pdf · grade 7
-- **Skill:** פתרון משוואה, פתיחת סוגריים, בדיקה
-- **Learning goal:** התלמיד יפתור משוואה מדרגה ראשונה ויבדוק פתרון
-- **Teacher purpose:** ביסוס איזון משוואה והעברת אגף
-- **Common misconceptions:** אי-היפוך סימן בהעברת אגף; פתיחת סוגריים חלקית
-- **Follow-up ideas:** פתרו עם סוגריים; בדקו פתרון נתון; בנו משוואה לפתרון נתון
+- **Skill:** פתרון משוואה, פתיחת סוגריים, בדיקת פתרון, בניית משוואה מסיפור ובחירה לפי פתרון נתון
+- **Learning goal:** התלמיד יפתור משוואה מדרגה ראשונה, יבדוק פתרון, יבנה משוואה מהקשר מילולי ויזהה משוואה לפי פתרון נתון
+- **Teacher purpose:** ביסוס משמעות פתרון משוואה, איזון משוואה והמעבר מייצוג מילולי לייצוג אלגברי
+- **Common misconceptions:** אי-היפוך סימן בהעברת אגף; פתיחת סוגריים חלקית; בדיקה באגף אחד בלבד; בניית משוואה בלי סוגריים בהקשר של התייקרות; בחירת משוואה לפי מראה במקום הצבה
+- **Follow-up ideas:** פתרו עם סוגריים; בדקו פתרון נתון; בנו משוואה לפתרון נתון; בחרו משוואה שפתרונה נתון; מלאו משבצת כך שיתקבל פתרון מבוקש
 - **Visual required:** no
 - **Engine status:** dedicated
 
@@ -371,15 +371,18 @@ Sources 01–06 = direct question/example sources. 07–09 = principles, skills,
   | `verify_solution` | open/mcq/tf/mistake | האם x=5 פתרון? | הצבה רק באגף אחד | בדיקת פתרון |
   | `build_equation_from_word_problem` | open/mcq/tf/mistake | בניית משוואה מבעיה מילולית ופתרונה | תרגום שגוי של היחס למשוואה | מחיר/כמות |
   | `identify_equation_with_solution` | open/mcq/tf/mistake | איזו משוואה פתרונה x=s | בחירה ללא בדיקה בהצבה | בחירת משוואה |
+  | `word_build_equation` | open/mcq/tf/mistake | מחיר כדור x; לאחר התייקרות ב-6 קנו 15 כמו 18 לפני — בנו 15(x+6)=18x | כתיבת 15x+6 במקום 15(x+6) | שאלת מחיר/כמות, משוואה מהקשר |
+  | `given_solution_equation` | open/mcq/tf/mistake | סמנו את המשוואה שפתרונה x=10 | בחירה לפי מראה בלי הצבה | בחירת משוואה, פתרון נתון |
+  | `missing_box_for_solution` | open/mcq/tf/mistake | מה צריך לכתוב במשבצת כדי שפתרון המשוואה יהיה 1? | ניחוש החסר בלי להציב את הפתרון המבוקש | משבצת חסרה, פתרון נתון |
 
 ### A7-04-ENGINE — ביטויים שקולים ופישוט
 
 - **Source PDF:** 01_grade-7_algebra_curriculum.pdf · grade 7
-- **Skill:** פתיחת סוגריים, איברים דומים, גורם משותף
-- **Learning goal:** התלמיד יזהה וייצר ביטויים שקולים
-- **Teacher purpose:** ביסוס מושג השקילות האלגברית
-- **Common misconceptions:** פתיחת סוגריים חלקית; מינוס לפני סוגריים; חיבור איברים לא דומים
-- **Follow-up ideas:** בחרו ביטוי שקול; פשטו עם מינוס לפני סוגריים; הוציאו גורם משותף
+- **Skill:** פתיחת סוגריים, איברים דומים, גורם משותף ובדיקת זהות בין ביטויים
+- **Learning goal:** התלמיד יזהה וייצר ביטויים שקולים, ויקבע אם שני ביטויים שווים לכל ערך של המשתנה
+- **Teacher purpose:** ביסוס מושג השקילות האלגברית ומשמעות סימן השוויון כזהות ולא רק כתוצאת חישוב
+- **Common misconceptions:** פתיחת סוגריים חלקית; מינוס לפני סוגריים; חיבור איברים לא דומים; הנחה שביטויים שנראים שונים אינם שווים; הנחה שאותה אות מספיקה לשקילות
+- **Follow-up ideas:** בחרו ביטוי שקול; פשטו עם מינוס לפני סוגריים; הוציאו גורם משותף; בדקו אם שני ביטויים שווים לכל ערך; התאימו בין טורי ביטויים שקולים
 - **Visual required:** no
 - **Engine status:** dedicated
 
@@ -389,33 +392,34 @@ Sources 01–06 = direct question/example sources. 07–09 = principles, skills,
   | `minus_distribution` | open/mcq/tf/mistake | px−b(x−c) | אי-שינוי סימן | מינוס לפני סוגריים |
   | `factor_common` | open/mcq/tf/mistake | fx+fq | הוצאת גורם שגויה | גורם משותף |
   | `like_terms` | open/mcq/tf/mistake | ax+c−bx+d | חיבור איברים לא דומים | איברים דומים |
+  | `identity_check` | open/mcq/tf/mistake | האם a·a ו-a² שווים? האם 2(t+3) ו-2t+3 שווים? | קביעה לפי מראה הביטויים במקום לפי חוקי החשבון | בדיקת זהות, שווים לכל ערך |
 
-### A7-05-ENGINE — מציאת טעות בביטויים
+### A7-05-ENGINE — טבלת ערכים וגרף ברביע ראשון
 
 - **Source PDF:** 01_grade-7_algebra_curriculum.pdf · grade 7
-- **Skill:** ניתוח טעות אלגברית ותיקונה
-- **Learning goal:** התלמיד יאתר טעות נפוצה בפישוט ויתקן
-- **Teacher purpose:** חידוד מודעות לטעויות אלגבריות נפוצות
-- **Common misconceptions:** פילוג חלקי; שינוי חזקה בחיבור; מינוס לפני סוגריים; איחוד איבר חופשי עם משתנה
-- **Follow-up ideas:** סווגו את סוג הטעות; תקנו פתרון תלמיד; כתבו ביטוי נכון
-- **Visual required:** no
+- **Skill:** בניית טבלת ערכים, סימון נקודות, קריאת גרף והמרה ביטוי↔טבלה↔גרף
+- **Learning goal:** התלמיד יבנה טבלת ערכים מתיאור או מביטוי, יסמן נקודות ברביע הראשון ויקרא ערכים מהגרף
+- **Teacher purpose:** חיבור הייצוג המילולי, האלגברי, הטבלאי והגרפי כבר בכיתה ז׳
+- **Common misconceptions:** החלפת x ו-y בסימון נקודה; קריאת ציר y במקום ציר x; סימון נקודות בלי להשלים טבלה; הנחה שכל גרף חייב להיות ישר
+- **Follow-up ideas:** השלימו טבלת ערכים; סמנו נקודות ברביע הראשון; מצאו ערך מתוך גרף; כתבו ביטוי שמתאים לגרף
+- **Visual required:** yes
 - **Engine status:** dedicated
 
   | family | qtypes | source pattern | misconception | variations |
   |---|---|---|---|---|
-  | `mistake_distribution` | open/mcq/tf/mistake | p(x+q)=px+q | כפל רק על המשתנה | פילוג |
-  | `mistake_like_power` | open/mcq/tf/mistake | ax+bx=(a+b)x² | שינוי חזקה | איברים דומים |
-  | `mistake_minus_sign` | open/mcq/tf/mistake | px−b(x+q)=…+bq | אי-שינוי סימן | מינוס לפני סוגריים |
-  | `mistake_constant_like` | open/mcq/tf/mistake | ax+k=(a+k)x | איחוד חופשי עם משתנה | איבר חופשי |
+  | `fuel_table_plot` | open/mcq/tf/mistake | מחיר ליטר דלק 7 שקלים — מלאו טבלה ושרטטו נקודות | החלפת שיעורי הנקודה | דלק, עלות לפי כמות |
+  | `parking_table_plot` | open/mcq/tf/mistake | עלות חניה: תשלום קבוע ועוד תשלום לכל שעה — טבלה וגרף | התעלמות מהתשלום הקבוע | חניה, תשלום קבוע+משתנה |
+  | `square_area_graph` | open/mcq/tf/mistake | שטח ריבוע לפי אורך צלע — קראו מהגרף וכתבו ביטוי | הנחה ששטח משתנה בקצב קבוע | שטח ריבוע, גרף לא לינארי |
+  | `folded_paper_graph` | open/mcq/tf/mistake | קיפולי דף — מלאו טבלה וסמנו נקודות של שטח לאחר כל קיפול | הפחתת מספר קבוע במקום חלוקה פי 2 | טבלת תופעה, גרף נקודות |
 
 ### A8-01-ENGINE — גרפים יישומיים ופונקציות
 
 - **Source PDF:** 02_grade-8_algebra_curriculum.pdf · grade 8
-- **Skill:** קריאת גרף יישומי, סף, קצב, זיהוי פונקציה
-- **Learning goal:** התלמיד יקרא ערכים, סף וקצב מגרף יישומי ויזהה פונקציה
+- **Skill:** קריאת גרף יישומי, סף, קצב, זיהוי פונקציה, השלמת טבלת ערכים ושרטוט נקודות
+- **Learning goal:** התלמיד יקרא ערכים, סף וקצב מגרף יישומי, יזהה פונקציה, ישלים טבלת ערכים ויקשר אותה לגרף ולשיפוע
 - **Teacher purpose:** חיבור בין הקשר מציאותי לגרף לינארי
-- **Common misconceptions:** קריאת x במקום y; התעלמות מערך התחלתי; התעלמות מקנה מידה
-- **Follow-up ideas:** מצאו סף; מצאו קצב; קבעו האם פונקציה
+- **Common misconceptions:** קריאת x במקום y; התעלמות מערך התחלתי; התעלמות מקנה מידה; השלמת טבלה לפי חיבור קבוע בלי להציב בכלל
+- **Follow-up ideas:** מצאו סף; מצאו קצב; קבעו האם פונקציה; השלימו טבלת ערכים; שרטטו נקודות ומצאו שיפוע
 - **Visual required:** yes
 - **Engine status:** dedicated
 
@@ -424,6 +428,7 @@ Sources 01–06 = direct question/example sources. 07–09 = principles, skills,
   | `fuel_cost_graph` | open/mcq/tf/mistake | מחיר ליטר 7 — מתי העלות > 63? | התעלמות מקנה מידה | סף עלות |
   | `heating_rate_graph` | open/mcq/tf/mistake | נוזל 8°C, קצב 10°/דקה | התעלמות מטמפ׳ התחלתית | קצב, ערך לאחר זמן |
   | `value_from_rule` | open/mcq/tf/mistake | y=3x+4, מה y ב-x=2? | הצבה חלקית | טבלת ערכים |
+  | `complete_table_graph` | open/mcq/tf/mistake | השלימו טבלת ערכים לפי כלל, שרטטו נקודות ומצאו שיפוע | השלמה לפי חיבור/חיסור ב-x בלי להכפיל במקדם | טבלת ערכים, שרטוט נקודות, שיפוע |
   | `is_function` | open/mcq/tf/mistake | האם ההתאמה פונקציה? | בלבול קיום ערכים עם יחידות | זיהוי פונקציה |
 
 ### A8-02-ENGINE — שיפוע ומשוואת ישר
@@ -730,11 +735,11 @@ Sources 01–06 = direct question/example sources. 07–09 = principles, skills,
 ### U7-01-ENGINE — טבלת תדירות ותרשים עמודות
 
 - **Source PDF:** 06_uncertainty_domain_curriculum_examples.pdf · grade 7
-- **Skill:** קריאת תדירות, שכיח, סך, תדירות יחסית, קריאת תרשים
-- **Learning goal:** התלמיד יקרא טבלת תדירות ותרשים עמודות ויחשב תדירות יחסית
+- **Skill:** ארגון נתונים גולמיים, קריאת תדירות, שכיח, סך, תדירות יחסית, קריאת תרשים
+- **Learning goal:** התלמיד יארגן נתונים בטבלת שכיחויות, יקרא טבלת תדירות ותרשים עמודות ויחשב תדירות יחסית
 - **Teacher purpose:** ביסוס ארגון נתונים וקריאתם
-- **Common misconceptions:** קריאת ערך כתדירות; תדירות יחסית כספירה; שכיח לפי הערך הגדול
-- **Follow-up ideas:** קראו תדירות; מצאו שכיח; חשבו תדירות יחסית; קראו מתרשים
+- **Common misconceptions:** קריאת ערך כתדירות; תדירות יחסית כספירה; שכיח לפי הערך הגדול; כתיבת כל ערך פעם אחת בלי לספור מופעים
+- **Follow-up ideas:** ארגנו נתונים גולמיים בטבלה; קראו תדירות; מצאו שכיח; חשבו תדירות יחסית; קראו מתרשים
 - **Visual required:** yes
 - **Engine status:** dedicated
 
@@ -744,6 +749,7 @@ Sources 01–06 = direct question/example sources. 07–09 = principles, skills,
   | `most_frequent` | open/mcq/tf/mistake | מהו השכיח? | שכיח לפי הערך הגדול | שכיח |
   | `total_count` | open/mcq/tf/mistake | כמה נבדקים בסך הכל? | סכום ערכים במקום תדירויות | סך |
   | `relative_frequency` | open/mcq/tf/mistake | תדירות יחסית של ערך | תדירות יחסית כספירה | שבר/עשרוני/אחוז |
+  | `raw_to_table` | open/mcq/tf/mistake | לפניכם ציוני הכיתה — ארגנו בטבלת שכיחויות וחשבו תדירות יחסית | כתיבת כל ערך פעם אחת בלבד | נתונים גולמיים, טבלה ריקה, תדירות יחסית |
   | `bar_chart_read` | open/mcq/tf/mistake | קריאת ערך/קיצון/סך מתרשים | קריאת עמודה שכנה | תרשים עמודות |
 
 ### U7-02-ENGINE — הסתברות בסיסית
@@ -781,14 +787,14 @@ Sources 01–06 = direct question/example sources. 07–09 = principles, skills,
   | `which_group_higher` | open/mcq/tf/mistake | באיזו קבוצה השיעור גבוה יותר? | בחירת הקבוצה הגדולה | בחירת קבוצה |
   | `explain_trap` | open/mcq/tf/mistake | הסבירו מדוע הגדולה אינה בהכרח "יותר" | התעלמות מגודל הקבוצה | הסבר מילולי |
 
-### U7-04-ENGINE — קריאה מתרשים עמודות
+### U7-04-ENGINE — קריאת ייצוגים חזותיים של נתונים
 
 - **Source PDF:** 06_uncertainty_domain_curriculum_examples.pdf · grade 7
-- **Skill:** קריאת ערך, קיצון וסך מתרשים עמודות
-- **Learning goal:** התלמיד יקרא ערכים, קיצון וסך מתרשים עמודות
-- **Teacher purpose:** ביסוס קריאת ייצוג גרפי של נתונים
-- **Common misconceptions:** קריאת עמודה שכנה; הקיצון כסך הכל
-- **Follow-up ideas:** קראו ערך לפי קטגוריה; מצאו גבוה/נמוך; חשבו סך
+- **Skill:** קריאת ערך, קיצון, סך, פיקטוגרמה והמרה לטבלת שכיחויות
+- **Learning goal:** התלמיד יקרא ערכים, קיצון וסך מתרשים עמודות ומפיקטוגרמה, ויתאר נתונים בטבלת שכיחויות
+- **Teacher purpose:** ביסוס קריאת ייצוג גרפי של נתונים והבנת תפקיד המקרא
+- **Common misconceptions:** קריאת עמודה שכנה; הקיצון כסך הכל; כתיבת הסך הכול כתדירות של קטגוריה; ספירת סמלים בפיקטוגרמה בלי להכפיל במקרא
+- **Follow-up ideas:** קראו ערך לפי קטגוריה; המירו דיאגרמת עמודות לטבלה; מצאו גבוה/נמוך; חשבו סך; השתמשו במקרא של פיקטוגרמה
 - **Visual required:** yes
 - **Engine status:** dedicated
 
@@ -796,6 +802,8 @@ Sources 01–06 = direct question/example sources. 07–09 = principles, skills,
   |---|---|---|---|---|
   | `read_value` | open/mcq/tf/mistake | כמה בקטגוריה X? | קריאת עמודה שכנה | קריאת ערך |
   | `highest_lowest` | open/mcq/tf/mistake | איזו קטגוריה גבוהה/נמוכה? | בחירה לפי מיקום | קיצון |
+  | `bar_to_table` | open/mcq/tf/mistake | תארו את הנתונים בדיאגרמת העמודות באמצעות טבלת שכיחויות | כתיבת הסך הכול במקום תדירות קטגוריה | המרה גרף→טבלה |
+  | `pictogram_read` | open/mcq/tf/mistake | קראו פיקטוגרמה לפי מקרא וחישבו קטגוריה וסך הכול | ספירת סמלים בלי להכפיל במקרא | פיקטוגרמה, מקרא, סך הכול |
   | `total_from_bars` | open/mcq/tf/mistake | מה הסך הכל? | הקיצון כסך | סך |
 
 ### U7-05-ENGINE — דיאגרמת עוגה ושכיחות יחסית
@@ -869,11 +877,11 @@ Sources 01–06 = direct question/example sources. 07–09 = principles, skills,
 ### U8-01-ENGINE — ממוצע, חציון, טווח
 
 - **Source PDF:** 06_uncertainty_domain_curriculum_examples.pdf · grade 8
-- **Skill:** חישוב מדדי מרכז ופיזור
-- **Learning goal:** התלמיד יחשב ממוצע, חציון וטווח
-- **Teacher purpose:** ביסוס מדדי מרכז ופיזור
-- **Common misconceptions:** ממוצע כערך האמצעי; חציון בלי מיון; טווח כערך הגדול
-- **Follow-up ideas:** חשבו ממוצע; מצאו חציון; חשבו טווח; מצאו ערך חסר מממוצע
+- **Skill:** חישוב מדדי מרכז ופיזור וניתוח השפעת שינוי נתונים
+- **Learning goal:** התלמיד יחשב ממוצע, חציון וטווח ויסביר כיצד שינוי נתונים משפיע על המדדים
+- **Teacher purpose:** ביסוס מדדי מרכז ופיזור וחשיבה על שינוי בנתונים
+- **Common misconceptions:** ממוצע כערך האמצעי; חציון בלי מיון; טווח כערך הגדול; הוספת אותו מספר משנה גם את הטווח; הוספת הפרש של ציון אחד ישירות לממוצע
+- **Follow-up ideas:** חשבו ממוצע; מצאו חציון; חשבו טווח; מצאו ערך חסר מממוצע; בדקו השפעת הוספת נקודות לכל הנתונים; חשבו ממוצע אחרי תיקון ציון
 - **Visual required:** no
 - **Engine status:** dedicated
 
@@ -883,6 +891,9 @@ Sources 01–06 = direct question/example sources. 07–09 = principles, skills,
   | `median` | open/mcq/tf/mistake | מצאו חציון | חציון בלי מיון | חציון |
   | `range` | open/mcq/tf/mistake | חשבו טווח | טווח כערך גדול | טווח |
   | `missing_from_mean` | open/mcq/tf/mistake | ערך חמישי לממוצע נתון | הערך=הממוצע | ערך חסר |
+  | `add_constant_effect` | open/mcq/tf/mistake | מוסיפים אותו מספר לכל הנתונים — מה קורה לממוצע, חציון וטווח? | הטווח גדל יחד עם כל ציון | השפעת שינוי אחיד |
+  | `replace_value_mean` | open/mcq/tf/mistake | מתקנים ציון שגוי — חשבו ממוצע חדש | הוספת כל ההפרש ישירות לממוצע | תיקון נתון יחיד |
+  | `boost_failures_mean` | open/mcq/tf/mistake | מוסיפים נקודות רק לציונים נכשלים — חשבו ממוצע חדש | הוספת התוספת פעם אחת לממוצע | שינוי חלק מהנתונים |
 
 ### U8-02-ENGINE — הסתברות מטבלה
 

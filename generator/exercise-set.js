@@ -43,7 +43,13 @@ function generateSet(){
   const isEngine=typeof E.isEngineTopic==='function'&&E.isEngineTopic(id)&&typeof E.getEngineExercise==='function';
   // The visible level selector (#sl: רמה 1/2/3 → basic/standard/challenge) drives
   // difficulty for every topic; the engine panel's hidden #selDiff is a fallback.
-  const diff=(document.getElementById('sl')?.value)||(document.getElementById('selDiff')?.value)||'standard';
+  const selectedDiff=(document.getElementById('sl')?.value)||(document.getElementById('selDiff')?.value)||'standard';
+  const LADDER=['basic','standard','challenge'];
+  function diffForItem(i){
+    if(selectedDiff!=='ladder') return selectedDiff;
+    if(count<=1) return 'standard';
+    return LADDER[Math.min(2,Math.floor(i*3/count))];
+  }
   const qtype=isEngine?(document.getElementById('selQType')?.value||'mixed'):'open';
   const mcqMode=document.getElementById('selMcqMode')?.value||'single';
   const plan=buildTypePlan(qtype,count);
@@ -53,7 +59,7 @@ function generateSet(){
     let ex=null,last=null;
     for(let tries=0;tries<8&&attempts<maxAttempts;tries++){
       attempts++;
-      const cand=makeExercise(id,diff,plan[i],isEngine,E,mcqMode);
+      const cand=makeExercise(id,diffForItem(i),plan[i],isEngine,E,mcqMode);
       if(!cand)break;
       last=cand;
       const key=cand.questionHTML.replace(/\s+/g,' ').trim();
@@ -83,10 +89,10 @@ function generateSet(){
     gradeLabel:(typeof grade==='function'&&grade()===8)?'כיתה ח׳':'כיתה ז׳',
     domainLabel:{geometry:'גאומטריה',algebra:'אלגברה',numeric:'תחום מספרי',uncertainty:'אי־ודאות'}[domainKey]||'',
     cls:{geometry:'geo',algebra:'alg',numeric:'num',uncertainty:'unc'}[domainKey]||'num',
-    diffLabel:{basic:'רמה 1',standard:'רמה 2',challenge:'רמה 3'}[diff]||diff
+    diffLabel:{basic:'רמה 1',standard:'רמה 2',challenge:'רמה 3',ladder:'סולם רמות 1-3'}[selectedDiff]||selectedDiff
   };
   // publish set context so Teacher Advanced Mode can regenerate single items
-  window.__exsetCtx={id:id,isEngine:isEngine,diff:diff,topicLabel:topicLabel,cls:meta.cls,mcqMode:mcqMode,exercises:exercises};
+  window.__exsetCtx={id:id,isEngine:isEngine,diff:selectedDiff,topicLabel:topicLabel,cls:meta.cls,mcqMode:mcqMode,exercises:exercises};
   renderExerciseSet(meta,exercises);
 }
 
@@ -115,8 +121,10 @@ function renderExerciseSet(meta,exercises){
   if(typeof setMainTitle==='function')setMainTitle(meta.cls,meta.topicLabel);
   const cards=exercises.map(function(ex,i){
     const questionHTML=sharpenMathRects(ex.questionHTML);
+    const levelLabel=(ex.meta&&ex.meta.difficultyLabel)||({basic:'רמה 1',standard:'רמה 2',challenge:'רמה 3'}[ex.meta&&ex.meta.difficulty]||'');
+    const levelTag=levelLabel?'<span class="tag level-tag">'+levelLabel+'</span>':'';
     return '<div class="qcard engine-card ex-card" id="exCard'+i+'" data-idx="'+i+'">'
-      +'<div class="qmeta" data-html2canvas-ignore="true"><span class="ex-num">תרגיל '+(i+1)+'</span></div>'
+      +'<div class="qmeta" data-html2canvas-ignore="true"><span class="ex-num">תרגיל '+(i+1)+'</span>'+levelTag+'</div>'
       +'<div class="ex-body">'+questionHTML+'</div>'
       +workAreaHTML(ex.qtype)
       +'<div class="ex-imgbar" data-html2canvas-ignore="true">'

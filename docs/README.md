@@ -26,6 +26,7 @@
 - [RELEASE_CHECKLIST.md](RELEASE_CHECKLIST.md) — תנאי שחרור, בדיקות וסעיפי בטיחות להמשך.
 - [reports/FINAL_PR7_RELEASE_STATUS_20260614.md](reports/FINAL_PR7_RELEASE_STATUS_20260614.md) — דוח היסטורי חשוב של PR #7; לא מקור אמת יחיד אחרי המיזוג.
 - [reports/REPO_CLEANUP_EXECUTION_20260614.md](reports/REPO_CLEANUP_EXECUTION_20260614.md) — דוח ניקוי ריפו אחרון.
+- [reports/SOURCE_SYNC_REPAIR_20260617.md](reports/SOURCE_SYNC_REPAIR_20260617.md) — סנכרון אחרון של `A7-04/A7-05`, מקור אמת ובדיקות guard.
 
 ## ליבה — מקור האמת (source of truth)
 
@@ -59,6 +60,7 @@ COPY_TO_CANVA_WORD, VISUAL_QA_ZERO_CARDS_FIX ועוד. שני קבצים נוצ�
 - [reports/FINAL_PR7_RELEASE_STATUS_20260614.md](reports/FINAL_PR7_RELEASE_STATUS_20260614.md) — היסטורי/שחרור PR #7.
 - [reports/REPO_CLEANUP_PLAN_20260614.md](reports/REPO_CLEANUP_PLAN_20260614.md) — תוכנית ניקוי.
 - [reports/REPO_CLEANUP_EXECUTION_20260614.md](reports/REPO_CLEANUP_EXECUTION_20260614.md) — מה נוקה בפועל.
+- [reports/SOURCE_SYNC_REPAIR_20260617.md](reports/SOURCE_SYNC_REPAIR_20260617.md) — דוח סנכרון מקור עדכני אחרי תיקוני `A7-04/A7-05`.
 
 ## אודיטים (docs/audits/)
 

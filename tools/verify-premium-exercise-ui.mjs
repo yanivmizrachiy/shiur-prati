@@ -21,6 +21,13 @@ const setSrc = read('generator/exercise-set.js');
 const exportSrc = read('generator/export.js');
 const teacherSrc = read('generator/teacher-mode.js');
 const styleSrc = read('generator/style.css');
+const mobileShareSrc = read('generator/mobile-share.js');
+const mobilePolishSrc = read('generator/mobile-polish.css');
+const galleryHtml = read('generator/gallery.html');
+const visualQaHtml = read('generator/visual-qa.html');
+const bookCss = read('generator/book.css');
+const bookHtmlForTypography = read('generator/book.html');
+const engineCss = read('generator/engine/engine.css');
 
 // ── 1. Drawing-view selector: color + BW only ──
 const svMatch = index.match(/<select id="sv"[\s\S]*?<\/select>/);
@@ -38,6 +45,23 @@ check('image buttons are primary (btn-img-primary)', /btn-img-primary/.test(setS
 check('image bar is excluded from the captured image',
   /<div class="ex-imgbar" data-html2canvas-ignore="true">/.test(setSrc));
 check('image buttons call the unified actions', /exImageCopy\(/.test(setSrc) && /exImageDownload\(/.test(setSrc));
+check('mobile dock keeps only image copy, no share buttons',
+  mobileShareSrc.indexOf('שתף קישור') < 0 &&
+  mobileShareSrc.indexOf('שתף תמונה') < 0 &&
+  mobileShareSrc.indexOf('shareLink') < 0 &&
+  mobileShareSrc.indexOf('shareImage') < 0 &&
+  mobileShareSrc.indexOf('navigator.share') < 0 &&
+  mobileShareSrc.indexOf('navigator.canShare') < 0 &&
+  mobileShareSrc.indexOf('<button>העתק תמונה</button>') >= 0);
+check('mobile share dock is one-column copy UI',
+  /mobile-share-dock[\s\S]*?grid-template-columns:minmax\(0,1fr\)/.test(mobilePolishSrc));
+const typographySurface = [index, styleSrc, mobilePolishSrc, galleryHtml, visualQaHtml, bookCss, bookHtmlForTypography, engineCss].join('\n');
+const nonzeroLetterSpacing = (typographySurface.match(/letter-spacing\s*:\s*([^;}]+)/gi) || [])
+  .filter(x => !/^letter-spacing\s*:\s*0\s*$/i.test(x.trim()));
+check('premium typography avoids heavy UI weights',
+  !/font-weight\s*:\s*(?:700|800|900)\b/.test(typographySurface) &&
+  !/wght@[^"']*(?:700|800|900)/.test(typographySurface));
+check('premium typography avoids nonzero letter spacing', nonzeroLetterSpacing.length === 0, nonzeroLetterSpacing.join(', '));
 
 // ── 3. One clean, untitled student answer box, no split work area ──
 check('one student answer box via stable hook', /data-student-answer-box="true"/.test(setSrc) && /class="answer-box"/.test(setSrc));

@@ -16,8 +16,39 @@ const check = (name, ok, extra) => { console.log((ok ? 'PASS' : 'FAIL') + ' — 
 function svgs(html) { const out = []; const re = /<svg[\s\S]*?<\/svg>/gi; let m; while ((m = re.exec(html))) out.push(m[0]); return out; }
 function nums(str) { return (str.match(/-?\d+(?:\.\d+)?/g) || []).map(Number); }
 
-const cov = { svgChecked: 0, noViewBox: 0, tinyFont: 0, raster: 0, noLabel: 0, outOfBounds: 0, oversized: 0, notResponsive: 0 };
+const cov = { svgChecked: 0, noViewBox: 0, tinyFont: 0, raster: 0, noLabel: 0, outOfBounds: 0, shapeOutOfBounds: 0, oversized: 0, notResponsive: 0 };
 const ids = pilotIds.concat(sourceFitIds);
+function attr(tag, name) {
+  const m = tag.match(new RegExp('\\b' + name + '="(-?[\\d.]+)"'));
+  return m ? parseFloat(m[1]) : null;
+}
+function pointOk(x, y, minx, miny, w, h, mg) {
+  return x >= minx - mg && x <= minx + w + mg && y >= miny - mg && y <= miny + h + mg;
+}
+function shapesInside(svg, minx, miny, w, h) {
+  const mg = 8;
+  for (const tag of svg.match(/<(line|circle|rect)\b[^>]*>/gi) || []) {
+    if (/^<line/i.test(tag)) {
+      const x1 = attr(tag, 'x1'), y1 = attr(tag, 'y1'), x2 = attr(tag, 'x2'), y2 = attr(tag, 'y2');
+      if ([x1, y1, x2, y2].every(v => v !== null) && (!pointOk(x1, y1, minx, miny, w, h, mg) || !pointOk(x2, y2, minx, miny, w, h, mg))) return false;
+    } else if (/^<circle/i.test(tag)) {
+      const cx = attr(tag, 'cx'), cy = attr(tag, 'cy'), r = attr(tag, 'r') || 0;
+      if ([cx, cy].every(v => v !== null) && (cx - r < minx - mg || cx + r > minx + w + mg || cy - r < miny - mg || cy + r > miny + h + mg)) return false;
+    } else if (/^<rect/i.test(tag)) {
+      const x = attr(tag, 'x'), y = attr(tag, 'y'), rw = attr(tag, 'width'), rh = attr(tag, 'height');
+      if ([x, y, rw, rh].every(v => v !== null) && (x < minx - mg || y < miny - mg || x + rw > minx + w + mg || y + rh > miny + h + mg)) return false;
+    }
+  }
+  for (const tag of svg.match(/<(polygon|polyline)\b[^>]*>/gi) || []) {
+    const m = tag.match(/\bpoints="([^"]+)"/);
+    if (!m) continue;
+    const values = nums(m[1]);
+    for (let i = 0; i + 1 < values.length; i += 2) {
+      if (!pointOk(values[i], values[i + 1], minx, miny, w, h, mg)) return false;
+    }
+  }
+  return true;
+}
 
 for (const id of ids) {
   for (const d of DIFFS) for (const t of QT) {
@@ -53,6 +84,7 @@ for (const id of ids) {
           if (xv < minx - mg || xv > minx + w + mg || yv < miny - mg || yv > miny + h + mg) { escaped = true; break; }
         }
         if (escaped) { cov.outOfBounds++; console.log('  OUTOFBOUNDS ' + id); }
+        if (!shapesInside(svg, minx, miny, w, h)) { cov.shapeOutOfBounds++; console.log('  SHAPE_OUTOFBOUNDS ' + id); }
       }
     }
   }
@@ -65,6 +97,7 @@ check('no raster / foreignObject (clean vector graphics)', cov.raster === 0, cov
 check('all fonts are readable (>= 9px)', cov.tinyFont === 0, cov.tinyFont + '');
 check('every diagram carries at least one label', cov.noLabel === 0, cov.noLabel + '');
 check('no label escapes its viewBox (no clipped/demo labels)', cov.outOfBounds === 0, cov.outOfBounds + '');
+check('no drawn line/bar/dot escapes its viewBox', cov.shapeOutOfBounds === 0, cov.shapeOutOfBounds + '');
 
 console.log(JSON.stringify(cov, null, 2));
 console.log(fails ? 'GRAPHICS_QUALITY_FAIL (' + fails + ')' : 'GRAPHICS_QUALITY_PASS');
