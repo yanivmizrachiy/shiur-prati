@@ -7,7 +7,12 @@ function domain(){return document.getElementById('sd').value}
 // Display-only: engine ids and registry labels are unchanged in code.
 function cleanTopicLabel(s){return String(s==null?'':s).replace(/\s*(✦.*|—\s*מנוע.*|גרסה חכמה.*|מנוע מקור.*)$/,'').replace(/\s*[—–\-•·✦]\s*$/,'').trim();}
 function onGrade(){document.getElementById('gradeBadge').textContent={7:'כיתה ז׳',8:'כיתה ח׳'}[grade()]||'כיתה ז׳';onDomain()}
-function onDomain(){let s=document.getElementById('st');s.innerHTML='';let g=TOPICS[grade()]||TOPICS[7];let list=g[domain()]||[];if(!list.length){let o=document.createElement('option');o.value='';o.textContent='אין נושאים זמינים';s.appendChild(o);return}list.forEach(t=>{let o=document.createElement('option');o.value=t[0];o.textContent=cleanTopicLabel(t[1]);s.appendChild(o)})}
+function onDomain(){let s=document.getElementById('st');s.innerHTML='';let g=TOPICS[grade()]||TOPICS[7];let list=g[domain()]||[];if(!list.length){let o=document.createElement('option');o.value='';o.textContent='אין נושאים זמינים';s.appendChild(o);return}
+  // Hide stale bare-id duplicates: when an "X-ENGINE" topic exists, the bare "X" is a
+  // superseded legacy registration (identical label, no working generator) — show only
+  // the canonical engine version so teachers never see a duplicated or "locked" topic.
+  const ids=new Set(list.map(t=>t[0]));list=list.filter(t=>!ids.has(t[0]+'-ENGINE'));
+  list.forEach(t=>{let o=document.createElement('option');o.value=t[0];o.textContent=cleanTopicLabel(t[1]);s.appendChild(o)})}
 function generate(){let id=document.getElementById('st').value;if(!generators[id]){document.getElementById('out').innerHTML='<div class="qcard wip">נושא זה עדיין נעול או בפיתוח לפי חומרי המקור הקיימים.</div>';return}let count=+(document.getElementById('sn')?.value||1);if(count>1&&typeof generateSet==='function'){generateSet();return}let qsel=document.getElementById('selQType'),restore=null;if(qsel&&qsel.value==='mixed'){restore='mixed';let types=['open','mcq','tf','mistake'];qsel.value=types[Math.floor(Math.random()*types.length)]}try{generators[id]()}finally{if(restore!==null&&qsel)qsel.value=restore}}
 function visualMode(){let s=document.getElementById('sv');return s?s.value:'color'}
 function colorToGray(c){if(!/^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/.test(c))return null;let h=c.slice(1);if(h.length===3)h=h.split('').map(ch=>ch+ch).join('');const r=parseInt(h.slice(0,2),16),g=parseInt(h.slice(2,4),16),b=parseInt(h.slice(4,6),16),y=Math.round(0.299*r+0.587*g+0.114*b),hx=('0'+y.toString(16)).slice(-2);return{y:y,hex:'#'+hx+hx+hx}}
