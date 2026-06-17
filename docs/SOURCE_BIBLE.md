@@ -6,7 +6,7 @@ _Do not edit by hand; edit the registry and regenerate._
 Sources 01–06 = direct question/example sources. 07–09 = principles, skills, misconceptions, visual requirements. **File 10 is never a question source.**
 
 - Topics: 50 (33 active engines + 17 fallback)
-- Question families: 173
+- Question families: 185
 
 ## Numeric
 
@@ -324,6 +324,12 @@ Sources 01–06 = direct question/example sources. 07–09 = principles, skills,
   | `match_expression` | open/mcq/tf/mistake | התאימו ביטוי לתיאור | תרגום שגוי של פעולה | גדול ב, פי, תשלום קבוע+משתנה |
   | `rectangle_expression` | open/mcq/tf/mistake | היקף/שטח מלבן עם צלע פי k | בלבול היקף/שטח בביטוי | היקף, שטח |
   | `two_variable_cost` | open/mcq/tf/mistake | עלות a-ל-X ו-b-ל-Y | כפל סך פריטים בסכום משתנים | שני מחירים |
+  | `generalize_concrete_to_general` | open/mcq/tf/mistake | מהיקף/עלות קונקרטית → ביטוי כללי → הצבה | "פי"/"כפול" כחיבור | משולש, דלק, כרטיסים |
+  | `sequence_general_term` | open/mcq/tf/mistake | האיבר ה-n בסדרה חשבונית | הוספת ההפרש n פעמים במקום (n−1) | הפרש חיובי, הפרש שלילי |
+  | `tower_general_term` | open/mcq/tf/mistake | גובה מגדל n כוסות | התעלמות מ-(n−1) התוספות | גובה התחלתי+תוספת |
+  | `simplify_mixed_terms` | open/mcq/tf/mistake | פשטו 5x−2x+3 | איחוד איבר חופשי עם מקדם | עם איבר חופשי |
+  | `equal_expressions` | open/mcq/tf/mistake | האם a²=a·a? האם 3(x+2)=3x+6? | a²=2a / פילוג חלקי | חזקה, פילוג, כינוס |
+  | `polygon_perimeter_expression` | open/mcq/tf/mistake | ביטוי להיקף מצולע עם צלעות אלגבריות | אי-כינוס המספרים החופשיים | משולש, מרובע |
 
 ### A7-02-ENGINE — הצבה בביטוי
 
@@ -341,6 +347,9 @@ Sources 01–06 = direct question/example sources. 07–09 = principles, skills,
   | `substitute_positive` | open/mcq/tf/mistake | ערך של 2x+7 ב-x=3 | kx כחיבור | x חיובי |
   | `substitute_negative` | open/mcq/tf/mistake | ערך של 3x+10 ב-x=−2 | טעות סימן | x שלילי |
   | `substitute_power` | open/mcq/tf/mistake | ערך של x²+c ב-x=−4 | (−a)² כ-−a² | ריבוע, בסיס שלילי |
+  | `substitute_two_variables` | open/mcq/tf/mistake | ערך של Ab+Bc ב-b,c נתונים | איחוד שני המשתנים | שני משתנים, מקדם שלילי |
+  | `substitute_two_var_powers` | open/mcq/tf/mistake | ערך של h³+jk²+c | חזקה ככפל במעריך | חזקה שלישית, חזקה שנייה |
+  | `substitute_applied_formula` | open/mcq/tf/mistake | הצבה בנוסחה: h=5t², F=1.8C+32 | t² כ-×2 / שכחת המחובר הקבוע | נפילה חופשית, צלזיוס↔פרנהייט |
 
 ### A7-03-ENGINE — משוואות מדרגה ראשונה
 
@@ -359,6 +368,8 @@ Sources 01–06 = direct question/example sources. 07–09 = principles, skills,
   | `two_step` | open/mcq/tf/mistake | 3x+5=20 | סדר פעולות שגוי | שני שלבים |
   | `parentheses_equation` | open/mcq/tf/mistake | 3(x+2)=21 | פתיחת סוגריים חלקית | סוגריים |
   | `verify_solution` | open/mcq/tf/mistake | האם x=5 פתרון? | הצבה רק באגף אחד | בדיקת פתרון |
+  | `build_equation_from_word_problem` | open/mcq/tf/mistake | בניית משוואה מבעיה מילולית ופתרונה | תרגום שגוי של היחס למשוואה | מחיר/כמות |
+  | `identify_equation_with_solution` | open/mcq/tf/mistake | איזו משוואה פתרונה x=s | בחירה ללא בדיקה בהצבה | בחירת משוואה |
 
 ### A7-04-ENGINE — ביטויים שקולים ופישוט
 
@@ -465,17 +476,17 @@ Sources 01–06 = direct question/example sources. 07–09 = principles, skills,
 
   | family | qtypes | source pattern | misconception | variations |
   |---|---|---|---|---|
-  | `rectangle_area` | open/mcq/tf/mistake | שטח מלבן a×b | חיבור צלעות | שטח |
+  | `rectangle_area` | open/mcq/tf/mistake | שטח מלבן a·b | חיבור צלעות | שטח |
   | `rectangle_perimeter` | open/mcq/tf/mistake | היקף מלבן | כפל במקום סכום | היקף |
   | `rectangle_missing_side` | open/mcq/tf/mistake | שטח/היקף ידוע — צלע חסרה | חיסור במקום חילוק | צלע חסרה |
-  | `box_volume` | open/mcq/tf/mistake | נפח תיבה l×w×h | חיבור ממדים | נפח |
+  | `box_volume` | open/mcq/tf/mistake | נפח תיבה l·w·h | חיבור ממדים | נפח |
   | `box_missing_dim` | open/mcq/tf/mistake | נפח ידוע — ממד חסר | חיסור במקום חילוק | ממד חסר |
 
-### G7-02-ENGINE — שטחי צורות שטוחות
+### G7-02-ENGINE — שטחי מצולעים
 
 - **Source PDF:** 03_grade-7_pre_deductive_geometry_curriculum.pdf · grade 7
 - **Skill:** שטח משולש, מקבילית, טרפז, גובה חסר
-- **Learning goal:** התלמיד יחשב שטחי צורות שטוחות וימצא גובה חסר
+- **Learning goal:** התלמיד יחשב שטחי מצולעים וימצא גובה חסר
 - **Teacher purpose:** ביסוס נוסחאות שטח והקשר ביניהן
 - **Common misconceptions:** אי-חלוקה ב-2 במשולש; חלוקה ב-2 במקבילית
 - **Follow-up ideas:** שטח משולש; שטח טרפז; גובה חסר ממשולש
@@ -504,7 +515,7 @@ Sources 01–06 = direct question/example sources. 07–09 = principles, skills,
   |---|---|---|---|---|
   | `find_side` | open/mcq/tf/mistake | רגליים 3,4 — יתר? | חיבור רגליים | יתר, רגל |
   | `check_right_triangle` | open/mcq/tf/mistake | האם 3,4,6 ישר-זווית? | הנחה שכל משולש ישר | בדיקת שלשה |
-  | `rectangle_diagonal` | open/mcq/tf/mistake | אלכסון מלבן 3×4 | חיבור צלעות לאלכסון | אלכסון מלבן |
+  | `rectangle_diagonal` | open/mcq/tf/mistake | אלכסון מלבן 3 על 4 | חיבור צלעות לאלכסון | אלכסון מלבן |
 
 ### G7-04-ENGINE — זווית חסרה במשולש
 
@@ -632,7 +643,7 @@ Sources 01–06 = direct question/example sources. 07–09 = principles, skills,
 
 - **Source PDF:** 04_grade-8_geometry_curriculum.pdf · grade 8
 - **Skill:** זווית מרכזית, חלק מהעיגול וגזרה
-- **Learning goal:** התלמיד יקשר בין אחוז מהעיגול לזווית מרכזית (×360°) וישווה גזרות
+- **Learning goal:** התלמיד יקשר בין אחוז מהעיגול לזווית מרכזית (·360°) וישווה גזרות
 - **Teacher purpose:** ביסוס הקשר חלק↔זווית מרכזית והבחנה ממעלות
 - **Common misconceptions:** אחוז כמעלות; כפל ב-100 במקום ב-360; בלבול זווית מרכזית עם היקפית
 - **Follow-up ideas:** זווית מרכזית מאחוז; אחוז מזווית; איזו גזרה גדולה יותר
@@ -641,7 +652,7 @@ Sources 01–06 = direct question/example sources. 07–09 = principles, skills,
 
   | family | qtypes | source pattern | misconception | variations |
   |---|---|---|---|---|
-  | `angle_from_part` | open/mcq/tf/mistake | זווית מרכזית מאחוז (אחוז×360°) | אחוז=מעלות | אחוז→זווית |
+  | `angle_from_part` | open/mcq/tf/mistake | זווית מרכזית מאחוז (אחוז·360°) | אחוז=מעלות | אחוז→זווית |
   | `part_from_angle` | open/mcq/tf/mistake | חלק מהעיגול מזווית מרכזית (זווית/360°) | הזווית כאחוז | זווית→אחוז |
   | `compare` | open/mcq/tf/mistake | איזו גזרה גדולה יותר? | בחירה לפי מספר "עגול" | השוואת גזרות |
 
@@ -750,6 +761,7 @@ Sources 01–06 = direct question/example sources. 07–09 = principles, skills,
   | `die_probability` | open/mcq/tf/mistake | הסתברות בקובייה הוגנת | מכנה=כישלונות | קובייה |
   | `bag_probability` | open/mcq/tf/mistake | הסתברות שליפת כדור | מכנה=צבע אחר בלבד | קופסה |
   | `complement_probability` | open/mcq/tf/mistake | הסתברות "לא" | P(לא)=1+P | משלים |
+  | `expected_count_over_trials` | open/mcq/tf/mistake | כמה פעמים צפוי צבע ב-N סיבובי גלגל | בלבול בין הסתברות לתוחלת | גלגל מזל, מספר סיבובים |
 
 ### U7-03-ENGINE — השוואת קבוצות — תדירות יחסית
 
@@ -790,7 +802,7 @@ Sources 01–06 = direct question/example sources. 07–09 = principles, skills,
 - **Source PDF:** 06_uncertainty_domain_curriculum_examples.pdf · grade 7
 - **Skill:** זווית מרכזית מאחוז, אחוז חסר, גזרה גדולה
 - **Learning goal:** התלמיד יחשב זווית מרכזית מאחוז ויקרא דיאגרמת עוגה
-- **Teacher purpose:** חיבור אחוז לזווית מרכזית (×360°)
+- **Teacher purpose:** חיבור אחוז לזווית מרכזית (·360°)
 - **Common misconceptions:** אחוז כמעלות; כפל ב-100 במקום ב-360; גזרה גדולה לפי סדר במקרא
 - **Follow-up ideas:** חשבו זווית מרכזית; מצאו אחוז חסר; זהו את הגזרה הגדולה
 - **Visual required:** yes
@@ -798,7 +810,7 @@ Sources 01–06 = direct question/example sources. 07–09 = principles, skills,
 
   | family | qtypes | source pattern | misconception | variations |
   |---|---|---|---|---|
-  | `pie_central_angle` | open/mcq/tf/mistake | זווית מרכזית מאחוז (×3.6°) | אחוז=מעלות | גזרה |
+  | `pie_central_angle` | open/mcq/tf/mistake | זווית מרכזית מאחוז (·3.6°) | אחוז=מעלות | גזרה |
   | `pie_missing_percent` | open/mcq/tf/mistake | מצאו את האחוז החסר (סכום 100%) | התעלמות מסכום 100% | אחוז חסר |
   | `pie_largest_sector` | open/mcq/tf/mistake | איזו גזרה הגדולה ביותר? | בחירה לפי סדר במקרא | גזרה גדולה |
 
