@@ -6,7 +6,7 @@ _Do not edit by hand; edit the registry and regenerate._
 Sources 01–06 = direct question/example sources. 07–09 = principles, skills, misconceptions, visual requirements. **File 10 is never a question source.**
 
 - Topics: 50 (33 active engines + 17 fallback)
-- Question families: 185
+- Question families: 186
 
 ## Numeric
 
@@ -350,6 +350,7 @@ Sources 01–06 = direct question/example sources. 07–09 = principles, skills,
   | `substitute_two_variables` | open/mcq/tf/mistake | ערך של Ab+Bc ב-b,c נתונים | איחוד שני המשתנים | שני משתנים, מקדם שלילי |
   | `substitute_two_var_powers` | open/mcq/tf/mistake | ערך של h³+jk²+c | חזקה ככפל במעריך | חזקה שלישית, חזקה שנייה |
   | `substitute_applied_formula` | open/mcq/tf/mistake | הצבה בנוסחה: h=5t², F=1.8C+32 | t² כ-×2 / שכחת המחובר הקבוע | נפילה חופשית, צלזיוס↔פרנהייט |
+  | `expression_value_range` | open/mcq/tf/mistake | אם x בין a ל-b, בין מה נמצא kx+c | הצבת מקדם בלבד / שכחת המחובר הקבוע | תחום ערכים |
 
 ### A7-03-ENGINE — משוואות מדרגה ראשונה
 
