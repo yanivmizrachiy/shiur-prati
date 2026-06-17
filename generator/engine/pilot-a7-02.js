@@ -44,13 +44,21 @@
     const mult=9*C/5;                        // the 1.8·C part, exact integer
     return {kind:'temp', v:C, mult:mult, r:mult+32, wrongR:C+32};
   }
+  // Expression-value range — source files 01/08 reasoning ("אם t בין 6 ל-9, בין מה
+  // נמצא t+5?"). Evaluate a linear expression at both ends of an interval. k≥2 keeps
+  // the distractors (forgot +c / treated k as 1) distinct from the correct range.
+  function caseRange(){
+    const k=rnd(2,4), c=rnd(1,9), a=rnd(2,7), b=a+rnd(2,5);
+    return {k:k, c:c, a:a, b:b, lo:k*a+c, hi:k*b+c};
+  }
+  const rangeExpr = x => `${x.k}x+${x.c}`;
 
   function pickFamily(diff){
     // רמה 1: substitute a positive into kx+c. רמה 2: + negatives, single power, two-var, formula.
-    // רמה 3: powers (incl. cube), two-variable, applied formula.
+    // רמה 3: powers (incl. cube), two-variable, applied formula, value over an interval.
     if(diff === 'basic') return 'sub_pos';
-    if(diff === 'challenge') return E.pick(['sub_neg','sub_power','sub_pow2','sub_two','formula']);
-    return E.pick(['sub_pos','sub_neg','sub_power','sub_two','formula']);
+    if(diff === 'challenge') return E.pick(['sub_neg','sub_power','sub_pow2','sub_two','formula','range']);
+    return E.pick(['sub_pos','sub_neg','sub_power','sub_two','formula','range']);
   }
   function pickCase(f){
     if(f==='sub_neg') return caseSubNeg();
@@ -58,6 +66,7 @@
     if(f==='sub_two') return caseSubTwo();
     if(f==='sub_pow2') return caseSubPow2();
     if(f==='formula') return caseFormula();
+    if(f==='range') return caseRange();
     return caseSubPos();
   }
   // expression + substitution display for the two-variable families
@@ -68,6 +77,20 @@
   function wrap(n){ return n < 0 ? '(' + n + ')' : '' + n; }
 
   function choices(family,x){
+    if(family==='range'){
+      // range answers are intervals, not single numbers — build range-text options
+      const opts=[
+        {t:`בין $${x.lo}$ ל-$${x.hi}$`, ok:true},
+        {t:`בין $${x.k*x.a}$ ל-$${x.k*x.b}$`, ok:false},   // forgot +c
+        {t:`בין $${x.a+x.c}$ ל-$${x.b+x.c}$`, ok:false},   // treated k as 1
+        {t:`בין $${x.lo}$ ל-$${x.hi+x.k}$`, ok:false}      // wrong upper endpoint
+      ];
+      const seen=new Set(), uniq=[];
+      for(const o of opts){ if(!seen.has(o.t)){ seen.add(o.t); uniq.push(o); } }
+      let pad=x.hi+2*x.k;
+      while(uniq.length<4){ const t=`בין $${x.lo}$ ל-$${pad}$`; if(!seen.has(t)){ seen.add(t); uniq.push({t:t,ok:false}); } pad+=x.k; }
+      return E.shuffle(uniq.slice(0,4)).map((o,i)=>({label:['א','ב','ג','ד'][i], text:o.t, correct:o.ok}));
+    }
     let correct = x.r, wrongs;
     if(family==='formula') wrongs = x.kind==='drop' ? [x.wrongR, 25*x.v*x.v, 5*x.v] : [x.wrongR, x.mult, 2*x.v+32];
     else if(family==='sub_two') wrongs = [x.A*x.b+Math.abs(x.B)*x.c, x.A+x.B+x.b+x.c, x.r+x.A];
@@ -81,6 +104,14 @@
   }
 
   function question(family,x,qtype,tfTrue){
+    if(family==='range'){
+      const e=rangeExpr(x);
+      if(qtype==='tf'){ const lo=tfTrue?x.lo:x.k*x.a, hi=tfTrue?x.hi:x.k*x.b;
+        return `אם המספר $x$ נמצא בין $${x.a}$ ל-$${x.b}$, אז ערך הביטוי $${e}$ נמצא בין $${lo}$ ל-$${hi}$.`; }
+      if(qtype==='mistake') return `נתון ש-$x$ נמצא בין $${x.a}$ ל-$${x.b}$. תלמיד טען שהביטוי $${e}$ נמצא בין $${x.k*x.a}$ ל-$${x.k*x.b}$.`;
+      if(qtype==='mcq') return `המספר $x$ נמצא בין $${x.a}$ ל-$${x.b}$.\nבין אילו ערכים נמצא הביטוי $${e}$?`;
+      return `המספר $x$ נמצא בין $${x.a}$ ל-$${x.b}$.\nבין אילו ערכים נמצא ערך הביטוי $${e}$?`;
+    }
     if(family==='formula'){
       if(x.kind==='drop'){
         const f='h=5t^2';
@@ -120,6 +151,14 @@
 
   function answer(family,x,qtype,tfTrue){
     const wrong = qtype==='mistake' || (qtype==='tf' && !tfTrue);
+    if(family==='range'){
+      const e=rangeExpr(x);
+      const prefix = wrong ? 'שגוי — יש להציב את שני קצות התחום בביטוי המלא (כולל ה-$+'+x.c+'$), לא רק את מקדם ה-$x$.\n' : '';
+      return `${prefix}מציבים את שני קצות התחום בביטוי $${e}$:
+כאשר $x=${x.a}$:  $${x.k}\\cdot ${x.a}+${x.c}=${x.lo}$.
+כאשר $x=${x.b}$:  $${x.k}\\cdot ${x.b}+${x.c}=${x.hi}$.
+המקדם של $x$ חיובי, ולכן הביטוי גדל עם $x$ — הוא נמצא בין $${x.lo}$ ל-$${x.hi}$.`;
+    }
     if(family==='formula'){
       if(x.kind==='drop'){
         const prefix = wrong ? 'שגוי — $t^2$ הוא כפל עצמי ($t\\cdot t$), לא כפל ב-$2$.\n' : '';
