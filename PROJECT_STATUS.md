@@ -4,7 +4,7 @@
 **Central rules:** see `RULES.md` (authoritative operating guide; this file is the status snapshot).  
 **Default branch:** `main`.
 **Live site:** GitHub Pages serves `generator/` from `main` — https://yanivmizrachiy.github.io/targilim/ . The live site reflects `main` only.  
-**Current repo state:** Phase 1 + PRs #21–#34 + PRs #46–#52 + main commit `7db6ab4` are merged into `main`. Local/GitHub sync is checked by `npm run verify:sync`.
+**Current repo state:** Phase 1 + PRs #21–#34 + PRs #46–#52 + main commit `7db6ab4` + the Pythagoras terminology guard are merged into `main`. Local/GitHub sync is checked by `npm run verify:sync`.
 **Package version:** `0.78.0`
 
 ## Executive snapshot
@@ -35,6 +35,7 @@ All merged to `main`, live, and `verify:deep`-green.
 
 | PR | Date | Improvement |
 |---|---|---|
+| main | 2026-06-17 | Pythagoras Hebrew terminology guard: G7-03 now uses "ניצב/ניצבים" and "יתר"; `verify:geometry-language` prevents "רגל/רגליים" from returning to Pythagoras output. |
 | #52 | 2026-06-17 | A8-03 count-and-value system word problem (coins/stamps elimination). |
 | `7db6ab4` | 2026-06-17 | Source-fit/UI sync: A7-05 value tables + first-quadrant graphs, A7-03/U7-01/U8-01 family expansion, copy-image-only mobile dock, premium typography guards. |
 | #51 | 2026-06-17 | A7-02 expression-value-range family. |
@@ -76,6 +77,7 @@ npm run verify:deep
 - visual coverage checks;
 - question-family provenance checks;
 - follow-up generation checks;
+- geometry Hebrew terminology check (`verify:geometry-language`);
 - gallery and visual QA dashboard checks;
 - Teacher Advanced Mode checks;
 - teacher controls checks;

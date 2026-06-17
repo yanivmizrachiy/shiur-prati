@@ -87,6 +87,7 @@ All entries below are **merged to `main`, live, and `verify:deep`-green**. Newes
 
 | PR | Date | Improvement |
 |---|---|---|
+| main | 2026-06-17 | **Pythagoras Hebrew terminology guard** — student and teacher wording now uses the standard Hebrew terms **ניצב/ניצבים** and **יתר**; `verify:geometry-language` prevents "רגל/רגליים" from returning to G7-03 Pythagoras output. |
 | **#52** | 2026-06-17 | **A8-03 count-and-value system word problem** — coins/stamps style elimination family added and documented. |
 | main `7db6ab4` | 2026-06-17 | **Source-fit/UI sync** — A7-05 aligned to value tables + first-quadrant graphs; A7-03/U7-01/U8-01 families expanded; mobile share reduced to copy-image only; premium typography guards added. |
 | **#51** | 2026-06-17 | **A7-02 expression-value range** — questions of the form "if x is in [a,b], where is kx+c?" |
@@ -95,7 +96,7 @@ All entries below are **merged to `main`, live, and `verify:deep`-green**. Newes
 | **#48** | 2026-06-17 | **A7-01 polygon perimeter with algebraic sides** — labeled diagram + source-backed family. |
 | **#47** | 2026-06-17 | **Source-level family expansion** — applied-formula substitution and equal-expressions families. |
 | **#46** | 2026-06-17 | **Difficulty tiers integration** — new families wired into real רמה 1/2/3 paths. |
-| **#34** | 2026-06-16 | **Pythagoras (legacy G7-03) fixes** — diagram no longer reveals the answer (the unknown side is marked **`?`**, like `angleSvg` already did for the unknown angle); fixed the clipped "ס\"מ" label (`text-anchor="middle"`); precise Hebrew (**"חשבו את אורך היתר"** / "אורך הרגל השנייה"); **premium student answer box** (rounded, soft shadow, 5 comfortable 40px ruled lines). |
+| **#34** | 2026-06-16 | **Pythagoras (legacy G7-03) fixes** — diagram no longer reveals the answer (the unknown side is marked **`?`**, like `angleSvg` already did for the unknown angle); fixed the clipped "ס\"מ" label (`text-anchor="middle"`); precise Hebrew around unknown side length; **premium student answer box** (rounded, soft shadow, 5 comfortable 40px ruled lines). |
 | **#33** | 2026-06-16 | **Source-faithful topic labels** — `G7-02` "שטחי צורות שטוחות" → **"שטחי מצולעים"** (source: "שטחי מצולעים" / "Areas of polygons"); `G8-04` "ניידות משולשים" → **"דמיון משולשים"** (curriculum-map "Triangle similarity"; engine + questions already used "דמיון"). `U7-01` "טבלת תדירות" kept — the source uses "תדירות". |
 | **#32** | 2026-06-16 | **Removed the landing splash** — the main page opens **directly** to the "הגדרות תרגיל" topic-selection tool (no hero/benefits/CTA/marketing). `generator/landing.css` deleted. |
 | **#30** | 2026-06-16 | **Level selector = רמה 1 / רמה 2 / רמה 3**, and the visible `#sl` selector now actually drives difficulty for every topic (it was previously a hidden no-op reading `#selDiff`). |

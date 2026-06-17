@@ -513,14 +513,14 @@ Sources 01–06 = direct question/example sources. 07–09 = principles, skills,
 - **Skill:** מציאת צלע, בדיקת משולש ישר-זווית, אלכסון מלבן
 - **Learning goal:** התלמיד ייישם את משפט פיתגורס למציאת צלע ובדיקת ישר-זווית
 - **Teacher purpose:** ביסוס הקשר בין צלעות במשולש ישר-זווית
-- **Common misconceptions:** חיבור רגיל של הרגליים במקום ריבועים
-- **Follow-up ideas:** מצאו רגל חסרה; בדקו שלשה פיתגורית; אלכסון מלבן
+- **Common misconceptions:** חיבור רגיל של הניצבים במקום סכום ריבועים
+- **Follow-up ideas:** מצאו ניצב חסר; בדקו שלשה פיתגורית; אלכסון מלבן
 - **Visual required:** yes
 - **Engine status:** dedicated
 
   | family | qtypes | source pattern | misconception | variations |
   |---|---|---|---|---|
-  | `find_side` | open/mcq/tf/mistake | רגליים 3,4 — יתר? | חיבור רגליים | יתר, רגל |
+  | `find_side` | open/mcq/tf/mistake | ניצבים 3,4 — יתר? | חיבור ניצבים | יתר, ניצב |
   | `check_right_triangle` | open/mcq/tf/mistake | האם 3,4,6 ישר-זווית? | הנחה שכל משולש ישר | בדיקת שלשה |
   | `rectangle_diagonal` | open/mcq/tf/mistake | אלכסון מלבן 3 על 4 | חיבור צלעות לאלכסון | אלכסון מלבן |
 
@@ -913,4 +913,3 @@ Sources 01–06 = direct question/example sources. 07–09 = principles, skills,
   | `prob_row` | open/mcq/tf/mistake | הסתברות שורה שלמה | התעלמות מעמודה שנייה | שורה |
   | `prob_complement` | open/mcq/tf/mistake | הסתברות "לא" | משלים 1+P | משלים |
   | `compare_groups` | open/mcq/tf/mistake | באיזו קבוצה שיעור גבוה? | ספירה מוחלטת | השוואה |
-
