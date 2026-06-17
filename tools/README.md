@@ -1,6 +1,6 @@
 # tools/ — מנועי בדיקה וכלי תחזוקה
 
-44 קבצים. כולם נטענים/נבדקים; אין כאן קוד מת. החלוקה:
+49 קבצים. כולם נטענים/נבדקים; אין כאן קוד מת. החלוקה:
 
 ## 1. ספריית טעינה משותפת
 - **`engine-load.mjs`** — טוען את כל ערכת המנועים (DOM stub, VM) ומחזיר
@@ -30,12 +30,15 @@
 - `verify-phase2-static.mjs` · `verify-phase3a-static.mjs` (בדיקות פאזה היסטוריות)
 
 ## 5. כלי תחזוקה נוספים
+- **`verify-repo-sync.mjs`** — בדיקת סנכרון מקומי מול `origin/main` ומול GitHub; מורץ דרך `npm run verify:sync`.
 - **`harness-engines.mjs`** — harness ידני לעמידוּת כל המנועים (`node tools/harness-engines.mjs [runs]`).
 - **`release-audit.mjs`** — אודיט מצב לקראת שחרור.
 - **`verify-all-termux.sh`** — הרצת הבדיקות מ-Termux/אנדרואיד.
 
 ## הרצה
 ```bash
+npm run verify:sync        # ודא שעובדים בריפו הנכון, נקי וזהה ל-GitHub
+npm run verify:workbench   # בדיקות מרכזיות נוחות לפני המשך עבודה
 npm run verify:deep        # כל ה-31 + שערי העומק
 node tools/<tool>.mjs       # כלי בודד
 ```

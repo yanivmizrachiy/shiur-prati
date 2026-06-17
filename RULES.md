@@ -2,7 +2,7 @@
 # תרגילים — דף כללים מרכזי לבינה מלאכותית ולמפתחים
 
 Repository: `yanivmizrachiy/targilim` · Hebrew name: `תרגילים`
-**Last updated: 2026-06-16** · Baseline: 2026-06-14
+**Last updated: 2026-06-17** · Baseline: 2026-06-14
 
 > **This file is the central operating guide.** Any AI or developer must read it
 > (and `PROJECT_STATUS.md`) before any change. It overrides older claims found in
@@ -36,6 +36,7 @@ Repository: `yanivmizrachiy/targilim` · Hebrew name: `תרגילים`
 | Approved source materials | **`sources/intake/2026-06-09/`** (10 PDFs) |
 | Live engine inventory (the real list) | **`generator/engine/source-registry.js`** |
 | Quality gates | **`package.json`** scripts (`verify:deep`) |
+| Local worktree + GitHub sync | `docs/reference/ACTIVE_WORKTREE_AND_SYNC.md` · `npm run verify:sync` |
 | Coverage gaps roadmap | `docs/reports/SOURCE_BACKED_COVERAGE_GAPS_20260614.md` |
 | PDF duplicate audit | `docs/reports/PDF_DUPLICATE_AUDIT_20260614.md` |
 | Verifier/tool index | `tools/README.md` · Docs index `docs/README.md` |
@@ -86,6 +87,14 @@ All entries below are **merged to `main`, live, and `verify:deep`-green**. Newes
 
 | PR | Date | Improvement |
 |---|---|---|
+| **#52** | 2026-06-17 | **A8-03 count-and-value system word problem** — coins/stamps style elimination family added and documented. |
+| main `7db6ab4` | 2026-06-17 | **Source-fit/UI sync** — A7-05 aligned to value tables + first-quadrant graphs; A7-03/U7-01/U8-01 families expanded; mobile share reduced to copy-image only; premium typography guards added. |
+| **#51** | 2026-06-17 | **A7-02 expression-value range** — questions of the form "if x is in [a,b], where is kx+c?" |
+| **#50** | 2026-06-17 | **Topic dropdown dedupe/order cleanup** — canonical engine topic display without stale duplicate rows. |
+| **#49** | 2026-06-17 | **Registry/source-bible sync** — shipped families documented in `pedagogy-registry` and regenerated `SOURCE_BIBLE`. |
+| **#48** | 2026-06-17 | **A7-01 polygon perimeter with algebraic sides** — labeled diagram + source-backed family. |
+| **#47** | 2026-06-17 | **Source-level family expansion** — applied-formula substitution and equal-expressions families. |
+| **#46** | 2026-06-17 | **Difficulty tiers integration** — new families wired into real רמה 1/2/3 paths. |
 | **#34** | 2026-06-16 | **Pythagoras (legacy G7-03) fixes** — diagram no longer reveals the answer (the unknown side is marked **`?`**, like `angleSvg` already did for the unknown angle); fixed the clipped "ס\"מ" label (`text-anchor="middle"`); precise Hebrew (**"חשבו את אורך היתר"** / "אורך הרגל השנייה"); **premium student answer box** (rounded, soft shadow, 5 comfortable 40px ruled lines). |
 | **#33** | 2026-06-16 | **Source-faithful topic labels** — `G7-02` "שטחי צורות שטוחות" → **"שטחי מצולעים"** (source: "שטחי מצולעים" / "Areas of polygons"); `G8-04` "ניידות משולשים" → **"דמיון משולשים"** (curriculum-map "Triangle similarity"; engine + questions already used "דמיון"). `U7-01` "טבלת תדירות" kept — the source uses "תדירות". |
 | **#32** | 2026-06-16 | **Removed the landing splash** — the main page opens **directly** to the "הגדרות תרגיל" topic-selection tool (no hero/benefits/CTA/marketing). `generator/landing.css` deleted. |
@@ -99,9 +108,10 @@ Earlier history: PR #7/#8 (Phase 1, 50-engine generator), #15–#18 (A7-04 + str
 
 ---
 
-## 6. Current state (verified 2026-06-16)
+## 6. Current state (verified 2026-06-17)
 
-- The live site reflects `main`; **no open PRs**. GitHub Pages publishes `generator/` from `main`.
+- The live site reflects `main`; GitHub Pages publishes `generator/` from `main`.
+- Local sync is checked with `npm run verify:sync`; it must pass before continuing work in a local copy.
 - The main page **opens directly to the generator** — there is no landing/marketing page.
 - **50 engine topics (`*-ENGINE`) / 0 fallback** — counted from `source-registry.js`.
 - **No `A8-04-ENGINE`** (A8-04 inequalities is legacy in `a8-03.js`; A8-05 percent equations is legacy too).

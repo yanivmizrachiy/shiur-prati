@@ -8,8 +8,10 @@ Current status:
 
 - 50 מנועי ENGINE פעילים.
 - 0 נושאי fallback.
-- Main quality gate: npm run verify:deep.
-- Final status report: docs/reports/FINAL_PR7_RELEASE_STATUS_20260614.md.
+- Main quality gate: `npm run verify:deep`.
+- Local/GitHub sync gate: `npm run verify:sync`.
+- Workbench gate before continuing feature work: `npm run verify:workbench`.
+- Active local worktree note: `docs/reference/ACTIVE_WORKTREE_AND_SYNC.md`.
 
 Entry points:
 
@@ -22,5 +24,9 @@ Entry points:
 
 Verification:
 
+```bash
 npm install
+npm run verify:sync
+npm run verify:workbench
 npm run verify:deep
+```

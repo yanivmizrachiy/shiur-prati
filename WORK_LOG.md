@@ -6,6 +6,19 @@
 
 יומן עבודה. רשומה אחת לכל מקטע עבודה משמעותי. החדש למעלה.
 
+## 2026-06-17 — סדר ריפו וסנכרון עבודה
+**ענף:** main · **מטרה:** למנוע בלבול בין עותקי עבודה ולהגדיר שער עבודה נוח.
+
+### שונה/נוסף
+1. `tools/verify-repo-sync.mjs` — בדיקה שהעותק המקומי נקי, על `main`, מחובר ל-`yanivmizrachiy/targilim`, וזהה ל-`origin/main` ול-GitHub.
+2. `package.json` — נוספו `verify:sync` ו-`verify:workbench`.
+3. `docs/reference/ACTIVE_WORKTREE_AND_SYNC.md` — מסמך עבודה שמבהיר שהריפו הפעיל הוא `.repo-inspect`, ומה מריצים לפני המשך פיתוח.
+4. `README.md`, `docs/README.md`, `tools/README.md`, `PROJECT_RULES.md` — קישורים והוראות סנכרון.
+5. `PROJECT_STATUS.md`, `RULES.md`, `REQUIREMENTS_STATUS.md`, `NEXT_STEPS.md` — עודכנו כדי להסיר בלבול אחרי PRs #46–#52 וקומיט `7db6ab4`.
+
+### בדיקות
+- להריץ לפני סגירה: `npm run verify:sync`, `npm run verify:workbench`, `git diff --check`.
+
 ## 2026-06-14 — Phase 1 (דרישות יסוד)
 **ענף:** feat/source-bible-variety-dedicated-engines · **שער:** `npm run verify:deep` = 23/23 PASS.
 

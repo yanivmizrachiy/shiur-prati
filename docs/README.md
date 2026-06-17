@@ -27,6 +27,7 @@
 - [reports/FINAL_PR7_RELEASE_STATUS_20260614.md](reports/FINAL_PR7_RELEASE_STATUS_20260614.md) — דוח היסטורי חשוב של PR #7; לא מקור אמת יחיד אחרי המיזוג.
 - [reports/REPO_CLEANUP_EXECUTION_20260614.md](reports/REPO_CLEANUP_EXECUTION_20260614.md) — דוח ניקוי ריפו אחרון.
 - [reports/SOURCE_SYNC_REPAIR_20260617.md](reports/SOURCE_SYNC_REPAIR_20260617.md) — סנכרון אחרון של `A7-04/A7-05`, מקור אמת ובדיקות guard.
+- [reference/ACTIVE_WORKTREE_AND_SYNC.md](reference/ACTIVE_WORKTREE_AND_SYNC.md) — באיזה עותק מקומי עובדים ואיך בודקים סנכרון מול GitHub.
 
 ## ליבה — מקור האמת (source of truth)
 
@@ -78,6 +79,7 @@ COPY_TO_CANVA_WORD, VISUAL_QA_ZERO_CARDS_FIX ועוד. שני קבצים נוצ�
 ## רפרנס (docs/reference/)
 
 - [reference/DATA_MODEL.md](reference/DATA_MODEL.md)
+- [reference/ACTIVE_WORKTREE_AND_SYNC.md](reference/ACTIVE_WORKTREE_AND_SYNC.md)
 - [reference/DEPLOY_GITHUB_PAGES.md](reference/DEPLOY_GITHUB_PAGES.md)
 - [reference/MOBILE_UI.md](reference/MOBILE_UI.md)
 - [reference/PRIVACY.md](reference/PRIVACY.md)

@@ -1,10 +1,10 @@
 # Project Status — Targilim תרגילים
 
-**Last updated:** 2026-06-16 · baseline 2026-06-14  
+**Last updated:** 2026-06-17 · baseline 2026-06-14
 **Central rules:** see `RULES.md` (authoritative operating guide; this file is the status snapshot).  
-**Default branch:** `main` — no open PRs.  
+**Default branch:** `main`.
 **Live site:** GitHub Pages serves `generator/` from `main` — https://yanivmizrachiy.github.io/targilim/ . The live site reflects `main` only.  
-**Current repo state:** Phase 1 + the UI premium round (#21–#24), worksheet polish (#27), A7-04 multi-correct (#28), the **רמה 1/2/3** level selector (#30), **landing splash removed — opens directly to the tool** (#32), source-faithful topic labels (#33), and the Pythagoras diagram/phrasing/answer-box fixes (#34) are all merged and live.  
+**Current repo state:** Phase 1 + PRs #21–#34 + PRs #46–#52 + main commit `7db6ab4` are merged into `main`. Local/GitHub sync is checked by `npm run verify:sync`.
 **Package version:** `0.78.0`
 
 ## Executive snapshot
@@ -35,6 +35,14 @@ All merged to `main`, live, and `verify:deep`-green.
 
 | PR | Date | Improvement |
 |---|---|---|
+| #52 | 2026-06-17 | A8-03 count-and-value system word problem (coins/stamps elimination). |
+| `7db6ab4` | 2026-06-17 | Source-fit/UI sync: A7-05 value tables + first-quadrant graphs, A7-03/U7-01/U8-01 family expansion, copy-image-only mobile dock, premium typography guards. |
+| #51 | 2026-06-17 | A7-02 expression-value-range family. |
+| #50 | 2026-06-17 | Topic dropdown dedupe/order cleanup. |
+| #49 | 2026-06-17 | Registry and source-bible sync for shipped families. |
+| #48 | 2026-06-17 | A7-01 polygon perimeter with algebraic sides and labeled diagram. |
+| #47 | 2026-06-17 | Source-level families: applied-formula substitution and equal-expressions. |
+| #46 | 2026-06-17 | Real רמה 1/2/3 integration for new families. |
 | #34 | 2026-06-16 | Pythagoras (legacy G7-03): diagram marks the unknown side `?` instead of revealing the answer; fixed the clipped "ס\"מ" label; precise Hebrew ("חשבו את אורך היתר"); premium student answer box (5 comfortable 40px ruled lines). |
 | #33 | 2026-06-16 | Source-faithful topic labels: G7-02 → "שטחי מצולעים"; G8-04 → "דמיון משולשים" (U7-01 "טבלת תדירות" kept — source uses "תדירות"). |
 | #32 | 2026-06-16 | Removed the landing splash — the main page opens directly to the topic-selection tool; `landing.css` deleted. |
@@ -52,6 +60,8 @@ Primary gate:
 
 ```bash
 npm install
+npm run verify:sync
+npm run verify:workbench
 npm run verify:deep
 ```
 
@@ -127,6 +137,7 @@ npm run verify:deep
 
 - `README.md` documents the high-level repository structure.
 - `docs/README.md` indexes documentation folders and source-of-truth files.
+- `docs/reference/ACTIVE_WORKTREE_AND_SYNC.md` documents the active local worktree and sync checks.
 - `tools/README.md` maps verifiers, generators, harnesses and standalone tools.
 - Historical unreferenced docs are organized under purpose folders.
 - Protected source PDFs and GitHub Pages marker files are not deleted.
