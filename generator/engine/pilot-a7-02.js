@@ -34,9 +34,11 @@
   }
 
   function pickFamily(diff){
+    // רמה 1: substitute a positive into kx+c. רמה 2: + negatives, single power, two-var.
+    // רמה 3: powers (incl. cube) and two-variable expressions.
     if(diff === 'basic') return 'sub_pos';
-    if(diff === 'challenge') return E.pick(['sub_power','sub_neg','sub_pow2','sub_two']);
-    return E.pick(['sub_pos','sub_neg','sub_power','sub_two','sub_pow2']);
+    if(diff === 'challenge') return E.pick(['sub_neg','sub_power','sub_pow2','sub_two']);
+    return E.pick(['sub_pos','sub_neg','sub_power','sub_two']);
   }
   function pickCase(f){
     if(f==='sub_neg') return caseSubNeg();

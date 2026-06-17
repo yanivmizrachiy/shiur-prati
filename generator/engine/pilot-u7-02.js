@@ -41,8 +41,10 @@
   }
 
   function pickFamily(diff){
-    if(diff === 'basic') return E.pick(['bag_simple','spinner']);
-    if(diff === 'challenge') return E.pick(['complement','die','spinner']);
+    // רמה 1: direct probability P=favourable/total (bag, die). רמה 2: + complement, spinner.
+    // רמה 3: complement (1−P) and expected count over many trials (multi-step).
+    if(diff === 'basic') return E.pick(['bag_simple','die']);
+    if(diff === 'challenge') return E.pick(['complement','spinner','die']);
     return E.pick(['bag_simple','complement','die','spinner']);
   }
   function pickCase(f){
