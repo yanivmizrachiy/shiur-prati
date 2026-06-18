@@ -10,6 +10,7 @@
 **ענף:** main · **מטרה:** למנוע מצב שבו `verify:deep` או כלי בדיקה משאירים קבצים modified ומבלבלים בין שינוי אמיתי לבין דוח שנוצר.
 
 ### שונה/נוסף
+0. `tools/verify-readonly-verifiers.mjs` + `verify:readonly` — guard שמוודא שכלי `verify-*` הם read-only כברירת מחדל, ושכתיבת דוחות מותרת רק מאחורי `--write`.
 1. `tools/verify-question-coverage-deep.mjs` — כברירת מחדל לא כותב מחדש את `QUESTION_COVERAGE_CENSUS_LATEST.md`; רענון רק עם `--write` או `TARGILIM_UPDATE_REPORTS=1`.
 2. `tools/verify-visual-coverage.mjs` — כברירת מחדל לא כותב מחדש את `VISUAL_COVERAGE_MATRIX.json`; רענון רק עם `--write` או `TARGILIM_UPDATE_REPORTS=1`.
 3. `tools/README.md`, `docs/README.md`, `tools/gen-visual-coverage-report.mjs` — תיעוד הרצת דוחות ידנית.
