@@ -4,7 +4,7 @@
 **Central rules:** see `RULES.md` (authoritative operating guide; this file is the status snapshot).  
 **Default branch:** `main`.
 **Live site:** GitHub Pages serves `generator/` from `main` — https://yanivmizrachiy.github.io/targilim/ . The live site reflects `main` only.  
-**Current repo state:** Phase 1 + PRs #21–#34 + PRs #46–#52 + main commit `7db6ab4` + the Pythagoras terminology guard + task-generation-only main UI guard + source-06 uncertainty deep coverage are merged into `main`. Local/GitHub sync is checked by `npm run verify:sync`.
+**Current repo state:** Phase 1 + PRs #21–#34 + PRs #46–#52 + main commit `7db6ab4` + the Pythagoras terminology guard + task-generation-only main UI guard + source-06 uncertainty deep coverage + topic-dropdown cleanliness guard are merged into `main`. Local/GitHub sync is checked by `npm run verify:sync`.
 **Package version:** `0.78.0`
 
 ## Executive snapshot
@@ -34,6 +34,7 @@ All merged to `main`, live, and `verify:deep`-green.
 
 | PR | Date | Improvement |
 |---|---|---|
+| main | 2026-06-18 | Added repo-foundation dropdown guard: `verify:topic-dropdown` checks 50 visible teacher-facing topics, no duplicate labels/values, and no internal jargon in the main topic selector. |
 | main | 2026-06-18 | Added source-06 uncertainty deep coverage: 33 PDF-mapped families across U7/U8 uncertainty, graphics/tables/pie/line/multi-source tasks, and `verify:uncertainty-source-deep`. |
 | main | 2026-06-18 | Removed teacher-mode exposure from the main generator UI; `index.html` is task-generation-only and guarded by `verify:task-ui`. |
 | main | 2026-06-17 | Pythagoras Hebrew terminology guard: G7-03 now uses "ניצב/ניצבים" and "יתר"; `verify:geometry-language` prevents "רגל/רגליים" from returning to Pythagoras output. |
@@ -73,6 +74,7 @@ npm run verify:deep
 - baseline and branding checks;
 - source lock and source bible checks;
 - source-06 uncertainty deep coverage check (`verify:uncertainty-source-deep`);
+- visible topic dropdown cleanliness check (`verify:topic-dropdown`);
 - task-generation-only main UI check (`verify:task-ui`);
 - coverage and stress checks;
 - question variety checks;
@@ -117,6 +119,7 @@ npm run verify:deep
 
 - Main page exposes only worksheet/task generation controls.
 - No teacher-mode toggle, gallery link, or visual-QA link appears in `generator/index.html`.
+- Topic selector exposes 50 teacher-facing topics with no duplicate visible labels/values and no internal jargon.
 - Copy whole question card as image for Word/Canva-style workflows.
 - Download whole question card as PNG.
 
@@ -168,11 +171,10 @@ Repository paths:
 
 ## Remaining high-value work
 
-1. **Legacy ↔ engine topic dedup (flagged, needs approval).** Several topics appear twice in the dropdown — a legacy generator (e.g. `geo.js` G7-03) and a `*-ENGINE` "גרסה חכמה". The legacy generators are lower quality (the #33/#34 fixes were on legacy files). Unifying each topic to its single smart engine would prevent label/diagram inconsistencies at the root.
-2. **U7-03 single-answer MCQ already exists** in `source-fit-extensions.js` (verified: U7-03-ENGINE emits MCQ with choices). Do **not** duplicate it. Select next content work only after checking existing engine coverage.
-3. Real A4 print review, with and without answer key.
-4. Manual copy-as-image paste test into Word/Canva/Docs.
-5. Optional future feature after approval only: source-question coverage gap for inequalities / A8-05.
+1. **U7-03 single-answer MCQ already exists** in `source-fit-extensions.js` (verified: U7-03-ENGINE emits MCQ with choices). Do **not** duplicate it. Select next content work only after checking existing engine coverage.
+2. Real A4 print review, with and without answer key.
+3. Manual copy-as-image paste test into Word/Canva/Docs.
+4. Optional future feature after approval only: source-question coverage gap for inequalities / A8-05.
 
 ## Release / CI gate
 

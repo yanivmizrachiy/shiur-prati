@@ -1,6 +1,6 @@
 # REQUIREMENTS_STATUS.md — Phase 1
 
-מצב הדרישות של פאזה 1 והסנכרונים שאחריה (נכון ל-2026-06-17). מקור-אמת: הקוד החי + `npm run verify:deep`.
+מצב הדרישות של פאזה 1 והסנכרונים שאחריה (נכון ל-2026-06-18). מקור-אמת: הקוד החי + `npm run verify:deep`.
 
 | # | דרישה | מצב | פירוט |
 |---|---|---|---|
@@ -15,9 +15,10 @@
 | 9 | נוטציה/גרפיקה מתמטית איכותית | ✅ קיים | KaTeX + SVG textbook-quality (verify:graphics-quality, verify:visual, verify:visual-coverage). |
 | 10 | רב־ברירה אמיתית | ✅ הושלם ומורחב | ערבוב אמיתי, אין דליפה (`.exset .mcq-correct` ניטרלי), מצב single עם תשובה אחת, ומצב multi אמיתי ב-`A7-04-ENGINE` עם 2+ תשובות נכונות. מאומת ב-`verify:multi-correct`. |
 | 11 | סיום: נקי, מתועד, מאומת, committed, pushed | ✅ ראו WORK_LOG / git | verify:deep ירוק, מתועד, committed, pushed (ראו WORK_LOG.md). |
+| 12 | dropdown נקי ומובן למורה | ✅ קיים ואומת | `verify:topic-dropdown` בודק 50 נושאים גלויים, בלי כפילות label/value ובלי jargon פנימי כמו מנוע/fallback/QA/Registry. |
 
 ## מה היה קיים ולא שונה (שימור)
-- מנוע ההפקה, 50 המנועים, עיגון-מקור, דה-דופ, מצב מורה, גלריה, QA חזותי, KaTeX/SVG.
+- מנוע ההפקה, 50 המנועים, עיגון-מקור, דה-דופ, KaTeX/SVG, וכלי QA פנימיים שאינם חלק מהממשק הראשי.
 - לוגיקת אי-דליפה ברב־ברירה (`.exset .mcq-choice.mcq-correct` ניטרלי) — הייתה קיימת ונכונה.
 
 ## מה הושלם בפאזה זו (חסר→מומש)

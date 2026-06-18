@@ -1,12 +1,12 @@
 # tools/ — מנועי בדיקה וכלי תחזוקה
 
-53 קבצים. כולם נטענים/נבדקים; אין כאן קוד מת. החלוקה:
+54 קבצים. כולם נטענים/נבדקים; אין כאן קוד מת. החלוקה:
 
 ## 1. ספריית טעינה משותפת
 - **`engine-load.mjs`** — טוען את כל ערכת המנועים (DOM stub, VM) ומחזיר
   `{ E, Teacher, pilotIds, sourceFitIds, callEngine }`. כל ה-verifiers מייבאים אותו.
 
-## 2. verifiers שמחווטים ל-`verify:deep` (34)
+## 2. verifiers שמחווטים ל-`verify:deep` (35)
 מורצים אוטומטית ב-`npm run verify:deep` (וב-CI). ראו `package.json` → `verify:all` / `verify:deep`.
 דוגמאות: `verify-task-generation-only-ui`, `verify-source-lock`, `verify-source-bible`, `verify-question-coverage-deep`,
 `verify-all-engines-stress`, `verify-topic-question-variety`, `verify-visual-quality-deep`,
@@ -14,7 +14,7 @@
 `verify-visual-coverage`, `verify-copy-export`, `verify-print-layout`,
 `verify-geometry-terminology`, `verify-repo-hygiene`, `verify-release-readiness-docs`,
 `verify-baseline-protection`, `verify-branding`, `verify-readonly-verifiers`,
-`verify-real-generator-runtime` ועוד.
+`verify-real-generator-runtime`, `verify-topic-dropdown-clean` ועוד.
 `verify-source-fit` כולל גם guard נגד חזרת מיפוי ישן של `A7-04/A7-05`.
 
 ## 3. מחוללי תיעוד (gen-*) — מורצים ידנית
@@ -46,6 +46,6 @@
 ```bash
 npm run verify:sync        # ודא שעובדים בריפו הנכון, נקי וזהה ל-GitHub
 npm run verify:workbench   # בדיקות מרכזיות נוחות לפני המשך עבודה
-npm run verify:deep        # כל ה-33 + שערי העומק
+npm run verify:deep        # כל שערי העומק
 node tools/<tool>.mjs       # כלי בודד
 ```

@@ -2,7 +2,7 @@
 # תרגילים — דף כללים מרכזי לבינה מלאכותית ולמפתחים
 
 Repository: `yanivmizrachiy/targilim` · Hebrew name: `תרגילים`
-**Last updated: 2026-06-17** · Baseline: 2026-06-14
+**Last updated: 2026-06-18** · Baseline: 2026-06-14
 
 > **This file is the central operating guide.** Any AI or developer must read it
 > (and `PROJECT_STATUS.md`) before any change. It overrides older claims found in
@@ -16,9 +16,12 @@ Repository: `yanivmizrachiy/targilim` · Hebrew name: `תרגילים`
 - A **Hebrew, RTL** smart math **exercise generator** for **Grades 7–8 only** (no Grade 9).
 - Fully source-bound: every question maps to one of the **10 approved source PDFs**.
 - It is a **print-first teaching product**, not an online auto-graded task.
-- Capabilities: single-exercise + numbered worksheet generation, mixed question
-  types, answer key, **teacher mode**, **engine gallery**, **visual-QA dashboard**,
-  and **image export** (copy/download a whole question as PNG).
+- Main-page capabilities: single-exercise + numbered worksheet generation,
+  mixed question types, answer key, print flow, and **image export**
+  (copy/download a whole question as PNG).
+- Historical/internal gallery, visual-QA, and teacher-support files may remain
+  in the repo for audits, but they are **not linked from `generator/index.html`**
+  and are not part of the primary product flow.
 - **Live site:** GitHub Pages serves `generator/` from `main`:
   https://yanivmizrachiy.github.io/targilim/
   - **The live site reflects `main` only.** Changes on open branches do **not**
@@ -90,6 +93,9 @@ All entries below are **merged to `main`, live, and `verify:deep`-green**. Newes
 
 | PR | Date | Improvement |
 |---|---|---|
+| main | 2026-06-18 | **Repo foundation guard** — added `verify:topic-dropdown` so the visible topic dropdown stays at 50 teacher-facing topics with no duplicates and no internal jargon. |
+| main | 2026-06-18 | **Source-06 uncertainty deep coverage** — 33 PDF-mapped families across U7/U8 uncertainty with tables, bar/pie/line graphs and multi-source tasks. |
+| main | 2026-06-18 | **Task-generation-only main UI** — teacher/gallery/visual-QA links are absent from `generator/index.html` and guarded by `verify:task-ui`. |
 | main | 2026-06-17 | **Pythagoras Hebrew terminology guard** — student and teacher wording now uses the standard Hebrew terms **ניצב/ניצבים** and **יתר**; `verify:geometry-language` prevents "רגל/רגליים" from returning to G7-03 Pythagoras output. |
 | **#52** | 2026-06-17 | **A8-03 count-and-value system word problem** — coins/stamps style elimination family added and documented. |
 | main `7db6ab4` | 2026-06-17 | **Source-fit/UI sync** — A7-05 aligned to value tables + first-quadrant graphs; A7-03/U7-01/U8-01 families expanded; mobile share reduced to copy-image only; premium typography guards added. |
@@ -112,7 +118,7 @@ Earlier history: PR #7/#8 (Phase 1, 50-engine generator), #15–#18 (A7-04 + str
 
 ---
 
-## 6. Current state (verified 2026-06-17)
+## 6. Current state (verified 2026-06-18)
 
 - The live site reflects `main`; GitHub Pages publishes `generator/` from `main`.
 - Local sync is checked with `npm run verify:sync`; it must pass before continuing work in a local copy.
@@ -120,10 +126,16 @@ Earlier history: PR #7/#8 (Phase 1, 50-engine generator), #15–#18 (A7-04 + str
 - **50 engine topics (`*-ENGINE`) / 0 fallback** — counted from `source-registry.js`.
 - **No `A8-04-ENGINE`** (A8-04 inequalities is legacy in `a8-03.js`; A8-05 percent equations is legacy too).
 - `verify:deep` aggregates the deep gates and includes `verify:premium-ui` + `verify:worksheet-polish` + `verify:multi-correct`.
+- The visible topic dropdown is guarded by `verify:topic-dropdown`: 50
+  teacher-facing topics, no duplicate visible labels/values, and no
+  internal jargon such as `fallback`, `QA`, `Registry`, or `מנוע`.
 - Real A7-04 multi-correct works; **U7-03 single-answer MCQ already exists** in `source-fit-extensions.js` — do **not** duplicate it.
 
-### Known follow-up (flagged, needs approval — not yet done)
-- **Legacy ↔ engine topic dedup.** Several topics appear **twice** in the dropdown — once as a legacy generator (e.g. `geo.js` G7-03) and once as a `*-ENGINE` "גרסה חכמה". The legacy generators are lower quality; the #33/#34 fixes were both on legacy files. Unifying each topic to its single smart engine would prevent a whole class of label/diagram inconsistencies at the root.
+### Guarded cleanup note
+- Legacy generator files may still exist where they are part of shipped
+  behavior or historical compatibility, but the main dropdown must show only a
+  clean teacher-facing topic list. Do not delete legacy files during cleanup
+  unless a verifier proves they are unreachable and unnecessary.
 
 ### Do NOT
 - Add Grade-8 numeric or uncertainty engines without **new** source intake.
