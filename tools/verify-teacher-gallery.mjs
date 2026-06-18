@@ -1,4 +1,4 @@
-// tools/verify-teacher-gallery.mjs  (verify:gallery)
+// tools/verify-teacher-gallery.mjs  (standalone historical/internal)
 // Gate for the engine gallery: every engine is reachable, the page builds its
 // cards from the live registry (all 50), offers grade/domain/provenance/search
 // filters, and renders samples LAZILY (no 50 heavy SVGs on first paint).

@@ -1,21 +1,20 @@
-// tools/verify-teacher-advanced-mode.mjs  (verify:teacher)
-// Gate for Teacher Advanced Mode: the toggle exists and is wired, every engine
-// exposes a full pedagogy meta for its teacher card, the teacher card markup is
-// student-print-safe (teacher-only + html2canvas-ignore), and the print
-// stylesheet hides all teacher-only chrome.
+// tools/verify-teacher-advanced-mode.mjs  (standalone historical/internal)
+// Historical/internal Teacher Advanced Mode gate: the main generator must not
+// expose the teacher toggle, while the archived Teacher API remains internally
+// loadable for old QA/workbench pages.
 import fs from 'node:fs';
 import { loadEngines } from './engine-load.mjs';
 
-const { E, Teacher, pilotIds, sourceFitIds, callEngine } = loadEngines();
+const { E, Teacher, pilotIds, sourceFitIds, callEngine } = loadEngines({ loadTeacher: true });
 const read = p => fs.readFileSync(p, 'utf8');
 let fails = 0;
 const check = (name, ok, extra) => { console.log((ok ? 'PASS' : 'FAIL') + ' — ' + name + (extra && !ok ? ' :: ' + extra : '')); if (!ok) fails++; };
 
-// 1. wiring in index.html
+// 1. main generator must stay task-generation-only
 const idx = read('generator/index.html');
-check('index.html loads teacher-mode.js', /teacher-mode\.js/.test(idx));
-check('index.html has teacher toggle button', /id="btnTeacherMode"/.test(idx) && /Teacher\.toggle\(\)/.test(idx));
-check('index.html links to the gallery', /gallery\.html/.test(idx));
+check('index.html does not load teacher-mode.js', !/teacher-mode\.js/.test(idx));
+check('index.html has no teacher toggle button', !/id="btnTeacherMode"/.test(idx) && !/Teacher\.toggle\(\)/.test(idx));
+check('index.html does not link the internal gallery', !/gallery\.html/.test(idx));
 
 // 2. teacher-mode API present
 check('Teacher API loaded', !!Teacher);

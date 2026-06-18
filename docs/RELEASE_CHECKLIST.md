@@ -7,6 +7,7 @@
 - Default branch: `main`.
 - Product version: `0.78.0`.
 - Current product state: 50 source-backed engines, 0 fallback topics, Hebrew RTL worksheet generator for Grades 7–8.
+- Main generator UI: task/exercise generation only; no teacher mode, gallery, or QA links in `generator/index.html`.
 - Phase 1 has been merged through PR #7 and PR #8.
 - Cleanup-only changes must not touch product code unless explicitly approved.
 
@@ -32,13 +33,13 @@ Required gates inside `verify:deep`:
 - `verify:visual`
 - `verify:family`
 - `verify:followups`
+- `verify:task-ui`
 - `verify:graphics-quality`
 - `verify:visual-coverage`
-- `verify:gallery`
-- `verify:visual-qa`
-- `verify:teacher`
-- `verify:teacher-controls`
 - `verify:copy-export`
+- `verify:premium-ui`
+- `verify:worksheet-polish`
+- `verify:multi-correct`
 - `verify:print-layout`
 - `verify:release-docs`
 
@@ -48,10 +49,9 @@ Required gates inside `verify:deep`:
 - 0 fallback topics.
 - All engines are locked to approved source material.
 - Source file 10 is sequencing/teaching context only and not a direct question source.
-- Teacher Advanced Mode remains opt-in and hidden from student print/export.
-- `generator/gallery.html` and `generator/visual-qa.html` build from the live registry.
+- Main generator remains task-generation-only.
 - Essential visual topics must produce visuals.
-- Copy-as-image remains available for the teacher workflow and has a PNG fallback when browser clipboard image writing is blocked.
+- Copy-as-image remains available for worksheet creation and has a PNG fallback when browser clipboard image writing is blocked.
 - UI and student-facing output remain Hebrew RTL.
 - Visible owner credit remains `יניב רז`.
 - Documentation indexes remain present: `docs/README.md`, `tools/README.md`, `PROJECT_STATUS.md`, and `REQUIREMENTS_STATUS.md`.
@@ -62,16 +62,13 @@ Required gates inside `verify:deep`:
 
 Automated checks are necessary but not enough. Before releasing product behavior changes:
 
-1. Open `generator/visual-qa.html`.
-2. Confirm the dashboard shows engines after a hard reload.
-3. Generate samples for visible engines.
-4. Mark each engine as: יפה / צריך תיקון / בעיה בשרטוט / בעיה בהדפסה / בעיה בטקסט.
-5. Export the QA JSON from the dashboard when doing a formal visual QA pass.
-6. Print at least one A4 worksheet with diagrams.
-7. Print at least one A4 worksheet with answer key open.
-8. Confirm teacher-only controls/cards do not appear in student print.
-9. In a real browser, click “העתק כתמונה” on a question containing a diagram.
-10. Paste the result into Word/Canva/Docs and confirm both Hebrew text and drawing are present.
+1. Open `generator/index.html`.
+2. Confirm the main page shows only task-generation controls and no teacher/gallery/QA links.
+3. Generate samples for visual topics.
+4. Print at least one A4 worksheet with diagrams.
+5. Print at least one A4 worksheet with answer key open.
+6. In a real browser, click “העתק כתמונה” on a question containing a diagram.
+7. Paste the result into Word/Canva/Docs and confirm both Hebrew text and drawing are present.
 
 ## Repo organization checks before merge
 

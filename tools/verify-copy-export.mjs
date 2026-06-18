@@ -1,68 +1,66 @@
 // tools/verify-copy-export.mjs  (verify:copy-export)
-// Gate for one-click copy/export: the payload builders produce correct, faithful
-// output for every kind across many engines — preserving Hebrew text, stripping
-// SVG/markup for the text kinds, keeping HTML for the html kinds, and carrying
-// the full teacher-card pedagogy. Also asserts the DOM export entry points exist.
+// Product gate for one-click task image copy/export. The main generator no
+// longer depends on teacher mode; this verifier checks the worksheet card
+// buttons and the shared export.js html2canvas pipeline directly.
 import fs from 'node:fs';
 import { loadEngines } from './engine-load.mjs';
 
-const { E, Teacher, pilotIds, sourceFitIds } = loadEngines();
+const { E, pilotIds, sourceFitIds } = loadEngines();
 const read = p => fs.readFileSync(p, 'utf8');
 let fails = 0;
-const check = (name, ok, extra) => { console.log((ok ? 'PASS' : 'FAIL') + ' — ' + name + (extra && !ok ? ' :: ' + extra : '')); if (!ok) fails++; };
+const check = (name, ok, extra = '') => {
+  console.log((ok ? 'PASS' : 'FAIL') + ' - ' + name + (extra && !ok ? ' :: ' + extra : ''));
+  if (!ok) fails++;
+};
 const hasHebrew = s => /[֐-׿]/.test(s);
-const hasTag = s => /<[a-zA-Z][^>]*>/.test(s);
 
-check('Teacher.buildCopyPayload present', Teacher && typeof Teacher.buildCopyPayload === 'function');
-check('Teacher.htmlToText present', Teacher && typeof Teacher.htmlToText === 'function');
+const setSrc = read('generator/exercise-set.js');
+const exportSrc = read('generator/export.js');
+const index = read('generator/index.html');
 
-// htmlToText strips svg + tags but keeps Hebrew
-const t = Teacher.htmlToText('<div class="qtext"><svg><text>x</text></svg>כמה זה <b>5+3</b>?</div>');
-check('htmlToText strips svg + markup, keeps text', !/svg|<b>/.test(t) && /כמה זה/.test(t) && /\[שרטוט\]/.test(t));
+check('index does not load teacher-mode.js for copy/export', !/teacher-mode\.js/.test(index));
+check('exercise cards render copy-as-image button', setSrc.indexOf('העתק כתמונה') >= 0);
+check('exercise cards render download-as-image button', setSrc.indexOf('הורד כתמונה') >= 0);
+check('image buttons call product export actions', /exImageCopy\(/.test(setSrc) && /exImageDownload\(/.test(setSrc));
+check('image button bar is excluded from copied images',
+  /<div class="ex-imgbar" data-html2canvas-ignore="true">/.test(setSrc));
+check('question number/type meta is ignored in copied images',
+  /<div class="qmeta" data-html2canvas-ignore="true">[\s\S]*?<span class="ex-num">/.test(setSrc));
+check('exercise-set settings meta is ignored in copied images',
+  /<div class="qmeta" data-html2canvas-ignore="true">[\s\S]*?meta\.gradeLabel[\s\S]*?meta\.diffLabel/.test(setSrc));
+
+check('captureExerciseCardAsPng exists', /function captureExerciseCardAsPng/.test(exportSrc));
+check('copyExerciseImage exists', /function copyExerciseImage/.test(exportSrc));
+check('downloadExerciseImage exists', /function downloadExerciseImage/.test(exportSrc));
+check('capture uses html2canvas', /html2canvas\(/.test(exportSrc));
+check('capture renders on a white background', /backgroundColor:\s*'#ffffff'/.test(exportSrc));
+check('capture renders at high resolution', /scale:\s*Math\.max\(3,/.test(exportSrc));
+check('capture waits for fonts before snapshot', /document\.fonts[\s\S]*?\.ready/.test(exportSrc));
+check('copy-as-image writes PNG ClipboardItem when supported',
+  /ClipboardItem/.test(exportSrc) && /navigator\.clipboard\.write/.test(exportSrc));
+check('copy-as-image falls back to a PNG download', /copyExerciseImage[\s\S]*?downloadBlob/.test(exportSrc));
+check('download uses object URL helper for the captured PNG',
+  /function downloadBlob\s*\(\s*blob\s*,\s*filename\s*\)/.test(exportSrc) &&
+  /URL\.createObjectURL\(blob\)/.test(exportSrc) &&
+  /URL\.revokeObjectURL/.test(exportSrc));
+check('image filename is targil-matematika-<n>.png', /targil-matematika-/.test(exportSrc));
+check('black-and-white capture path remains available', /grayscale|0\.299/.test(exportSrc));
 
 const ids = pilotIds.concat(sourceFitIds);
-let qBad = 0, qsBad = 0, tcBad = 0, htmlBad = 0;
+let bad = 0;
+let noHebrew = 0;
 for (const id of ids) {
   for (const qt of ['open', 'mcq', 'tf', 'mistake']) {
-    const ex = E.getEngineExercise(id, 'standard', qt) || (E.generateOne && E.generateOne(id, 'standard', qt));
+    const ex = E.getEngineExercise(id, 'standard', qt);
     if (!ex) continue;
-    const q = Teacher.buildCopyPayload(ex, 'question');
-    const qs = Teacher.buildCopyPayload(ex, 'question_solution');
-    const tc = Teacher.buildCopyPayload(ex, 'teacher_card');
-    const html = Teacher.buildCopyPayload(ex, 'html_full');
-    if (!q || hasTag(q) || /undefined|NaN/.test(q)) qBad++;
-    if (!qs || qs.indexOf('— פתרון —') < 0 || qs.length <= q.length) qsBad++;
-    const m = ex.meta || {};
-    if (!tc || tc.indexOf('כרטיס מורה') < 0 || (m.sourceFile && tc.indexOf(m.sourceFile) < 0) || (m.questionFamily && tc.indexOf(m.questionFamily) < 0)) tcBad++;
-    if (!html || html.indexOf(ex.questionHTML) < 0 || html.indexOf('solution') < 0) htmlBad++;
+    const q = String(ex.questionHTML || '');
+    const a = String(ex.answerHTML || '');
+    if (!q || !a || /undefined|NaN/.test(q + a)) bad++;
+    if (!hasHebrew(q + a)) noHebrew++;
   }
 }
-check('copy "question" is clean text for all engines', qBad === 0, qBad + ' bad');
-check('copy "question+solution" appends the solution', qsBad === 0, qsBad + ' bad');
-check('copy "teacher card" carries source + family + pedagogy', tcBad === 0, tcBad + ' bad');
-check('export HTML keeps question markup + solution block', htmlBad === 0, htmlBad + ' bad');
-
-// faithfulness spot-check: a known Hebrew question round-trips its text
-const exG = E.getEngineExercise('G8-09-ENGINE', 'standard', 'open');
-check('payload preserves Hebrew + formulas', hasHebrew(Teacher.buildCopyPayload(exG, 'question')));
-
-// DOM export entry points exist in source
-const src = read('generator/teacher-mode.js');
-['exportPNG', 'exportHTML', 'addToWorksheet', 'exportWorksheet'].forEach(fn =>
-  check('export entry point ' + fn + ' implemented', new RegExp('Teacher\\.' + fn + '\\s*=\\s*function').test(src)));
-check('PNG export uses html2canvas', /html2canvas\(/.test(src));
-check('downloads use Blob + object URL', /new Blob\(/.test(src) && /createObjectURL/.test(src));
-
-// copy-as-image: the whole question + drawing to the clipboard (paste into Canva/Word)
-check('copyImage implemented', /Teacher\.copyImage\s*=\s*function/.test(src));
-check('copyImage captures the card with html2canvas', /copyImage[\s\S]*?html2canvas\(/.test(src));
-check('copyImage writes an image to the clipboard (ClipboardItem)', /ClipboardItem\(\{\s*'image\/png'|ClipboardItem\(\{ 'image\/png'/.test(src) && /clipboard\.write\(/.test(src));
-check('copyImage falls back to a PNG download when blocked', /copyImage[\s\S]*?download\(/.test(src));
-
-// copy-as-image must not include worksheet numbering/type/settings chips.
-const setSrc = read('generator/exercise-set.js');
-check('question number/type meta is ignored in copied images', /<div class="qmeta" data-html2canvas-ignore="true">[\s\S]*?<span class="ex-num">/.test(setSrc));
-check('exercise-set settings meta is ignored in copied images', /<div class="qmeta" data-html2canvas-ignore="true">[\s\S]*?meta\.gradeLabel[\s\S]*?meta\.diffLabel/.test(setSrc));
+check('all engine copy/export candidates have valid question + answer HTML', bad === 0, bad + ' bad');
+check('copy/export candidates preserve Hebrew text', noHebrew === 0, noHebrew + ' without Hebrew');
 
 console.log(fails ? 'COPY_EXPORT_FAIL (' + fails + ')' : 'COPY_EXPORT_PASS');
 process.exit(fails ? 1 : 0);

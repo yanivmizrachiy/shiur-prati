@@ -4,7 +4,7 @@
 **Central rules:** see `RULES.md` (authoritative operating guide; this file is the status snapshot).  
 **Default branch:** `main`.
 **Live site:** GitHub Pages serves `generator/` from `main` — https://yanivmizrachiy.github.io/targilim/ . The live site reflects `main` only.  
-**Current repo state:** Phase 1 + PRs #21–#34 + PRs #46–#52 + main commit `7db6ab4` + the Pythagoras terminology guard are merged into `main`. Local/GitHub sync is checked by `npm run verify:sync`.
+**Current repo state:** Phase 1 + PRs #21–#34 + PRs #46–#52 + main commit `7db6ab4` + the Pythagoras terminology guard + task-generation-only main UI guard are merged into `main`. Local/GitHub sync is checked by `npm run verify:sync`.
 **Package version:** `0.78.0`
 
 ## Executive snapshot
@@ -14,9 +14,8 @@
 - Fallback topics: **0 fallback**.
 - The generator is source-bound to the approved intake PDFs.
 - Source file 10 is sequencing/teaching context only; it is not a direct question source.
-- Teacher Advanced Mode is implemented and opt-in.
-- Engine gallery is implemented at `generator/gallery.html`.
-- Human visual QA dashboard is implemented at `generator/visual-qa.html`.
+- Main generator UI is task-generation-only: no teacher mode, gallery, or QA links in `generator/index.html`.
+- Historical/internal QA workbench files remain in the repo, but they are not linked from the main generator and are not part of the primary product flow.
 - Visual coverage is enforced by `verify:visual-coverage` inside `verify:deep`.
 - Copy/export includes copy-as-image for whole question cards, including drawings.
 - Documentation is indexed with `docs/README.md` and `tools/README.md`.
@@ -35,6 +34,7 @@ All merged to `main`, live, and `verify:deep`-green.
 
 | PR | Date | Improvement |
 |---|---|---|
+| main | 2026-06-18 | Removed teacher-mode exposure from the main generator UI; `index.html` is task-generation-only and guarded by `verify:task-ui`. |
 | main | 2026-06-17 | Pythagoras Hebrew terminology guard: G7-03 now uses "ניצב/ניצבים" and "יתר"; `verify:geometry-language` prevents "רגל/רגליים" from returning to Pythagoras output. |
 | #52 | 2026-06-17 | A8-03 count-and-value system word problem (coins/stamps elimination). |
 | `7db6ab4` | 2026-06-17 | Source-fit/UI sync: A7-05 value tables + first-quadrant graphs, A7-03/U7-01/U8-01 family expansion, copy-image-only mobile dock, premium typography guards. |
@@ -53,7 +53,7 @@ All merged to `main`, live, and `verify:deep`-green.
 | #27 | 2026-06-15 | Worksheet polish — sharp math rectangles + no question-type badge. |
 | #21–#24 | 2026-06-15 | UI premium round — professional card + typography; single untitled answer box; premium image export + color/שחור-לבן only; `verify:premium-ui` guard. |
 
-The book/learning-material viewer is served from the site (no GitHub Pages 404). `verify:deep` now includes `verify:premium-ui`, `verify:worksheet-polish` and `verify:multi-correct`.
+The book/learning-material viewer is served from the site (no GitHub Pages 404). `verify:deep` now includes `verify:task-ui`, `verify:premium-ui`, `verify:worksheet-polish` and `verify:multi-correct`.
 
 ## Current verification gates
 
@@ -71,6 +71,7 @@ npm run verify:deep
 - repository hygiene check;
 - baseline and branding checks;
 - source lock and source bible checks;
+- task-generation-only main UI check (`verify:task-ui`);
 - coverage and stress checks;
 - question variety checks;
 - SVG/visual/graphics checks;
@@ -78,9 +79,6 @@ npm run verify:deep
 - question-family provenance checks;
 - follow-up generation checks;
 - geometry Hebrew terminology check (`verify:geometry-language`);
-- gallery and visual QA dashboard checks;
-- Teacher Advanced Mode checks;
-- teacher controls checks;
 - copy/export checks, including copy-as-image entry points;
 - print-layout checks;
 - release documentation freshness check.
@@ -94,7 +92,7 @@ npm run verify:deep
 - Support mixed question types.
 - Support answer key toggle.
 - Support browser print.
-- Student print hides teacher-only controls/cards.
+- Student print keeps the generated worksheet focused on the tasks and answer key.
 - Includes writing space shaped by question type.
 
 ### Engine layer
@@ -113,22 +111,17 @@ npm run verify:deep
 - Multi-answer wording exists and the answer key supports 1..N correct answers.
 - **Real multi-correct MCQ is `DONE` and merged (PR #28).** Root cause: the `getEngineExercise` wrapper chain dropped the `mcqMode` argument, so the already-implemented A7-04 multi-correct path was unreachable (emitted one correct even in multi mode). PR #28 (`fix/a704-multi-correct-clean-v2`, the clean path — the earlier #25 was closed/superseded) forwards `opts` through every wrapper and wires `tools/verify-multi-correct-coverage.mjs` into `verify:deep`. Verified: A7-04 multi → 2 correct, single → 1 correct.
 
-### Teacher layer
+### Task creation / export layer
 
-- Teacher Advanced Mode toggle.
-- Per-question teacher card.
-- Refresh / easier / harder / change type / new numbers controls.
-- Follow-up modes.
-- Show/hide solution, source and graphic.
-- Copy question / question+solution / teacher card.
+- Main page exposes only worksheet/task generation controls.
+- No teacher-mode toggle, gallery link, or visual-QA link appears in `generator/index.html`.
 - Copy whole question card as image for Word/Canva-style workflows.
-- Export HTML / PNG.
-- Add-to-worksheet flow.
+- Download whole question card as PNG.
 
-### Visual and QA layer
+### Internal visual and QA layer
 
-- `generator/gallery.html` displays engines from the live registry.
-- `generator/visual-qa.html` lets a teacher perform human visual QA on engines.
+- Historical/internal pages can display engines from the live registry and support visual review.
+- These pages are not linked from the main generator UI.
 - Visual QA statuses: יפה, צריך תיקון, בעיה בשרטוט, בעיה בהדפסה, בעיה בטקסט.
 - Visual QA notes are stored locally in the browser and can be exported as JSON.
 - Visual expectation badges identify topics where drawings are essential/recommended/optional.
@@ -163,8 +156,6 @@ Do not do any of the following without explicit approval:
 Repository paths:
 
 - Main generator: `generator/index.html`
-- Engine gallery: `generator/gallery.html`
-- Visual QA dashboard: `generator/visual-qa.html`
 - Digital source book: `generator/book.html`
 - Source Bible: `docs/SOURCE_BIBLE.md`
 - Release checklist: `docs/RELEASE_CHECKLIST.md`
@@ -177,11 +168,9 @@ Repository paths:
 
 1. **Legacy ↔ engine topic dedup (flagged, needs approval).** Several topics appear twice in the dropdown — a legacy generator (e.g. `geo.js` G7-03) and a `*-ENGINE` "גרסה חכמה". The legacy generators are lower quality (the #33/#34 fixes were on legacy files). Unifying each topic to its single smart engine would prevent label/diagram inconsistencies at the root.
 2. **U7-03 single-answer MCQ already exists** in `source-fit-extensions.js` (verified: U7-03-ENGINE emits MCQ with choices). Do **not** duplicate it. Select next content work only after checking existing engine coverage.
-3. Human visual QA across engines using `generator/visual-qa.html`.
-4. Real A4 print review, with and without answer key.
-5. Confirm teacher-only content never appears in student print/export.
-6. Manual copy-as-image paste test into Word/Canva/Docs.
-7. Optional future feature after approval only: source-question coverage gap for inequalities / A8-05.
+3. Real A4 print review, with and without answer key.
+4. Manual copy-as-image paste test into Word/Canva/Docs.
+5. Optional future feature after approval only: source-question coverage gap for inequalities / A8-05.
 
 ## Release / CI gate
 

@@ -20,7 +20,7 @@ function makeExercise(id,diff,qtype,isEngine,E,mcqMode){
   if(isEngine){
     let ex=tryEngineExercise(E,id,diff,qtype,mcqMode);
     if(!ex&&qtype!=='open')ex=tryEngineExercise(E,id,diff,'open',mcqMode); // safe fallback per item
-    // ensure pedagogy meta is present for Teacher Advanced Mode
+    // Keep pedagogy metadata attached for answer keys, diagnostics, and exports.
     if(ex&&!ex.meta&&typeof E.buildMeta==='function'){try{ex.meta=E.buildMeta(id,ex.qtype||qtype,diff,ex.questionFamily);}catch(e){}}
     return ex;
   }
@@ -91,7 +91,7 @@ function generateSet(){
     cls:{geometry:'geo',algebra:'alg',numeric:'num',uncertainty:'unc'}[domainKey]||'num',
     diffLabel:{basic:'רמה 1',standard:'רמה 2',challenge:'רמה 3',ladder:'סולם רמות 1-3'}[selectedDiff]||selectedDiff
   };
-  // publish set context so Teacher Advanced Mode can regenerate single items
+  // Publish the current set context for diagnostics and export helpers.
   window.__exsetCtx={id:id,isEngine:isEngine,diff:selectedDiff,topicLabel:topicLabel,cls:meta.cls,mcqMode:mcqMode,exercises:exercises};
   renderExerciseSet(meta,exercises);
 }
@@ -158,12 +158,9 @@ function renderExerciseSet(meta,exercises){
   out.innerHTML=html;
   renderMathInElement(out,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false});
   if(typeof applyVisualMode==='function')applyVisualMode();
-  // Teacher Advanced Mode decoration (teacher cards + per-question controls)
-  if(window.Teacher&&typeof window.Teacher.decorateSet==='function')window.Teacher.decorateSet();
 }
 
-// Per-question image actions — available to every teacher, not only in teacher
-// mode. They snapshot the whole card (text + diagram + answer box) through the
+// Per-question image actions snapshot the whole card (text + diagram + answer box) through the
 // unified premium pipeline in export.js; the buttons are data-html2canvas-ignore
 // so they never appear in the captured image.
 // Reset any button left in the persistent "copied" (green) state — called when the

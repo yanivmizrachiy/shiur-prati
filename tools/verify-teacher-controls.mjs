@@ -1,4 +1,4 @@
-// tools/verify-teacher-controls.mjs  (verify:teacher-controls)
+// tools/verify-teacher-controls.mjs  (standalone historical/internal)
 // Gate for the per-question teacher controls: every advertised edit action is
 // implemented on the Teacher API and wired into the rendered control bar —
 // regenerate / new numbers / easier / harder / change type / follow-up /
@@ -6,7 +6,7 @@
 import fs from 'node:fs';
 import { loadEngines } from './engine-load.mjs';
 
-const { Teacher } = loadEngines();
+const { Teacher } = loadEngines({ loadTeacher: true });
 const read = p => fs.readFileSync(p, 'utf8');
 let fails = 0;
 const check = (name, ok, extra) => { console.log((ok ? 'PASS' : 'FAIL') + ' — ' + name + (extra && !ok ? ' :: ' + extra : '')); if (!ok) fails++; };

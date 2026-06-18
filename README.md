@@ -8,6 +8,7 @@ Current status:
 
 - 50 מנועי ENGINE פעילים.
 - 0 נושאי fallback.
+- Main generator UI is task-generation-only: no teacher mode, gallery, or QA links in `generator/index.html`.
 - Main quality gate: `npm run verify:deep`.
 - Local/GitHub sync gate: `npm run verify:sync`.
 - Workbench gate before continuing feature work: `npm run verify:workbench`.
@@ -16,8 +17,6 @@ Current status:
 Entry points:
 
 - generator/index.html
-- generator/gallery.html
-- generator/visual-qa.html
 - generator/book.html
 - docs/README.md
 - tools/README.md

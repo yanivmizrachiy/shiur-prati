@@ -1,5 +1,6 @@
 // tools/verify-release-readiness-docs.mjs
-// Prevents release/PR documentation from drifting behind the actual 50-engine product.
+// Prevents release/PR documentation from drifting behind the actual 50-engine,
+// task-generation-only product.
 import fs from 'node:fs';
 
 let fails = 0;
@@ -33,17 +34,31 @@ const visualQa = read(files.visualQa);
 const gallery = read(files.gallery);
 
 check('README reflects 50-engine state', /50\s+מנועי/.test(readme) && /0\s+נושאי fallback/.test(readme));
-check('README links the visual QA dashboard', readme.includes('generator/visual-qa.html'));
+check('README records task-generation-only main UI',
+  readme.includes('task-generation-only') && readme.includes('generator/index.html'));
+check('README does not list gallery/visual-QA as regular entry points',
+  !readme.includes('generator/gallery.html') && !readme.includes('generator/visual-qa.html'));
 check('PROJECT_STATUS is refreshed to 2026-06-14', status.includes('2026-06-14'));
 check('PROJECT_STATUS records 50 engines and 0 fallback', status.includes('50') && /0\s+fallback/.test(status));
 check('PROJECT_STATUS mentions GitHub Actions success requirement', status.includes('GitHub Actions') && status.includes('verify:deep'));
 check('release checklist has merge safety rules', checklist.includes('Do not merge to `main`') && checklist.includes('explicit approval'));
-check('release checklist requires human visual/print QA', checklist.includes('generator/visual-qa.html') && checklist.includes('Print') && checklist.includes('Human QA'));
+check('release checklist requires task-only UI plus print/copy QA',
+  checklist.includes('task/exercise generation only') &&
+  checklist.includes('generator/index.html') &&
+  checklist.includes('Print') &&
+  checklist.includes('העתק כתמונה'));
 check('hardening report documents CI + QA dashboard', hardening.includes('GitHub Actions deep gate') && hardening.includes('Visual QA dashboard'));
 check('workflow runs verify:deep', workflow.includes('npm run verify:deep'));
 check('workflow can be manually dispatched', workflow.includes('workflow_dispatch'));
 check('package exposes verify:release-docs', !!(pkg.scripts && pkg.scripts['verify:release-docs']));
+check('package exposes verify:task-ui', !!(pkg.scripts && pkg.scripts['verify:task-ui']));
+check('package no longer exposes teacher/gallery/visual-QA aliases',
+  !['verify:teacher', 'verify:teacher-controls', 'verify:gallery', 'verify:visual-qa']
+    .some(k => Object.prototype.hasOwnProperty.call(pkg.scripts || {}, k)));
+check('verify:all includes task-only UI gate', !!(pkg.scripts && pkg.scripts['verify:all'] || '').includes('verify:task-ui'));
 check('verify:deep includes release docs gate', !!(pkg.scripts && pkg.scripts['verify:deep'] || '').includes('verify:release-docs'));
+check('verify:deep no longer requires teacher/gallery/visual-QA gates',
+  !/verify:teacher|verify:teacher-controls|verify:gallery|verify:visual-qa/.test((pkg.scripts && pkg.scripts['verify:deep']) || ''));
 check('visual QA uses live registry, not hardcoded engine list', visualQa.includes('SOURCE_REGISTRY') && visualQa.includes('-ENGINE$'));
 check('gallery uses live registry, not hardcoded engine list', gallery.includes('SOURCE_REGISTRY') && gallery.includes('-ENGINE'));
 check('visible credit rule is preserved in docs', readme.includes('יניב רז') || status.includes('יניב רז') || checklist.includes('יניב רז'));

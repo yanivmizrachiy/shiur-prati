@@ -1,6 +1,6 @@
 # tools/ — מנועי בדיקה וכלי תחזוקה
 
-51 קבצים. כולם נטענים/נבדקים; אין כאן קוד מת. החלוקה:
+52 קבצים. כולם נטענים/נבדקים; אין כאן קוד מת. החלוקה:
 
 ## 1. ספריית טעינה משותפת
 - **`engine-load.mjs`** — טוען את כל ערכת המנועים (DOM stub, VM) ומחזיר
@@ -8,12 +8,11 @@
 
 ## 2. verifiers שמחווטים ל-`verify:deep` (33)
 מורצים אוטומטית ב-`npm run verify:deep` (וב-CI). ראו `package.json` → `verify:all` / `verify:deep`.
-דוגמאות: `verify-source-lock`, `verify-source-bible`, `verify-question-coverage-deep`,
+דוגמאות: `verify-task-generation-only-ui`, `verify-source-lock`, `verify-source-bible`, `verify-question-coverage-deep`,
 `verify-all-engines-stress`, `verify-topic-question-variety`, `verify-visual-quality-deep`,
 `verify-question-family-provenance`, `verify-follow-up-generation`, `verify-graphics-quality`,
-`verify-visual-coverage`, `verify-teacher-advanced-mode`, `verify-teacher-gallery`,
-`verify-teacher-controls`, `verify-copy-export`, `verify-print-layout`,
-`verify-visual-qa-dashboard`, `verify-geometry-terminology`, `verify-repo-hygiene`, `verify-release-readiness-docs`,
+`verify-visual-coverage`, `verify-copy-export`, `verify-print-layout`,
+`verify-geometry-terminology`, `verify-repo-hygiene`, `verify-release-readiness-docs`,
 `verify-baseline-protection`, `verify-branding`, `verify-readonly-verifiers`,
 `verify-real-generator-runtime` ועוד.
 `verify-source-fit` כולל גם guard נגד חזרת מיפוי ישן של `A7-04/A7-05`.
@@ -33,6 +32,9 @@
 - `verify-variety.mjs` (קודם ל-`verify-topic-question-variety.mjs`)
 - `verify-worksheet-print-quality.mjs` (קודם ל-`verify-print-layout.mjs`)
 - `verify-phase2-static.mjs` · `verify-phase3a-static.mjs` (בדיקות פאזה היסטוריות)
+- `verify-teacher-advanced-mode.mjs` · `verify-teacher-controls.mjs`
+- `verify-teacher-gallery.mjs` · `verify-visual-qa-dashboard.mjs`
+  (כלים פנימיים/היסטוריים; אינם חלק מהממשק הראשי ואינם ב-`verify:deep`)
 
 ## 5. כלי תחזוקה נוספים
 - **`verify-repo-sync.mjs`** — בדיקת סנכרון מקומי מול `origin/main` ומול GitHub; מורץ דרך `npm run verify:sync`.
@@ -44,6 +46,6 @@
 ```bash
 npm run verify:sync        # ודא שעובדים בריפו הנכון, נקי וזהה ל-GitHub
 npm run verify:workbench   # בדיקות מרכזיות נוחות לפני המשך עבודה
-npm run verify:deep        # כל ה-32 + שערי העומק
+npm run verify:deep        # כל ה-33 + שערי העומק
 node tools/<tool>.mjs       # כלי בודד
 ```

@@ -8,7 +8,8 @@
 //   • image export goes through the unified, premium html2canvas pipeline with a
 //     clipboard→PNG-download fallback and device-resolution, white-background,
 //     fonts-ready capture
-//   • teacher chrome stays out of the exported image (data-html2canvas-ignore)
+//   • the main generator stays focused on task creation, with no teacher/workbench
+//     chrome exposed in index.html
 // Pure source checks — no DOM, no engine load — so it is fast and deterministic.
 import fs from 'node:fs';
 
@@ -19,7 +20,6 @@ const check = (name, ok, extra) => { console.log((ok ? 'PASS' : 'FAIL') + ' — 
 const index = read('generator/index.html');
 const setSrc = read('generator/exercise-set.js');
 const exportSrc = read('generator/export.js');
-const teacherSrc = read('generator/teacher-mode.js');
 const styleSrc = read('generator/style.css');
 const mobileShareSrc = read('generator/mobile-share.js');
 const mobilePolishSrc = read('generator/mobile-polish.css');
@@ -78,24 +78,28 @@ check('no split work-area (.work-area removed)', setSrc.indexOf('class="work-are
 check('no split "דרך:" label', setSrc.indexOf('work-label">דרך:') < 0 && setSrc.indexOf('>דרך:<') < 0);
 check('no split "תשובה:" work label', setSrc.indexOf('work-label">תשובה:') < 0);
 
-// ── 3b. No developer/repo jargon in the regular teacher view ──
-// Teachers see pedagogy, not repo words. Check the VISIBLE text of index.html
+// ── 3b. No developer/repo jargon in the regular generator view ──
+// Users see task controls, not repo words. Check the VISIBLE text of index.html
 // (scripts/styles/tags stripped, so code identifiers and src paths don't count).
 const indexVisible = index
   .replace(/<script[\s\S]*?<\/script>/gi, ' ')
   .replace(/<style[\s\S]*?<\/style>/gi, ' ')
   .replace(/<[^>]+>/g, ' ');
 ['מנוע', 'מקור', 'QA', 'fallback', 'Registry'].forEach(w =>
-  check('teacher view has no "' + w + '"', indexVisible.indexOf(w) < 0));
-check('no "גלריית מנועים" link text', index.indexOf('גלריית מנועים') < 0);
-check('no "QA חזותי" link text', index.indexOf('QA חזותי') < 0);
+  check('main generator view has no "' + w + '"', indexVisible.indexOf(w) < 0));
+check('main generator has no teacher mode text', indexVisible.indexOf('מצב מורה') < 0);
+check('main generator has no gallery/visual-QA links',
+  !/href="(?:gallery\.html|visual-qa\.html)/.test(index) &&
+  indexVisible.indexOf('גלריית') < 0 &&
+  indexVisible.indexOf('QA חזותי') < 0 &&
+  indexVisible.indexOf('בדיקת שרטוטים') < 0);
 // Topic-dropdown labels are cleaned of internal markers (✦ / מנוע / גרסה חכמה) at display time.
 const coreSrc = read('generator/core.js');
 check('cleanTopicLabel exists and strips internal markers', /function cleanTopicLabel/.test(coreSrc) && /✦/.test(coreSrc) && /מנוע/.test(coreSrc));
 check('topic dropdown applies cleanTopicLabel', /cleanTopicLabel\(t\[1\]\)/.test(coreSrc));
 check('worksheet title applies cleanTopicLabel', /cleanTopicLabel\(/.test(setSrc));
 // No source-file jargon ("מקור קובץ NN") in ANY generator output — diagram
-// captions, question/answer text, etc. Teachers/students must never see repo
+// captions, question/answer text, etc. Users/students must never see repo
 // provenance like "מקור קובץ 06". Scans every generator + engine .js file.
 const genJsFiles = [];
 for (const dir of ['generator', 'generator/engine']) {
@@ -114,9 +118,10 @@ check('capture supports black-and-white output', /grayscale|0\.299/.test(exportS
 check('copy-as-image falls back to a PNG download', /copyExerciseImage[\s\S]*?ClipboardItem[\s\S]*?downloadBlob/.test(exportSrc));
 check('image filename is targil-matematika-<n>.png', /targil-matematika-/.test(exportSrc));
 
-// ── 5. Teacher chrome never leaks into the exported image ──
-check('teacher control bar is html2canvas-ignored', /teacher-controls teacher-only" data-html2canvas-ignore="true"/.test(teacherSrc));
-check('teacher card is html2canvas-ignored', /teacher-card teacher-only" data-html2canvas-ignore="true"/.test(teacherSrc));
+// ── 5. Main generator is task-creation-only ──
+check('index.html does not load teacher-mode.js', !/teacher-mode\.js/.test(index));
+check('index.html has no teacher toggle button', !/id="btnTeacherMode"/.test(index) && !/Teacher\.toggle\(\)/.test(index));
+check('exercise-set does not decorate teacher controls', !/Teacher\.decorateSet/.test(setSrc));
 
 // ── 6. Learning-material viewer (book): served from the site, no 404, no repo paths ──
 const bookJs = read('generator/book.js');

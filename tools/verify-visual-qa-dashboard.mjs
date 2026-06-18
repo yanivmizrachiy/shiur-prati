@@ -1,5 +1,5 @@
 // tools/verify-visual-qa-dashboard.mjs
-// Static + engine reachability gate for the teacher visual QA dashboard.
+// Static + engine reachability gate for the internal visual QA dashboard.
 import fs from 'node:fs';
 import { loadEngines } from './engine-load.mjs';
 
@@ -15,7 +15,7 @@ const html = read('generator/visual-qa.html');
 const index = read('generator/index.html');
 const gallery = read('generator/gallery.html');
 
-check('index links to visual QA dashboard', index.includes('visual-qa.html'));
+check('main generator does not expose the internal visual QA dashboard', !index.includes('visual-qa.html'));
 check('gallery page remains present', gallery.includes('גלריית מנועים'));
 check('visual QA is RTL Hebrew', html.includes('<html lang="he" dir="rtl">'));
 check('visual QA loads full engine stack', [

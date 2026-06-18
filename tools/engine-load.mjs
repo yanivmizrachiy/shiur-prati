@@ -1,12 +1,13 @@
 // tools/engine-load.mjs
 // Shared loader: boots the full browser engine stack inside a Node VM with a
 // minimal DOM/window/TOPICS stub, using the REAL question-types renderers so
-// generated questionHTML/answerHTML can be inspected. Returns { E, pilotIds,
-// sourceFitIds, callEngine }.
+// generated questionHTML/answerHTML can be inspected. Teacher mode is not loaded
+// by default; historical/internal teacher verifiers must opt in explicitly.
+// Returns { E, Teacher, pilotIds, sourceFitIds, callEngine }.
 import fs from 'node:fs';
 import vm from 'node:vm';
 
-export function loadEngines() {
+export function loadEngines(options = {}) {
   const noop = () => {};
   const elStub = { value: '', style: {}, addEventListener: noop, appendChild: noop, classList: { add: noop, remove: noop, toggle: noop, contains: () => false } };
   const documentStub = {
@@ -48,9 +49,9 @@ export function loadEngines() {
     if (!fs.existsSync(p)) continue;
     vm.runInContext(fs.readFileSync(p, 'utf8'), sandbox, { filename: f });
   }
-  // teacher-mode lives in generator/ (not generator/engine/); load it so its
-  // pure API (window.Teacher) is available to the teacher/copy-export verifiers.
-  if (fs.existsSync('generator/teacher-mode.js')) {
+  // teacher-mode lives in generator/ (not generator/engine/). It is intentionally
+  // opt-in so product gates do not silently depend on the retired main UI layer.
+  if (options.loadTeacher === true && fs.existsSync('generator/teacher-mode.js')) {
     vm.runInContext(fs.readFileSync('generator/teacher-mode.js', 'utf8'), sandbox, { filename: 'teacher-mode.js' });
   }
   const E = sandbox.window.TargilimEngine;
