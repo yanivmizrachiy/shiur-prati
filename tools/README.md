@@ -6,7 +6,7 @@
 - **`engine-load.mjs`** — טוען את כל ערכת המנועים (DOM stub, VM) ומחזיר
   `{ E, Teacher, pilotIds, sourceFitIds, callEngine }`. כל ה-verifiers מייבאים אותו.
 
-## 2. verifiers שמחווטים ל-`verify:deep` (35)
+## 2. verifiers שמחווטים ל-`verify:deep` (36)
 מורצים אוטומטית ב-`npm run verify:deep` (וב-CI). ראו `package.json` → `verify:all` / `verify:deep`.
 דוגמאות: `verify-task-generation-only-ui`, `verify-source-lock`, `verify-source-bible`, `verify-question-coverage-deep`,
 `verify-all-engines-stress`, `verify-topic-question-variety`, `verify-visual-quality-deep`,
@@ -14,6 +14,7 @@
 `verify-visual-coverage`, `verify-copy-export`, `verify-print-layout`,
 `verify-geometry-terminology`, `verify-repo-hygiene`, `verify-release-readiness-docs`,
 `verify-baseline-protection`, `verify-branding`, `verify-readonly-verifiers`,
+`verify-math-bidi-quality`,
 `verify-real-generator-runtime`, `verify-topic-dropdown-clean` ועוד.
 `verify-source-fit` כולל גם guard נגד חזרת מיפוי ישן של `A7-04/A7-05`.
 
@@ -28,7 +29,7 @@
 
 ## 4. verifiers עצמאיים (לא ב-`verify:deep`) — להרצה ידנית/היסטורית
 לא חלק משער האיכות; שמורים לבדיקות ממוקדות ולמעקב. **אין למחוק** (כלל בטיחות):
-- `verify-geometry-diagram-quality.mjs` · `verify-math-bidi-quality.mjs`
+- `verify-geometry-diagram-quality.mjs`
 - `verify-variety.mjs` (קודם ל-`verify-topic-question-variety.mjs`)
 - `verify-worksheet-print-quality.mjs` (קודם ל-`verify-print-layout.mjs`)
 - `verify-phase2-static.mjs` · `verify-phase3a-static.mjs` (בדיקות פאזה היסטוריות)

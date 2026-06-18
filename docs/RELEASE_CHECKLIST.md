@@ -34,6 +34,7 @@ Required gates inside `verify:deep`:
 - `verify:family`
 - `verify:followups`
 - `verify:task-ui`
+- `verify:math-bidi`
 - `verify:graphics-quality`
 - `verify:visual-coverage`
 - `verify:copy-export`
@@ -53,6 +54,7 @@ Required gates inside `verify:deep`:
 - Essential visual topics must produce visuals.
 - Copy-as-image remains available for worksheet creation and has a PNG fallback when browser clipboard image writing is blocked.
 - UI and student-facing output remain Hebrew RTL.
+- Hebrew/math output must pass strict BiDi and wording checks, including ratios, units, and SVG labels.
 - Visible owner credit remains `יניב רז`.
 - Documentation indexes remain present: `docs/README.md`, `tools/README.md`, `PROJECT_STATUS.md`, and `REQUIREMENTS_STATUS.md`.
 - Main exercise count selector remains 1–10 unless a future requirement explicitly changes it.

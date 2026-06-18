@@ -18,13 +18,38 @@
     point: function(x, y){ return '$(' + x + ',' + y + ')$'; }
   };
 
+  function texifyRawExpr(raw){
+    return String(raw).trim()
+      .replace(/π/g, '\\pi ')
+      .replace(/²/g, '^2')
+      .replace(/³/g, '^3')
+      .replace(/·/g, '\\cdot ')
+      .replace(/\s+/g, '');
+  }
+
+  function protectMathBidi(value){
+    return String(value == null ? '' : value)
+      .split(/(\$\$[\s\S]*?\$\$|\$[^$]*\$|<svg[\s\S]*?<\/svg>|<table[\s\S]*?<\/table>|<[^>]+>)/gi)
+      .map(function(part){
+        if(!part || /^\$\$[\s\S]*\$\$$/.test(part) || /^\$[^$]*\$/.test(part) || /^</.test(part)) return part;
+        return part
+          .replace(/(\d+(?:\.\d+)?)\s*°C/g, function(_, n){ return '$' + n + '^\\circ\\mathrm{C}$'; })
+          .replace(/(\d+(?:\.\d+)?)\s*°/g, function(_, n){ return '$' + n + '^\\circ$'; })
+          .replace(/(^|[\s(])-(\d+(?:\.\d+)?)/g, function(_, prefix, n){ return prefix + '$-' + n + '$'; })
+          .replace(/\b([A-Za-z][A-Za-z0-9π²³^·+\-*/() ]{0,34}=\s*[A-Za-z0-9π²³^·+\-*/() ]{1,40})/g, function(_, expr){
+            return '$' + texifyRawExpr(expr) + '$';
+          });
+      })
+      .join('');
+  }
+
   E.questionTypes = {
-    open: function(o){ return { questionHTML:(o.svg?'<div class="diagram">'+o.svg+'</div>':'')+'<div class="qtext">'+o.question+'</div>', answerHTML:o.answer }; },
+    open: function(o){ return { questionHTML:(o.svg?'<div class="diagram">'+o.svg+'</div>':'')+'<div class="qtext">'+protectMathBidi(o.question)+'</div>', answerHTML:protectMathBidi(o.answer) }; },
     mcq: function(o){
-      const html = o.choices.map(c=>'<div class="mcq-choice '+(c.correct?'mcq-correct':'')+'"><span class="mcq-label">'+c.label+'.</span> '+c.text+'</div>').join('');
-      return { questionHTML:(o.svg?'<div class="diagram">'+o.svg+'</div>':'')+'<div class="qtext">'+o.question+'</div><div class="mcq-choices">'+html+'</div>', answerHTML:o.answer };
+      const html = o.choices.map(c=>'<div class="mcq-choice '+(c.correct?'mcq-correct':'')+'"><span class="mcq-label">'+c.label+'.</span> '+protectMathBidi(c.text)+'</div>').join('');
+      return { questionHTML:(o.svg?'<div class="diagram">'+o.svg+'</div>':'')+'<div class="qtext">'+protectMathBidi(o.question)+'</div><div class="mcq-choices">'+html+'</div>', answerHTML:protectMathBidi(o.answer) };
     },
-    tf: function(o){ return { questionHTML:(o.svg?'<div class="diagram">'+o.svg+'</div>':'')+'<div class="qtext tf-statement"><span class="tf-label">נכון / שגוי:</span> '+o.question+'</div>', answerHTML:'<div class="tf-verdict">'+(o.isTrue?'✓ נכון':'✗ שגוי')+'</div>\n'+o.answer }; },
-    mistake: function(o){ return { questionHTML:(o.svg?'<div class="diagram">'+o.svg+'</div>':'')+'<div class="mistake-prompt">מצאו את הטעות בפתרון הבא:</div><div class="qtext mistake-box">'+o.question+'</div>', answerHTML:o.answer }; }
+    tf: function(o){ return { questionHTML:(o.svg?'<div class="diagram">'+o.svg+'</div>':'')+'<div class="qtext tf-statement"><span class="tf-label">נכון / שגוי:</span> '+protectMathBidi(o.question)+'</div>', answerHTML:'<div class="tf-verdict">'+(o.isTrue?'✓ נכון':'✗ שגוי')+'</div>\n'+protectMathBidi(o.answer) }; },
+    mistake: function(o){ return { questionHTML:(o.svg?'<div class="diagram">'+o.svg+'</div>':'')+'<div class="mistake-prompt">מצאו את הטעות בפתרון הבא:</div><div class="qtext mistake-box">'+protectMathBidi(o.question)+'</div>', answerHTML:protectMathBidi(o.answer) }; }
   };
 })();

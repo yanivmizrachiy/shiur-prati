@@ -7,6 +7,7 @@
   function pick(a){ return E.pick ? E.pick(a) : a[Math.floor(Math.random()*a.length)]; }
   function shuf(a){ return E.shuffle ? E.shuffle(a) : a.slice().sort(()=>Math.random()-0.5); }
   function tex(s){ return E.fmt && E.fmt.inline ? E.fmt.inline(s) : '$'+s+'$'; }
+  function degC(v){ return tex(v + '^\\circ\\mathrm{C}'); }
   function choices(a){ return shuf(a).map((x,i)=>({label:L[i], text:x.text, correct:!!x.correct})); }
   function topic(g,d,id,label){ if(typeof TOPICS==='undefined'||!TOPICS[g]||!TOPICS[g][d]) return; if(!TOPICS[g][d].some(t=>t[0]===id)) TOPICS[g][d].push([id,label,1]); }
 
@@ -110,11 +111,11 @@
       if(qtype==='mistake'){q='תלמיד כתב: "אם 63 גדול מ-7, אז כל כמות מתאימה".'; a='הטעות: צריך לחשב עלות כוללת לפי מספר הליטרים, כלומר להכפיל 7 במספר הליטרים.';}
     } else if(family==='heating'){
       const start=8, rate=10, t=5; svg=graphSvg([0,1,2,3,4,5,6].map(n=>({x:n,y:start+rate*n})),'התחממות נוזל','דקות','°C',6,70);
-      q=`נוזל התחיל בטמפרטורה ${start}°C ומתחמם בקצב אחיד של ${rate}°C לדקה. מה תהיה הטמפרטורה אחרי ${t} דקות?`;
+      q=`נוזל התחיל בטמפרטורה ${degC(start)} ומתחמם בקצב אחיד של ${degC(rate)} לדקה. מה תהיה הטמפרטורה אחרי ${t} דקות?`;
       a=`הביטוי הוא ${tex(start+'+'+rate+'t')}. עבור ${tex('t='+t)} נקבל ${tex(start+'+'+rate+'\\cdot '+t+'='+(start+rate*t))}.`;
-      cs=choices([{text:`${start+rate*t}°C`,correct:true},{text:`${rate*t}°C`,correct:false},{text:`${start+t}°C`,correct:false},{text:`${start+rate+t}°C`,correct:false}]);
-      if(qtype==='tf'){ isTrue=tfTrue; q=tfTrue?`אחרי ${t} דקות הטמפרטורה היא ${start+rate*t}°C.`:`אחרי ${t} דקות הטמפרטורה היא ${rate*t}°C.`; a=tfTrue?`נכון. מתחילים מ-${start}°C ומוסיפים ${rate}·${t}: ${start}+${rate*t}=${start+rate*t}°C.`:`שגוי. שכחו להוסיף את הטמפרטורה ההתחלתית ${start}°C.`; }
-      if(qtype==='mistake'){q=`תלמיד חישב ${rate}·${t}=${rate*t} והתעלם מהטמפרטורה ההתחלתית.`; a=`הטעות: הגרף לא מתחיל מאפס אלא מ-${start}°C. לכן מוסיפים את הערך ההתחלתי.`;}
+      cs=choices([{text:degC(start+rate*t),correct:true},{text:degC(rate*t),correct:false},{text:degC(start+t),correct:false},{text:degC(start+rate+t),correct:false}]);
+      if(qtype==='tf'){ isTrue=tfTrue; q=tfTrue?`אחרי ${t} דקות הטמפרטורה היא ${degC(start+rate*t)}.`:`אחרי ${t} דקות הטמפרטורה היא ${degC(rate*t)}.`; a=tfTrue?`נכון. מתחילים מ-${degC(start)} ומוסיפים ${tex(rate+'\\cdot '+t)}: ${tex(start+'+'+(rate*t)+'='+(start+rate*t))}, כלומר ${degC(start+rate*t)}.`:`שגוי. שכחו להוסיף את הטמפרטורה ההתחלתית ${degC(start)}.`; }
+      if(qtype==='mistake'){q=`תלמיד חישב ${tex(rate+'\\cdot '+t+'='+(rate*t))} והתעלם מהטמפרטורה ההתחלתית.`; a=`הטעות: הגרף לא מתחיל מאפס אלא מ-${degC(start)}. לכן מוסיפים את הערך ההתחלתי.`;}
     } else if(family==='table'){
       const rows=[-2,-1,0,1,2].map(x=>({x:x,y:3*x+4})); svg=graphSvg(rows,'ישר לפי טבלת ערכים','x','y',2,12);
       q='בטבלת ערכים של פונקציה קווית מתקבל הכלל '+tex('y=3x+4')+'. מהו הערך של y כאשר '+tex('x=2')+'?';

@@ -62,9 +62,9 @@
   const IDENTITY_CASES = [
     {left:'a\\cdot a', right:'a^2', equal:true, why:'כפל של מספר בעצמו הוא בדיוק ריבוע של אותו מספר.'},
     {left:'4(a+1)', right:'4a+4', equal:true, why:'לפי חוק הפילוג: מכפילים את שני האיברים שבסוגריים ב-4.'},
-    {left:'a+7+2a-2', right:'3a+5', equal:true, why:'מחברים איברים דומים: a+2a=3a וגם 7-2=5.'},
-    {left:'2(t+3)', right:'2t+3', equal:false, correct:'2t+6', why:'חוק הפילוג מחייב להכפיל גם את 3 ב-2, לכן הביטוי השקול הוא 2t+6.'},
-    {left:'3x+4', right:'7x', equal:false, correct:'3x+4', why:'איבר מספרי ואיבר עם משתנה אינם איברים דומים, ולכן אי אפשר לאחד אותם ל-7x.'}
+    {left:'a+7+2a-2', right:'3a+5', equal:true, why:'מחברים איברים דומים: $a+2a=3a$ וגם $7-2=5$.'},
+    {left:'2(t+3)', right:'2t+3', equal:false, correct:'2t+6', why:'חוק הפילוג מחייב להכפיל גם את 3 ב-2, לכן הביטוי השקול הוא $2t+6$.'},
+    {left:'3x+4', right:'7x', equal:false, correct:'3x+4', why:'איבר מספרי ואיבר עם משתנה אינם איברים דומים, ולכן אי אפשר לאחד אותם ל-$7x$.'}
   ];
 
   function genA704Identity(qtype){

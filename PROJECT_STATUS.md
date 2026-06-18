@@ -34,6 +34,7 @@ All merged to `main`, live, and `verify:deep`-green.
 
 | PR | Date | Improvement |
 |---|---|---|
+| main | 2026-06-18 | Tightened Hebrew/BiDi and ratio-diagram quality: N8-01 distance-ratio wording now uses route lengths and units, `ratioBarSvg` has explicit RTL-safe labels, and `verify:math-bidi` is wired into `verify:all`/`verify:deep`. |
 | main | 2026-06-18 | Made worksheet answer boxes proportional for copy-to-worksheet output; `verify:worksheet-polish` now guards against returning to fixed oversized boxes. |
 | main | 2026-06-18 | Added repo-foundation dropdown guard: `verify:topic-dropdown` checks 50 visible teacher-facing topics, no duplicate labels/values, and no internal jargon in the main topic selector. |
 | main | 2026-06-18 | Added source-06 uncertainty deep coverage: 33 PDF-mapped families across U7/U8 uncertainty, graphics/tables/pie/line/multi-source tasks, and `verify:uncertainty-source-deep`. |
@@ -84,6 +85,7 @@ npm run verify:deep
 - question-family provenance checks;
 - follow-up generation checks;
 - geometry Hebrew terminology check (`verify:geometry-language`);
+- Hebrew/math BiDi and wording quality check (`verify:math-bidi`);
 - copy/export checks, including copy-as-image entry points;
 - print-layout checks;
 - release documentation freshness check.

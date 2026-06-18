@@ -1,66 +1,137 @@
 // tools/verify-math-bidi-quality.mjs
-// Guards math/BiDi quality: no raw math tokens (A=45°, bare negatives, degree
-// signs) left in Hebrew prose OUTSIDE KaTeX delimiters, across every engine,
-// question type and difficulty; plus the CSS isolation rules that keep KaTeX
-// and SVG labels from mirroring on the RTL page.
+// Guards Hebrew wording, math/BiDi quality, and high-risk SVG labels across the
+// real 50-engine stack. This catches visible "demo" output: raw math inside RTL
+// prose, undefined/NaN leakage, broken Hebrew quantity phrasing, and fragile
+// ratio labels in drawings.
 // Run: node tools/verify-math-bidi-quality.mjs [drawsPerCombo]
 import fs from 'node:fs';
-import vm from 'node:vm';
+import { loadEngines } from './engine-load.mjs';
 
 const N = Number(process.argv[2] || 30);
 let fails = 0;
-function check(name, ok, info){ console.log((ok?'PASS':'FAIL')+' — '+name+(ok?'':' :: '+(info||''))); if(!ok) fails++; }
+function check(name, ok, info) {
+  console.log((ok ? 'PASS' : 'FAIL') + ' — ' + name + (ok ? '' : ' :: ' + (info || '')));
+  if (!ok) fails++;
+}
 
-// ── static CSS isolation rules ──
-const css = fs.readFileSync('generator/style.css','utf8');
+// Static CSS isolation rules.
+const css = fs.readFileSync('generator/style.css', 'utf8');
 check('KaTeX forced LTR', /\.katex[^{]*\{[^}]*direction:\s*ltr/.test(css));
 check('KaTeX bidi isolated', /\.katex[^{]*\{[^}]*unicode-bidi:\s*isolate/.test(css));
 check('SVG text plaintext bidi', /svg text\s*\{[^}]*unicode-bidi:\s*plaintext/.test(css));
 
-// ── runtime scan of all engines ──
-const sandbox = { window: {}, console, Math, Date };
-vm.createContext(sandbox);
-const files = ['themes.js','random.js','validators.js','diagrams.js','question-types.js']
-  .concat(fs.readdirSync('generator/engine').filter(f=>f.startsWith('pilot-')).sort());
-for (const f of files) vm.runInContext(fs.readFileSync('generator/engine/'+f,'utf8'), sandbox, {filename:f});
-const E = sandbox.window.TargilimEngine;
+// Runtime scan of all engines.
+const { E, pilotIds, sourceFitIds, callEngine } = loadEngines();
 check('central fmt helpers exist', !!(E.fmt && E.fmt.angle && E.fmt.deg && E.fmt.signed && E.fmt.point));
-check('fmt.angle is professional KaTeX', E.fmt && E.fmt.angle('B',80) === '$\\sphericalangle B=80^\\circ$');
+check('fmt.angle is professional KaTeX', E.fmt && E.fmt.angle('B', 80) === '$\\sphericalangle B=80^\\circ$');
 
-// keep real questionTypes so we scan the actual rendered HTML
-function prose(html){
+const n801 = fs.readFileSync('generator/engine/pilot-n8-01.js', 'utf8');
+check('N8-01 no longer phrases distances as count nouns',
+  !/ידוע\s+שיש\s+\$\$\{x\.known\}\$\s+\$\{knownLabel\}/.test(n801) &&
+  !/כמה\s+יש\s+\$\{missingLabel\}/.test(n801));
+
+function prose(html) {
   return String(html)
-    .replace(/<svg[\s\S]*?<\/svg>/g,'')      // svg labels are graphics, checked separately
-    .replace(/<table[\s\S]*?<\/table>/g,'')
-    .replace(/\$\$[\s\S]*?\$\$/g,' ')        // strip block math
-    .replace(/\$[^$]*\$/g,' ')               // strip inline math
-    .replace(/<[^>]+>/g,' ');
+    .replace(/<svg[\s\S]*?<\/svg>/g, ' ')
+    .replace(/<table[\s\S]*?<\/table>/g, ' ')
+    .replace(/\$\$[\s\S]*?\$\$/g, ' ')
+    .replace(/\$[^$]*\$/g, ' ')
+    .replace(/<[^>]+>/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
 }
+function svgs(html) {
+  const out = [];
+  const re = /<svg[\s\S]*?<\/svg>/gi;
+  let m;
+  while ((m = re.exec(html))) out.push(m[0]);
+  return out;
+}
+function textNodes(svg) {
+  const out = [];
+  const re = /<text\b([^>]*)>([\s\S]*?)<\/text>/gi;
+  let m;
+  while ((m = re.exec(svg))) out.push({ tag: m[1], text: m[2].replace(/<[^>]+>/g, '') });
+  return out;
+}
+
 const RAW_DEGREE = /\d+\s*°/;
 const RAW_EQ = /[A-Za-z]\s*=\s*-?\d/;
 const RAW_NEG_AFTER_HEB = /[֐-׿]\s+-\d/;
 const BADTOK = /undefined|NaN/;
+const DEMO_TOK = /דמו|demo|placeholder/i;
+const BAD_HEBREW = [
+  ['distance-as-count', /(?:ידוע\s+ש)?יש\s+(?:\$[^$]+\$|\d+)?\s*(?:דרך|מסלול)\b/],
+  ['missing-distance-as-count', /כמה\s+יש\s+(?:דרך|מסלול)\b/],
+  ['lamed-instead-of-between', /היחס\s+בין\s+[^.\n]+?\s+ל(?:דרך|מסלול|כמות|קבוצה|חוג|דף|משימה)\b/],
+  ['therefore-question-fragment', /לכן\s+(?:מהו|כמה)\b/]
+];
 
-const gens = Object.keys(E).filter(k=>/^generate[A-Z]\d{3}Engine$/.test(k)).sort();
-let scanned = 0, offenders = [];
-for (const g of gens) {
-  for (const d of ['basic','standard','challenge']) {
-    for (const t of ['open','mcq','tf','mistake']) {
-      for (let i=0;i<N;i++) {
+const ratioSample = E.ratioBarSvg({
+  left: 'מסלול א', right: 'מסלול ב', r1: 5, r2: 2,
+  knownSide: 'left', known: 45, missing: 18, measure: 'אורך', unit: 'ק״מ'
+}, 'missing');
+check('ratio bar writes ratio in RTL-safe Hebrew words',
+  ratioSample.includes('יחס 5 ל־2') && !/5\s*:\s*2|2\s*:\s*5/.test(ratioSample));
+check('ratio bar shows distance units and route labels',
+  ratioSample.includes('45 ק״מ') && ratioSample.includes('אורך מסלול א') && ratioSample.includes('אורך מסלול ב'));
+check('ratio bar text nodes carry explicit RTL bidi isolation',
+  (ratioSample.match(/direction="rtl"/g) || []).length >= 5 &&
+  (ratioSample.match(/unicode-bidi="plaintext"/g) || []).length >= 5);
+
+const ids = pilotIds.concat(sourceFitIds).sort();
+let scanned = 0;
+const offenders = [];
+const hebrewOffenders = [];
+const svgOffenders = [];
+const demoOffenders = [];
+
+for (const id of ids) {
+  for (const d of ['basic', 'standard', 'challenge']) {
+    for (const t of ['open', 'mcq', 'tf', 'mistake']) {
+      for (let i = 0; i < N; i++) {
         scanned++;
-        const r = E[g](d,t);
-        const all = (r.questionHTML||'')+(r.answerHTML||'');
+        const r = callEngine(id, d, t);
+        if (!r) { offenders.push([id, t, 'no-result', '']); break; }
+        const all = (r.questionHTML || '') + (r.answerHTML || '');
         const p = prose(all);
-        if (RAW_DEGREE.test(p)) { offenders.push([g,t,'raw-degree',p.match(RAW_DEGREE)[0]]); break; }
-        if (RAW_EQ.test(p)) { offenders.push([g,t,'raw-equation',p.match(RAW_EQ)[0]]); break; }
-        if (RAW_NEG_AFTER_HEB.test(p)) { offenders.push([g,t,'raw-negative',p.match(RAW_NEG_AFTER_HEB)[0]]); break; }
-        if (BADTOK.test(all)) { offenders.push([g,t,'undefined/NaN','']); break; }
+        if (RAW_DEGREE.test(p)) { offenders.push([id, t, 'raw-degree', p.match(RAW_DEGREE)[0]]); break; }
+        if (RAW_EQ.test(p)) { offenders.push([id, t, 'raw-equation', p.match(RAW_EQ)[0]]); break; }
+        if (RAW_NEG_AFTER_HEB.test(p)) { offenders.push([id, t, 'raw-negative', p.match(RAW_NEG_AFTER_HEB)[0]]); break; }
+        if (BADTOK.test(all)) { offenders.push([id, t, 'undefined/NaN', '']); break; }
+        if (DEMO_TOK.test(p)) { demoOffenders.push([id, t, 'demo-token', p.match(DEMO_TOK)[0]]); break; }
+        for (const [kind, re] of BAD_HEBREW) {
+          const m = p.match(re);
+          if (m) { hebrewOffenders.push([id, t, kind, m[0].slice(0, 80)]); break; }
+        }
+        for (const svg of svgs(all)) {
+          for (const node of textNodes(svg)) {
+            if (/[֐-׿]/.test(node.text) && /\d+\s*:\s*\d+/.test(node.text)) {
+              svgOffenders.push([id, t, 'rtl-colon-ratio-in-svg', node.text]);
+              break;
+            }
+            if (/^\d+\s+\d+$/.test(node.text.trim())) {
+              svgOffenders.push([id, t, 'numeric-internal-value-leak-in-svg', node.text]);
+              break;
+            }
+          }
+          if (svgOffenders.length) break;
+        }
+        if (hebrewOffenders.length || svgOffenders.length) break;
       }
     }
   }
 }
-for (const o of offenders.slice(0,12)) console.log('  OFFENDER', o.join(' | '));
-check('no raw math in Hebrew prose ('+scanned+' generations scanned)', offenders.length === 0, offenders.length+' offenders');
 
-console.log(fails ? 'MATH_BIDI_QUALITY_FAIL ('+fails+')' : 'MATH_BIDI_QUALITY_PASS');
-process.exit(fails?1:0);
+for (const o of offenders.slice(0, 12)) console.log('  OFFENDER', o.join(' | '));
+for (const o of hebrewOffenders.slice(0, 12)) console.log('  HEBREW_OFFENDER', o.join(' | '));
+for (const o of svgOffenders.slice(0, 12)) console.log('  SVG_BIDI_OFFENDER', o.join(' | '));
+for (const o of demoOffenders.slice(0, 12)) console.log('  DEMO_OFFENDER', o.join(' | '));
+
+check('no raw math in Hebrew prose (' + scanned + ' generations scanned)', offenders.length === 0, offenders.length + ' offenders');
+check('no demo/placeholder wording in generated student output', demoOffenders.length === 0, demoOffenders.length + ' offenders');
+check('no broken Hebrew quantity phrasing in generated output', hebrewOffenders.length === 0, hebrewOffenders.length + ' offenders');
+check('no RTL-fragile colon ratios inside Hebrew SVG labels', svgOffenders.length === 0, svgOffenders.length + ' offenders');
+
+console.log(fails ? 'MATH_BIDI_QUALITY_FAIL (' + fails + ')' : 'MATH_BIDI_QUALITY_PASS');
+process.exit(fails ? 1 : 0);

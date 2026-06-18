@@ -44,7 +44,7 @@
     const W=270,H=150,x1=42,x2=214,y=82;
     const mapLabel = unknown==='map' ? '?' : params.map + ' ס״מ';
     const realLabel = unknown==='real' ? '?' : params.real;
-    const scaleLabel = unknown==='scale' ? 'קנה מידה ?' : 'קנה מידה 1:' + params.scale;
+    const scaleLabel = unknown==='scale' ? 'קנה מידה ?' : 'קנה מידה 1 ל־' + params.scale;
     const mapColor = unknown==='map' ? T.unknown : T.given;
     const realColor = unknown==='real' ? T.unknown : T.given;
     const scaleColor = unknown==='scale' ? T.unknown : T.label;
@@ -61,25 +61,44 @@
   };
   E.ratioBarSvg = function(params, unknown){
     const T = E.themes.geometry;
-    const W=270,H=150,x=34,y1=45,y2=91,maxW=172;
+    const W=340,H=190,barRight=260,y1=62,y2=116,maxW=190;
     const r1 = Math.max(1, params.r1 || 1);
     const r2 = Math.max(1, params.r2 || 1);
-    const sum = r1 + r2;
-    const w1 = Math.max(44, Math.round(maxW * r1 / sum));
-    const w2 = Math.max(44, Math.round(maxW * r2 / sum));
+    const maxR = Math.max(r1, r2);
+    const w1 = Math.max(42, Math.round(maxW * r1 / maxR));
+    const w2 = Math.max(42, Math.round(maxW * r2 / maxR));
+    const x1 = barRight - w1;
+    const x2 = barRight - w2;
+    function esc(v){
+      return String(v == null ? '' : v)
+        .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+        .replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+    }
+    function value(v, isUnknown){
+      if(isUnknown) return '?';
+      const suffix = params.unit ? ' ' + params.unit : '';
+      return String(v) + suffix;
+    }
+    function label(name){
+      return params.measure ? params.measure + ' ' + name : name;
+    }
     const leftValue = unknown === 'missing' && params.knownSide === 'right' ? '?' : (params.a || params.known || r1);
     const rightValue = unknown === 'missing' && params.knownSide === 'left' ? '?' : (params.b || params.missing || r2);
     const leftColor = unknown === 'missing' && params.knownSide === 'right' ? T.unknown : T.given;
     const rightColor = unknown === 'missing' && params.knownSide === 'left' ? T.unknown : T.given;
+    const leftUnknown = leftValue === '?';
+    const rightUnknown = rightValue === '?';
+    const tickStroke = '#d8e0ea';
     return `<svg class="engine-svg" viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">
-      <rect x="20" y="18" width="230" height="112" rx="12" fill="${T.fill}" stroke="${T.stroke}" stroke-width="2.2"/>
-      <rect x="${x}" y="${y1}" width="${w1}" height="26" rx="7" fill="${T.helper}" opacity="0.78"/>
-      <rect x="${x}" y="${y2}" width="${w2}" height="26" rx="7" fill="${T.stroke}" opacity="0.82"/>
-      <text x="${x+w1+13}" y="${y1+18}" fill="${leftColor}" font-size="13" font-weight="800">${leftValue}</text>
-      <text x="${x+w2+13}" y="${y2+18}" fill="${rightColor}" font-size="13" font-weight="800">${rightValue}</text>
-      <text x="238" y="${y1+18}" fill="${T.label}" font-size="11" font-weight="800" text-anchor="end">${params.left || 'חלק א'}</text>
-      <text x="238" y="${y2+18}" fill="${T.label}" font-size="11" font-weight="800" text-anchor="end">${params.right || 'חלק ב'}</text>
-      <text x="135" y="139" fill="${T.label}" font-size="12" font-weight="800" text-anchor="middle">יחס ${r1}:${r2}</text>
+      <rect x="20" y="18" width="300" height="150" rx="8" fill="${T.fill}" stroke="${T.stroke}" stroke-width="1.8"/>
+      <line x1="${barRight}" y1="48" x2="${barRight}" y2="146" stroke="${tickStroke}" stroke-width="1"/>
+      <rect x="${x1}" y="${y1}" width="${w1}" height="26" rx="3" fill="${T.helper}" opacity="0.62" stroke="${T.stroke}" stroke-width="0.8"/>
+      <rect x="${x2}" y="${y2}" width="${w2}" height="26" rx="3" fill="${T.stroke}" opacity="0.72" stroke="${T.stroke}" stroke-width="0.8"/>
+      <text x="${Math.max(36,x1-12)}" y="${y1+17}" fill="${leftColor}" font-size="13" font-weight="600" text-anchor="end" direction="rtl" unicode-bidi="plaintext">${esc(value(leftValue,leftUnknown))}</text>
+      <text x="${Math.max(36,x2-12)}" y="${y2+17}" fill="${rightColor}" font-size="13" font-weight="600" text-anchor="end" direction="rtl" unicode-bidi="plaintext">${esc(value(rightValue,rightUnknown))}</text>
+      <text x="304" y="${y1+17}" fill="${T.label}" font-size="12" font-weight="500" text-anchor="end" direction="rtl" unicode-bidi="plaintext">${esc(label(params.left || 'חלק א'))}</text>
+      <text x="304" y="${y2+17}" fill="${T.label}" font-size="12" font-weight="500" text-anchor="end" direction="rtl" unicode-bidi="plaintext">${esc(label(params.right || 'חלק ב'))}</text>
+      <text x="170" y="181" fill="${T.label}" font-size="12" font-weight="500" text-anchor="middle" direction="rtl" unicode-bidi="plaintext">יחס ${r1} ל־${r2}</text>
     </svg>`;
   };
   E.proportionTableSvg = function(params, unknown){

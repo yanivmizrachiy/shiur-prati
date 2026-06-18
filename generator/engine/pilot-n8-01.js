@@ -18,7 +18,7 @@
   const RATIO_MISSING = [
     {r1:2,r2:5,knownSide:'left',known:8,missing:20,mult:4,ctx:'יחס בין סרטים',left:'סרטים כחולים',right:'סרטים לבנים'},
     {r1:3,r2:4,knownSide:'right',known:28,missing:21,mult:7,ctx:'יחס בין תלמידים',left:'תלמידי ח',right:'תלמידי ז'},
-    {r1:5,r2:2,knownSide:'left',known:45,missing:18,mult:9,ctx:'יחס בין מרחקים',left:'דרך א',right:'דרך ב'},
+    {r1:5,r2:2,knownSide:'left',known:45,missing:18,mult:9,ctx:'בהשוואת מרחקי נסיעה',left:'מסלול א',right:'מסלול ב',measure:'אורך',unitLabel:'ק״מ'},
     {r1:4,r2:9,knownSide:'right',known:63,missing:28,mult:7,ctx:'יחס בין כמויות',left:'כמות א',right:'כמות ב'}
   ];
 
@@ -46,7 +46,30 @@
       const parts = String(v).split(',');
       return `$${parts[0]}$ ו-$${parts[1]}$`;
     }
-    return `$${v}$`;
+    return x.unitLabel ? `$${v}$ ${x.unitLabel}` : `$${v}$`;
+  }
+
+  function ratioPhrase(a,b){
+    return `$${a}$ ל־$${b}$`;
+  }
+
+  function betweenPhrase(left,right){
+    return `${left} לבין ${right}`;
+  }
+
+  function quantitySentence(x,label,value){
+    if(x.measure) return `${x.measure} ${label} הוא $${value}$ ${x.unitLabel || ''}`.trim();
+    return `יש $${value}$ ${label}`;
+  }
+
+  function missingQuestion(x,label){
+    if(x.measure) return `מהו ${x.measure} ${label}?`;
+    return `כמה יש ${label}?`;
+  }
+
+  function resultSentence(x,label,value){
+    if(x.measure) return `${x.measure} ${label} הוא $${value}$ ${x.unitLabel || ''}`.trim();
+    return `יש $${value}$ ${label}`;
   }
 
   function choices(family,x){
@@ -75,25 +98,25 @@
   function question(family,x,qt,tfTrue){
     if(family === 'ratio_simplify'){
       const intro = E.pick([
-        `${x.ctx} היחס בין ${x.left} ל${x.right} הוא $${x.a}:${x.b}$.`,
+        `${x.ctx} היחס בין ${betweenPhrase(x.left,x.right)} הוא ${ratioPhrase(x.a,x.b)}.`,
         `${x.ctx} נספרו $${x.a}$ ${x.left} ו-$${x.b}$ ${x.right}.`
       ]);
-      if(qt === 'tf') return `${intro} היחס המצומצם הוא $${tfTrue?x.sa:x.sa+1}:${x.sb}$.`;
-      if(qt === 'mistake') return `${intro}\nתלמיד צמצם רק צד אחד וכתב $${x.sa}:${x.b}$.`;
+      if(qt === 'tf') return `${intro} היחס המצומצם הוא ${ratioPhrase(tfTrue?x.sa:x.sa+1,x.sb)}.`;
+      if(qt === 'mistake') return `${intro}\nתלמיד צמצם רק צד אחד וכתב ${ratioPhrase(x.sa,x.b)}.`;
       return `${intro}\nכתבו את היחס המצומצם.`;
     }
     if(family === 'ratio_share'){
       if(qt === 'tf') return tfTrue
-        ? `${x.ctx} ביחס $${x.r1}:${x.r2}$ ובסך הכל $${x.total}$. החלקים הם $${x.a}$ ו-$${x.b}$.`
-        : `${x.ctx} ביחס $${x.r1}:${x.r2}$ ובסך הכל $${x.total}$. החלקים הם $${x.r1*x.total}$ ו-$${x.r2*x.total}$.`;
-      if(qt === 'mistake') return `${x.ctx} ביחס $${x.r1}:${x.r2}$ ובסך הכל $${x.total}$.\nתלמיד כפל כל חלק ב-$${x.total}$ וקיבל $${x.r1*x.total}$ ו-$${x.r2*x.total}$.`;
-      return `${x.ctx} בין ${x.left} ל${x.right} ביחס $${x.r1}:${x.r2}$.\nבסך הכל יש $${x.total}$ יחידות. כמה תקבל כל קבוצה?`;
+        ? `${x.ctx} ביחס ${ratioPhrase(x.r1,x.r2)} ובסך הכל $${x.total}$. החלקים הם $${x.a}$ ו-$${x.b}$.`
+        : `${x.ctx} ביחס ${ratioPhrase(x.r1,x.r2)} ובסך הכל $${x.total}$. החלקים הם $${x.r1*x.total}$ ו-$${x.r2*x.total}$.`;
+      if(qt === 'mistake') return `${x.ctx} ביחס ${ratioPhrase(x.r1,x.r2)} ובסך הכל $${x.total}$.\nתלמיד כפל כל חלק ב-$${x.total}$ וקיבל $${x.r1*x.total}$ ו-$${x.r2*x.total}$.`;
+      return `${x.ctx} בין ${betweenPhrase(x.left,x.right)} ביחס ${ratioPhrase(x.r1,x.r2)}.\nבסך הכל יש $${x.total}$ יחידות. כמה תקבל כל קבוצה?`;
     }
     const knownLabel = x.knownSide === 'left' ? x.left : x.right;
     const missingLabel = x.knownSide === 'left' ? x.right : x.left;
-    if(qt === 'tf') return `${x.ctx}: היחס בין ${x.left} ל${x.right} הוא $${x.r1}:${x.r2}$. אם יש $${x.known}$ ${knownLabel}, אז יש $${tfTrue?x.missing:x.missing+x.mult}$ ${missingLabel}.`;
-    if(qt === 'mistake') return `${x.ctx}: היחס בין ${x.left} ל${x.right} הוא $${x.r1}:${x.r2}$ ויש $${x.known}$ ${knownLabel}.\nתלמיד חיבר $${x.r2}$ במקום לכפול לפי אותו גורם.`;
-    return `${x.ctx}: היחס בין ${x.left} ל${x.right} הוא $${x.r1}:${x.r2}$.\nידוע שיש $${x.known}$ ${knownLabel}. כמה יש ${missingLabel}?`;
+    if(qt === 'tf') return `${x.ctx}: היחס בין ${betweenPhrase(x.left,x.right)} הוא ${ratioPhrase(x.r1,x.r2)}. אם ${quantitySentence(x,knownLabel,x.known)}, אז ${quantitySentence(x,missingLabel,tfTrue?x.missing:x.missing+x.mult)}.`;
+    if(qt === 'mistake') return `${x.ctx}: היחס בין ${betweenPhrase(x.left,x.right)} הוא ${ratioPhrase(x.r1,x.r2)}, ו${quantitySentence(x,knownLabel,x.known)}.\nתלמיד חיבר $${x.r2}$ במקום לכפול לפי אותו גורם.`;
+    return `${x.ctx}: היחס בין ${betweenPhrase(x.left,x.right)} הוא ${ratioPhrase(x.r1,x.r2)}.\nידוע ש${quantitySentence(x,knownLabel,x.known)}. ${missingQuestion(x,missingLabel)}`;
   }
 
   function answer(family,x,qt){
@@ -109,7 +132,7 @@
     const prefix = qt === 'mistake' ? 'הטעות היא שחיבור אינו שומר יחס. חייבים לכפול או לחלק את שני חלקי היחס באותו גורם.\n' : '';
     const knownRatio = x.knownSide === 'left' ? x.r1 : x.r2;
     const missingRatio = x.knownSide === 'left' ? x.r2 : x.r1;
-    return `${prefix}מוצאים את גורם ההגדלה:\n$$${x.known}\\div ${knownRatio}=${x.mult}$$\nמכפילים את החלק השני באותו גורם:\n$$${missingRatio}\\cdot ${x.mult}=${x.missing}$$`;
+    return `${prefix}מוצאים את גורם ההגדלה:\n$$${x.known}\\div ${knownRatio}=${x.mult}$$\nמכפילים את החלק השני באותו גורם:\n$$${missingRatio}\\cdot ${x.mult}=${x.missing}$$${x.unitLabel ? `\nלכן ${resultSentence(x, x.knownSide === 'left' ? x.right : x.left, x.missing)}.` : ''}`;
   }
 
   E.generateN801Engine = function(difficulty, questionType){
@@ -118,7 +141,7 @@
     const family = pickFamily(difficulty);
     const x = pickCase(family);
     const unknown = family === 'ratio_simplify' ? 'ratio' : family === 'ratio_share' ? 'share' : 'missing';
-    const svg = E.ratioBarSvg({left:x.left,right:x.right,r1:x.r1 || x.sa,r2:x.r2 || x.sb,a:x.a,b:x.b,knownSide:x.knownSide,known:x.known,missing:x.missing,total:x.total}, unknown);
+    const svg = E.ratioBarSvg({left:x.left,right:x.right,r1:x.r1 || x.sa,r2:x.r2 || x.sb,a:x.a,b:x.b,knownSide:x.knownSide,known:x.known,missing:x.missing,total:x.total,measure:x.measure,unit:x.unitLabel}, unknown);
     const tfTrue = questionType==='tf' && Math.random()<0.5;
     const q = question(family,x,questionType,tfTrue);
     const a = answer(family,x,questionType);

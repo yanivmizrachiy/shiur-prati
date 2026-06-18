@@ -53,11 +53,13 @@ check('workflow can be manually dispatched', workflow.includes('workflow_dispatc
 check('package exposes verify:release-docs', !!(pkg.scripts && pkg.scripts['verify:release-docs']));
 check('package exposes verify:task-ui', !!(pkg.scripts && pkg.scripts['verify:task-ui']));
 check('package exposes verify:topic-dropdown', !!(pkg.scripts && pkg.scripts['verify:topic-dropdown']));
+check('package exposes verify:math-bidi', !!(pkg.scripts && pkg.scripts['verify:math-bidi']));
 check('package no longer exposes teacher/gallery/visual-QA aliases',
   !['verify:teacher', 'verify:teacher-controls', 'verify:gallery', 'verify:visual-qa']
     .some(k => Object.prototype.hasOwnProperty.call(pkg.scripts || {}, k)));
 check('verify:all includes task-only UI gate', !!(pkg.scripts && pkg.scripts['verify:all'] || '').includes('verify:task-ui'));
 check('verify:all includes topic dropdown cleanliness gate', !!(pkg.scripts && pkg.scripts['verify:all'] || '').includes('verify:topic-dropdown'));
+check('verify:all includes Hebrew/math bidi quality gate', !!(pkg.scripts && pkg.scripts['verify:all'] || '').includes('verify:math-bidi'));
 check('verify:deep includes release docs gate', !!(pkg.scripts && pkg.scripts['verify:deep'] || '').includes('verify:release-docs'));
 check('verify:deep no longer requires teacher/gallery/visual-QA gates',
   !/verify:teacher|verify:teacher-controls|verify:gallery|verify:visual-qa/.test((pkg.scripts && pkg.scripts['verify:deep']) || ''));
