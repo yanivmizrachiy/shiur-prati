@@ -1,3 +1,0 @@
-phase2-batch-25-slices
-updated: 2026-06-10
-purpose: deployment marker for GitHub Pages and Phase 2 verification
