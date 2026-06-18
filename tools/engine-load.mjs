@@ -41,6 +41,7 @@ export function loadEngines(options = {}) {
     'source-fit-geometry.js', 'source-fit-algebra-g7.js',
     'source-fit-dedicated.js',
     'source-fit-dedicated-2.js',
+    'source-fit-uncertainty-deep.js',
     'pedagogy-attach.js',
     'follow-up.js'
   ];
@@ -83,7 +84,7 @@ export function loadEngines(options = {}) {
     if (typeof E[fn] === 'function') {
       const r = E[fn](diff, qtype);
       if (r && (r.questionHTML || r.question)) {
-        const meta = (r.meta) || (typeof E.buildMeta === 'function' ? E.buildMeta(id, qtype, diff) : null);
+        const meta = (r.meta) || (typeof E.buildMeta === 'function' ? E.buildMeta(id, qtype, diff, r.questionFamily) : null);
         return { questionHTML: r.questionHTML || r.question, answerHTML: r.answerHTML || r.answer, meta: meta };
       }
       return null;

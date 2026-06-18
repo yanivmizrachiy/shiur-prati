@@ -103,7 +103,8 @@
       cls: dom === 'N' ? 'num' : dom === 'A' ? 'alg' : dom === 'U' ? 'unc' : 'geo',
       questionHTML: result.questionHTML,
       answerHTML: result.answerHTML,
-      correctLabel: correctLabel
+      correctLabel: correctLabel,
+      questionFamily: result.questionFamily || null
     };
   };
 

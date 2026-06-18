@@ -1,12 +1,12 @@
 # tools/ — מנועי בדיקה וכלי תחזוקה
 
-52 קבצים. כולם נטענים/נבדקים; אין כאן קוד מת. החלוקה:
+53 קבצים. כולם נטענים/נבדקים; אין כאן קוד מת. החלוקה:
 
 ## 1. ספריית טעינה משותפת
 - **`engine-load.mjs`** — טוען את כל ערכת המנועים (DOM stub, VM) ומחזיר
   `{ E, Teacher, pilotIds, sourceFitIds, callEngine }`. כל ה-verifiers מייבאים אותו.
 
-## 2. verifiers שמחווטים ל-`verify:deep` (33)
+## 2. verifiers שמחווטים ל-`verify:deep` (34)
 מורצים אוטומטית ב-`npm run verify:deep` (וב-CI). ראו `package.json` → `verify:all` / `verify:deep`.
 דוגמאות: `verify-task-generation-only-ui`, `verify-source-lock`, `verify-source-bible`, `verify-question-coverage-deep`,
 `verify-all-engines-stress`, `verify-topic-question-variety`, `verify-visual-quality-deep`,

@@ -1,10 +1,10 @@
 # Project Status — Targilim תרגילים
 
-**Last updated:** 2026-06-17 · baseline 2026-06-14
+**Last updated:** 2026-06-18 · baseline 2026-06-14
 **Central rules:** see `RULES.md` (authoritative operating guide; this file is the status snapshot).  
 **Default branch:** `main`.
 **Live site:** GitHub Pages serves `generator/` from `main` — https://yanivmizrachiy.github.io/targilim/ . The live site reflects `main` only.  
-**Current repo state:** Phase 1 + PRs #21–#34 + PRs #46–#52 + main commit `7db6ab4` + the Pythagoras terminology guard + task-generation-only main UI guard are merged into `main`. Local/GitHub sync is checked by `npm run verify:sync`.
+**Current repo state:** Phase 1 + PRs #21–#34 + PRs #46–#52 + main commit `7db6ab4` + the Pythagoras terminology guard + task-generation-only main UI guard + source-06 uncertainty deep coverage are merged into `main`. Local/GitHub sync is checked by `npm run verify:sync`.
 **Package version:** `0.78.0`
 
 ## Executive snapshot
@@ -34,6 +34,7 @@ All merged to `main`, live, and `verify:deep`-green.
 
 | PR | Date | Improvement |
 |---|---|---|
+| main | 2026-06-18 | Added source-06 uncertainty deep coverage: 33 PDF-mapped families across U7/U8 uncertainty, graphics/tables/pie/line/multi-source tasks, and `verify:uncertainty-source-deep`. |
 | main | 2026-06-18 | Removed teacher-mode exposure from the main generator UI; `index.html` is task-generation-only and guarded by `verify:task-ui`. |
 | main | 2026-06-17 | Pythagoras Hebrew terminology guard: G7-03 now uses "ניצב/ניצבים" and "יתר"; `verify:geometry-language` prevents "רגל/רגליים" from returning to Pythagoras output. |
 | #52 | 2026-06-17 | A8-03 count-and-value system word problem (coins/stamps elimination). |
@@ -71,6 +72,7 @@ npm run verify:deep
 - repository hygiene check;
 - baseline and branding checks;
 - source lock and source bible checks;
+- source-06 uncertainty deep coverage check (`verify:uncertainty-source-deep`);
 - task-generation-only main UI check (`verify:task-ui`);
 - coverage and stress checks;
 - question variety checks;

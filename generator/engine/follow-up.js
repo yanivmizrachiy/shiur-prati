@@ -18,7 +18,8 @@
   // (generate<Base>Engine) and source-fit engines (getEngineExercise), always
   // returning { questionHTML, answerHTML, meta }.
   function fnName(id) { return 'generate' + String(id).replace(/-ENGINE$/, '').replace('-', '') + 'Engine'; }
-  E.generateOne = function (id, diff, qtype) {
+  E.generateOne = function (id, diff, qtype, opts) {
+    opts = opts || {};
     const fn = fnName(id);
     if (typeof E[fn] === 'function') {
       const r = E[fn](diff, qtype);
@@ -29,7 +30,10 @@
       return null;
     }
     if (typeof E.getEngineExercise === 'function') {
-      const r = E.getEngineExercise(id, diff, qtype);
+      const r = E.getEngineExercise(id, diff, qtype, {
+        requestedFamily: opts.family || null,
+        sourceDeepFamily: opts.family || null
+      });
       if (r && r.questionHTML) return { questionHTML: r.questionHTML, answerHTML: r.answerHTML, meta: r.meta || null };
     }
     return null;
@@ -77,7 +81,7 @@
     let best = null, bestScore = -1;
     for (let i = 0; i < tries; i++) {
       const qtype = plan.qtype || QT[Math.floor(Math.random() * QT.length)];
-      const r = E.generateOne(engineId, plan.diff, qtype);
+      const r = E.generateOne(engineId, plan.diff, qtype, { family: plan.family });
       if (!r || !r.questionHTML || !r.answerHTML) continue;
       let score = 1;
       const fam = r.meta && r.meta.questionFamily;
