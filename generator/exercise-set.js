@@ -19,7 +19,11 @@ function tryEngineExercise(E,id,diff,qtype,mcqMode){
 function makeExercise(id,diff,qtype,isEngine,E,mcqMode){
   if(isEngine){
     let ex=tryEngineExercise(E,id,diff,qtype,mcqMode);
-    if(!ex&&qtype!=='open')ex=tryEngineExercise(E,id,diff,'open',mcqMode); // safe fallback per item
+    if(ex&&!ex.qtype)ex.qtype=qtype;
+    if(!ex&&qtype!=='open'){
+      ex=tryEngineExercise(E,id,diff,'open',mcqMode); // safe fallback per item
+      if(ex&&!ex.qtype)ex.qtype='open';
+    }
     // Keep pedagogy metadata attached for answer keys, diagnostics, and exports.
     if(ex&&!ex.meta&&typeof E.buildMeta==='function'){try{ex.meta=E.buildMeta(id,ex.qtype||qtype,diff,ex.questionFamily);}catch(e){}}
     return ex;
@@ -96,19 +100,40 @@ function generateSet(){
   renderExerciseSet(meta,exercises);
 }
 
+function plainText(html){
+  return String(html||'')
+    .replace(/<svg[\s\S]*?<\/svg>/g,' ')
+    .replace(/<table[\s\S]*?<\/table>/g,' ')
+    .replace(/<[^>]+>/g,' ')
+    .replace(/\s+/g,' ')
+    .trim();
+}
+
+function answerBoxLineCount(ex){
+  const qtype=ex&&ex.qtype;
+  const LINES={open:3,mistake:4};
+  let n=LINES[qtype];
+  if(!n) return 0;
+  const question=plainText(ex.questionHTML);
+  const answer=plainText(ex.answerHTML);
+  const asksLong=/(הסבירו|נמקו|הוכיחו|תארו|השוו|החליטו|מסקנה|מדוע|כיצד|תקנו|בחרו.*נימוק)/.test(question);
+  const shortAnswer=answer.length>0&&answer.length<90;
+  if(qtype==='open'&&shortAnswer&&question.length<260&&!asksLong) n=2;
+  if(qtype==='open'&&(asksLong||answer.length>180||question.length>520)) n=4;
+  return Math.max(2,Math.min(4,n));
+}
+
 // A clean, untitled writing area — but ONLY for free-write question types.
-// open → solution lines; mistake → find/correct the error. Mark-the-answer types
-// get NO box: mcq the student marks one of the lettered choices, tf the student
-// circles נכון/שגוי — a blank box there is redundant and confusing. The box (when
-// present) is part of the captured card (not html2canvas-ignored) and carries a
-// stable data-student-answer-box hook for verifiers.
-function workAreaHTML(qtype){
-  const LINES={open:5,mistake:5};
-  const n=LINES[qtype];
+// The box is deliberately proportional: short calculation tasks get a compact
+// answer space, and explanation/error-analysis tasks get more room. Mark-the-
+// answer types get NO box: mcq the student marks choices, tf circles נכון/שגוי.
+// The box is part of the captured card and carries a stable verifier hook.
+function workAreaHTML(ex){
+  const n=answerBoxLineCount(ex);
   if(!n) return ''; // mcq, tf — no writing box; the answer is the marked choice
   let wl='';for(let i=0;i<n;i++)wl+='<div class="wl"></div>';
   return '<div class="answer-box" data-student-answer-box="true">'
-    +'<div class="answer-box-body">'+wl+'</div></div>';
+    +'<div class="answer-box-body" data-answer-lines="'+n+'">'+wl+'</div></div>';
 }
 
 function sharpenMathRects(html){
@@ -126,7 +151,7 @@ function renderExerciseSet(meta,exercises){
     return '<div class="qcard engine-card ex-card" id="exCard'+i+'" data-idx="'+i+'">'
       +'<div class="qmeta" data-html2canvas-ignore="true"><span class="ex-num">תרגיל '+(i+1)+'</span>'+levelTag+'</div>'
       +'<div class="ex-body">'+questionHTML+'</div>'
-      +workAreaHTML(ex.qtype)
+      +workAreaHTML(ex)
       +'<div class="ex-imgbar" data-html2canvas-ignore="true">'
         +'<button class="btn-img btn-img-primary btn-img-copy" onclick="exImageCopy('+i+',this)">📋 העתק כתמונה</button>'
         +'<button class="btn-img btn-img-download" onclick="exImageDownload('+i+',this)">⬇ הורד כתמונה</button>'

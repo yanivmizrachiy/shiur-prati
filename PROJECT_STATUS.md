@@ -34,6 +34,7 @@ All merged to `main`, live, and `verify:deep`-green.
 
 | PR | Date | Improvement |
 |---|---|---|
+| main | 2026-06-18 | Made worksheet answer boxes proportional for copy-to-worksheet output; `verify:worksheet-polish` now guards against returning to fixed oversized boxes. |
 | main | 2026-06-18 | Added repo-foundation dropdown guard: `verify:topic-dropdown` checks 50 visible teacher-facing topics, no duplicate labels/values, and no internal jargon in the main topic selector. |
 | main | 2026-06-18 | Added source-06 uncertainty deep coverage: 33 PDF-mapped families across U7/U8 uncertainty, graphics/tables/pie/line/multi-source tasks, and `verify:uncertainty-source-deep`. |
 | main | 2026-06-18 | Removed teacher-mode exposure from the main generator UI; `index.html` is task-generation-only and guarded by `verify:task-ui`. |
@@ -46,7 +47,7 @@ All merged to `main`, live, and `verify:deep`-green.
 | #48 | 2026-06-17 | A7-01 polygon perimeter with algebraic sides and labeled diagram. |
 | #47 | 2026-06-17 | Source-level families: applied-formula substitution and equal-expressions. |
 | #46 | 2026-06-17 | Real רמה 1/2/3 integration for new families. |
-| #34 | 2026-06-16 | Pythagoras (legacy G7-03): diagram marks the unknown side `?` instead of revealing the answer; fixed the clipped "ס\"מ" label; precise Hebrew ("חשבו את אורך היתר"); premium student answer box (5 comfortable 40px ruled lines). |
+| #34 | 2026-06-16 | Pythagoras (legacy G7-03): diagram marks the unknown side `?` instead of revealing the answer; fixed the clipped "ס\"מ" label; precise Hebrew ("חשבו את אורך היתר"); premium student answer box with ruled writing lines. |
 | #33 | 2026-06-16 | Source-faithful topic labels: G7-02 → "שטחי מצולעים"; G8-04 → "דמיון משולשים" (U7-01 "טבלת תדירות" kept — source uses "תדירות"). |
 | #32 | 2026-06-16 | Removed the landing splash — the main page opens directly to the topic-selection tool; `landing.css` deleted. |
 | #30 | 2026-06-16 | Level selector shows **רמה 1 / רמה 2 / רמה 3** and the visible selector actually drives difficulty. |

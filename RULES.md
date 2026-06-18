@@ -93,6 +93,7 @@ All entries below are **merged to `main`, live, and `verify:deep`-green**. Newes
 
 | PR | Date | Improvement |
 |---|---|---|
+| main | 2026-06-18 | **Proportional worksheet answer boxes** — free-write answer spaces now scale to the task instead of using a fixed oversized box; guarded by `verify:worksheet-polish`. |
 | main | 2026-06-18 | **Repo foundation guard** — added `verify:topic-dropdown` so the visible topic dropdown stays at 50 teacher-facing topics with no duplicates and no internal jargon. |
 | main | 2026-06-18 | **Source-06 uncertainty deep coverage** — 33 PDF-mapped families across U7/U8 uncertainty with tables, bar/pie/line graphs and multi-source tasks. |
 | main | 2026-06-18 | **Task-generation-only main UI** — teacher/gallery/visual-QA links are absent from `generator/index.html` and guarded by `verify:task-ui`. |
@@ -105,7 +106,7 @@ All entries below are **merged to `main`, live, and `verify:deep`-green**. Newes
 | **#48** | 2026-06-17 | **A7-01 polygon perimeter with algebraic sides** — labeled diagram + source-backed family. |
 | **#47** | 2026-06-17 | **Source-level family expansion** — applied-formula substitution and equal-expressions families. |
 | **#46** | 2026-06-17 | **Difficulty tiers integration** — new families wired into real רמה 1/2/3 paths. |
-| **#34** | 2026-06-16 | **Pythagoras (legacy G7-03) fixes** — diagram no longer reveals the answer (the unknown side is marked **`?`**, like `angleSvg` already did for the unknown angle); fixed the clipped "ס\"מ" label (`text-anchor="middle"`); precise Hebrew around unknown side length; **premium student answer box** (rounded, soft shadow, 5 comfortable 40px ruled lines). |
+| **#34** | 2026-06-16 | **Pythagoras (legacy G7-03) fixes** — diagram no longer reveals the answer (the unknown side is marked **`?`**, like `angleSvg` already did for the unknown angle); fixed the clipped "ס\"מ" label (`text-anchor="middle"`); precise Hebrew around unknown side length; **premium student answer box** (rounded, soft shadow, ruled writing lines). |
 | **#33** | 2026-06-16 | **Source-faithful topic labels** — `G7-02` "שטחי צורות שטוחות" → **"שטחי מצולעים"** (source: "שטחי מצולעים" / "Areas of polygons"); `G8-04` "ניידות משולשים" → **"דמיון משולשים"** (curriculum-map "Triangle similarity"; engine + questions already used "דמיון"). `U7-01` "טבלת תדירות" kept — the source uses "תדירות". |
 | **#32** | 2026-06-16 | **Removed the landing splash** — the main page opens **directly** to the "הגדרות תרגיל" topic-selection tool (no hero/benefits/CTA/marketing). `generator/landing.css` deleted. |
 | **#30** | 2026-06-16 | **Level selector = רמה 1 / רמה 2 / רמה 3**, and the visible `#sl` selector now actually drives difficulty for every topic (it was previously a hidden no-op reading `#selDiff`). |
@@ -161,9 +162,10 @@ Earlier history: PR #7/#8 (Phase 1, 50-engine generator), #15–#18 (A7-04 + str
   and `curriculum-map/` — and use precise Hebrew (e.g. "אורך היתר", not "היתר").
 - Every exercise card carries central primary buttons **`העתק כתמונה`** and **`הורד כתמונה`**.
 - The copied/downloaded image must include **the full question and all drawings**.
-- The student answer area is **one** clean, untitled, comfortable **premium writing box**
-  (generous ruled lines) — present only for free-write types (open/mistake); mark-the-answer
-  types (mcq/tf) get **no** box. A stable `data-student-answer-box="true"` hook identifies it.
+- The student answer area is **one** clean, untitled, proportional **premium writing box**
+  with ruled lines sized to the task — present only for free-write types (open/mistake);
+  mark-the-answer types (mcq/tf) get **no** box. A stable `data-student-answer-box="true"`
+  hook identifies it.
 - Diagrams must be **sharp, readable, not clipped**.
 - Mobile must look professional; print must be clean.
 - Teacher-only content must never appear in the student print/export.
