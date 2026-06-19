@@ -11,10 +11,10 @@
 דוגמאות: `verify-task-generation-only-ui`, `verify-source-lock`, `verify-source-bible`, `verify-question-coverage-deep`,
 `verify-all-engines-stress`, `verify-topic-question-variety`, `verify-visual-quality-deep`,
 `verify-question-family-provenance`, `verify-follow-up-generation`, `verify-graphics-quality`,
-`verify-visual-coverage`, `verify-copy-export`, `verify-print-layout`,
+  `verify-visual-coverage` (כולל `requiredVisual` ברמת משפחת שאלה), `verify-copy-export`, `verify-print-layout`,
 `verify-geometry-terminology`, `verify-repo-hygiene`, `verify-release-readiness-docs`,
 `verify-baseline-protection`, `verify-branding`, `verify-readonly-verifiers`,
-`verify-math-bidi-quality`,
+  `verify-math-bidi-quality` (כולל עברית/כיווניות וציורי יחס/מגדל כוסות),
 `verify-real-generator-runtime`, `verify-topic-dropdown-clean` ועוד.
 `verify-source-fit` כולל גם guard נגד חזרת מיפוי ישן של `A7-04/A7-05`.
 

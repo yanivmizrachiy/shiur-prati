@@ -7,6 +7,9 @@
 //   essential   -> >= 95% visual
 //   recommended -> >= 30% visual
 //   optional    -> no requirement
+// It also enforces family-level requiredVisual flags whenever exact family
+// provenance is available, so a mixed textual/visual topic cannot hide a
+// missing diagram inside one family (for example algebraic cup towers).
 // Also flags the inverse smell: an 'optional' topic that is ALWAYS visual is
 // only reported (not failed). By default this is read-only; pass --write or set
 // TARGILIM_UPDATE_REPORTS=1 to refresh docs/reports/VISUAL_COVERAGE_MATRIX.json.
@@ -27,13 +30,21 @@ const hasVisual = h => /<svg|<table/.test(h || '');
 
 const ids = pilotIds.concat(sourceFitIds);
 const matrix = [];
+const familyVisualFailures = [];
 for (const id of ids) {
   const s = E.getSource(id) || {}, p = E.getPedagogy(id) || {};
   const exp = E.getVisualExpectation(id);
+  const famByQuestionFamily = new Map(((p && p.families) || []).map(f => [f.questionFamily, f]));
   let svg = 0, table = 0, tot = 0;
   for (const d of DIFFS) for (const t of QT) for (let i = 0; i < SAMPLES; i++) {
     const r = callEngine(id, d, t); if (!r || !r.questionHTML) continue; tot++;
+    const visual = hasVisual(r.questionHTML);
     if (/<svg/.test(r.questionHTML)) svg++; else if (/<table/.test(r.questionHTML)) table++;
+    const meta = r.meta || {};
+    const fam = meta.familyProvenance === 'exact' ? famByQuestionFamily.get(meta.questionFamily) : null;
+    if (fam && fam.requiredVisual && !visual) {
+      familyVisualFailures.push(id + '/' + meta.questionFamily + '/' + d + '/' + t);
+    }
   }
   const vis = svg + table, pct = tot ? Math.round(100 * vis / tot) : 0;
   matrix.push({ topicId: id, topicName: p.topicName || s.skill || '', domain: s.domain || '',
@@ -45,12 +56,17 @@ for (const id of ids) {
 // every engine must carry a declared expectation
 const undeclared = ids.filter(id => !E.VISUAL_EXPECTATION[String(id).replace(/-ENGINE$/, '') + '-ENGINE']);
 if (undeclared.length) fail('engines without a declared visualExpectation: ' + undeclared.join(', '));
+if (familyVisualFailures.length) {
+  fail('family-level requiredVisual generations missing visuals: ' + familyVisualFailures.slice(0, 12).join(', ') +
+    (familyVisualFailures.length > 12 ? ' ... +' + (familyVisualFailures.length - 12) : ''));
+}
 
 const byExp = exp => matrix.filter(m => m.visualExpectation === exp);
 const ess = byExp('essential'), rec = byExp('recommended'), opt = byExp('optional');
 console.log('PASS — declared expectations: ' + ess.length + ' essential, ' + rec.length + ' recommended, ' + opt.length + ' optional');
 console.log('essential min %: ' + Math.min.apply(null, ess.map(m => m.visualCoveragePercent)));
 console.log('recommended min %: ' + Math.min.apply(null, rec.map(m => m.visualCoveragePercent)));
+console.log('family requiredVisual failures: ' + familyVisualFailures.length);
 
 // Keep normal verification read-only so local/CI checks do not dirty the repo.
 if (WRITE_REPORT) {

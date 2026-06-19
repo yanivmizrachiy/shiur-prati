@@ -51,7 +51,7 @@ Required gates inside `verify:deep`:
 - All engines are locked to approved source material.
 - Source file 10 is sequencing/teaching context only and not a direct question source.
 - Main generator remains task-generation-only.
-- Essential visual topics must produce visuals.
+- Essential visual topics must produce visuals, and any exact question family marked `requiredVisual` must render a diagram/table.
 - Copy-as-image remains available for worksheet creation and has a PNG fallback when browser clipboard image writing is blocked.
 - UI and student-facing output remain Hebrew RTL.
 - Hebrew/math output must pass strict BiDi and wording checks, including ratios, units, and SVG labels.
@@ -66,7 +66,7 @@ Automated checks are necessary but not enough. Before releasing product behavior
 
 1. Open `generator/index.html`.
 2. Confirm the main page shows only task-generation controls and no teacher/gallery/QA links.
-3. Generate samples for visual topics.
+3. Generate samples for visual topics and for mixed algebra families that require visuals, including A7-01 cup-tower questions.
 4. Print at least one A4 worksheet with diagrams.
 5. Print at least one A4 worksheet with answer key open.
 6. In a real browser, click “העתק כתמונה” on a question containing a diagram.

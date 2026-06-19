@@ -30,6 +30,12 @@ check('N8-01 no longer phrases distances as count nouns',
   !/ידוע\s+שיש\s+\$\$\{x\.known\}\$\s+\$\{knownLabel\}/.test(n801) &&
   !/כמה\s+יש\s+\$\{missingLabel\}/.test(n801));
 
+const a701 = fs.readFileSync('generator/engine/pilot-a7-01.js', 'utf8');
+check('A7-01 tower wording does not expose orphan additive step',
+  !/כל כוס נוספת\s*:?\s*\$\+\$\{x\.step\}/.test(a701) &&
+  !/כל כוס נוספת\s+\$\+\$\{x\.step\}/.test(a701) &&
+  !/מגדל מכוס אחת/.test(a701));
+
 function prose(html) {
   return String(html)
     .replace(/<svg[\s\S]*?<\/svg>/g, ' ')
@@ -63,6 +69,7 @@ const DEMO_TOK = /דמו|demo|placeholder/i;
 const BAD_HEBREW = [
   ['distance-as-count', /(?:ידוע\s+ש)?יש\s+(?:\$[^$]+\$|\d+)?\s*(?:דרך|מסלול)\b/],
   ['missing-distance-as-count', /כמה\s+יש\s+(?:דרך|מסלול)\b/],
+  ['cup-tower-weak-opening', /מגדל מכוס אחת/],
   ['lamed-instead-of-between', /היחס\s+בין\s+[^.\n]+?\s+ל(?:דרך|מסלול|כמות|קבוצה|חוג|דף|משימה)\b/],
   ['therefore-question-fragment', /לכן\s+(?:מהו|כמה)\b/]
 ];
@@ -78,6 +85,29 @@ check('ratio bar shows distance units and route labels',
 check('ratio bar text nodes carry explicit RTL bidi isolation',
   (ratioSample.match(/direction="rtl"/g) || []).length >= 5 &&
   (ratioSample.match(/unicode-bidi="plaintext"/g) || []).length >= 5);
+
+function findTowerSample(qtype) {
+  for (const d of ['standard', 'challenge']) {
+    for (let i = 0; i < 320; i++) {
+      const r = callEngine('A7-01-ENGINE', d, qtype);
+      const all = ((r && r.questionHTML) || '') + ((r && r.answerHTML) || '');
+      if ((r && r.meta && r.meta.questionFamily === 'tower_general_term') || /מגדל כוסות/.test(all)) {
+        return { d, r, all };
+      }
+    }
+  }
+  return null;
+}
+const towerSamples = ['open', 'mcq', 'tf', 'mistake'].map(t => [t, findTowerSample(t)]);
+check('A7-01 tower family is discoverable in every question type',
+  towerSamples.every(([, s]) => !!s),
+  towerSamples.filter(([, s]) => !s).map(([t]) => t).join(', '));
+check('A7-01 tower uses exact family provenance',
+  towerSamples.every(([, s]) => s && s.r && s.r.meta && s.r.meta.questionFamily === 'tower_general_term' && s.r.meta.familyProvenance === 'exact'));
+check('A7-01 tower always renders a cup-tower diagram',
+  towerSamples.every(([, s]) => s && /<svg[\s\S]*cup-tower-svg/.test(s.r.questionHTML || '')));
+check('A7-01 tower output has professional Hebrew step wording',
+  towerSamples.every(([, s]) => s && !/\$\+\d+/.test(s.all) && !/מגדל מכוס אחת/.test(s.all) && /גובה של כוס אחת|גובה הכוס הראשונה/.test(s.all)));
 
 const ids = pilotIds.concat(sourceFitIds).sort();
 let scanned = 0;

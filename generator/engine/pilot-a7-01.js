@@ -142,6 +142,23 @@
     if(f==='poly_perimeter') return casePolyPerimeter();
     return E.pick(FROM_WORDS);
   }
+  const FAMILY_META = {
+    from_words: 'expression_from_words',
+    simplify: 'simplify_like_terms',
+    match_expr: 'match_expression',
+    tower: 'tower_general_term',
+    rect_expr: 'rectangle_expression',
+    two_var: 'two_variable_cost',
+    generalize: 'generalize_concrete_to_general',
+    sequence: 'sequence_general_term',
+    equal_expr: 'equal_expressions',
+    poly_perimeter: 'polygon_perimeter_expression',
+    simplify_mixed: 'simplify_mixed_terms'
+  };
+  function withFamily(result, family){
+    if(result) result.questionFamily = FAMILY_META[family] || 'expression_from_words';
+    return result;
+  }
 
   function choices(family,x){
     let correct, wrongs;
@@ -255,9 +272,9 @@
 ב. כתבו ביטוי לשטח המלבן.`;
     }
     // tower
-    if(qtype==='tf') return `מגדל מכוס אחת: $${x.first}$ ס״מ. כל כוס נוספת: $+${x.step}$ ס״מ. הביטוי לגובה מגדל $n$ כוסות: $${tfTrue?x.expr:x.step+'n+'+x.first}$.`;
-    if(qtype==='mistake') return `מגדל מכוס אחת: $${x.first}$ ס״מ, כל כוס נוספת $+${x.step}$ ס״מ. תלמיד כתב: "גובה $n$ כוסות: $${x.step}n+${x.first}$".`;
-    return `גובה מגדל מכוס אחת: $${x.first}$ ס״מ. כל כוס נוספת מוסיפה $${x.step}$ ס״מ.
+    if(qtype==='tf') return `במגדל כוסות, גובה של כוס אחת הוא $${x.first}$ ס״מ, וכל כוס נוספת מגדילה את הגובה ב־$${x.step}$ ס״מ. הביטוי לגובה מגדל של $n$ כוסות הוא $${tfTrue?x.expr:x.step+'n+'+x.first}$.`;
+    if(qtype==='mistake') return `במגדל כוסות, גובה של כוס אחת הוא $${x.first}$ ס״מ, ובכל כוס נוספת הגובה גדל ב־$${x.step}$ ס״מ. תלמיד כתב: "גובה מגדל של $n$ כוסות הוא $${x.step}n+${x.first}$".`;
+    return `במגדל כוסות, גובה של כוס אחת הוא $${x.first}$ ס״מ. בכל כוס נוספת הגובה גדל ב־$${x.step}$ ס״מ.
 כתבו ביטוי אלגברי לגובה מגדל של $n$ כוסות.`;
   }
 
@@ -335,8 +352,8 @@ $$S=x\\cdot ${x.k}x=${x.k}x^2$$`;
 היקף: $$P=2(x+${x.k}x)=2\\cdot ${x.k+1}x=${per}x$$
 שטח: $$S=x\\cdot ${x.k}x=${x.k}x^2$$`;
     }
-    const prefix = wrong ? 'הביטוי שנכתב כמעט נכון — נבדוק אם הוא מתאים גם לכוס אחת:\n' : '';
-    return `${prefix}כל כוס אחרי הראשונה מוסיפה $${x.step}$, כלומר $(n-1)$ תוספות:
+    const prefix = wrong ? `הטעות היא שסופרים $n$ תוספות של $${x.step}$ ס״מ, אף על פי שהכוס הראשונה כבר נותנת את הגובה ההתחלתי.\n` : '';
+    return `${prefix}גובה הכוס הראשונה הוא $${x.first}$ ס״מ. אחרי הכוס הראשונה יש $(n-1)$ כוסות נוספות, וכל אחת מגדילה את הגובה ב־$${x.step}$ ס״מ:
 $$${x.first}+${x.step}(n-1)=${x.step}n+${x.first-x.step}$$
 כלומר הביטוי הנכון: $${x.expr}$.
 בדיקה ל-$n=1$: $${x.step}\\cdot 1+${x.first-x.step}=${x.first}$ ✓`;
@@ -348,10 +365,13 @@ $$${x.first}+${x.step}(n-1)=${x.step}n+${x.first-x.step}$$
     const x = pickCase(family);
     const tfTrue = questionType==='tf' && Math.random()<0.5;
     const q = question(family,x,questionType,tfTrue), a = answer(family,x,questionType,tfTrue);
-    const svg = (family==='poly_perimeter' && E.polygonSidesSvg) ? E.polygonSidesSvg(x.sides, x.shape) : '';
-    if(questionType==='mcq') return E.questionTypes.mcq({question:q,answer:a,svg:svg,choices:choices(family,x)});
-    if(questionType==='tf') return E.questionTypes.tf({question:q,answer:a,svg:svg,isTrue:tfTrue});
-    if(questionType==='mistake') return E.questionTypes.mistake({question:q,answer:a,svg:svg});
-    return E.questionTypes.open({question:q,answer:a,svg:svg});
+    let svg = '';
+    if(family==='poly_perimeter' && E.polygonSidesSvg) svg = E.polygonSidesSvg(x.sides, x.shape);
+    else if(family==='tower' && E.cupTowerSvg) svg = E.cupTowerSvg(x);
+    else if(family==='rect_expr' && E.algebraRectangleSvg) svg = E.algebraRectangleSvg(x.k);
+    if(questionType==='mcq') return withFamily(E.questionTypes.mcq({question:q,answer:a,svg:svg,choices:choices(family,x)}), family);
+    if(questionType==='tf') return withFamily(E.questionTypes.tf({question:q,answer:a,svg:svg,isTrue:tfTrue}), family);
+    if(questionType==='mistake') return withFamily(E.questionTypes.mistake({question:q,answer:a,svg:svg}), family);
+    return withFamily(E.questionTypes.open({question:q,answer:a,svg:svg}), family);
   };
 })();

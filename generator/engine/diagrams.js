@@ -190,6 +190,65 @@
       ${texts}
     </svg>`;
   };
+  E.algebraRectangleSvg = function(k){
+    const T = E.themes.geometry;
+    const W=280,H=170,x=54,y=46,w=172,h=78;
+    const longLabel = k + 'x';
+    return `<svg class="engine-svg" viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="מלבן עם צלעות x ו-${longLabel}">
+      <rect x="20" y="18" width="240" height="128" rx="10" fill="${T.bg}" stroke="#d8e0ea" stroke-width="1.2"/>
+      <rect x="${x}" y="${y}" width="${w}" height="${h}" rx="5" fill="${T.fill}" stroke="${T.stroke}" stroke-width="2.5"/>
+      <line x1="${x}" y1="${y+h+18}" x2="${x+w}" y2="${y+h+18}" stroke="${T.helper}" stroke-width="1.6"/>
+      <line x1="${x-18}" y1="${y}" x2="${x-18}" y2="${y+h}" stroke="${T.helper}" stroke-width="1.6"/>
+      <text x="${x+w/2}" y="${y+h+39}" fill="${T.given}" font-size="15" font-weight="650" text-anchor="middle" font-style="italic">${longLabel}</text>
+      <text x="${x-36}" y="${y+h/2+5}" fill="${T.given}" font-size="15" font-weight="650" text-anchor="middle" font-style="italic">x</text>
+      <text x="140" y="33" fill="${T.label}" font-size="12" font-weight="500" text-anchor="middle" direction="rtl" unicode-bidi="plaintext">צלע אחת ארוכה פי ${k}</text>
+    </svg>`;
+  };
+  E.cupTowerSvg = function(params){
+    const T = E.themes.geometry;
+    const W=360,H=220;
+    const first = params && params.first != null ? params.first : 8;
+    const step = params && params.step != null ? params.step : 6;
+    function rtlText(x,y,text,size,weight,anchor,color){
+      return `<text x="${x}" y="${y}" fill="${color || T.label}" font-size="${size || 12}" font-weight="${weight || 500}" text-anchor="${anchor || 'middle'}" direction="rtl" unicode-bidi="plaintext">${text}</text>`;
+    }
+    function cup(cx,top,bottom,fill,stroke,opacity){
+      const lipW=68, baseW=45, lipH=12;
+      const leftTop=cx-lipW/2, rightTop=cx+lipW/2, leftBot=cx-baseW/2, rightBot=cx+baseW/2;
+      return `<path d="M${leftTop} ${top+lipH/2} Q${cx} ${top-lipH/2} ${rightTop} ${top+lipH/2} L${rightBot} ${bottom} Q${cx} ${bottom+10} ${leftBot} ${bottom} Z" fill="${fill}" fill-opacity="${opacity}" stroke="${stroke}" stroke-width="1.8" stroke-linejoin="round"/>
+        <ellipse cx="${cx}" cy="${top+lipH/2}" rx="${lipW/2}" ry="${lipH/2}" fill="${T.bg}" fill-opacity="0.72" stroke="${stroke}" stroke-width="1.6"/>`;
+    }
+    const singleTop=86,singleBottom=156,cx1=88;
+    const cx2=248,base=170,cupH=54,stepPx=24,count=4;
+    let tower='';
+    for(let i=count-1;i>=0;i--){
+      const top=base-cupH-i*stepPx, bottom=base-i*stepPx;
+      tower += cup(cx2, top, bottom, i===0?T.helper:T.fill, T.stroke, i===0?0.58:0.92);
+    }
+    const firstTop=base-cupH, addedTop=firstTop-stepPx;
+    return `<svg class="engine-svg cup-tower-svg" viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="מגדל כוסות: גובה התחלתי ותוספת קבועה">
+      <rect x="18" y="18" width="324" height="176" rx="12" fill="${T.bg}" stroke="#d8e0ea" stroke-width="1.2"/>
+      ${rtlText(180,38,'מודל גובה של מגדל כוסות',13,600,'middle',T.label)}
+      ${cup(cx1,singleTop,singleBottom,T.fill,T.stroke,0.96)}
+      ${rtlText(cx1,182,'כוס אחת',12,500,'middle',T.label)}
+      <line x1="42" y1="${singleTop+6}" x2="42" y2="${singleBottom}" stroke="${T.given}" stroke-width="1.5"/>
+      <line x1="36" y1="${singleTop+6}" x2="48" y2="${singleTop+6}" stroke="${T.given}" stroke-width="1.5"/>
+      <line x1="36" y1="${singleBottom}" x2="48" y2="${singleBottom}" stroke="${T.given}" stroke-width="1.5"/>
+      ${rtlText(31,124,first+' ס״מ',12,600,'middle',T.given)}
+      ${tower}
+      ${rtlText(cx2,182,'מגדל של n כוסות',12,500,'middle',T.label)}
+      <line x1="306" y1="${firstTop}" x2="306" y2="${base}" stroke="${T.given}" stroke-width="1.5"/>
+      <line x1="300" y1="${firstTop}" x2="312" y2="${firstTop}" stroke="${T.given}" stroke-width="1.5"/>
+      <line x1="300" y1="${base}" x2="312" y2="${base}" stroke="${T.given}" stroke-width="1.5"/>
+      ${rtlText(324,146,'גובה התחלתי',10.5,500,'middle',T.label)}
+      ${rtlText(324,160,first+' ס״מ',11.5,600,'middle',T.given)}
+      <line x1="196" y1="${addedTop}" x2="196" y2="${firstTop}" stroke="${T.unknown}" stroke-width="1.5"/>
+      <line x1="190" y1="${addedTop}" x2="202" y2="${addedTop}" stroke="${T.unknown}" stroke-width="1.5"/>
+      <line x1="190" y1="${firstTop}" x2="202" y2="${firstTop}" stroke="${T.unknown}" stroke-width="1.5"/>
+      ${rtlText(176,96,'כל כוס נוספת',10.5,500,'middle',T.label)}
+      ${rtlText(176,110,'מוסיפה '+step+' ס״מ',11.5,600,'middle',T.unknown)}
+    </svg>`;
+  };
   E.boxSvg = function(p, unknown){
     const T = E.themes.geometry;
     const W=270,H=180,x=46,y=64,w=130,h=72,dx=44,dy=30;

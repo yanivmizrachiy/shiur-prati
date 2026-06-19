@@ -36,6 +36,14 @@ function checkSvg(id, svg, skill) {
   }
   if (/bar/.test(skill || '')) { if (!/<rect/.test(svg)) fail(id + ' bar chart missing bars'); }
   if (/circle|diameter|radius/.test(skill || '')) { if (!/<circle/.test(svg)) fail(id + ' circle topic missing <circle>'); }
+  if (/cup-tower-svg/.test(svg)) {
+    if (!/role="img"/.test(svg) || !/aria-label="מגדל כוסות/.test(svg)) fail(id + ' cup-tower SVG missing accessible role/label');
+    if ((svg.match(/<path\b/g) || []).length < 5) fail(id + ' cup-tower SVG is too sparse');
+    if (!/גובה התחלתי/.test(svg) || !/כל כוס נוספת/.test(svg) || !/מוסיפה\s+\d+\s+ס״מ/.test(svg)) {
+      fail(id + ' cup-tower SVG missing pedagogical height/step labels');
+    }
+    if (/\+\d+\s*ס״מ|\$\+\d+/.test(svg)) fail(id + ' cup-tower SVG uses orphan plus-step wording');
+  }
 }
 
 const ids = pilotIds.concat(sourceFitIds);

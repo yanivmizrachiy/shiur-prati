@@ -1,6 +1,6 @@
 # Project Status — Targilim תרגילים
 
-**Last updated:** 2026-06-18 · baseline 2026-06-14
+**Last updated:** 2026-06-19 · baseline 2026-06-14
 **Central rules:** see `RULES.md` (authoritative operating guide; this file is the status snapshot).  
 **Default branch:** `main`.
 **Live site:** GitHub Pages serves `generator/` from `main` — https://yanivmizrachiy.github.io/targilim/ . The live site reflects `main` only.  
@@ -16,7 +16,7 @@
 - Source file 10 is sequencing/teaching context only; it is not a direct question source.
 - Main generator UI is task-generation-only: no teacher mode, gallery, or QA links in `generator/index.html`.
 - Historical/internal QA workbench files remain in the repo, but they are not linked from the main generator and are not part of the primary product flow.
-- Visual coverage is enforced by `verify:visual-coverage` inside `verify:deep`.
+- Visual coverage is enforced by `verify:visual-coverage` inside `verify:deep`, including exact family-level `requiredVisual` checks.
 - Copy/export includes copy-as-image for whole question cards, including drawings.
 - Documentation is indexed with `docs/README.md` and `tools/README.md`.
 - GitHub Pages publishes the `generator/` directory from `main`.
@@ -34,6 +34,7 @@ All merged to `main`, live, and `verify:deep`-green.
 
 | PR | Date | Improvement |
 |---|---|---|
+| main | 2026-06-19 | Hardened A7-01 algebraic-expression visuals and Hebrew wording: cup-tower questions now render a dedicated cup-tower SVG, avoid orphan `+step` phrasing, report exact family provenance, and `verify:math-bidi`/`verify:visual-coverage`/`verify:visual` guard the family systematically. |
 | main | 2026-06-18 | Tightened Hebrew/BiDi and ratio-diagram quality: N8-01 distance-ratio wording now uses route lengths and units, `ratioBarSvg` has explicit RTL-safe labels, and `verify:math-bidi` is wired into `verify:all`/`verify:deep`. |
 | main | 2026-06-18 | Made worksheet answer boxes proportional for copy-to-worksheet output; `verify:worksheet-polish` now guards against returning to fixed oversized boxes. |
 | main | 2026-06-18 | Added repo-foundation dropdown guard: `verify:topic-dropdown` checks 50 visible teacher-facing topics, no duplicate labels/values, and no internal jargon in the main topic selector. |
